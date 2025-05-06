@@ -6,8 +6,8 @@
 
 @section('content')
   @component('components.breadcrumb')
-    @slot('li_1') Sewa Lahan @endslot
-    @slot('title') Pengajuan Sewa Lahan @endslot
+    @slot('li_1') Sewa @endslot
+    @slot('title') Pengajuan Sewa @endslot
   @endcomponent
   @if(session('success'))
     <div class="alert alert-success">
@@ -19,9 +19,9 @@
       <div class="card">
         <div class="card-body">
 
-          <h4 class="card-title mb-4">Formulir Pengajuan Sewa Lahan</h4>
+          <h4 class="card-title mb-4">Formulir Pengajuan Sewa</h4>
 
-          <form method="POST" action="{{ route('sewa.store') }}" enctype="multipart/form-data" class="needs-validation" novalidate>
+          <form method="POST" action="{{ route('sewaLahan.store') }}" enctype="multipart/form-data" class="needs-validation" novalidate>
             @csrf
 
             <div class="mb-3">

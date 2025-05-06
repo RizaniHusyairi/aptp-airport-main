@@ -10,7 +10,6 @@ return new class extends Migration
     {
         Schema::create('finances', function (Blueprint $table) {
             $table->id();
-
             $table->date('date'); 
             $table->enum('flow_type', ['in', 'budget']); 
             $table->unsignedInteger('amount'); 

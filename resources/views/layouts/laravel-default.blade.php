@@ -26,11 +26,12 @@
 
 <body>
     <main style="overflow-x: hidden;">
-        <nav class="navbar navbar-expand-lg  px-md-5 py-md-4 scrolled" id="navbar">
+        <nav class="navbar navbar-expand-lg  px-md-3 py-md-2 scrolled" id="navbar">
             <div class="container-fluid">
                 <!-- Logo -->
-                <a class="navbar-brand" href="#">
-                    <img src="{{ asset('frontend/assets/logo.png') }}" alt="mind & body" style="width: 7rem;" />
+                <a class="navbar-brand d-flex" href="#">
+                    <img src="{{ asset('frontend/assets/logo.png') }}" alt="mind & body" style="width: 8rem;" />
+                    <img src="{{ asset('frontend/assets/logo-badan-layanan-umum.png') }}" alt="logo BLU" style="width: 4rem;" >
                 </a>
 
                 <!-- Toggler -->

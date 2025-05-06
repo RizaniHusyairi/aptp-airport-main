@@ -9,7 +9,7 @@ class Rental extends Model
     protected $guarded = [];
     public function users()
     {
-        return $this->belongsToMany(User::class)
+        return $this->belongsToMany(User::class, 'rental_user', 'rental_id', 'user_id')
                     ->withTimestamps();
     }
     // public function submissionDocuments()

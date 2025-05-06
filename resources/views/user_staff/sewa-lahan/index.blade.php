@@ -28,7 +28,7 @@
                   <h4 class="card-title">Daftar Sewa Lahan</h4>
                   @notadmin
                     @notstaff
-                      <a href='{{ route("sewa.create") }}' class="btn btn-success btn-sm">+ Tambah Pengajuan</a>
+                      <a href='{{ route("sewaLahan.create") }}' class="btn btn-success btn-sm">+ Tambah Pengajuan</a>
                     @endnotstaff
                   @endnotadmin
                 </div>

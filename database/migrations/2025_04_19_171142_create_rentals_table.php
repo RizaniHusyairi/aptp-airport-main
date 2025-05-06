@@ -15,6 +15,11 @@ return new class extends Migration
             $table->string('rental_type');
             $table->string('documents'); 
             $table->enum('submission_status', ['diajukan', 'disetujui', 'ditolak'])->default('diajukan');
+            // Kolom tambahan
+            $table->integer('area')->nullable(); // Untuk ruang/lahan (m²)
+            $table->string('location')->nullable(); // Lokasi (terminal, lounge, dll.)
+            $table->integer('quantity')->nullable(); // Jumlah unit (Xray, kendaraan)
+            $table->string('design_file')->nullable(); // File desain untuk reklame
             $table->timestamps();
         });
     }

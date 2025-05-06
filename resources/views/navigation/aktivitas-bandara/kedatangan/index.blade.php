@@ -4,6 +4,7 @@
 
 @section('content')
     <section class="min-vh-100 hubud-secondary">
+        
         <h2>Daftar Kedatangan Pesawat</h2>
         
         <div class="table-responsive">

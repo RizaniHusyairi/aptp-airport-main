@@ -54,7 +54,7 @@ class SewaLahanController extends Controller
             'updated_at' => now(),
         ]);
 
-        return redirect()->route('sewa.index')->with('success', 'Pengajuan sewa lahan berhasil dikirim!');
+        return redirect()->route('sewaLahan.index')->with('success', 'Pengajuan sewa lahan berhasil dikirim!');
     }
 
     public function create()
@@ -78,7 +78,7 @@ class SewaLahanController extends Controller
         // Hapus rental
         $rental->delete();
 
-        return redirect()->route('sewa.index')->with('success', 'Pengajuan berhasil dihapus.');    }
+        return redirect()->route('sewaLahan.index')->with('success', 'Pengajuan berhasil dihapus.');    }
 
     public function indexUser()
     {

@@ -8,6 +8,7 @@ use Illuminate\Notifications\Notifiable;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
+
 class User extends Authenticatable implements HasMedia
 {
     use  Notifiable,  SoftDeletes, InteractsWithMedia;
@@ -37,6 +38,10 @@ class User extends Authenticatable implements HasMedia
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+    public function rentals()
+{
+    return $this->belongsToMany(Rental::class, 'rental_user', 'user_id', 'rental_id');
+}
 
     public function getCreatedAtAttribute($value)
     {

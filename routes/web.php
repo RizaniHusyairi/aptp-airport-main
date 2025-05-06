@@ -47,10 +47,15 @@ Route::group(["prefix" => 'dashboard'], function () {
         Route::get('/tenant', [TenantController::class, 'indexUser'])->name('tenant.index');
         
         // Rental User Routes
-        Route::get('/sewa', [SewaLahanController::class, 'indexUser'])->name('sewa.index');
-        Route::get('/sewa/create', [SewaLahanController::class, 'create'])->name('sewa.create');
-        Route::post('/sewa/store', [SewaLahanController::class, 'store'])->name('sewa.store');
-        Route::delete('/sewa/{id}', [SewaLahanController::class, 'destroy'])->name('sewa.destroy');
+        Route::get('/sewaRuang', [SewaLahanController::class, 'indexUser'])->name('sewaRuang.index');
+        Route::get('/sewaRuang/create', [SewaLahanController::class, 'create'])->name('sewaRuang.create');
+        Route::post('/sewaRuang/store', [SewaLahanController::class, 'store'])->name('sewaRuang.store');
+        Route::delete('/sewaRuang/{id}', [SewaLahanController::class, 'destroy'])->name('sewaRuang.destroy');
+        
+        Route::get('/sewaLahan', [SewaLahanController::class, 'indexUser'])->name('sewaLahan.index');
+        Route::get('/sewaLahan/create', [SewaLahanController::class, 'create'])->name('sewaLahan.create');
+        Route::post('/sewaLahan/store', [SewaLahanController::class, 'store'])->name('sewaLahan.store');
+        Route::delete('/sewaLahan/{id}', [SewaLahanController::class, 'destroy'])->name('sewaLahan.destroy');
         
         // Perijinan User Routes
         Route::get('/perijinan', [PerijinanUsahaController::class, 'indexUser'])->name('perijinan.index');
@@ -88,11 +93,17 @@ Route::group(["prefix" => 'dashboard'], function () {
             Route::patch('staff/tenant/{id}/approve', [TenantController::class, 'approve'])->name('tenant.approve');
             Route::patch('staff/tenant/{id}/reject', [TenantController::class, 'reject'])->name('tenant.reject');
 
-            // Rental Staff Routes
-            Route::get('staff/sewa', [SewaLahanController::class, 'index'])->name('sewa.staffIndex');
-            Route::get('staff/sewa/{id}', [SewaLahanController::class, 'show'])->name('sewa.show');
-            Route::patch('staff/sewa/{id}/approve', [SewaLahanController::class, 'approve'])->name('sewa.approve');
-            Route::patch('staff/sewa/{id}/reject', [SewaLahanController::class, 'reject'])->name('sewa.reject');
+            // Sewa Staff Routes
+            Route::get('staff/sewaRuang', [SewaLahanController::class, 'index'])->name('sewa.staffIndex');
+            Route::get('staff/sewaRuang/{id}', [SewaLahanController::class, 'show'])->name('sewa.show');
+            Route::patch('staff/sewaRuang/{id}/approve', [SewaLahanController::class, 'approve'])->name('sewa.approve');
+            Route::patch('staff/sewaRuang/{id}/reject', [SewaLahanController::class, 'reject'])->name('sewa.reject');
+            
+            // Sewa Staff Routes
+            Route::get('staff/sewaLahan', [SewaLahanController::class, 'index'])->name('sewa.staffIndex');
+            Route::get('staff/sewaLahan/{id}', [SewaLahanController::class, 'show'])->name('sewa.show');
+            Route::patch('staff/sewaLahan/{id}/approve', [SewaLahanController::class, 'approve'])->name('sewa.approve');
+            Route::patch('staff/sewaLahan/{id}/reject', [SewaLahanController::class, 'reject'])->name('sewa.reject');
             
             // Perijinan Staff Routes
             Route::get('staff/perijinan', [PerijinanUsahaController::class, 'index'])->name('perijinan.staffIndex');

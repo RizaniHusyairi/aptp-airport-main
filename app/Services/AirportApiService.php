@@ -14,14 +14,14 @@ class AirportApiService
 
     public function getKeberangkatan()
     {
-        $response = Http::get("{$this->baseUrl}/departure");
+        $response = Http::get("{$this->baseUrl}/keberangkatan");
         return $response->successful() ? $response->json() : [];
     }
 
     public function getKedatangan()
     {
-        $response = Http::get("{$this->baseUrl}/arrival");
-        
+        $response = Http::get("{$this->baseUrl}/kedatangan");
+
         return $response->successful() ? $response->json() : [];
     }
 }
