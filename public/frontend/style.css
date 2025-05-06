@@ -1,0 +1,392 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-family: 'Poppins', sans-serif;
+  overflow-x: hidden;
+}
+
+:root {
+  --main-color: #f8b281;
+  --secondary-color: #1b1b1b;
+}
+
+#form{
+  padding-top: 13rem ;
+}
+
+@font-face {
+  font-family: 'argonite';
+  src: url('./assets/stone\ orgonite.woff');
+}
+section {
+  padding: 5%;
+}
+
+h2 {
+  font-size: 2.5rem;
+  line-height: 125%;
+  padding: 1rem 0rem;
+}
+h3 {
+  font-size: 1.25rem;
+  line-height: 125%;
+}
+
+/* nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+nav svg {
+  cursor: pointer;
+  z-index: 10;
+} */
+
+.hubud{
+  background-color: #06A3DA;
+}
+.hubud-text{
+  color: #06A3DA;
+}
+.hubud-secondary{
+  background-color: #EEF9FF;
+}
+
+.links {
+  z-index: 9;
+  position: absolute;
+  background: white;
+  width: 100%;
+  height: 100vh;
+  left: 0;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  transform: translateX(100%);
+}
+.links a {
+  color: var(--secondary-color);
+  font-size: 2rem;
+}
+.logo {
+  display: flex;
+  align-items: center;
+  z-index: 8;
+}
+.logo h1 {
+  margin-left: 0.5rem;
+  font-size: 1rem;
+  font-family: 'argonite', sans-serif;
+}
+
+.logo img {
+  width: 15rem;
+}
+
+/* .primary-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.5);
+  width: 100%;
+  height: 100%;
+} */
+
+/* .front-page {
+  min-height: 100vh;
+  color: white;
+} */
+.selling-point {
+  font-family: 'argonite', sans-serif;
+  text-shadow: 0px 4px 12px rgba(0, 0, 0, 0.49);
+  text-align: center;
+}
+.selling-point h3 {
+  font-family: sans-serif;
+  text-shadow: 0px 4px 12px rgba(0, 0, 0, 0.49);
+}
+.card {
+  transition: transform 0.3s, box-shadow 0.3s;
+  height: 100%;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+}
+.card-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+.card-text-container {
+  flex-grow: 1;
+}
+.btn-container {
+  margin-top: auto;
+}
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+.card-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+.traffic-card {
+  background-color: #e3f2fd;
+  border-left: 5px solid #1976d2;
+}
+.arrival-card {
+  background-color: #e8f5e9;
+  border-left: 5px solid #388e3c;
+}
+.departure-card {
+  background-color: #fff3e0;
+  border-left: 5px solid #f57c00;
+}
+.card-count {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+.btn-detail {
+  margin-top: 1rem;
+  border-radius: 20px;
+}
+.traffic-btn {
+  background-color: #1976d2;
+  border-color: #1976d2;
+}
+.arrival-btn {
+  background-color: #388e3c;
+  border-color: #388e3c;
+}
+.departure-btn {
+  background-color: #f57c00;
+  border-color: #f57c00;
+}
+
+.h-fit{
+  height: fit-content;
+}
+.w-fit{
+  width: fit-content;
+}
+
+#navbar {
+  display: none;
+  background-color: #EEF9FF;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  color: white;
+}
+
+#navbar.scrolled {
+  display: block;
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 10;
+  background-color: #EEF9FF;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+#navbar .navigation {
+  color: black;
+  transition: color 0.3s ease;
+}
+
+#navbar.scrolled a {
+  color: black !important;
+}
+
+.ctas {
+  margin-top: 2rem;
+}
+.ctas button {
+  padding: 1rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 0.5rem;
+  box-shadow: 0px 4px 24px rgba(0, 0, 0, 0.216);
+  margin: 1rem;
+}
+.cta-main {
+  background-color: var(--main-color);
+  color: var(--secondary-color);
+}
+.cta-main a {
+  text-decoration: none;
+  color: var(--secondary-color);
+}
+.cta-sec {
+  background-color: var(--secondary-color);
+  color: white;
+}
+
+.cta-sec a {
+  text-decoration: none;
+  color: white;
+}
+
+.hero {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  object-fit: cover;
+  z-index: -1;
+}
+
+.bg-black{
+  background-color: black;
+}
+
+.classes {
+  color: var(--secondary-color);
+}
+
+.argonite{
+  font-family: 'argonite', sans-serif;
+}
+
+.classes h2{
+  font-family: 'argonite', sans-serif;
+}
+
+.fs-7{
+  font-size: .95rem !important;
+}
+.fs-8{
+  font-size: .85rem !important;
+}
+.fs-9{
+  font-size: .75rem !important;
+}
+
+.other-news{
+  gap: .5rem;
+}
+
+.other-news:hover{
+  gap: 1rem;
+  transition: all ease-in-out .2s;
+  border-bottom: 1px solid white;
+}
+
+.videos div {
+  width: 400px;
+  /* height: 400px; */
+}
+.videos video {
+  width: 100%;
+  border-radius: 1rem;
+  margin-top: 1rem;
+}
+
+.pilates:hover {
+  transform: scale(1.03);
+  transition: all ease-in-out .1s;
+}
+.social-media:hover {
+  transform: scale(1.5);
+  transition: all ease-in-out .1s;
+}
+/* .videos h3 {
+  display: none;
+  position: absolute;
+  color: var(--main-color);
+  text-shadow: 0px 2px 12px rgba(0, 0, 0, 0.408);
+  bottom: 10%;
+  left: 50%;
+  transform: translate(-50%, -10%);
+  font-size: 2rem;
+} */
+
+.about {
+  color: var(--secondary-color);
+}
+.about h2 {
+  font-family: 'argonite', sans-serif;
+  text-align: center;
+}
+.about p {
+  line-height: 150%;
+  font-size: 1.2rem;
+}
+.about img {
+  width: 100%;
+  margin-top: 2rem;
+}
+
+.footer {
+  width: 100vw;
+  text-align: center;
+  color: white;
+  padding: 1.3rem 2rem;
+}
+
+.carousel-home {
+  height: 100vh;
+  object-fit: cover;
+  object-position: center center;
+}
+.carousel-footer {
+  object-fit: cover;
+  object-position: center center;
+}
+
+.email{
+  text-decoration: none;
+}
+
+.email:hover{
+  text-decoration: underline;
+}
+
+.iframe-container {
+  /* position: relative;
+  width: 100%;
+  padding-top: 56.25%; 
+  height: 0;
+  overflow: hidden; */
+  height: 100vh;
+}
+
+/* .iframe-container iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+} */
+
+@media screen and (min-width: 768px) {
+  .conatiner {
+    /* padding: 0% 10%; */
+  }
+  .videos {
+    display: flex;
+    gap: 2rem;
+  }
+  .about {
+    display: flex;
+    gap: 5rem;
+    justify-content: space-between;
+  }
+  .about img {
+    width: 50%;
+  }
+  .about h2 {
+    text-align: start;
+  }
+  footer {
+    width: 100%;
+  }
+}
