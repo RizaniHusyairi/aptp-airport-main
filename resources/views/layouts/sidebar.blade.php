@@ -13,7 +13,7 @@
           $permissionRoutes = [
             'Manajemen Berita' => ['route' => 'berita.staffIndex', 'icon' => 'bx bx-news', 'label' => 'Berita'],
             'Manajemen Tenant' => ['route' => 'tenant.staffIndex', 'icon' => 'bx bx-store', 'label' => 'Tenant'],
-            'Manajemen Penyewaan' => ['route' => 'sewa.staffIndex', 'icon' => 'bx bx-map', 'label' => 'Penyewaan'],
+            'Manajemen Penyewaan' => ['route' => '', 'icon' => 'bx bx-map', 'label' => 'Penyewaan'],
             'Manajemen Perijinan Usaha' => ['route' => 'perijinan.staffIndex', 'icon' => 'bx bx-id-card', 'label' => 'Perijinan Usaha'],
             'Manajemen Pengiklanan' => ['route' => 'pengiklanan.staffIndex', 'icon' => 'bx bx-broadcast', 'label' => 'Pengiklanan'],
             'Manajemen Field Trip' => ['route' => 'fieldtrip.staffIndex', 'icon' => 'bx bx-walk', 'label' => 'Field Trip'],
@@ -24,7 +24,7 @@
           ];
           $userRoutes = [
             'Ajukan Tenant' => ['route' => 'tenant.index', 'icon' => 'bx bx-store', 'label' => 'Ajukan Tenant'],
-            'Ajukan Sewa' => ['route' => 'sewaRuang.index', 'icon' => 'bx bx-map', 'label' => 'Ajukan Sewa'],
+            'Ajukan Sewa' => ['route' => '', 'icon' => 'bx bx-map', 'label' => 'Ajukan Sewa'],
             'Ajukan Perijinan Usaha' => ['route' => 'perijinan.index', 'icon' => 'bx bx-id-card', 'label' => 'Ajukan Perijinan Usaha'],
             'Ajukan Pengiklanan' => ['route' => 'pengiklanan.index', 'icon' => 'bx bx-broadcast', 'label' => 'Ajukan Pengiklanan'],
             'Ajukan Field Trip' => ['route' => 'fieldtrip.index', 'icon' => 'bx bx-walk', 'label' => 'Ajukan Field Trip'],
@@ -45,27 +45,27 @@
                   <span key="t-ecommerce">{{ $data['label'] }}</span>
                 </a>
                 <ul class="sub-menu" aria-expanded="false">
-                  <li><a href="ecommerce-products" key="t-products">Sewa Ruang</a></li>
-                  <li><a href="" >Sewa Lahan</a></li>
-                  <li><a href="" >Sewa Xray Kabin</a></li>
-                  <li><a href="" >Sewa Xray Kargo</a></li>
-                  <li><a href="" >Sewa Kendaraan Roda (Micro Bus)</a></li>
-                  <li><a href="" >Sewa Peralatan Workshop</a></li>
-                  <li><a href="" >Sewa Penempatan Reklame</a></li>
+                    <li><a href="{{ route('staffSewa.index',['type' => 'ruang']) }}">Sewa Ruang</a></li>
+                    <li><a href="{{ route('staffSewa.index',['type' => 'lahan']) }}" >Sewa Lahan</a></li>
+                    <li><a href="{{ route('staffSewa.index',['type' => 'xray_kabin']) }}" >Sewa Xray Kabin</a></li>
+                    <li><a href="{{ route('staffSewa.index',['type' => 'xray_kargo']) }}" >Sewa Xray Kargo</a></li>
+                    <li><a href="{{ route('staffSewa.index',['type' => 'bus']) }}" >Sewa Kendaraan Roda (Micro Bus)</a></li>
+                    <li><a href="{{ route('staffSewa.index',['type' => 'workshop']) }}" >Sewa Peralatan Workshop</a></li>
+                    <li><a href="{{ route('staffSewa.index',['type' => 'reklame']) }}" >Sewa Penempatan Reklame</a></li>
                   
                   </li>
                 </ul>
               </li>
             @else
+            <li>
+              <a href="{{ route($data['route']) }}" class="waves-effect d-flex align-items-center">
+                <i class="{{ $data['icon'] }}"></i>
+                <span>{{ $data['label'] }}</span>
+              </a>
+            </li>
             
           @endif
           {{-- <li class="{{ Str::startsWith($currentRoute, Str::before($data['route'], '.')) ? 'mm-active' : '' }}"> --}}
-          <li>
-            <a href="{{ route($data['route']) }}" class="waves-effect d-flex align-items-center">
-              <i class="{{ $data['icon'] }}"></i>
-              <span>{{ $data['label'] }}</span>
-            </a>
-          </li>
           @endif
         @endforeach
         <!-- User Sidebar -->
@@ -79,26 +79,26 @@
                   <span key="t-ecommerce">{{ $data['label'] }}</span>
                 </a>
                 <ul class="sub-menu" aria-expanded="false">
-                  <li><a href="{{ route('sewaRuang.index') }}" key="t-products">Sewa Ruang</a></li>
-                  <li><a href="{{ route('sewaLahan.index') }}" >Sewa Lahan</a></li>
-                  <li><a href="" >Sewa Xray Kabin</a></li>
-                  <li><a href="" >Sewa Xray Kargo</a></li>
-                  <li><a href="" >Sewa Kendaraan Roda (Micro Bus)</a></li>
-                  <li><a href="" >Sewa Peralatan Workshop</a></li>
-                  <li><a href="" >Sewa Penempatan Reklame</a></li>
+                    <li><a href="{{ route('sewa.index',['type' => 'ruang']) }}">Sewa Ruang</a></li>
+                    <li><a href="{{ route('sewa.index',['type' => 'lahan']) }}" >Sewa Lahan</a></li>
+                    <li><a href="{{ route('sewa.index',['type' => 'xray_kabin']) }}" >Sewa Xray Kabin</a></li>
+                    <li><a href="{{ route('sewa.index',['type' => 'xray_kargo']) }}" >Sewa Xray Kargo</a></li>
+                    <li><a href="{{ route('sewa.index',['type' => 'bus']) }}" >Sewa Kendaraan Roda (Micro Bus)</a></li>
+                    <li><a href="{{ route('sewa.index',['type' => 'workshop']) }}" >Sewa Peralatan Workshop</a></li>
+                    <li><a href="{{ route('sewa.index',['type' => 'reklame']) }}" >Sewa Penempatan Reklame</a></li>
                   
                   </li>
                 </ul>
               </li>
             @else
-            
-          @endif
               <li class="{{ Str::startsWith($currentRoute, Str::before($data['route'], '.')) ? 'mm-active' : '' }}">
                 <a href="{{ route($data['route']) }}" class="waves-effect">
                   <i class="{{ $data['icon'] }}"></i>
                   <span>{{ $data['label'] }}</span>
                 </a>
               </li>
+            
+          @endif
             @endnotstaff
           @endnotadmin
         @endforeach
@@ -110,23 +110,7 @@
               <span key="t-contact">@lang('sidebar.dashboard')</span>
             </a>
           </li>
-          <li>
-            <a href="javascript: void(0);" class="has-arrow waves-effect">
-              <i class="bx bx-store"></i>
-              <span key="t-ecommerce">@lang('translation.Ecommerce')</span>
-            </a>
-            <ul class="sub-menu" aria-expanded="false">
-              <li><a href="ecommerce-products" key="t-products">@lang('translation.Products')</a></li>
-              <li><a href="ecommerce-product-detail" key="t-product-detail">@lang('translation.Product_Detail')</a></li>
-              <li><a href="ecommerce-orders" key="t-orders">@lang('translation.Orders')</a></li>
-              <li><a href="ecommerce-customers" key="t-customers">@lang('translation.Customers')</a></li>
-              <li><a href="ecommerce-cart" key="t-cart">@lang('translation.Cart')</a></li>
-              <li><a href="ecommerce-checkout" key="t-checkout">@lang('translation.Checkout')</a></li>
-              <li><a href="ecommerce-shops" key="t-shops">@lang('translation.Shops')</a></li>
-              <li><a href="ecommerce-add-product" key="t-add-product">@lang('translation.Add_Product')</a>
-              </li>
-            </ul>
-          </li>
+          
           
 
           <li class="{{ request()->routeIs('customers.*') ? 'mm-active' : '' }}">

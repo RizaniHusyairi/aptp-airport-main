@@ -6,8 +6,8 @@
 
 @section('content')
   @component('components.breadcrumb')
-    @slot('li_1') Sewa @endslot
-    @slot('title') Pengajuan Sewa @endslot
+    @slot('li_1') Sewa Lahan @endslot
+    @slot('title') Pengajuan Sewa Lahan @endslot
   @endcomponent
   @if(session('success'))
     <div class="alert alert-success">

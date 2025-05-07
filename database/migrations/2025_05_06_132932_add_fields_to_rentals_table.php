@@ -15,6 +15,7 @@ return new class extends Migration
             $table->integer('quantity')->nullable()->after('location');
             $table->string('design_file')->nullable()->after('quantity');
             
+            
         });
     }
 };

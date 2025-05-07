@@ -7,6 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 class Rental extends Model
 {
     protected $guarded = [];
+
+    protected $fillable = [
+        'rental_name', 'description', 'rental_type', 'documents',
+        'submission_status', 'area', 'location', 'quantity', 'design_file'
+    ];
+
+    
     public function users()
     {
         return $this->belongsToMany(User::class, 'rental_user', 'rental_id', 'user_id')
