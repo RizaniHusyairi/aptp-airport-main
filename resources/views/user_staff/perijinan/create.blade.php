@@ -31,10 +31,16 @@
                 <div class="invalid-feedback d-block">{{ $message }}</div>
               @enderror
             </div>
-
             <div class="mb-3">
+
               <label for="license_type" class="form-label">Jenis Perizinan Usaha</label>
-              <input type="text" class="form-control" id="license_type" name="license_type" value="{{ old('license_type') }}" required>
+              <select name="license_type" id="license_type" class="form-control" required>
+                  <option value="">Pilih Jenis Perizinan Usaha</option>
+                  @foreach ($license_type as $type)
+                      <option value="{{ $type }}">{{ $type }}</option>
+                  @endforeach
+              </select>  
+            
               @error('license_type')
                 <div class="invalid-feedback d-block">{{ $message }}</div>
               @enderror

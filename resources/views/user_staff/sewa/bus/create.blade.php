@@ -1,13 +1,13 @@
 @extends('layouts.master')
 
 @section('title')
-  Pengajuan Sewa Lahan
+  Pengajuan Sewa Kendaraan Roda Empat (Micro Bus)
 @endsection
 
 @section('content')
   @component('components.breadcrumb')
-    @slot('li_1') Sewa Lahan @endslot
-    @slot('title') Pengajuan Sewa Lahan @endslot
+    @slot('li_1') Sewa Kendaraan Roda Empat (Micro Bus) @endslot
+    @slot('title') Pengajuan Sewa Kendaraan Roda Empat (Micro Bus) @endslot
   @endcomponent
   @if(session('success'))
     <div class="alert alert-success">
@@ -18,12 +18,9 @@
     <div class="col-xl-12">
       <div class="card">
         <div class="card-body">
-
           <h4 class="card-title mb-4">Formulir Pengajuan Sewa</h4>
-
-          <form method="POST" action="{{ route('sewaLahan.store') }}" enctype="multipart/form-data" class="needs-validation" novalidate>
+          <form method="POST" action="{{ route('sewa.store',['type' => $rentalTypes]) }}" enctype="multipart/form-data" class="needs-validation" novalidate>
             @csrf
-
             <div class="mb-3">
               <label for="rental_name" class="form-label">Nama Sewa</label>
               <input type="text" class="form-control" id="rental_name" name="rental_name" value="{{ old('rental_name') }}" required>

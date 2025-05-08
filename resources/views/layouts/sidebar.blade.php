@@ -13,7 +13,7 @@
           $permissionRoutes = [
             'Manajemen Berita' => ['route' => 'berita.staffIndex', 'icon' => 'bx bx-news', 'label' => 'Berita'],
             'Manajemen Tenant' => ['route' => 'tenant.staffIndex', 'icon' => 'bx bx-store', 'label' => 'Tenant'],
-            'Manajemen Penyewaan' => ['route' => '', 'icon' => 'bx bx-map', 'label' => 'Penyewaan'],
+            'Manajemen Penyewaan' => ['route' => 'staffSewa.index', 'icon' => 'bx bx-map', 'label' => 'Penyewaan'],
             'Manajemen Perijinan Usaha' => ['route' => 'perijinan.staffIndex', 'icon' => 'bx bx-id-card', 'label' => 'Perijinan Usaha'],
             'Manajemen Pengiklanan' => ['route' => 'pengiklanan.staffIndex', 'icon' => 'bx bx-broadcast', 'label' => 'Pengiklanan'],
             'Manajemen Field Trip' => ['route' => 'fieldtrip.staffIndex', 'icon' => 'bx bx-walk', 'label' => 'Field Trip'],
@@ -24,7 +24,7 @@
           ];
           $userRoutes = [
             'Ajukan Tenant' => ['route' => 'tenant.index', 'icon' => 'bx bx-store', 'label' => 'Ajukan Tenant'],
-            'Ajukan Sewa' => ['route' => '', 'icon' => 'bx bx-map', 'label' => 'Ajukan Sewa'],
+            'Ajukan Sewa' => ['route' => 'sewa.index', 'icon' => 'bx bx-map', 'label' => 'Ajukan Sewa'],
             'Ajukan Perijinan Usaha' => ['route' => 'perijinan.index', 'icon' => 'bx bx-id-card', 'label' => 'Ajukan Perijinan Usaha'],
             'Ajukan Pengiklanan' => ['route' => 'pengiklanan.index', 'icon' => 'bx bx-broadcast', 'label' => 'Ajukan Pengiklanan'],
             'Ajukan Field Trip' => ['route' => 'fieldtrip.index', 'icon' => 'bx bx-walk', 'label' => 'Ajukan Field Trip'],
@@ -38,25 +38,7 @@
         @foreach ($permissionRoutes as $permissionName => $data)
         
           @if ($user->hasPermission($permissionName))
-            @if ($permissionName == 'Manajemen Penyewaan')
-              <li>
-                <a href="javascript: void(0);" class="has-arrow waves-effect">
-                  <i class="{{ $data['icon'] }}"></i>
-                  <span key="t-ecommerce">{{ $data['label'] }}</span>
-                </a>
-                <ul class="sub-menu" aria-expanded="false">
-                    <li><a href="{{ route('staffSewa.index',['type' => 'ruang']) }}">Sewa Ruang</a></li>
-                    <li><a href="{{ route('staffSewa.index',['type' => 'lahan']) }}" >Sewa Lahan</a></li>
-                    <li><a href="{{ route('staffSewa.index',['type' => 'xray_kabin']) }}" >Sewa Xray Kabin</a></li>
-                    <li><a href="{{ route('staffSewa.index',['type' => 'xray_kargo']) }}" >Sewa Xray Kargo</a></li>
-                    <li><a href="{{ route('staffSewa.index',['type' => 'bus']) }}" >Sewa Kendaraan Roda (Micro Bus)</a></li>
-                    <li><a href="{{ route('staffSewa.index',['type' => 'workshop']) }}" >Sewa Peralatan Workshop</a></li>
-                    <li><a href="{{ route('staffSewa.index',['type' => 'reklame']) }}" >Sewa Penempatan Reklame</a></li>
-                  
-                  </li>
-                </ul>
-              </li>
-            @else
+            
             <li>
               <a href="{{ route($data['route']) }}" class="waves-effect d-flex align-items-center">
                 <i class="{{ $data['icon'] }}"></i>
@@ -64,7 +46,6 @@
               </a>
             </li>
             
-          @endif
           {{-- <li class="{{ Str::startsWith($currentRoute, Str::before($data['route'], '.')) ? 'mm-active' : '' }}"> --}}
           @endif
         @endforeach
@@ -72,33 +53,13 @@
         @foreach ($userRoutes as $permissionName => $data)
           @notadmin
             @notstaff
-            @if ($permissionName == 'Ajukan Sewa')
-              <li>
-                <a href="javascript: void(0);" class="has-arrow waves-effect">
-                  <i class="{{ $data['icon'] }}"></i>
-                  <span key="t-ecommerce">{{ $data['label'] }}</span>
-                </a>
-                <ul class="sub-menu" aria-expanded="false">
-                    <li><a href="{{ route('sewa.index',['type' => 'ruang']) }}">Sewa Ruang</a></li>
-                    <li><a href="{{ route('sewa.index',['type' => 'lahan']) }}" >Sewa Lahan</a></li>
-                    <li><a href="{{ route('sewa.index',['type' => 'xray_kabin']) }}" >Sewa Xray Kabin</a></li>
-                    <li><a href="{{ route('sewa.index',['type' => 'xray_kargo']) }}" >Sewa Xray Kargo</a></li>
-                    <li><a href="{{ route('sewa.index',['type' => 'bus']) }}" >Sewa Kendaraan Roda (Micro Bus)</a></li>
-                    <li><a href="{{ route('sewa.index',['type' => 'workshop']) }}" >Sewa Peralatan Workshop</a></li>
-                    <li><a href="{{ route('sewa.index',['type' => 'reklame']) }}" >Sewa Penempatan Reklame</a></li>
-                  
-                  </li>
-                </ul>
-              </li>
-            @else
+            
               <li class="{{ Str::startsWith($currentRoute, Str::before($data['route'], '.')) ? 'mm-active' : '' }}">
                 <a href="{{ route($data['route']) }}" class="waves-effect">
                   <i class="{{ $data['icon'] }}"></i>
                   <span>{{ $data['label'] }}</span>
                 </a>
               </li>
-            
-          @endif
             @endnotstaff
           @endnotadmin
         @endforeach
@@ -126,85 +87,7 @@
             </a>
           </li>
 
-          <!-- <li class="{{ request()->routeIs('airlines.*') ? 'mm-active' : '' }}">
-            <a href="{{ route('airlines.index') }}" class="waves-effect">
-              <i class='bx bx-globe'></i>
-              <span key="t-contact">@lang('sidebar.airlines')</span>
-            </a>
-          </li>
-
-          <li class="{{ request()->routeIs('planes.*') ? 'mm-active' : '' }}">
-            <a href="{{ route('planes.index') }}" class="waves-effect">
-              <i class='bx bxs-paper-plane'></i>
-              <span key="t-contact">@lang('sidebar.planes')</span>
-            </a>
-          </li>
-
-          <li class="{{ request()->routeIs('airports.*') ? 'mm-active' : '' }}">
-            <a href="{{ route('airports.index') }}" class="waves-effect">
-              <i class='bx bx-buildings'></i>
-              <span key="t-contact">@lang('sidebar.airports')</span>
-            </a>
-          </li>
-
-          <li class="{{ request()->routeIs('flights.*') ? 'mm-active' : '' }}">
-            <a href="{{ route('flights.index') }}" class="waves-effect">
-              <i class='bx bxs-plane-alt'></i>
-              <span key="t-contact">@lang('sidebar.flights')</span>
-            </a>
-          </li> -->
-
-          {{-- tickets --}}
-          <!-- <li>
-            <a href="javascript: void(0);" class="has-arrow waves-effect {{ request()->routeIs('tickets.*') ? 'mm-active' : '' }}">
-              <i class="dripicons-ticket"></i>
-              <span key="t-ecommerce">@lang('sidebar.tickets')</span>
-            </a>
-            <ul class="{{ request()->routeIs('tickets.*') ? 'sub-menu mm-collapse mm-show' : 'sub-menu' }}" aria-expanded="false">
-              <li>
-                <a href="{{ route('tickets.index') }}">All Tickets
-                  <span class="badge rounded-pill bg-info float-end ticket-badge d-none" id="totalTickets"></span>
-                </a>
-              </li>
-              <li>
-                <a href="{{ route('tickets.index', ['status' => 'pending']) }}" class="{{ request()->get('status') == 'pending' ? 'active' : '' }}" key="t-products">Pending Tickets
-                  <span class="badge rounded-pill bg-info float-end ticket-badge d-none" id="pendingTickets"></span>
-                </a>
-              </li>
-              <li>
-                <a href="{{ route('tickets.index', ['status' => 'approved']) }}" class="{{ request()->get('status') == 'approved' ? 'active' : '' }}" key="t-products">Approved Tickets
-                  <span class="badge rounded-pill bg-info float-end ticket-badge d-none" id="approvedTickets"></span>
-                </a>
-              </li>
-              <li>
-                <a href="{{ route('tickets.index', ['status' => 'canceled']) }}" class="{{ request()->get('status') == 'canceled' ? 'active' : '' }}" key="t-products">Canceled Tickets
-                  <span class="badge rounded-pill bg-info float-end ticket-badge d-none" id="canceledTickets"></span>
-                </a>
-              </li>
-            </ul>
-          </li> -->
         @else
-          {{-- USER ROUTES  --}}
-          <!-- <li>
-            <a href="{{ route('profile') }}" class="waves-effect">
-              <i class="bx bx-user-circle"></i>
-              <span key="t-contact">@lang('sidebar.my_profile')</span>
-            </a>
-          </li> -->
-
-          <!-- <li>
-            <a href="{{ route('tickets.flights') }}" class="waves-effect">
-              <i class="bx bx-credit-card"></i>
-              <span>@lang('sidebar.book_ticket')</span>
-            </a>
-          </li>
-
-          <li>
-            <a href="{{ route('tickets.userTickets') }}" class="waves-effect">
-              <i class="bx bx-credit-card"></i>
-              <span>@lang('sidebar.my_tickets')</span>
-            </a>
-          </li> -->
         @endadmin
 
       </ul>

@@ -9,6 +9,10 @@ use App\Models\License;
 
 class PerijinanUsahaController extends Controller
 {
+    protected $licenseTypes = [
+        'ATM',
+        'Kargo',
+    ];
     /* ================== USER ROUTES ================== */
     public function store(Request $request)
     {
@@ -57,9 +61,12 @@ class PerijinanUsahaController extends Controller
         return redirect()->route('perijinan.index')->with('success', 'Pengajuan perijinan usaha berhasil dikirim!');
     }
 
+
+
     public function create()
-    {
-        return view('user_staff.perijinan.create');
+    {     
+        $license_type = $this->licenseTypes;
+        return view('user_staff.perijinan.create', compact('license_type'));
     }
 
     public function destroy($id)

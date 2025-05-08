@@ -41,30 +41,7 @@
                         </div>
                     @endforelse
                 </div>
-                <!-- <div class="mx-5 d-flex align-items-center justify-content-center text-white vh-100">
-                    <div class="selling-point">
-                        <h2>Selamat datang</h2>
-                          <h3>Bandar Udara APT Pranoto Kalimantan Timur</h3>
-                          <div class="ctas">
-                            @auth
-                                              <button class="cta-main">
-                                                @if (Auth::user()->is_admin)
-                            <a href="{{ route('root') }}">Dashboard</a>
-                        @else
-                            <a href="{{ route('tickets.flights') }}">Pesan Penerbangan</a>
-                            @endif
-                                                                </button>
-                        @else
-                            <button class="cta-main">
-                                <a href="{{ route('tickets.flights') }}">Pesan Penerbangan</a>
-                                </button>
-                                <button class="cta-sec">
-                                <a href="{{ route('register') }}">Daftar</a>
-                                </button>
-                            @endauth
-                          </div>
-                    </div>
-                </div> -->
+
             </div>
         </div>
         <div class="hubud-secondary container">

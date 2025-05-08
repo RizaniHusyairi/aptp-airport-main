@@ -46,14 +46,20 @@ Route::group(["prefix" => 'dashboard'], function () {
         Route::delete('/tenant/{id}', [TenantController::class, 'destroy'])->name('tenant.destroy');
         Route::get('/tenant', [TenantController::class, 'indexUser'])->name('tenant.index');
         
-        // Rental User Routes
-        Route::prefix('/sewa')->controller(SewaLahanController::class)
-        ->group(function () {
+        Route::prefix('/sewa')->controller(SewaLahanController::class)->group(function () {
+            Route::get('/', 'index')->name('sewa.index');
+            Route::get('/create', 'create')->name('sewa.create');
+            Route::post('/store', 'store')->name('sewa.store');
+            Route::delete('/{id}', 'destroy')->name('sewa.destroy');
+        });
+        // // Rental User Routes
+        // Route::prefix('/sewa')->controller(SewaLahanController::class)
+        // ->group(function () {
             
-            Route::get('/{type}', 'index')->name('sewa.index');
-            Route::get('/{type}/create', 'create')->name('sewa.create');
-            Route::post('/{type}/store', 'store')->name('sewa.store');
-            Route::delete('/{type}/{id}', 'destroy')->name('sewa.destroy');
+        //     Route::get('/{type}', 'index')->name('sewa.index');
+        //     Route::get('/{type}/create', 'create')->name('sewa.create');
+        //     Route::post('/{type}/store', 'store')->name('sewa.store');
+        //     Route::delete('/{type}/{id}', 'destroy')->name('sewa.destroy');
 
 
             // Route::get('/ruang', 'ruang')->name('ruang.index');
@@ -92,7 +98,7 @@ Route::group(["prefix" => 'dashboard'], function () {
             // Route::delete('/reklame/{id}',  'reklameDestroy')->name('reklame.destroy');
 
 
-        });
+        // });
         // Perijinan User Routes
         Route::get('/perijinan', [PerijinanUsahaController::class, 'indexUser'])->name('perijinan.index');
         Route::get('/perijinan/create', [PerijinanUsahaController::class, 'create'])->name('perijinan.create');
@@ -130,40 +136,14 @@ Route::group(["prefix" => 'dashboard'], function () {
             Route::patch('staff/tenant/{id}/reject', [TenantController::class, 'reject'])->name('tenant.reject');
 
 
-            Route::prefix('staff/')->controller(SewaLahanController::class)
-            ->group(function () {
-                Route::get('/{type}', 'indexStaff')->name('staffSewa.index');
-                Route::get('/{type}/{id}', 'show')->name('staffSewa.show');
-                Route::patch('/sewa/{id}/approve', 'approve')->name('sewa.approve');
-                Route::patch('/sewa/{id}/reject', 'reject')->name('sewa.reject');
 
-                
-                // Route::get('ruang', 'ruangStaff')->name('staffRuang.index');
-                // Route::get('ruang/{id}',  'ruangShow')->name('staffRuang.show');
-                
-                // Route::get('lahan', 'lahanStaff')->name('staffLahan.index');
-                // Route::get('lahan/{id}',  'lahanShow')->name('staffLahan.show');
-                
-                // Route::get('kabin', 'kabinStaff')->name('staffKabin.index');
-                // Route::get('kabin/{id}',  'kabinShow')->name('staffKabin.show');
-                
-                // Route::get('kargo', 'kargoStaff')->name('staffKargo.index');
-                // Route::get('kargo/{id}',  'kargoShow')->name('staffKargo.show');
-                
-                // Route::get('bus', 'busStaff')->name('staffBus.index');
-                // Route::get('bus/{id}',  'busShow')->name('staffBus.show');
-                
-                // Route::get('workshop', 'workshopStaff')->name('staffWorkshop.index');
-                // Route::get('workshop/{id}',  'workshopShow')->name('staffWorkshop.show');
-                
-                // Route::get('reklame', 'reklameStaff')->name('staffReklame.index');
-                // Route::get('reklame/{id}',  'reklameShow')->name('staffReklame.show');
-                
-                // Route::patch('sewa/{id}/approve',  'approve')->name('sewa.approve');
-                // Route::patch('sewa/{id}/reject', 'reject')->name('sewa.reject');
+            Route::prefix('staff/sewa')->controller(SewaLahanController::class)->group(function () {
+                Route::get('/', 'indexStaff')->name('staffSewa.index');
+                Route::get('/{id}', 'show')->name('staffSewa.show');
+                Route::patch('/{id}/approve', 'approve')->name('sewa.approve');
+                Route::patch('/{id}/reject', 'reject')->name('sewa.reject');
             });
-
-
+            
             
             // Perijinan Staff Routes
             Route::get('staff/perijinan', [PerijinanUsahaController::class, 'index'])->name('perijinan.staffIndex');
@@ -290,7 +270,7 @@ Route::get('/informasi/berita', [LandingPageController::class, 'berita'])->name(
 Route::get('/informasi/berita/{slug}', [LandingPageController::class, 'showNews'])->name('showNews');
 Route::get('/informasi/laporan-keuangan', [LandingPageController::class, 'laporanKeuangan'])->name('laporanKeuangan');
 Route::get('/informasi/tenant', [LandingPageController::class, 'tenant'])->name('tenant');
-Route::get('/informasi/sewa-lahan', [LandingPageController::class, 'sewaLahan'])->name('sewaLahan');
+Route::get('/informasi/sewa', [LandingPageController::class, 'sewa'])->name('sewa');
 Route::get('/informasi/perijinan-usaha', [LandingPageController::class, 'perijinanUsaha'])->name('perijinanUsaha');
 Route::get('/informasi/pengiklanan', [LandingPageController::class, 'pengiklanan'])->name('pengiklanan');
 Route::get('/informasi/field-trip', [LandingPageController::class, 'fieldTrip'])->name('fieldTrip');

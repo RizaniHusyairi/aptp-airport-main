@@ -1,13 +1,13 @@
 @extends('layouts.master')
 
 @section('title')
-  Pengajuan Sewa Peralatan Workshop
+  Pengajuan Sewa Lahan
 @endsection
 
 @section('content')
   @component('components.breadcrumb')
-    @slot('li_1') Sewa Peralatan Workshop @endslot
-    @slot('title') Pengajuan Sewa Peralatan Workshop @endslot
+    @slot('li_1') Sewa @endslot
+    @slot('title') Pengajuan Sewa @endslot
   @endcomponent
   @if(session('success'))
     <div class="alert alert-success">
@@ -25,11 +25,11 @@
             <div class="col-12">
               <div class="card">
                 <div class="card-header d-flex justify-content-between bg-transparent">
-                  <h4 class="card-title">Daftar Sewa Peralatan Workshop</h4>
+                  <h4 class="card-title">Daftar Sewa </h4>
                   @notadmin
                     @notstaff
                     
-                      <a href='{{ route("sewa.create", ['type' => 'workshop']) }}' class="btn btn-success btn-sm">+ Tambah Pengajuan</a>
+                      <a href='{{ route("sewa.create") }}' class="btn btn-success btn-sm">+ Tambah Pengajuan</a>
                     @endnotstaff
                   @endnotadmin
                 </div>
@@ -70,10 +70,10 @@
                                 @if ($rental->documents)
                                   <div class="row">
                                     <form class="col">
-                                      <a href="{{ asset('uploads/documents/rental/' . basename($rental->documents)) }}" class="btn btn-sm btn-primary w-100" target="_blank">Lihat Berkas</a>
+                                      <a href="{{ asset('storage/' . $rental->documents) }}" class="btn btn-sm btn-primary w-100" target="_blank">Lihat Berkas</a>
                                     </form>
                                     @if ($rental->submission_status == 'diajukan')
-                                      <form class="col" action="{{ route('sewa.destroy',['type' => $rental->rentaltype, 'id' => $rental->id]) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus pengajuan ini?')">
+                                      <form class="col" action="{{ route('sewa.destroy', $rental->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus pengajuan ini?')">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-danger btn-sm w-100">Hapus pengajuan</button>
@@ -87,7 +87,7 @@
                             </tr>
                           @empty
                             <tr>
-                              <td colspan="4" class="text-center">Belum ada pengajuan sewa Peralatan Workshop</td>
+                              <td colspan="4" class="text-center">Belum ada pengajuan sewa lahan</td>
                             </tr>
                           @endforelse
                         </tbody>
@@ -120,7 +120,7 @@
                             <td>
                               <div class="row g-1">
                                 <div class="col-12 mb-1">
-                                  <a href="{{  route('sewa.show', ['type' => $rental->rentaltype,'id' => $rental->id]) }}" class="btn btn-sm btn-primary w-100">
+                                  <a href="{{  route('sewa.show',  $rental->id) }}" class="btn btn-sm btn-primary w-100">
                                     Lihat
                                   </a>
                                 </div>

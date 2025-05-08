@@ -47,6 +47,7 @@
                 <li>Akta Pendirian Perusahaan</li>
                 <li>NPWP</li>
                 <li>Proposal usaha</li>
+                
                 <li>Sertifikat penjamah makanan (jika F&B)</li>
                 <li>Bukti bayar pajak 3 bulan terakhir</li>
                 <li>Desain teknis booth/tempat usaha</li>

@@ -1,13 +1,13 @@
 @extends('layouts.master')
 
 @section('title')
-  Pengajuan Sewa Lahan
+  Pengajuan Sewa Xray Kabin
 @endsection
 
 @section('content')
   @component('components.breadcrumb')
-    @slot('li_1') Sewa Lahan @endslot
-    @slot('title') Pengajuan Sewa Lahan @endslot
+    @slot('li_1') Sewa Xray Kabin @endslot
+    @slot('title') Pengajuan Sewa Xray Kabin @endslot
   @endcomponent
   @if(session('success'))
     <div class="alert alert-success">
@@ -25,10 +25,11 @@
             <div class="col-12">
               <div class="card">
                 <div class="card-header d-flex justify-content-between bg-transparent">
-                  <h4 class="card-title">Daftar Sewa Lahan</h4>
+                  <h4 class="card-title">Daftar Sewa Xray Kabin</h4>
                   @notadmin
                     @notstaff
-                      <a href='{{ route('sewa.create', ['type' => 'xray_kabin', 'id'=>$rental->id]) }}' class="btn btn-success btn-sm">+ Tambah Pengajuan</a>
+                    
+                      <a href='{{ route("sewa.create", ['type' => 'xray_kabin']) }}' class="btn btn-success btn-sm">+ Tambah Pengajuan</a>
                     @endnotstaff
                   @endnotadmin
                 </div>
@@ -72,7 +73,7 @@
                                       <a href="{{ asset('uploads/documents/rental/' . basename($rental->documents)) }}" class="btn btn-sm btn-primary w-100" target="_blank">Lihat Berkas</a>
                                     </form>
                                     @if ($rental->submission_status == 'diajukan')
-                                      <form class="col" action="{{ route('sewa.destroy', ['type' => 'xray_kabin', 'id'=>$rental->id]) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus pengajuan ini?')">
+                                      <form class="col" action="{{ route('sewa.destroy',['type' => $rental->rentaltype, 'id' => $rental->id]) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus pengajuan ini?')">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-danger btn-sm w-100">Hapus pengajuan</button>
@@ -86,7 +87,7 @@
                             </tr>
                           @empty
                             <tr>
-                              <td colspan="4" class="text-center">Belum ada pengajuan sewa lahan</td>
+                              <td colspan="4" class="text-center">Belum ada pengajuan sewa Xray Kabin</td>
                             </tr>
                           @endforelse
                         </tbody>
@@ -119,7 +120,7 @@
                             <td>
                               <div class="row g-1">
                                 <div class="col-12 mb-1">
-                                  <a href="{{ route('staffSewa.show', ['type' => 'xray_kabin', 'id'=>$rental->id]) }}" class="btn btn-sm btn-primary w-100">
+                                  <a href="{{  route('sewa.show', ['type' => $rental->rentaltype,'id' => $rental->id]) }}" class="btn btn-sm btn-primary w-100">
                                     Lihat
                                   </a>
                                 </div>

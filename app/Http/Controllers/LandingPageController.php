@@ -92,7 +92,7 @@ class LandingPageController extends Controller
         return view('navigation.informasi.berita.show', compact('news', 'latestArticles'));
     }
     public function tenant(){return view('navigation.informasi.ajuan.index');}
-    public function sewaLahan(){return view('navigation.informasi.ajuan.index');}
+    public function sewa(){return view('navigation.informasi.ajuan.index');}
     public function perijinanUsaha(){return view('navigation.informasi.ajuan.index');}
     public function pengiklanan(){return view('navigation.informasi.ajuan.index');}
     public function fieldTrip(){return view('navigation.informasi.ajuan.index');}
