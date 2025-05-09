@@ -30,6 +30,7 @@ class ViewServiceProvider extends ServiceProvider
             $menuItems = [
                 'header' => [
                     ['name' => 'Beranda', 'route' => route('home')],
+                    
                     ['name' => 'Informasi Publik', 'dropdown' => [
                         ['name' => 'Profil Bandara', 'route' => route('profilBandara')],
                         ['name' => 'Struktur Organisasi', 'route' => route('strukturOrganisasi')],
@@ -37,11 +38,19 @@ class ViewServiceProvider extends ServiceProvider
                         ['name' => 'Pejabat Bandara', 'route' => route('pejabatBandara')],
                         ['name' => 'SOP PPID', 'route' => route('sopPpid')],
                         ['name' => 'Pengajuan Informasi Publik', 'route' => route('pengajuanInformasiPublik')],
-                        ]],
-                        ['name' => 'Informasi', 'dropdown' => [
-                            ['name' => 'Berita', 'route' => route('berita')],
-                            ['name' => 'Laporan Keuangan', 'route' => route('laporanKeuangan')],
+                        ]
+                    ],
+                    ['name' => 'Informasi', 'dropdown' => [
+                        ['name' => 'Berita', 'route' => route('berita')],
+                        ['name' => 'Laporan Keuangan', 'route' => route('laporanKeuangan')],
                     ]],
+                    
+                    ['name' => 'Regulasi','dropdown' =>[
+                        ['name' => 'Surat Utusan', 'route' => '#'],
+                        ['name' => 'Surat Edaran', 'route' => '#'],
+                        ]
+                    ],
+
                     ['name' => 'Layanan', 'dropdown' => [
                         ['name' => 'PAS', 'route' => 'https://aptpranoto.id/website/layanan/pas_orang.html'],
                         ['name' => 'Tenant', 'route' => route('tenant')],
@@ -49,7 +58,11 @@ class ViewServiceProvider extends ServiceProvider
                         ['name' => 'Perijinan Usaha', 'route' => route('perijinanUsaha')],
                         ['name' => 'Pengiklanan', 'route' => route('pengiklanan')],
                         ['name' => 'Field Trip', 'route' => route('fieldTrip')],
-                    ]],
+                        ['name' => 'Beauty Contest', 'route' => route('lelang')],
+                        ['name' => 'Pengajuan Slot', 'route' => route('lelang')],
+                    ]
+                    ],
+                    ['name' => 'Kontak Kami', 'route' => route('kontak') ]
                 ],
             ];
             $footerSliders = Slider::where('is_visible_footer', true)->get();

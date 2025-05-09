@@ -23,6 +23,7 @@ class LandingPageController extends Controller
     {
         $this->airportApi = $airportApi;
     }
+    
     public function home(Request $request, AirportApiService $airportApi)
     {
         $ip = $request->ip(); // IP Address pengunjung
@@ -82,20 +83,21 @@ class LandingPageController extends Controller
 
         return view('navigation.informasi.berita.index', compact('headline','subHeadlines','latestArticles', 'otherArticles'));
     }
+
     public function showNews($slug)
     {
         $news = News::where('slug', $slug)->where('is_published', true)->firstOrFail();
-
         $latestArticles = News::where('is_published', true)->orderBy('created_at', 'desc')->take(6)->get();
-
-
         return view('navigation.informasi.berita.show', compact('news', 'latestArticles'));
+    
     }
+    
     public function tenant(){return view('navigation.informasi.ajuan.index');}
     public function sewa(){return view('navigation.informasi.ajuan.index');}
     public function perijinanUsaha(){return view('navigation.informasi.ajuan.index');}
     public function pengiklanan(){return view('navigation.informasi.ajuan.index');}
     public function fieldTrip(){return view('navigation.informasi.ajuan.index');}
+    public function lelang(){return view('navigation.informasi.ajuan.index');}
 
     public function profilBandara(){return view('navigation.informasi-publik.profil-bandara.index');}
     public function strukturOrganisasi(){return view('navigation.informasi-publik.struktur-organisasi.index');}
@@ -115,6 +117,74 @@ class LandingPageController extends Controller
         
         return view('navigation.aktivitas-bandara.kedatangan.index', compact('kedatangan'));
     }
+
+    public function getFinanceData(Request $request)
+    {
+        $period = $request->input('period', 'monthly');
+        $year = $request->input('year', date('Y'));
+        // Anggaran dari finances (flow_type = 'budget')
+
+        if($period === 'monthly'){
+        $budget = Finance::where('flow_type', 'budget')
+            ->whereYear('date', $year)
+            ->groupBy(DB::raw('MONTH(date)'))
+            ->selectRaw('MONTH(date) as month, SUM(amount) as total')
+            ->pluck('total', 'month')
+            ->toArray();
+
+        // Pengeluaran dari budget_expenses, join dengan finances
+        $expense = BudgetExpense::join('finances', 'budget_expenses.finance_id', '=', 'finances.id')
+            ->whereYear('finances.date', $year)
+            ->groupBy(DB::raw('MONTH(finances.date)'))
+            ->selectRaw('MONTH(finances.date) as month, SUM(budget_expenses.amount) as total')
+            ->pluck('total', 'month')
+            ->toArray();
+
+        $labels = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+        $budgetData = array_fill(1, 12, 0);
+        $expenseData = array_fill(1, 12, 0);
+
+        foreach ($budget as $month => $total) {
+            $budgetData[$month] = $total;
+        }
+        foreach ($expense as $month => $total) {
+            $expenseData[$month] = $total;
+        }
+
+        $budgetData = array_values($budgetData);
+        $expenseData = array_values($expenseData);
+        } else {
+        // Anggaran tahunan
+        $budget = Finance::where('flow_type', 'budget')
+            ->groupBy(DB::raw('YEAR(date)'))
+            ->selectRaw('YEAR(date) as year, SUM(amount) as total')
+            ->pluck('total', 'year')
+            ->toArray();
+
+        // Pengeluaran tahunan
+        $expense = BudgetExpense::join('finances', 'budget_expenses.finance_id', '=', 'finances.id')
+            ->groupBy(DB::raw('YEAR(finances.date)'))
+            ->selectRaw('YEAR(finances.date) as year, SUM(budget_expenses.amount) as total')
+            ->pluck('total', 'year')
+            ->toArray();
+
+        $labels = array_unique(array_merge(array_keys($budget), array_keys($expense)));
+            sort($labels);
+        $budgetData = [];
+        $expenseData = [];
+        foreach ($labels as $year) {
+            $budgetData[] = $budget[$year] ?? 0;
+            $expenseData[] = $expense[$year] ?? 0;
+        }
+        }
+
+        return response()->json([
+            'labels' => $labels,
+            'budget' => $budgetData,
+            'expense' => $expenseData
+        ]);
+    }
+
     public function laluLintas(Request $request)
     {
         $filterType = $request->get('filter_type', 'year');
@@ -184,20 +254,20 @@ class LandingPageController extends Controller
         ]);
     }
 
-    
     public function laporanKeuangan(Request $request)
     {
         // Ambil semua tahun unik dari tabel finances
         $years = Finance::selectRaw('YEAR(date) as year')
-            ->distinct()
-            ->orderBy('year', 'desc')
-            ->pluck('year')
-            ->toArray();
-    
+        ->distinct()
+        ->orderBy('year', 'desc')
+        ->pluck('year')
+        ->toArray();
+        
         $filterTahun = $request->get('tahun', date('Y'));
         $filterTahunPie = $request->get('tahun_pie', date('Y'));
         $jenis_filter = $request->get('jenis_filter', 'bulan');
-    
+     
+
         // 1. DATA GRAFIK BAR (PEMASUKAN)
         $query = Finance::where('flow_type', 'in');
         if ($jenis_filter == 'bulan') {
@@ -244,7 +314,10 @@ class LandingPageController extends Controller
         })->sum('amount');
     
         $showPieChart = $anggaran > 0; // Hanya tampilkan grafik Pie jika anggaran ada
-    
+
+        //3. grafil line
+        
+     
         return view('navigation.informasi.laporan-keuangan.index', compact(
             'years', 'filterTahun', 'filterTahunPie',
             'jenis_filter', 'labels', 'dataPemasukan',
@@ -260,7 +333,6 @@ class LandingPageController extends Controller
             'ktp' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
             'surat_pertanggungjawaban' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
             'surat_permintaan' => 'required|string',
-
             
             'nama' => 'required|string|max:255',
             'alamat' => 'required|string',
@@ -312,5 +384,9 @@ class LandingPageController extends Controller
         ]);
 
         return redirect()->back()->with('success', 'Pengajuan informasi berhasil dikirim.');
+    }
+
+    public function kontak(){
+        return view('navigation.kontak.index');
     }
 }

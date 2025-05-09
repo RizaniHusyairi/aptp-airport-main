@@ -17,6 +17,7 @@
             'Manajemen Perijinan Usaha' => ['route' => 'perijinan.staffIndex', 'icon' => 'bx bx-id-card', 'label' => 'Perijinan Usaha'],
             'Manajemen Pengiklanan' => ['route' => 'pengiklanan.staffIndex', 'icon' => 'bx bx-broadcast', 'label' => 'Pengiklanan'],
             'Manajemen Field Trip' => ['route' => 'fieldtrip.staffIndex', 'icon' => 'bx bx-walk', 'label' => 'Field Trip'],
+            'Manajemen Lelang' => ['route' => 'lelang.staffIndex', 'icon' => 'bx bx-walk', 'label' => 'Lelang/Beauty Contest'],
             'Manajemen Laporan Keuangan' => ['route' => 'keuangan.staffIndex', 'icon' => 'bx bx-money', 'label' => 'Laporan Keuangan'],
             'Manajemen Slider' => ['route' => 'slider.staffIndex', 'icon' => 'bx bx-slider', 'label' => 'Slider'],
             'Manajemen Ajuan Informasi Publik' => ['route' => 'informasiPublik.staffIndex', 'icon' => 'bx bx-info-circle', 'label' => 'Informasi Publik'],
@@ -28,15 +29,17 @@
             'Ajukan Perijinan Usaha' => ['route' => 'perijinan.index', 'icon' => 'bx bx-id-card', 'label' => 'Ajukan Perijinan Usaha'],
             'Ajukan Pengiklanan' => ['route' => 'pengiklanan.index', 'icon' => 'bx bx-broadcast', 'label' => 'Ajukan Pengiklanan'],
             'Ajukan Field Trip' => ['route' => 'fieldtrip.index', 'icon' => 'bx bx-walk', 'label' => 'Ajukan Field Trip'],
+            'Ajukan Lelang' => ['route' => 'lelang.index', 'icon' => 'fas fa-gavel', 'label' => 'Ajukan Lelang/Beauty Contest'],
           ];
         @endphp
+
         @php
           $user = auth()->user();
         @endphp
         <!-- Staff Sidebar -->
         {{-- <span class="badge bg-info">user: {{ $user }}</span> --}}
         @foreach ($permissionRoutes as $permissionName => $data)
-        
+
           @if ($user->hasPermission($permissionName))
             
             <li>
@@ -45,15 +48,12 @@
                 <span>{{ $data['label'] }}</span>
               </a>
             </li>
-            
-          {{-- <li class="{{ Str::startsWith($currentRoute, Str::before($data['route'], '.')) ? 'mm-active' : '' }}"> --}}
           @endif
         @endforeach
         <!-- User Sidebar -->
         @foreach ($userRoutes as $permissionName => $data)
           @notadmin
             @notstaff
-            
               <li class="{{ Str::startsWith($currentRoute, Str::before($data['route'], '.')) ? 'mm-active' : '' }}">
                 <a href="{{ route($data['route']) }}" class="waves-effect">
                   <i class="{{ $data['icon'] }}"></i>
@@ -71,9 +71,6 @@
               <span key="t-contact">@lang('sidebar.dashboard')</span>
             </a>
           </li>
-          
-          
-
           <li class="{{ request()->routeIs('customers.*') ? 'mm-active' : '' }}">
             <a href="{{ route('customers.index') }}" class="waves-effect">
               <i class='bx bx-user'></i>

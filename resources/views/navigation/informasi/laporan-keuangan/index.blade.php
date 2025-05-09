@@ -120,6 +120,35 @@
         </div>
       </div>
     </div>
+    
+  </div>
+  @endif
+  <div class="card mb-5">
+    <div class="card-header">
+      
+      <h4 class="card-title mb-4">Grafik Anggaran vs Pemasukan</h4>
+    </div>
+    <div class="card-body">
+
+      <div class="row mb-3">
+        <div class="col-md-4">
+            <label for="period" class="form-label">Periode</label>
+            <select id="period" class="form-control">
+                <option value="monthly">Bulanan</option>
+                <option value="yearly">Tahunan</option>
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label for="year" class="form-label">Tahun</label>
+            <select id="year" class="form-control">
+                @foreach ($years as $y)
+                    <option value="{{ $y }}" {{ $y == date('Y') ? 'selected' : '' }}>{{ $y }}</option>
+                @endforeach
+            </select>
+        </div>
+      </div>
+      <canvas id="financeChart" height="100"></canvas>  
+    </div>
     <div class="card-footer text-muted">
       <div class="row">
         <div class="col-md-6">
@@ -141,8 +170,7 @@
         </div>
       </div>
     </div>
-  </div>
-  @endif
+</div>
 </section>
 
 @push('scripts')
@@ -165,6 +193,7 @@
 </script>
 
 <script>
+  
   const ctx = document.getElementById('grafikKeuangan').getContext('2d');
   new Chart(ctx, {
     type: 'bar',
@@ -239,6 +268,104 @@
     }
   });
   @endif
+
+  document.addEventListener('DOMContentLoaded', function () {
+            const ctx = document.getElementById('financeChart').getContext('2d');
+            let financeChart;
+
+            function formatRupiah(value) {
+                return 'Rp' + value.toLocaleString('id-ID', { minimumFractionDigits: 0 });
+            }
+
+            function fetchData() {
+                const period = document.getElementById('period').value;
+                const year = document.getElementById('year').value;
+
+                fetch(`/informasi-keuangan/data?period=${period}&year=${year}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (financeChart) {
+                            financeChart.destroy();
+                        }
+
+                        financeChart = new Chart(ctx, {
+                            type: 'line',
+                            data: {
+                                labels: data.labels,
+                                datasets: [
+                                    {
+                                        label: 'Anggaran',
+                                        data: data.budget,
+                                        borderColor: 'blue',
+                                        backgroundColor: 'blue',
+                                        fill: false,
+                                        tension: 0.1,
+                                        pointRadius: 5,
+                                        pointHoverRadius: 8
+                                    },
+                                    {
+                                        label: 'Pengeluaran',
+                                        data: data.expense,
+                                        borderColor: 'red',
+                                        backgroundColor: 'red',
+                                        fill: false,
+                                        tension: 0.1,
+                                        pointRadius: 5,
+                                        pointHoverRadius: 8
+                                    }
+                                ]
+                            },
+                            options: {
+                                responsive: true,
+                                scales: {
+                                    y: {
+                                        beginAtZero: true,
+                                        ticks: {
+                                            callback: function (value) {
+                                                return formatRupiah(value);
+                                            }
+                                        },
+                                        title: {
+                                            display: true,
+                                            text: 'Jumlah (IDR)'
+                                        }
+                                    },
+                                    x: {
+                                        title: {
+                                            display: true,
+                                            text: period === 'monthly' ? 'Bulan' : 'Tahun'
+                                        }
+                                    }
+                                },
+                                plugins: {
+                                    legend: {
+                                        position: 'top'
+                                    },
+                                    tooltip: {
+                                        callbacks: {
+                                            label: function (context) {
+                                                let label = context.dataset.label || '';
+                                                if (label) {
+                                                    label += ': ';
+                                                }
+                                                label += formatRupiah(context.parsed.y);
+                                                return label;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                    });
+            }
+
+            // Initial fetch
+            fetchData();
+
+            // Update chart on filter change
+            document.getElementById('period').addEventListener('change', fetchData);
+            document.getElementById('year').addEventListener('change', fetchData);
+        });
 </script>
 @endpush
 @endsection

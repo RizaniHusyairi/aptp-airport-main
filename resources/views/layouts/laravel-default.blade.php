@@ -214,7 +214,7 @@
             </div>
             <div class="footer text-start fs-9 mt-5 d-flex justify-content-between align-items-center"
                 style="background-color: #0b0b0b;">
-                <span>Kantor Unit Penyelenggara Bandar Udara Kelas I A.P.T Pranoto Samarinda</span>
+                <span>Kantor Unit Penyelenggara Bandara Udara Kelas I A.P.T Pranoto Samarinda</span>
             </div>
         </footer>
 

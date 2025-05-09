@@ -22,6 +22,9 @@
         @case('field-trip')
           Syarat & Ketentuan Field Trip
           @break
+        @case('lelang')
+          Syarat & Ketentuan Lelang/Beauty contest
+          @break
         @default
           Syarat & Ketentuan Pengajuan
       @endswitch
@@ -47,13 +50,18 @@
                 <li>Akta Pendirian Perusahaan</li>
                 <li>NPWP</li>
                 <li>Proposal usaha</li>
-                
+                @if(!request()->segment(2) == 'perijinan-usaha')
                 <li>Sertifikat penjamah makanan (jika F&B)</li>
+                @endif
                 <li>Bukti bayar pajak 3 bulan terakhir</li>
                 <li>Desain teknis booth/tempat usaha</li>
                 <li>Surat pernyataan mengikuti aturan (bermaterai)</li>
                 <li>Laporan keuangan</li>
+                @if(request()->segment(2) == 'perijinan-usaha')
+                <li>Service Level Agreement (kecuali untuk Kargo)</li>
+                @else
                 <li>Service Level Agreement (jika berlaku)</li>
+                @endif
               @endif
             </ul>
           </div>
@@ -110,6 +118,7 @@
           'perijinan-usaha' => 'dashboard/perijinan',
           'pengiklanan' => 'dashboard/pengiklanan',
           'field-trip' => 'dashboard/fieldtrip',
+          'lelang' => 'dashboard/lelang',
           default => '#',
       };
     @endphp

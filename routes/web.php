@@ -26,6 +26,7 @@ use App\Http\Controllers\Staff_User\{
     TenantController,
     InformasiPublikController,
     LaluLintasController,
+    LelangController,
 };
 
 use App\Http\Controllers\{
@@ -105,6 +106,12 @@ Route::group(["prefix" => 'dashboard'], function () {
         Route::post('/perijinan/store', [PerijinanUsahaController::class, 'store'])->name('perijinan.store');
         Route::delete('/perijinan/{id}', [PerijinanUsahaController::class, 'destroy'])->name('perijinan.destroy');
         
+        // Lelang User Routes
+        Route::get('/lelang', [LelangController::class, 'indexUser'])->name('lelang.index');
+        Route::get('/lelang/create', [LelangController::class, 'create'])->name('lelang.create');
+        Route::post('/lelang/store', [LelangController::class, 'store'])->name('lelang.store');
+        Route::delete('/lelang/{id}', [LelangController::class, 'destroy'])->name('lelang.destroy');
+        
         // Pengiklanan User Routes
         Route::get('/pengiklanan', [PengiklananController::class, 'indexUser'])->name('pengiklanan.index');
         Route::get('/pengiklanan/create', [PengiklananController::class, 'create'])->name('pengiklanan.create');
@@ -150,6 +157,12 @@ Route::group(["prefix" => 'dashboard'], function () {
             Route::get('staff/perijinan/{id}', [PerijinanUsahaController::class, 'show'])->name('perijinan.show');
             Route::patch('staff/perijinan/{id}/approve', [PerijinanUsahaController::class, 'approve'])->name('perijinan.approve');
             Route::patch('staff/perijinan/{id}/reject', [PerijinanUsahaController::class, 'reject'])->name('perijinan.reject');
+            
+            // Lelang Staff Routes
+            Route::get('staff/lelang', [LelangController::class, 'index'])->name('lelang.staffIndex');
+            Route::get('staff/lelang/{id}', [LelangController::class, 'show'])->name('lelang.show');
+            Route::patch('staff/lelang/{id}/approve', [LelangController::class, 'approve'])->name('lelang.approve');
+            Route::patch('staff/lelang/{id}/reject', [LelangController::class, 'reject'])->name('lelang.reject');
             
             // Pengiklanan Staff Routes
             Route::get('staff/pengiklanan', [PengiklananController::class, 'index'])->name('pengiklanan.staffIndex');
@@ -241,8 +254,11 @@ Route::group(["prefix" => 'dashboard'], function () {
         });
     });
     Route::middleware(['auth'])->group(function () {
-        // Sewa Lahan Routes
+        // Sewa Routes
         Route::get('/sewa', [SewaLahanController::class, 'index'])->name('sewa.index');
+        
+        // Lelang Routes
+        Route::get('/lelang', [LelangController::class, 'index'])->name('lelang.index');
         
         // Perijinan Usaha Routes
         Route::get('/izin', [PerijinanUsahaController::class, 'index'])->name('izin.index');
@@ -266,14 +282,18 @@ Route::group(["prefix" => 'dashboard'], function () {
 
 
 Route::get('/', [LandingPageController::class, 'home'])->name('home');
+Route::get('/kontak', [LandingPageController::class, 'kontak'])->name('kontak');
 Route::get('/informasi/berita', [LandingPageController::class, 'berita'])->name('berita');
 Route::get('/informasi/berita/{slug}', [LandingPageController::class, 'showNews'])->name('showNews');
 Route::get('/informasi/laporan-keuangan', [LandingPageController::class, 'laporanKeuangan'])->name('laporanKeuangan');
+Route::get('/informasi-keuangan/data', [LandingPageController::class, 'getFinanceData'])->name('informasiKeuangan.data');
+
 Route::get('/informasi/tenant', [LandingPageController::class, 'tenant'])->name('tenant');
 Route::get('/informasi/sewa', [LandingPageController::class, 'sewa'])->name('sewa');
 Route::get('/informasi/perijinan-usaha', [LandingPageController::class, 'perijinanUsaha'])->name('perijinanUsaha');
 Route::get('/informasi/pengiklanan', [LandingPageController::class, 'pengiklanan'])->name('pengiklanan');
 Route::get('/informasi/field-trip', [LandingPageController::class, 'fieldTrip'])->name('fieldTrip');
+Route::get('/informasi/lelang', [LandingPageController::class, 'lelang'])->name('lelang');
 
 Route::get('/informasi-publik/profil-bandara', [LandingPageController::class, 'profilBandara'])->name('profilBandara');
 Route::get('/informasi-publik/struktur-organisasi', [LandingPageController::class, 'strukturOrganisasi'])->name('strukturOrganisasi');

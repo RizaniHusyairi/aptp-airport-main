@@ -12,6 +12,7 @@ html {
 :root {
   --main-color: #f8b281;
   --secondary-color: #1b1b1b;
+  --card-color: linear-gradient(250deg, #f8b281 0%, #D46213FF 100%);
 }
 
 #form{
@@ -24,6 +25,25 @@ html {
 }
 section {
   padding: 5%;
+}
+.address-icon{
+  background-color: white;
+  padding: 10px;
+  margin-right: 10px;
+  border-radius: 50%;
+}
+.address-icon i{
+  color: #D46213FF;
+}
+
+.contact-box{
+  background-image: var(--card-color);
+  color: white;
+  border:0px
+}
+
+.address-text a{
+  color: white;
 }
 
 h2 {
