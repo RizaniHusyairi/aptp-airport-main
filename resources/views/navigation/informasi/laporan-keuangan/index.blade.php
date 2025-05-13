@@ -76,57 +76,10 @@
     </div>
   </div>
 
-  {{-- Filter Form untuk Grafik Pie --}}
-  <div class="card mb-5">
-    <div class="card-header">
-      <h5 class="mb-0">Filter Grafik Anggaran vs Pengeluaran</h5>
-    </div>
-    <div class="card-body">
-      <form method="GET" action="{{ route('laporanKeuangan') }}" id="formGrafikPie">
-        <div class="row g-3 align-items-center">
-          <div class="col-auto">
-            <label for="tahunPieSelect" class="col-form-label">Pilih Tahun</label>
-          </div>
-          <div class="col-auto">
-            <select name="tahun_pie" id="tahunPieSelect" class="form-select select-filter" >
-              @foreach ($years as $year)
-                <option value="{{ $year }}" {{ $filterTahunPie == $year ? 'selected' : '' }}>{{ $year }}</option>
-              @endforeach
-            </select>
-          </div>
-
-          {{-- Menyimpan nilai filter lainnya saat form ini disubmit --}}
-          <input type="hidden" name="jenis_filter" value="{{ $jenis_filter }}">
-          <input type="hidden" name="tahun" value="{{ $filterTahun }}">
-
-          <div class="col-auto">
-            <button type="submit" class="btn btn-primary">Tampilkan Grafik</button>
-          </div>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  {{-- Grafik Pie - Hanya ditampilkan jika data anggaran sudah tersedia --}}
-  @if(isset($showPieChart) && $showPieChart)
-  <div class="card mb-5">
-    <div class="card-header">
-      <h5 class="mb-0">Grafik Pie Anggaran vs Pengeluaran APT Pranoto Tahun {{ $filterTahunPie }}</h5>
-    </div>
-    <div class="d-flex justify-content-center">
-      <div class="w-50">
-        <div class="card-body">
-          <canvas id="pieKeuangan"></canvas>
-        </div>
-      </div>
-    </div>
-    
-  </div>
-  @endif
   <div class="card mb-5">
     <div class="card-header">
       
-      <h4 class="card-title mb-4">Grafik Anggaran vs Pemasukan</h4>
+      <h4 class="card-title mb-4">Grafik Anggaran dan Pengeluaran</h4>
     </div>
     <div class="card-body">
 
@@ -230,45 +183,7 @@
     }
   });
 
-  @if(isset($showPieChart) && $showPieChart)
-  const pieCtx = document.getElementById('pieKeuangan').getContext('2d');
-  new Chart(pieCtx, {
-    type: 'pie',
-    data: {
-      labels: ['Anggaran', 'Pengeluaran'],
-      datasets: [{
-        data: [{{ $anggaran }}, {{ $totalPengeluaran }}],
-        backgroundColor: [
-          'rgba(75, 192, 192, 0.7)',
-          'rgba(255, 99, 132, 0.7)'
-        ],
-        borderColor: [
-          'rgba(75, 192, 192, 1)',
-          'rgba(255, 99, 132, 1)'
-        ],
-        borderWidth: 1
-      }]
-    },
-    options: {
-      responsive: true,
-      plugins: {
-        legend: {
-          position: 'bottom',
-        },
-        tooltip: {
-          callbacks: {
-            label: function(context) {
-              let label = context.label || '';
-              let value = context.parsed || 0;
-              return `${label}: Rp ${value.toLocaleString('id-ID')}`;
-            }
-          }
-        }
-      }
-    }
-  });
-  @endif
-
+  
   document.addEventListener('DOMContentLoaded', function () {
             const ctx = document.getElementById('financeChart').getContext('2d');
             let financeChart;

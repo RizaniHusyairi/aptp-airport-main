@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\{
     RoleController,
 };
 use App\Http\Controllers\Staff_User\{
+    ComplaintController,
     NewsController,
     FieldTripController,
     LaporanKeuanganController,
@@ -176,6 +177,12 @@ Route::group(["prefix" => 'dashboard'], function () {
             Route::patch('staff/fieldtrip/{id}/approve', [FieldTripController::class, 'approve'])->name('fieldtrip.approve');
             Route::patch('staff/fieldtrip/{id}/reject', [FieldTripController::class, 'reject'])->name('fieldtrip.reject');
             
+            // Pengaduan Staff Routes
+            Route::get('staff/pengaduan', [ComplaintController::class, 'index'])->name('fieldtrip.staffIndex');
+            Route::patch('staff/pengaduan/{complaint}', [ComplaintController::class, 'updateStatus'])->name('fieldtrip.show');
+            Route::patch('staff/pengaduan/{id}/approve', [ComplaintController::class, 'approve'])->name('fieldtrip.approve');
+            Route::patch('staff/pengaduan/{id}/reject', [FieldTripController::class, 'reject'])->name('fieldtrip.reject');
+            
             // Slider Staff Routes
             Route::get('staff/slider', [SliderController::class, 'index'])->name('slider.staffIndex');
             Route::get('staff/slider/create', [SliderController::class, 'create'])->name('slider.create');
@@ -282,7 +289,10 @@ Route::group(["prefix" => 'dashboard'], function () {
 
 
 Route::get('/', [LandingPageController::class, 'home'])->name('home');
+
 Route::get('/kontak', [LandingPageController::class, 'kontak'])->name('kontak');
+Route::post('/pengaduan', [LandingPageController::class, 'storePengaduan'])->name('pengaduan.store');
+
 Route::get('/informasi/berita', [LandingPageController::class, 'berita'])->name('berita');
 Route::get('/informasi/berita/{slug}', [LandingPageController::class, 'showNews'])->name('showNews');
 Route::get('/informasi/laporan-keuangan', [LandingPageController::class, 'laporanKeuangan'])->name('laporanKeuangan');

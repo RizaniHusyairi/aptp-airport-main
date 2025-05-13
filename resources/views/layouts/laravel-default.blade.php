@@ -179,7 +179,7 @@
                     </div>
                 </div>
                 <div class="col text-end fs-8">
-                    <h4 class="fs-3 mb-4 pb-2">Kontak Kami</h4>
+                    <h4 class="fs-3 mb-4 pb-2">Info Kontak</h4>
                     <div class="d-flex flex-column">
                         <a href="https://maps.app.goo.gl/SBcNQFzbxBuyMTE8A" class="email text-white"
                             target="_blank">Jl. Poros Samarinda – Bontang, Kel. Sungai Siring, Samarinda – Kalimantan

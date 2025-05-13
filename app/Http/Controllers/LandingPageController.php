@@ -8,12 +8,14 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Slider;
 use App\Models\News;
 use App\Models\Finance;
+use App\Models\Complaint;
 use App\Models\BudgetExpense;
 use App\Models\Visitor;
 use App\Models\PublicInformation;
 use App\Models\AirFreightTraffic;
 use Carbon\Carbon;
 use App\Services\AirportApiService;
+use Illuminate\Support\Facades\Http;
 
 class LandingPageController extends Controller
 {
@@ -388,5 +390,41 @@ class LandingPageController extends Controller
 
     public function kontak(){
         return view('navigation.kontak.index');
+    }
+    
+    public function storePengaduan(Request $request)
+    {
+        // Validasi form
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'subject' => 'required|string|max:255',
+            'message' => 'required|string',
+            'g-recaptcha-response' => 'required',
+        ]);
+
+        // Validasi reCAPTCHA
+        $response = Http::post('https://www.google.com/recaptcha/api/siteverify', [
+            'secret' => config('services.recaptcha.secret_key'),
+            'response' => $request->input('g-recaptcha-response'),
+            'remoteip' => $request->ip(),
+        ]);
+
+        $result = $response->json();
+
+        if (!$result['success']) {
+            return back()->withErrors(['g-recaptcha-response' => 'Verifikasi CAPTCHA gagal. Silakan coba lagi.'])->withInput();
+        }
+
+        // Simpan pengaduan
+        Complaint::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'subject' => $request->subject,
+            'message' => $request->message,
+            'status' => 'pending',
+        ]);
+
+        return redirect()->route('kontak')->with('success', 'Pengaduan Anda telah dikirim. Kami akan segera menindaklanjuti.');
     }
 }

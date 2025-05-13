@@ -57,7 +57,8 @@
         </div>
         <div class="col-lg-8">
             <h2 class="fw-bold fs-1">Kontak Kami</h2>
-            <form action="">
+            <form action="{{ route('pengaduan.store') }}" method="POST">
+                @csrf
                 <div class="row mb-3">
                     <div class="col">
                         <input class="form-control form-control-lg" type="text" placeholder="Nama Lengkap" aria-label=".form-control-lg example">
@@ -77,6 +78,9 @@
                         <label for="floatingTextarea2">Isi Pesan Anda</label>
                       </div>
                 </div>
+                <div class="mb-3">
+                    <div class="g-recaptcha" data-sitekey="{{ config('services.recaptcha.site_key') }}"></div>
+                </div>
                 <div class="col-12">
                     <button type="submit" class=" contact-box btn">Kirim pesan</button>
                 </div>
@@ -91,3 +95,4 @@
 
 
 @endsection
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
