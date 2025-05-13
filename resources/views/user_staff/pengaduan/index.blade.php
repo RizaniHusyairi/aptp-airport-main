@@ -36,30 +36,48 @@
                     <thead>
                       <tr>
                         <th>#</th>
-                        <th>Tanggal</th>
-                        <th>Jenis / Angkutan</th>
-                        <th>Datang</th>
-                        <th>Berangkat</th>
-                        <th>Dibuat</th>
-                        <!-- <th>Aksi</th> -->
+                        <th>Nama</th>
+                        <th>Email</th>
+                        <th>Subjek</th>
+                        <th>Pesan</th>
+                        <th>Status</th>
+                        <th>Aksi</th>                      
                       </tr>
                     </thead>
 
                     @staff
                       <tbody>
-                        @forelse ($traffics as $index => $traffic)
+                        @forelse ($complaints as $index => $complaint)
                           <tr>
-                            <td>{{ $index + 1 }}</td>
-                            <td>{{ $traffic->date }}</td>
-                            <td>{{ $traffic->type }}</td>
-                            <td>{{ $traffic->arrival }}</td>
-                            <td>{{ $traffic->departure }}</td>
-                            <td>{{ $traffic->created_at->format('d M Y H:i') }}</td>
+                              <td>{{ $index + 1 }}</td>
+                              <td>{{ $complaint->name }}</td>
+                              <td>{{ $complaint->email }}</td>
+                              <td>{{ $complaint->subject }}</td>
+                              <td>{{ Str::limit($complaint->message, 50) }}</td>
+                              <td>
+                                  <form action="{{ route('pengaduan.staffUpdate', $complaint->id) }}" method="POST">
+                                      @csrf
+                                      @method('PATCH')
+                                      <select name="status" class="form-control" onchange="this.form.submit()">
+                                          <option value="pending" {{ $complaint->status == 'pending' ? 'selected' : '' }}>Pending</option>
+                                          <option value="processed" {{ $complaint->status == 'processed' ? 'selected' : '' }}>Diproses</option>
+                                          <option value="resolved" {{ $complaint->status == 'resolved' ? 'selected' : '' }}>Selesai</option>
+                                      </select>
+                                  </form>
+                              </td>
+                              <td>
+                                  <form action="{{ route('pengaduan.Staffdestroy', $complaint->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus pengaduan ini?')">
+                                      @csrf
+                                      @method('DELETE')
+                                      <button type="submit" class="btn btn-danger btn-sm"><i class='bx bx-trash'></i> Hapus</button>
+                                  </form>
+                              </td>
                           </tr>
-                        @empty
-                          <tr>
-                            <td colspan="6" class="text-center">Belum ada data</td>
-                          </tr>
+                          @empty
+                            <tr>
+                              <td colspan="7" class="text-center">Belum ada pengaduan</td>
+                            </tr>
+                          
                         @endforelse
                       </tbody>
                     @endstaff

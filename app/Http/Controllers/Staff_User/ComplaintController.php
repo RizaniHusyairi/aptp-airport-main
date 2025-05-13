@@ -11,7 +11,7 @@ class ComplaintController extends Controller
     public function index()
     {
         $complaints = Complaint::all();
-        return view('staff_user.pengaduan.index', compact('complaints'));
+        return view('user_staff.pengaduan.index', compact('complaints'));
     }
 
     public function updateStatus(Request $request, Complaint $complaint)
@@ -24,13 +24,13 @@ class ComplaintController extends Controller
             'status' => $request->status,
         ]);
 
-        return redirect()->route('staffComplaints.index')->with('success', 'Status pengaduan berhasil diperbarui.');
+        return redirect()->route('pengaduan.staffIndex')->with('success', 'Status pengaduan berhasil diperbarui.');
     }
 
     public function destroy(Complaint $complaint)
     {
         $complaint->delete();
-        return redirect()->route('staffComplaints.index')->with('success', 'Pengaduan berhasil dihapus.');
+        return redirect()->route('pengaduan.staffIndex')->with('success', 'Pengaduan berhasil dihapus.');
     }    
 
 }

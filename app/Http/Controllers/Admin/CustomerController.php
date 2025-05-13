@@ -117,6 +117,8 @@ class CustomerController extends Controller
             'Manajemen Pergudangan' => 'danger',
             'Manajemen Laporan Keuangan' => 'dark',
             'Manajemen Slider' => 'light',
+            'Manajemen Lelang' => 'pink',
+            'Manajemen Pengaduan' => 'purple',
         ];
 
         if ($request->ajax()) {

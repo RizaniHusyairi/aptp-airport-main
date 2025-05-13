@@ -22,6 +22,7 @@ class PermissionSeeder extends Seeder
             'Manajemen Ajuan Informasi Publik',
             'Manajemen Lalu Lintas Angkutan Udara',
             'Manajemen Hukum',
+            'Manajemen Pengaduan',
             
         ];
 

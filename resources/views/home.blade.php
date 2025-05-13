@@ -4,6 +4,61 @@
 
 @push('styles')
     <style>
+        /* Marquee untuk Kerja Sama Mitra */
+        .marquee-container {
+            width: 100%;
+            overflow: hidden;
+            background: #f8f9fa;
+            padding: 20px 0;
+            position: relative;
+        }
+
+        .marquee {
+            display: flex;
+            animation: marquee 20s linear infinite;
+            white-space: nowrap;
+        }
+
+        .marquee.paused {
+            animation-play-state: paused;
+        }
+
+        .marquee a {
+            display: inline-block;
+            margin: 0 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .marquee img {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+        }
+
+        .marquee a:hover img {
+            transform: scale(1.1);
+        }
+
+        @keyframes marquee {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        /* Responsivitas */
+        @media (max-width: 576px) {
+            .marquee a {
+                margin: 0 10px;
+            }
+            .marquee img {
+                width: 80px;
+                height: 80px;
+            }
+        }
+
         .image-chief {
             width: 500px;
             height: auto;
@@ -145,7 +200,7 @@
             </section>
         </div>
 
-        <div class="container-fluid mb-5">
+        <div class="container-fluid">
             <section class="classes py-5 bg-black text-white mb-5">
                 <div class="container">
                     <div class="mb-4">
@@ -177,6 +232,41 @@
                     </div>
                 </div>
             </section>
+            
+        </div>
+        {{-- Section Kerja sama Mitra --}}
+        <div class="container-fluid mb-5">
+            <div class="container">
+                <div class="mb-4 text-center">
+                    <h2>Kerja Sama Mitra</h2>
+                </div>
+            </div>
+            <div class="marquee-container">
+                <div class="marquee" id="marquee">
+                    <!-- Ulangi logo untuk efek marquee mulus -->
+                    @php
+                        $partners = [
+                            ['name' => 'Kementrian Kelautan dan Perikanan', 'logo' => 'frontend/assets/mitra/logo_kkp.svg', 'url' => 'https://kkp.go.id/'],
+                            ['name' => 'AirNav', 'logo' => 'frontend/assets/mitra/logo-airnav.png', 'url' => 'https://www.airnavindonesia.co.id/'],
+                            ['name' => 'Batik Air', 'logo' => 'frontend/assets/mitra/logo-batik.png', 'url' => 'https://www.batikair.com/id/'],
+                            ['name' => 'BMKG', 'logo' => 'frontend/assets/mitra/logo-BMKG.png', 'url' => 'https://www.bmkg.go.id/'],
+                        ];
+                    @endphp
+                    @foreach ($partners as $partner)
+                        <a href="{{ $partner['url'] }}" target="_blank" title="{{ $partner['name'] }}"
+                            data-bs-toggle="tooltip" data-bs-placement="top">
+                            <img src="{{ asset($partner['logo']) }}" alt="{{ $partner['name'] }}">
+                        </a>
+                    @endforeach
+                    <!-- Ulangi untuk efek mulus -->
+                    @foreach ($partners as $partner)
+                        <a href="{{ $partner['url'] }}" target="_blank" title="{{ $partner['name'] }}"
+                            data-bs-toggle="tooltip" data-bs-placement="top">
+                            <img src="{{ asset($partner['logo']) }}" alt="{{ $partner['name'] }}">
+                        </a>
+                    @endforeach
+                </div>
+            </div>
         </div>
     </div>
 @endsection

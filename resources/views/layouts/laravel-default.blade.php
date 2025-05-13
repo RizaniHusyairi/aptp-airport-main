@@ -226,7 +226,59 @@
     <script src="{{ asset('frontend/script.js') }}"></script>
     @stack('scripts')
     <script>
-        // window.addEventListener('scroll', function() {
+        
+document.addEventListener('DOMContentLoaded', function () {
+  var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+  var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+      return new bootstrap.Tooltip(tooltipTriggerEl);
+  });
+
+  // Logika Pause saat Logo di Tengah
+  const marquee = document.getElementById('marquee');
+  const logos = document.querySelectorAll('.partner-logo');
+  const container = document.querySelector('.marquee-container');
+  let isPaused = false;
+
+  function checkLogoPosition() {
+      if (isPaused) return;
+
+      const containerRect = container.getBoundingClientRect();
+      const containerCenter = containerRect.left + containerRect.width / 2;
+
+      logos.forEach(logo => {
+          const logoRect = logo.getBoundingClientRect();
+          const logoCenter = logoRect.left + logoRect.width / 2;
+
+          // Cek apakah logo berada di tengah (dengan toleransi 10px)
+          if (Math.abs(logoCenter - containerCenter) < 10) {
+              isPaused = true;
+              marquee.classList.add('paused');
+
+              setTimeout(() => {
+                  marquee.classList.remove('paused');
+                  isPaused = false;
+              }, 1000); // Pause 1 detik
+          }
+      });
+  }
+
+  // Periksa posisi logo setiap 50ms
+  setInterval(checkLogoPosition, 50);
+
+  // Hentikan animasi saat hover
+  marquee.addEventListener('mouseenter', () => {
+      if (!isPaused) {
+          marquee.classList.add('paused');
+      }
+  });
+
+  marquee.addEventListener('mouseleave', () => {
+      if (!isPaused) {
+          marquee.classList.remove('paused');
+      }
+  });
+});
+// window.addEventListener('scroll', function() {
         //     const navbar = document.getElementById('navbar');
         //     if (window.scrollY > 10) {
         //         navbar.classList.add('scrolled');

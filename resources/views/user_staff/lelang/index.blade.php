@@ -100,14 +100,14 @@
 
                     @staff
                       <tbody>
-                        @forelse ($licenses as $index => $license)
+                        @forelse ($lelangs as $index => $lelang)
                           <tr>
                             <td>{{ $index + 1 }}</td>
-                            <td>{{ $license->documents ? preg_replace('/^\d+_/', '', basename($license->documents)) : '-' }}</td>
-                            <td>{{ $license->created_at->format('d M Y H:i') }}</td>
+                            <td>{{ $lelang->documents ? preg_replace('/^\d+_/', '', basename($lelang->documents)) : '-' }}</td>
+                            <td>{{ $lelang->created_at->format('d M Y H:i') }}</td>
                             <td>
                               @php
-                                $status = $license->submission_status;
+                                $status = $lelang->submission_status;
                                 $badgeClass = match($status) {
                                     'disetujui' => 'bg-success',
                                     'ditolak' => 'bg-danger',
@@ -117,14 +117,14 @@
                               <span class="badge {{ $badgeClass }}">{{ ucfirst($status) }}</span>
                             </td>
                             <td>
-                              @foreach ($license->users as $user)
+                              @foreach ($lelang->users as $user)
                                 <span class="badge bg-secondary">{{ $user->name }}</span>
                               @endforeach
                             </td>
                             <td>
                               <div class="row g-1">
                                 <div class="col-12 mb-1">
-                                  <a href="{{  route('perijinan.show', $license->id) }}" class="btn btn-sm btn-primary w-100">
+                                  <a href="{{  route('perijinan.show', $lelang->id) }}" class="btn btn-sm btn-primary w-100">
                                     Lihat
                                   </a>
                                 </div>

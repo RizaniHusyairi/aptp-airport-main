@@ -178,10 +178,9 @@ Route::group(["prefix" => 'dashboard'], function () {
             Route::patch('staff/fieldtrip/{id}/reject', [FieldTripController::class, 'reject'])->name('fieldtrip.reject');
             
             // Pengaduan Staff Routes
-            Route::get('staff/pengaduan', [ComplaintController::class, 'index'])->name('fieldtrip.staffIndex');
-            Route::patch('staff/pengaduan/{complaint}', [ComplaintController::class, 'updateStatus'])->name('fieldtrip.show');
-            Route::patch('staff/pengaduan/{id}/approve', [ComplaintController::class, 'approve'])->name('fieldtrip.approve');
-            Route::patch('staff/pengaduan/{id}/reject', [FieldTripController::class, 'reject'])->name('fieldtrip.reject');
+            Route::get('staff/pengaduan', [ComplaintController::class, 'index'])->name('pengaduan.staffIndex');
+            Route::patch('staff/pengaduan/{complaint}', [ComplaintController::class, 'updateStatus'])->name('pengaduan.staffUpdate');
+            Route::delete('staff/pengaduan/{complaint}', [ComplaintController::class, 'destroy'])->name('pengaduan.Staffdestroy');
             
             // Slider Staff Routes
             Route::get('staff/slider', [SliderController::class, 'index'])->name('slider.staffIndex');
