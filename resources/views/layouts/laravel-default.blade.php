@@ -234,10 +234,10 @@ document.addEventListener('DOMContentLoaded', function () {
       return new bootstrap.Tooltip(tooltipTriggerEl);
   });
 
-  }
+  });
 
   // Periksa posisi logo setiap 50ms
-  setInterval(checkLogoPosition, 50);
+//   setInterval(checkLogoPosition, 50);
 
 //   // Hentikan animasi saat hover
 //   marquee.addEventListener('mouseenter', () => {
@@ -251,7 +251,7 @@ document.addEventListener('DOMContentLoaded', function () {
 //           marquee.classList.remove('paused');
 //       }
 //   });
-});
+
 // window.addEventListener('scroll', function() {
         //     const navbar = document.getElementById('navbar');
         //     if (window.scrollY > 10) {

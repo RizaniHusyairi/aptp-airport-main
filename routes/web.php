@@ -28,6 +28,7 @@ use App\Http\Controllers\Staff_User\{
     InformasiPublikController,
     LaluLintasController,
     LelangController,
+    LetterController,
 };
 
 use App\Http\Controllers\{
@@ -142,7 +143,12 @@ Route::group(["prefix" => 'dashboard'], function () {
             Route::get('staff/tenant/{id}', [TenantController::class, 'show'])->name('tenant.show');
             Route::patch('staff/tenant/{id}/approve', [TenantController::class, 'approve'])->name('tenant.approve');
             Route::patch('staff/tenant/{id}/reject', [TenantController::class, 'reject'])->name('tenant.reject');
-
+            
+            // Lelang Staff Routes
+            // Route::get('staff/letter', [LetterController::class, 'index'])->name('lelang.staffIndex');
+            Route::resource('staff/letters', LetterController::class)->names('letters.staff');
+            Route::patch('staff/tenant/{id}/approve', [TenantController::class, 'approve'])->name('tenant.approve');
+            Route::patch('staff/tenant/{id}/reject', [TenantController::class, 'reject'])->name('tenant.reject');
 
 
             Route::prefix('staff/sewa')->controller(SewaLahanController::class)->group(function () {
@@ -311,6 +317,10 @@ Route::get('/informasi-publik/pejabat-bandara', [LandingPageController::class, '
 Route::get('/informasi-publik/sop-ppid', [LandingPageController::class, 'sopPpid'])->name('sopPpid');
 Route::get('/informasi-publik/pengajuan-informasi-publik', [LandingPageController::class, 'pengajuanInformasiPublik'])->name('pengajuanInformasiPublik');
 Route::post('/informasi-publik/pengajuan-informasi-publik', [LandingPageController::class, 'storePengajuanInformasiPublik'])->name('storePengajuanInformasiPublik');
+
+// Regulasi
+Route::get('/regulasi/surat-edaran', [LetterController::class, 'suratEdaran'])->name('suratEdaran');
+Route::get('/regulasi/surat-utusan', [LetterController::class, 'suratUtusan'])->name('suratUtusan');
 
 //Language Translation
 Route::get('/keberangkatan', [LandingPageController::class, 'keberangkatan'])->name('keberangkatan');

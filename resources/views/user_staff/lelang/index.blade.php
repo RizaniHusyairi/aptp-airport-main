@@ -133,7 +133,7 @@
                           </tr>
                         @empty
                           <tr>
-                            <td colspan="4" class="text-center">Belum ada pengajuan perizinan usaha</td>
+                            <td colspan="12" class="text-center">Belum ada pengajuan Lelang</td>
                           </tr>
                         @endforelse
                       </tbody>

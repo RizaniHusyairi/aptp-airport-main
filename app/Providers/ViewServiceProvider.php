@@ -46,8 +46,8 @@ class ViewServiceProvider extends ServiceProvider
                     ]],
                     
                     ['name' => 'Regulasi','dropdown' =>[
-                        ['name' => 'Surat Utusan', 'route' => '#'],
-                        ['name' => 'Surat Edaran', 'route' => '#'],
+                        ['name' => 'Surat Utusan', 'route' => route('suratUtusan')],
+                        ['name' => 'Surat Edaran', 'route' => route('suratEdaran')],
                         ]
                     ],
 

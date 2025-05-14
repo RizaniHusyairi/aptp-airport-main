@@ -23,7 +23,7 @@
         .marquee a {
             display: inline-block;
             margin: 0 20px;
-            transition: transform 0.3s ease;
+            transition: transform .5s ease;
         }
 
         .marquee img {
@@ -41,7 +41,7 @@
                 transform: translateX(0);
             }
             100% {
-                transform: translateX(-50%);
+                transform: translateX(-100%);
             }
         }
 

@@ -23,6 +23,7 @@
             'Manajemen Ajuan Informasi Publik' => ['route' => 'informasiPublik.staffIndex', 'icon' => 'bx bx-info-circle', 'label' => 'Informasi Publik'],
             'Manajemen Lalu Lintas Angkutan Udara' => ['route' => 'laluLintas.staffIndex', 'icon' => 'bx bxs-traffic', 'label' => 'Lalu Lintas Angkutan Udara'],
             'Manajemen Pengaduan' => ['route' => 'pengaduan.staffIndex', 'icon' => 'bx bx-comment', 'label' => 'Pengaduan'],
+            'Manajemen Regulasi' => ['route' => 'letters.staff.index', 'icon' => 'bx bx-file', 'label' => 'Regulasi'],
           ];
           $userRoutes = [
             'Ajukan Tenant' => ['route' => 'tenant.index', 'icon' => 'bx bx-store', 'label' => 'Ajukan Tenant'],
