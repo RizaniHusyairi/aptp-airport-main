@@ -4,6 +4,7 @@
 
 @push('styles')
     <style>
+
         /* Marquee untuk Kerja Sama Mitra */
         .marquee-container {
             width: 100%;
@@ -17,10 +18,6 @@
             display: flex;
             animation: marquee 20s linear infinite;
             white-space: nowrap;
-        }
-
-        .marquee.paused {
-            animation-play-state: paused;
         }
 
         .marquee a {
@@ -48,8 +45,77 @@
             }
         }
 
+        /* Styling untuk Widget Cuaca */
+        .weather-widget {
+            position: absolute;
+            top: 30px;
+            right: 20px;
+            width: 300px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            padding: 10px;
+            z-index: 10;
+        }
+
+        .weather-widget h6 {
+            margin-bottom: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+        }
+
+        .weather-widget h6 i {
+            margin-right: 5px;
+        }
+
+        .weather-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .weather-info img {
+            width: 30px;
+            height: 30px;
+            margin-right: 10px;
+        }
+
+        .weather-details {
+            font-size: 0.85rem;
+        }
+
+        .weather-source {
+            font-size: 0.75rem;
+            color: #6c757d;
+            margin-top: 5px;
+        }
+
+        .weather-error {
+            font-size: 0.85rem;
+            color: #dc3545;
+            text-align: center;
+        }
+
+
         /* Responsivitas */
         @media (max-width: 576px) {
+            .weather-widget {
+                width: 200px;
+                bottom: 10px;
+                right: 10px;
+                height: fit-content
+            }
+            .weather-info img {
+                width: 25px;
+                height: 25px;
+            }
+            .weather-details {
+                font-size: 0.8rem;
+            }
+            .weather-widget h6 {
+                font-size: 0.9rem;
+            }        
             .marquee a {
                 margin: 0 10px;
             }
@@ -57,6 +123,7 @@
                 width: 80px;
                 height: 80px;
             }
+            
         }
 
         .image-chief {
@@ -75,30 +142,61 @@
                 /* tinggi dikurangi di mobile */
             }
         }
+
+        .sliderh{
+            height: 80vh;
+            /* tinggi slider */
+        }
     </style>
 @endpush
 
 @section('content')
     <div class="row">
         <div class="col-12">
-            <div id="carouselExampleSlidesOnly" class="carousel slide vh-100" style="background-color: rgba(0, 0, 0, 0.5);"
+            <div id="carouselExampleSlidesOnly" class="carousel slide sliderh"
                 data-bs-ride="carousel">
                 <div class="carousel-inner hero">
                     @forelse ($sliders as $key => $slider)
-                        <div class="carousel-item vh-100 {{ $key === 0 ? 'active' : '' }}">
+                        <div class="carousel-item {{ $key === 0 ? 'active' : '' }}">
                             <img src="{{ asset('uploads/' . $slider->documents) }}"
                                 class="carousel-home d-block w-100 object-fit-cover" alt="Slider Image {{ $key + 1 }}">
                         </div>
                     @empty
-                        <div class="carousel-item vh-100 active">
+                        <div class="carousel-item active">
                             <img src="{{ asset('frontend/assets/tes/tes1.jpg') }}"
                                 class="carousel-home d-block w-100 object-fit-cover" alt="Default Slider">
                         </div>
                     @endforelse
+                    <!-- Widget Cuaca -->
+                    <div class="weather-widget">
+                        <h6><i class='bx bx-cloud'></i> Cuaca Saat Ini</h6>
+                        @if ($weatherData['success'])
+                            <div class="weather-info">
+                                <img src="{{ $weatherData['data']['weather_image'] }}"
+                                    alt="{{ $weatherData['data']['weather_desc'] }}"
+                                    onerror="this.src='{{ asset('frontend/assets/weather/placeholder.png') }}'">
+                                <div class="weather-details">
+                                    <strong>{{ $weatherData['data']['time'] }} WITA</strong><br>
+                                    {{ $weatherData['data']['weather_desc'] }}<br>
+                                    Suhu: {{ $weatherData['data']['temperature'] }}°C<br>
+                                    Kelembapan: {{ $weatherData['data']['humidity'] }}%<br>
+                                    Angin: {{ $weatherData['data']['wind_speed'] }} km/jam ({{ $weatherData['data']['wind_direction'] }})
+                                </div>
+                            </div>
+                            <div class="weather-source">
+                                Data: Badan Meteorologi, Klimatologi, dan Geofisika (BMKG)
+                            </div>
+                        @else
+                            <div class="weather-error">
+                                {{ $weatherData['message'] }}
+                            </div>
+                        @endif
+                    </div>
                 </div>
 
             </div>
         </div>
+            
         <div class="hubud-secondary container">
             <section class="d-flex justify-content-center">
                 <div class="row">
@@ -252,6 +350,12 @@
                             ['name' => 'BMKG', 'logo' => 'frontend/assets/mitra/logo-BMKG.png', 'url' => 'https://www.bmkg.go.id/'],
                         ];
                     @endphp
+                    @foreach ($partners as $partner)
+                        <a href="{{ $partner['url'] }}" target="_blank" title="{{ $partner['name'] }}"
+                            data-bs-toggle="tooltip" data-bs-placement="top">
+                            <img src="{{ asset($partner['logo']) }}" alt="{{ $partner['name'] }}">
+                        </a>
+                    @endforeach
                     @foreach ($partners as $partner)
                         <a href="{{ $partner['url'] }}" target="_blank" title="{{ $partner['name'] }}"
                             data-bs-toggle="tooltip" data-bs-placement="top">

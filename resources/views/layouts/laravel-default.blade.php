@@ -88,7 +88,7 @@
         </div>
         <footer class="bg-black text-white">
             <div class="footer row">
-                <div id="carouselExampleSlidesOnly" class="carousel slide col d-flex align-items-end "
+                <div id="carouselExampleSlidesOnly" class="carousel slide col-lg-6 d-flex align-items-end "
                     data-bs-ride="carousel">
                     <div class="carousel-inner h-75">
                         @forelse ($footerSliders as $key => $slider)
@@ -180,6 +180,7 @@
                 </div>
                 <div class="col text-end fs-8">
                     <h4 class="fs-3 mb-4 pb-2">Info Kontak</h4>
+
                     <div class="d-flex flex-column">
                         <a href="https://maps.app.goo.gl/SBcNQFzbxBuyMTE8A" class="email text-white"
                             target="_blank">Jl. Poros Samarinda – Bontang, Kel. Sungai Siring, Samarinda – Kalimantan
@@ -233,50 +234,23 @@ document.addEventListener('DOMContentLoaded', function () {
       return new bootstrap.Tooltip(tooltipTriggerEl);
   });
 
-  // Logika Pause saat Logo di Tengah
-  const marquee = document.getElementById('marquee');
-  const logos = document.querySelectorAll('.partner-logo');
-  const container = document.querySelector('.marquee-container');
-  let isPaused = false;
-
-  function checkLogoPosition() {
-      if (isPaused) return;
-
-      const containerRect = container.getBoundingClientRect();
-      const containerCenter = containerRect.left + containerRect.width / 2;
-
-      logos.forEach(logo => {
-          const logoRect = logo.getBoundingClientRect();
-          const logoCenter = logoRect.left + logoRect.width / 2;
-
-          // Cek apakah logo berada di tengah (dengan toleransi 10px)
-          if (Math.abs(logoCenter - containerCenter) < 10) {
-              isPaused = true;
-              marquee.classList.add('paused');
-
-              setTimeout(() => {
-                  marquee.classList.remove('paused');
-                  isPaused = false;
-              }, 1000); // Pause 1 detik
-          }
-      });
   }
 
   // Periksa posisi logo setiap 50ms
   setInterval(checkLogoPosition, 50);
 
-  // Hentikan animasi saat hover
-  marquee.addEventListener('mouseenter', () => {
-      if (!isPaused) {
-          marquee.classList.add('paused');
-      }
-  });
+//   // Hentikan animasi saat hover
+//   marquee.addEventListener('mouseenter', () => {
+//       if (!isPaused) {
+//           marquee.classList.add('paused');
+//       }
+//   });
 
-  marquee.addEventListener('mouseleave', () => {
-      if (!isPaused) {
-          marquee.classList.remove('paused');
-      }
-  });
+//   marquee.addEventListener('mouseleave', () => {
+//       if (!isPaused) {
+//           marquee.classList.remove('paused');
+//       }
+//   });
 });
 // window.addEventListener('scroll', function() {
         //     const navbar = document.getElementById('navbar');

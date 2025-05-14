@@ -40,11 +40,19 @@ class LandingPageController extends Controller
         $keberangkatan = $airportApi->getKeberangkatan();
         $kedatangan = $airportApi->getKedatangan();
         $totalAngkutanUdara = AirFreightTraffic::sum(DB::raw('arrival + departure'));
+        $weatherData = $airportApi->getCuaca();
 
         $jumlahKeberangkatan = isset($keberangkatan['data']['result']['data']) ? count($keberangkatan['data']['result']['data']) : 0;
         $jumlahKedatangan = isset($kedatangan['data']['result']['data']) ? count($kedatangan['data']['result']['data']) : 0;
 
-        return view('home', compact('sliders', 'jumlahKeberangkatan', 'jumlahKedatangan','totalAngkutanUdara'));
+        return view('home', 
+        compact(
+            'sliders', 
+            'jumlahKeberangkatan', 
+            'jumlahKedatangan',
+            'totalAngkutanUdara',
+            'weatherData',
+        ));
     }
 
     public function berita()
