@@ -311,7 +311,7 @@ class LandingPageController extends Controller
             }
         }
     
-        // 2. DATA GRAFIK PIE (ANGGARAN VS PENGELUARAN)
+        // 2. DATA GRAFIK Line (ANGGARAN VS PENGELUARAN)
     
         // Ambil total Anggaran (dari tabel finances flow_type = 'budget')
         $anggaran = Finance::where('flow_type', 'budget')
@@ -406,9 +406,19 @@ class LandingPageController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255',
+            'phone_number' => 'required|string|max:15',
             'subject' => 'required|string|max:255',
             'message' => 'required|string',
             'g-recaptcha-response' => 'required',
+        ],[
+            'name.required' => 'Nama lengkap wajib diisi.',
+            'email.required' => 'Email wajib diisi.',
+            'email.email' => 'Format email tidak valid.',
+            'phone_number.required' => 'Nomor telepon wajib diisi.',
+            'phone_number.max' => 'Nomor telepon maksimal 15 karakter.',
+            'subject.required' => 'Topik wajib diisi.',
+            'message.required' => 'Pesan wajib diisi.',
+            'g-recaptcha-response.required' => 'Silakan centang reCAPTCHA.',
         ]);
 
         // Validasi reCAPTCHA
@@ -428,6 +438,7 @@ class LandingPageController extends Controller
         Complaint::create([
             'name' => $request->name,
             'email' => $request->email,
+            'phone_number' => $request->phone_number,
             'subject' => $request->subject,
             'message' => $request->message,
             'status' => 'pending',

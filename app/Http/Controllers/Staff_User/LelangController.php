@@ -79,7 +79,7 @@ class LelangController extends Controller
 
         $lelang = Lelang::create($data);
 
-        Auth::user()->lelangs()->attach($lelang->id, [
+        $lelang->users()->attach(auth()->id(), [
             'created_at' => now(),
             'updated_at' => now(),
         ]);

@@ -188,7 +188,7 @@
                         <a href="https://wa.me/62811551944" target="_blank" class="email text-white">+62 811 551
                             944</a>
                         <a href="mailto:mail.aptpranotoairport@gmail.com" target="_blank"
-                            class="email text-white">aptpranotoairport@gmail.com</a>
+                            class="email text-white">mail.aptpranotoairport@gmail.com</a>
                         <div class="fs-4 d-flex gap-3 justify-content-end mt-5">
                             <a href="https://wa.me/62811551944" target="_blank" class="text-white social-media">
                                 <i class="bx bxl-whatsapp"></i>

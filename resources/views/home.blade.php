@@ -51,11 +51,21 @@
             top: 30px;
             right: 20px;
             width: 300px;
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.8);
             border-radius: 8px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
             padding: 10px;
-            z-index: 10;
+            z-index: 5;
+            text-decoration: none;
+            color: inherit;
+            transition: box-shadow 0.3s ease, background-color 0.3s ease;
+        }
+
+        .weather-widget:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            background-color: rgb(255, 255, 255);
+            color: inherit;
+            cursor: pointer;
         }
 
         .weather-widget h6 {
@@ -167,32 +177,34 @@
                                 class="carousel-home d-block w-100 object-fit-cover" alt="Default Slider">
                         </div>
                     @endforelse
-                    <!-- Widget Cuaca -->
-                    <div class="weather-widget">
-                        <h6><i class='bx bx-cloud'></i> Cuaca Saat Ini</h6>
-                        @if ($weatherData['success'])
-                            <div class="weather-info">
-                                <img src="{{ $weatherData['data']['weather_image'] }}"
-                                    alt="{{ $weatherData['data']['weather_desc'] }}"
-                                    onerror="this.src='{{ asset('frontend/assets/weather/placeholder.png') }}'">
-                                <div class="weather-details">
-                                    <strong>{{ $weatherData['data']['time'] }} WITA</strong><br>
-                                    {{ $weatherData['data']['weather_desc'] }}<br>
-                                    Suhu: {{ $weatherData['data']['temperature'] }}°C<br>
-                                    Kelembapan: {{ $weatherData['data']['humidity'] }}%<br>
-                                    Angin: {{ $weatherData['data']['wind_speed'] }} km/jam ({{ $weatherData['data']['wind_direction'] }})
-                                </div>
-                            </div>
-                            <div class="weather-source">
-                                Data: Badan Meteorologi, Klimatologi, dan Geofisika (BMKG)
-                            </div>
-                        @else
-                            <div class="weather-error">
-                                {{ $weatherData['message'] }}
-                            </div>
-                        @endif
-                    </div>
                 </div>
+                <!-- Widget Cuaca -->
+                <a href="https://www.bmkg.go.id/cuaca/prakiraan-cuaca/64.72.05.1004" target="_blank" class="weather-widget">
+                
+                    <h6><i class='bx bx-cloud'></i>Prakiraan Cuaca</h6>
+                    @if ($weatherData['success'])
+
+                        <div class="weather-info">
+                            <img src="{{ $weatherData['data']['weather_image'] }}"
+                                alt="{{ $weatherData['data']['weather_desc'] }}"
+                                onerror="this.src='{{ asset('frontend/assets/weather/placeholder.png') }}'">
+                            <div class="weather-details">
+                                <strong>{{ $weatherData['data']['time'] }} WITA</strong><br>
+                                {{ $weatherData['data']['weather_desc'] }}<br>
+                                Suhu: {{ $weatherData['data']['temperature'] }}°C<br>
+                                Kelembapan: {{ $weatherData['data']['humidity'] }}%<br>
+                                Angin: {{ $weatherData['data']['wind_speed'] }} km/jam ({{ $weatherData['data']['wind_direction'] }})
+                            </div>
+                        </div>
+                        <div class="weather-source">
+                            Data: Badan Meteorologi, Klimatologi, dan Geofisika (BMKG)
+                        </div>
+                    @else
+                        <div class="weather-error">
+                            {{ $weatherData['message'] }}
+                        </div>
+                    @endif
+                </a>
 
             </div>
         </div>
@@ -269,9 +281,11 @@
             <section class="d-flex flex-column gap-5 hubud-secondary min-vh-100">
                 <h3 class="fs-2 text-center">Kepala BLU Kantor UPBU Kelas I APT. Pranoto Samarinda</h3>
                 <div class="d-flex flex-column flex-lg-row gap-5">
-                    <img src="{{ asset('frontend/assets/home/sambutan_image.jpg') }}" alt="sambutan"
+                    <img src="
+                {{ asset('frontend/assets/home/sambutan_image.jpg') }}" alt="sambutan"
                         class="object-fit-cover image-chief">
-                    <div class="d-flex flex-column gap-5 justify-content-center">
+                    <Prakiraandivd-flex flex-column gap-5 justify
+                    -content-center">
                         <p class="fs-7 lh-base fw-normal" style="text-align: justify">
                             "Dalam era yang penuh tantangan ini, di mana teknologi dan informasi berkembang begitu pesat, kita
                             di

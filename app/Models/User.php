@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
+use App\Models\Rental;
+use App\Models\Tenant;
+use App\Models\Ticket;
+use Spatie\MediaLibrary\HasMedia;
+use Illuminate\Notifications\Notifiable;
+use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Spatie\MediaLibrary\HasMedia;
-use Spatie\MediaLibrary\InteractsWithMedia;
 
 
 class User extends Authenticatable implements HasMedia
