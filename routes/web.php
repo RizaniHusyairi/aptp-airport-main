@@ -295,7 +295,6 @@ Route::group(["prefix" => 'dashboard'], function () {
 
 Route::get('/', [LandingPageController::class, 'home'])->name('home');
 
-Route::get('/kontak', [LandingPageController::class, 'kontak'])->name('kontak');
 Route::post('/pengaduan', [LandingPageController::class, 'storePengaduan'])->name('pengaduan.store');
 
 Route::get('/informasi/berita', [LandingPageController::class, 'berita'])->name('berita');

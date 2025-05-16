@@ -61,8 +61,7 @@ class ViewServiceProvider extends ServiceProvider
                         ['name' => 'Beauty Contest', 'route' => route('lelang')],
                         ['name' => 'Pengajuan Slot', 'route' => route('lelang')],
                     ]
-                    ],
-                    ['name' => 'Kontak Kami', 'route' => route('kontak') ]
+                    ]
                 ],
             ];
             $footerSliders = Slider::where('is_visible_footer', true)->get();

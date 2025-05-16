@@ -421,18 +421,7 @@ class LandingPageController extends Controller
             'g-recaptcha-response.required' => 'Silakan centang reCAPTCHA.',
         ]);
 
-        // Validasi reCAPTCHA
-        $response = Http::post('https://www.google.com/recaptcha/api/siteverify', [
-            'secret' => config('services.recaptcha.secret_key'),
-            'response' => $request->input('g-recaptcha-response'),
-            'remoteip' => $request->ip(),
-        ]);
-
-        $result = $response->json();
-
-        if (!$result['success']) {
-            return back()->withErrors(['g-recaptcha-response' => 'Verifikasi CAPTCHA gagal. Silakan coba lagi.'])->withInput();
-        }
+        
 
         // Simpan pengaduan
         Complaint::create([

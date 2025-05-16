@@ -19,19 +19,18 @@
     @stack('styles')
     <style>
       .content-wrapper {
-        margin-top: 80px;
+        /* margin-top: 80px; */
       }
     </style>
 </head>
 
 <body>
     <main style="overflow-x: hidden;">
-        <nav class="navbar navbar-expand-lg  px-md-3 py-md-2 scrolled" id="navbar">
+        <nav class="navbar navbar-expand-lg  px-md-3 py-md-2 scrolled {{ request()->routeIs('home') ? 'home' : '' }}" id="navbar">
             <div class="container-fluid">
                 <!-- Logo -->
-                <a class="navbar-brand d-flex" href="#">
+                <a class="navbar-brand d-flex" href="{{ route('home') }}">
                     <img src="{{ asset('frontend/assets/logo.png') }}" alt="mind & body" style="width: 8rem;" />
-                    <img src="{{ asset('frontend/assets/logo-badan-layanan-umum.png') }}" alt="logo BLU" style="width: 4rem;" >
                 </a>
 
                 <!-- Toggler -->
@@ -41,46 +40,47 @@
                 </button>
 
                 <!-- Navbar Items -->
-                <div class="collapse navbar-collapse justify-content-end" id="navbarContent">
+                <div class="collapse navbar-collapse justify-content-center" id="navbarContent">
                     <ul class="navbar-nav gap-lg-4 text-center text-lg-start">
                         @foreach ($menuItems['header'] as $item)
+                        <li class="nav-item dropdown">
+
                             @if (isset($item['dropdown']))
-                                <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle navigation" href="#"
                                         id="dropdownMenuLink{{ $loop->index }}" role="button"
                                         data-bs-toggle="dropdown" aria-expanded="false">
                                         {{ $item['name'] }}
                                     </a>
-                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink{{ $loop->index }}">
+                                    <ul class="dropdown-menu animated-dropdown" aria-labelledby="dropdownMenuLink{{ $loop->index }}">
                                         @foreach ($item['dropdown'] as $dropdownItem)
                                             <li><a class="dropdown-item"
                                                     href="{{ $dropdownItem['route'] }}">{{ $dropdownItem['name'] }}</a>
                                             </li>
                                         @endforeach
                                     </ul>
-                                </li>
-                            @else
-                                <li class="nav-item">
-                                    <a class="nav-link navigation" href="{{ $item['route'] }}">{{ $item['name'] }}</a>
-                                </li>
+                                    @else
+                            <a class="nav-link navigation" href="{{ $item['route'] }}">{{ $item['name'] }}</a>
+
+                            
                             @endif
+                        </li>
                         @endforeach
 
-                        @auth
-                            <li class="nav-item">
-                                @if (Auth::user()->is_admin)
-                                    <a href="{{ route('root') }}" class="nav-link navigation">Dashboard</a>
-                                @else
-                                    <a href="{{ route('root') }}/profile" class="nav-link navigation">Dashboard</a>
-                                @endif
-                            </li>
-                        @else
-                            <li class="nav-item">
-                                <a href="{{ route('login') }}" class="nav-link navigation">Masuk</a>
-                            </li>
-                        @endauth
                     </ul>
                 </div>
+                @auth
+                    <div class="justify-content-end">
+                        @if (Auth::user()->is_admin)
+                            <a href="{{ route('root') }}" class="nav-link navigation">Dashboard</a>
+                        @else
+                            <a href="{{ route('root') }}/profile" class="nav-link navigation">Dashboard</a>
+                        @endif
+                    </div>
+                @else
+                    <div class="justify-content-end">
+                        <a href="{{ route('login') }}" class="nav-link navigation">Masuk</a>
+                    </div>
+                @endauth
             </div>
         </nav>
         <div class="content-wrapper">
@@ -179,6 +179,8 @@
                     </div>
                 </div>
                 <div class="col text-end fs-8">
+                    <img src="{{ asset('frontend/assets/logo-badan-layanan-umum.png') }}" alt="logo BLU" style="width: 4rem;" >
+
                     <h4 class="fs-3 mb-4 pb-2">Info Kontak</h4>
 
                     <div class="d-flex flex-column">
@@ -222,7 +224,7 @@
 
     </main>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.1/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.1/ScrollTrigger.min.js"></script>
     <script src="{{ asset('frontend/script.js') }}"></script>
     @stack('scripts')
@@ -234,32 +236,77 @@ document.addEventListener('DOMContentLoaded', function () {
       return new bootstrap.Tooltip(tooltipTriggerEl);
   });
 
+  // Animasi Dropdown dengan GSAP
+    const dropdowns = document.querySelectorAll('.dropdown');
+    dropdowns.forEach(dropdown => {
+        if (!dropdown.querySelector('.dropdown-toggle')) {
+            console.error('Dropdown toggle not found in dropdown:', dropdown);
+        }else{
+
+            const dropdownMenu = dropdown.querySelector('.dropdown-menu');
+            const toggle = dropdown.querySelector('.dropdown-toggle');
+    
+            toggle.addEventListener('click', () => {
+                if (!dropdownMenu.classList.contains('show')) {
+                    // Animasi saat dropdown muncul
+                    gsap.fromTo(dropdownMenu, {
+                        opacity: 0,
+                        y: -10,
+                        scale: 0.95
+                    }, {
+                        opacity: 1,
+                        y: 0,
+                        scale: 1,
+                        duration: 0.3,
+                        ease: 'power2.out'
+                    });
+                }
+            });
+        }
+    });
+
+
+  // Logika Toggle Contact Panel
+    const contactIcon = document.getElementById('contactIcon');
+    const contactPanel = document.getElementById('contactPanel');
+    const closeContact = document.getElementById('closeContact');
+
+    contactIcon.addEventListener('click', () => {
+        contactPanel.classList.toggle('open');
+    });
+
+    closeContact.addEventListener('click', () => {
+        contactPanel.classList.remove('open');
+    });
+
+    // Tutup panel saat klik di luar
+    document.addEventListener('click', (e) => {
+        if (!contactPanel.contains(e.target) && !contactIcon.contains(e.target)) {
+            contactPanel.classList.remove('open');
+        }
+    });
+
   });
+              // Animasi Background Navbar di Beranda
+            const navbar = document.getElementById('navbar');
+            const isHomePage = navbar.classList.contains('home');
 
-  // Periksa posisi logo setiap 50ms
-//   setInterval(checkLogoPosition, 50);
+            if (isHomePage) {
+                const updateNavbar = () => {
+                    if (window.scrollY > 50) {
+                        navbar.classList.add('scrolled');
+                    } else {
+                        navbar.classList.remove('scrolled');
+                    }
+                };
 
-//   // Hentikan animasi saat hover
-//   marquee.addEventListener('mouseenter', () => {
-//       if (!isPaused) {
-//           marquee.classList.add('paused');
-//       }
-//   });
+                window.addEventListener('scroll', updateNavbar);
+                updateNavbar(); // Panggil sekali saat load
+            } else {
+                navbar.classList.add('scrolled'); // Selalu biru tua di halaman lain
+            }
 
-//   marquee.addEventListener('mouseleave', () => {
-//       if (!isPaused) {
-//           marquee.classList.remove('paused');
-//       }
-//   });
 
-// window.addEventListener('scroll', function() {
-        //     const navbar = document.getElementById('navbar');
-        //     if (window.scrollY > 10) {
-        //         navbar.classList.add('scrolled');
-        //     } else {
-        //         navbar.classList.remove('scrolled');
-        //     }
-        // });
     </script>
 </body>
 

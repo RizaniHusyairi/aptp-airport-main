@@ -48,9 +48,9 @@
         /* Styling untuk Widget Cuaca */
         .weather-widget {
             position: absolute;
-            top: 30px;
+            bottom: 30px;
             right: 20px;
-            width: 300px;
+            width: 250px;
             background: rgba(255, 255, 255, 0.8);
             border-radius: 8px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
@@ -120,6 +120,7 @@
                 width: 25px;
                 height: 25px;
             }
+
             .weather-details {
                 font-size: 0.8rem;
             }
@@ -133,6 +134,20 @@
                 width: 80px;
                 height: 80px;
             }
+
+            .contact-icon {
+                width: 50px;
+                height: 50px;
+                bottom: 10px;
+                right: 10px;
+            }
+            .contact-panel {
+                width: 90%;
+                right: -100%; /* Mulai di luar layar */
+            }
+            .contact-panel.open {
+                right: 5%;
+            }
             
         }
 
@@ -144,6 +159,70 @@
             object-fit: cover;
             margin: auto;
         }
+            
+        /* Styling untuk Widget Kontak */
+        .contact-icon {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: #007bff;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .contact-icon:hover {
+            transform: scale(1.1);
+        }
+
+        .contact-panel {
+            position: fixed;
+            bottom: 90px;
+            right: -400px; /* Mulai di luar layar */
+            width: 350px;
+            max-height: 80vh;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            z-index: 999;
+            overflow-y: auto;
+            transition: right 0.3s ease;
+        }
+
+        .contact-panel.open {
+            right: 20px; /* Slide-in ke posisi */
+        }
+
+        .contact-panel .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        .contact-panel .form-control.is-invalid {
+            border-color: #dc3545;
+        }
+
+        .contact-panel .invalid-feedback {
+            display: none;
+        }
+
+        .contact-panel .form-control.is-invalid ~ .invalid-feedback {
+            display: block;
+        }
 
         @media only screen and (max-width: 750px) {
             .image-chief {
@@ -154,7 +233,7 @@
         }
 
         .sliderh{
-            height: 80vh;
+            height: 100vh;
             /* tinggi slider */
         }
     </style>
@@ -348,11 +427,6 @@
         </div>
         {{-- Section Kerja sama Mitra --}}
         <div class="container-fluid mb-5">
-            <div class="container">
-                <div class="mb-4 text-center">
-                    <h2>Kerja Sama Mitra</h2>
-                </div>
-            </div>
             <div class="marquee-container">
                 <div class="marquee" id="marquee">
                     <!-- Ulangi logo untuk efek marquee mulus -->
@@ -386,5 +460,89 @@
                 </div>
             </div>
         </div>
+        <!-- Widget Kontak -->
+        <div class="contact-icon" id="contactIcon">
+            <i class='bx bx-envelope' style="font-size: 1.5rem;"></i>
+        </div>
+        <div class="contact-panel" id="contactPanel">
+            <button class="close-btn" id="closeContact"><i class='bx bx-x'></i></button>
+            <h5 class="mb-3"><i class='bx bx-envelope'></i> Kontak Kami</h5>
+            @if (session('success'))
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ session('success') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+            @if ($errors->any())
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li><i class="fas fa-exclamation-circle"></i> {{ $error }}</li>
+                        @endforeach
+                    </ul>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+            <form action="{{ route('pengaduan.store') }}" method="POST">
+                @csrf
+                <div class="mb-3">
+                        <div class="form-floating">
+                            <input type="text" class="form-control @error('name') is-invalid @enderror" name="name" id="name" placeholder="Nama Lengkap" value="{{ old('name') }}" required>
+                            <label for="name">Nama Lengkap</label>
+                            @error('name')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                </div>
+                <div class="mb-3">
+                    <div class="form-floating">
+                        <input type="email" class="form-control @error('email') is-invalid @enderror" name="email" id="email" placeholder="Email" value="{{ old('email') }}" required>
+                        <label for="email">Email</label>
+                        @error('email')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <div class="form-floating">
+                        <input type="tel" class="form-control @error('phone_number') is-invalid @enderror" name="phone_number" id="phone_number" placeholder="Nomor Telepon" value="{{ old('phone_number') }}" required>
+                        <label for="phone_number">Nomor Telepon/WA</label>
+                        @error('phone_number')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <div class="form-floating">
+                        <input type="text" class="form-control @error('subject') is-invalid @enderror" name="subject" id="subject" placeholder="Topik" value="{{ old('subject') }}" required>
+                        <label for="subject">Topik</label>
+                        @error('subject')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <div class="form-floating">
+                        <textarea class="form-control @error('message') is-invalid @enderror" placeholder="Isi Pesan Anda" name="message" id="message" required>{{ old('message') }}</textarea>
+                        <label for="message">Isi Pesan Anda</label>
+                        @error('message')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <div class="g-recaptcha" data-sitekey="{{ config('services.recaptcha.site_key') }}"></div>
+                    @error('g-recaptcha-response')
+                        <div class="invalid-feedback d-block">{{ $message }}</div>
+                    @enderror
+                </div>
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary">Kirim Pesan</button>
+                </div>
+            </form>
+        </div>
     </div>
+
+    
 @endsection
+

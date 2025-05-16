@@ -13,6 +13,12 @@ html {
   --main-color: #f8b281;
   --secondary-color: #1b1b1b;
   --card-color: linear-gradient(250deg, #f8b281 0%, #D46213FF 100%);
+  --navbar-bg: #ffffff;
+  --navbar-text: #FFFFFF;
+  --navbar-white: #ffffff;
+  --navbar-hover: #dadada;
+  --dropdown-bg: #ffffff;
+  --dropdown-text: #2C3E50;
 }
 
 #form{
@@ -198,27 +204,128 @@ nav svg {
   width: fit-content;
 }
 
-#navbar {
-  display: none;
-  background-color: #EEF9FF;
-  transition: background-color 0.3s ease, box-shadow 0.3s ease;
-  color: white;
+.nav-item > a{
+  padding: .1rem;
 }
 
-#navbar.scrolled {
-  display: block;
+
+#navbar {
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    color: var(--navbar-text);
+}
+
+#navbar.home {
+    background-color: transparent;
+    box-shadow: none;
+}
+
+
+#navbar.home .navigation::before {
+    color: var(--navbar-text);
+    background-color: #ffffff;
+    transition: background-color 0.3s ease;
+}
+
+/* #navbar.home .navigation::before:hover {
+    background-color: var(--navbar-hover);
+} */
+
+#navbar.home.scrolled {
+    background-color: var(--navbar-white);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+#navbar.home.scrolled .navigation {
+    color: var(--dropdown-text);
+}
+#navbar.home.scrolled .navigation::before {
+    background-color: black;
+}
+#navbar .navigation::before {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: #000000;
+  transition: width 0.3s ease !important;
+}
+#navbar .navigation:hover::before {
+    width: 100%;
+}
+
+#navbar.home.scrolled .navigation:hover {
+    color: var(--navbar-hover);
+}
+
+#navbar:not(.home) {
+    background-color: var(--navbar-bg);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+#navbar:not(.home) .navigation {
+    color: var(--navbar-text);
+    transition: color 0.3s ease;
+}
+
+#navbar:not(.home) .navigation:hover {
+    color: var(--navbar-hover);
+}
+
+
+#navbar {
   position: fixed;
   top: 0;
   right: 0;
   left: 0;
   z-index: 10;
-  background-color: #EEF9FF;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 #navbar .navigation {
-  color: black;
-  transition: color 0.3s ease;
+    color: var(--navbar-text);
+}
+
+#navbar .navigation:hover {
+    color: var(--navbar-hover);
+}
+
+#navbar .navbar-toggler {
+    border: none;
+    color: var(--navbar-text);
+}
+
+#navbar .navbar-toggler i {
+    font-size: 1.5rem;
+}
+
+#navbar .dropdown-menu {
+    background-color: var(--dropdown-bg);
+    border: none;
+    border-radius: 8px;
+}
+
+#navbar .dropdown-item {
+    color: var(--dropdown-text);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+#navbar .dropdown-item:hover {
+    background-color: var(--navbar-hover);
+    color: var(--navbar-text);
+}
+
+#navbar .animated-dropdown {
+    transform-origin: top;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+#navbar .animated-dropdown.show {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 #navbar.scrolled a {
