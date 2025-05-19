@@ -71,14 +71,14 @@
                 @auth
                     <div class="justify-content-end">
                         @if (Auth::user()->is_admin)
-                            <a href="{{ route('root') }}" class="nav-link navigation">Dashboard</a>
+                            <a href="{{ route('root') }}" class="nav-link">Dashboard</a>
                         @else
-                            <a href="{{ route('root') }}/profile" class="nav-link navigation">Dashboard</a>
+                            <a href="{{ route('root') }}/profile" class="nav-link">Dashboard</a>
                         @endif
                     </div>
                 @else
                     <div class="justify-content-end">
-                        <a href="{{ route('login') }}" class="nav-link navigation">Masuk</a>
+                        <a href="{{ route('login') }}" class="nav-link nav-login">Masuk</a>
                     </div>
                 @endauth
             </div>
@@ -251,8 +251,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     // Animasi saat dropdown muncul
                     gsap.fromTo(dropdownMenu, {
                         opacity: 0,
-                        y: -10,
-                        scale: 0.95
+                        y: -5,
+                        
+                        scale: 1
                     }, {
                         opacity: 1,
                         y: 0,
@@ -293,7 +294,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (isHomePage) {
                 const updateNavbar = () => {
-                    if (window.scrollY > 50) {
+                    if (window.scrollY > 300) {
                         navbar.classList.add('scrolled');
                     } else {
                         navbar.classList.remove('scrolled');

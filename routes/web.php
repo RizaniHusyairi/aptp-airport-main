@@ -55,53 +55,7 @@ Route::group(["prefix" => 'dashboard'], function () {
             Route::post('/store', 'store')->name('sewa.store');
             Route::delete('/{id}', 'destroy')->name('sewa.destroy');
         });
-        // // Rental User Routes
-        // Route::prefix('/sewa')->controller(SewaLahanController::class)
-        // ->group(function () {
-            
-        //     Route::get('/{type}', 'index')->name('sewa.index');
-        //     Route::get('/{type}/create', 'create')->name('sewa.create');
-        //     Route::post('/{type}/store', 'store')->name('sewa.store');
-        //     Route::delete('/{type}/{id}', 'destroy')->name('sewa.destroy');
-
-
-            // Route::get('/ruang', 'ruang')->name('ruang.index');
-            // Route::get('/ruang/create',  'ruangCreate')->name('ruang.create');
-            // Route::post('/ruang/store', 'ruangStore')->name('ruang.store');
-            // Route::delete('/ruang/{id}',  'ruangDestroy')->name('ruang.destroy');
-            
-            // Route::get('/lahan', 'lahan')->name('lahan.index');
-            // Route::get('/lahan/create',  'lahanCreate')->name('lahan.create');
-            // Route::post('/lahan/store',  'lahanStore')->name('lahan.store');
-            // Route::delete('/lahan/{id}',  'lahanDestroy')->name('lahan.destroy');
-            
-            // Route::get('/kabin', 'kabin')->name('kabin.index');
-            // Route::get('/kabin/create',  'kabinCreate')->name('kabin.create');
-            // Route::post('/kabin/store',  'kabinStore')->name('kabin.store');
-            // Route::delete('/kabin/{id}',  'kabinDestroy')->name('kabin.destroy');
-            
-            // Route::get('/kargo', 'kargo')->name('kargo.index');
-            // Route::get('/kargo/create',  'kargoCreate')->name('kargo.create');
-            // Route::post('/kargo/store',  'kargoStore')->name('kargo.store');
-            // Route::delete('/kargo/{id}',  'kargoDestroy')->name('kargo.destroy');
-            
-            // Route::get('/bus', 'bus')->name('bus.index');
-            // Route::get('/bus/create',  'busCreate')->name('bus.create');
-            // Route::post('/bus/store',  'busStore')->name('bus.store');
-            // Route::delete('/bus/{id}',  'busDestroy')->name('bus.destroy');
-            
-            // Route::get('/workshop', 'workshop')->name('workshop.index');
-            // Route::get('/workshop/create',  'workshopCreate')->name('workshop.create');
-            // Route::post('/workshop/store',  'workshopStore')->name('workshop.store');
-            // Route::delete('/workshop/{id}',  'workshopDestroy')->name('workshop.destroy');
-            
-            // Route::get('/reklame', 'reklame')->name('reklame.index');
-            // Route::get('/reklame/create',  'reklameCreate')->name('reklame.create');
-            // Route::post('/reklame/store',  'reklameStore')->name('reklame.store');
-            // Route::delete('/reklame/{id}',  'reklameDestroy')->name('reklame.destroy');
-
-
-        // });
+        
         // Perijinan User Routes
         Route::get('/perijinan', [PerijinanUsahaController::class, 'indexUser'])->name('perijinan.index');
         Route::get('/perijinan/create', [PerijinanUsahaController::class, 'create'])->name('perijinan.create');

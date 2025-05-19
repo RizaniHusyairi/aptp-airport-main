@@ -45,6 +45,11 @@ class LandingPageController extends Controller
         $jumlahKeberangkatan = isset($keberangkatan['data']['result']['data']) ? count($keberangkatan['data']['result']['data']) : 0;
         $jumlahKedatangan = isset($kedatangan['data']['result']['data']) ? count($kedatangan['data']['result']['data']) : 0;
 
+        $meta = [
+            'title' => 'APT Pranoto - Bandara Samarinda',
+            'description' => 'Sistem Informasi Bandara APT Pranoto, menyediakan data lalu lintas, cuaca, dan berita.',
+            'keywords' => 'bandara, APT Pranoto, Samarinda, cuaca, lalu lintas',
+        ];
         return view('home', 
         compact(
             'sliders', 
@@ -52,6 +57,7 @@ class LandingPageController extends Controller
             'jumlahKedatangan',
             'totalAngkutanUdara',
             'weatherData',
+            'meta'
         ));
     }
 
