@@ -4,6 +4,131 @@
 
 @push('styles')
     <style>
+        /* Section Topik Utama */
+        .news-section {
+            background: linear-gradient(135deg, #1A252F 0%, #2C3E50 100%);
+            padding: 60px 20px;
+            color: #ECF0F1;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .news-section h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 40px;
+            color: #F1C40F;
+            text-transform: uppercase;
+        }
+
+        .news-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .news-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+        }
+
+        .news-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            transition: opacity 0.3s ease;
+        }
+
+        .news-card .card-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 0%, transparent 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .news-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .news-card:hover .card-overlay {
+            opacity: 1;
+        }
+
+        .news-card .card-content {
+            padding: 15px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .news-card .card-content h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #F1C40F;
+        }
+
+        .news-card .card-content a {
+            color: #ECF0F1;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .news-card .card-content a:hover {
+            color: #F1C40F;
+        }
+
+        /* Dekorasi */
+        .decoration-line {
+            width: 50px;
+            height: 3px;
+            background-color: #F1C40F;
+            margin: 10px auto;
+        }
+
+        /* Link Lainnya */
+        .news-more {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .news-more a {
+            color: #F1C40F;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .news-more a:hover {
+            color: #ECF0F1;
+        }
+
+        /* Responsivitas */
+        @media (max-width: 768px) {
+            .news-section h2 {
+                font-size: 2rem;
+            }
+
+            .news-card img {
+                height: 150px;
+            }
+
+            .news-card .card-content h3 {
+                font-size: 1rem;
+            }
+        }
+
 
         /* Marquee untuk Kerja Sama Mitra */
         .marquee-container {
@@ -236,6 +361,125 @@
             height: 100vh;
             /* tinggi slider */
         }
+
+        /* Latar Belakang Dinamis */
+        .home-section {
+            background: linear-gradient(135deg, #E3F2FD 0%, #FFFFFF 100%);
+            background-size: cover;
+            padding: 60px 20px;
+            position: relative;
+            min-height: 80vh;
+        }
+
+        /* Kontainer Utama */
+        .welcome-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 40px;
+            padding: 20px;
+        }
+
+        /* Gambar Kepala BLU */
+        .chief-image {
+            width: 100%;
+            max-width: 500px;
+            height: auto;
+            max-height: 400px;
+            object-fit: cover;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .chief-image:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Teks Sambutan */
+        .welcome-text {
+            color: #2C3E50;
+            max-width: 600px;
+        }
+
+        .welcome-text h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #2980B9;
+        }
+
+        .welcome-text h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #34495E;
+        }
+
+        .welcome-text p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            text-align: justify;
+        }
+
+        .welcome-text .signature {
+            font-weight: 600;
+            color: #2980B9;
+        }
+
+        .welcome-text .title {
+            font-style: italic;
+            color: #7F8C8D;
+        }
+
+        /* Tombol Aksi */
+        .action-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #2980B9;
+            color: #FFFFFF;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .action-button:hover {
+            background-color: #1A5276;
+            color: #FFFFFF;
+        }
+
+        /* Responsivitas */
+        @media (max-width: 768px) {
+            .welcome-container {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .chief-image {
+                max-width: 100%;
+                max-height: 300px;
+            }
+
+            .welcome-text h1 {
+                font-size: 2rem;
+            }
+
+            .welcome-text h2 {
+                font-size: 1.2rem;
+            }
+        }
+
+        /* Dekorasi Tambahan */
+        .decoration-line {
+            width: 100px;
+            height: 4px;
+            background-color: #2980B9;
+            margin: 20px auto;
+        }
     </style>
 @endpush
 
@@ -356,75 +600,48 @@
                 </div>
             </section>
         </div>
-        <div class="container">
-            <section class="d-flex flex-column gap-5 hubud-secondary min-vh-100">
-                <h3 class="fs-2 text-center">Kepala BLU Kantor UPBU Kelas I APT. Pranoto Samarinda</h3>
-                <div class="d-flex flex-column flex-lg-row gap-5">
-                    <img src="
-                {{ asset('frontend/assets/home/sambutan_image.jpg') }}" alt="sambutan"
-                        class="object-fit-cover image-chief">
-                    <Prakiraandivd-flex flex-column gap-5 justify
-                    -content-center">
-                        <p class="fs-7 lh-base fw-normal" style="text-align: justify">
-                            "Dalam era yang penuh tantangan ini, di mana teknologi dan informasi berkembang begitu pesat, kita
-                            di
-                            BLU Kantor UPBU Kelas Kelas I APT. Pranoto Samarinda merasa penting untuk terus beradaptasi.
-                            Teknologi
-                            telah membawa kita ke Era Revolusi Industri 4.0, yang menuntut kita untuk memanfaatkannya dengan
-                            efektif
-                            dan efisien. Sejalan dengan semangat revolusi ini, kami berkomitmen untuk memberikan pelayanan yang
-                            terbaik kepada masyarakat. Melalui website ini, kami berharap dapat memberikan kemudahan akses
-                            informasi
-                            seputar kegiatan, tugas dan fungsi BLU Kantor UPBU Kelas I APT. Pranoto Samarinda. Kami mengundang
-                            anda
-                            untuk menjelajahi situs web kami, mendapatkan informasi yang berguna, dan memberikan masukan yang
-                            konstruktif. Semoga dengan kehadiran situs ini, kita dapat meningkatkan kualitas interaksi,
-                            informasi,
-                            dan komunikasi antara BLU Kantor UPBU Kelas I APT. Pranoto Samarinda dengan masyarakat."
-                        </p>
-                        <div class="fw-bold d-flex flex-column gap-0">
-                            <span>Maeka Rindra Hariyanto, SE., M.Si </span>
-                            <span class="fw-normal fst-italic">Kepala BLU Kantor UPBU Kelas I APT. Pranoto Samarinda</span>
+        <!-- Section Sambutan Kepala BLU -->
+        <div class="home-section">
+            <div class="welcome-container">
+                <img src="{{ asset('frontend/assets/home/sambutan_image.jpg') }}" alt="Kepala BLU"
+                    class="chief-image object-fit-cover">
+
+                <div class="welcome-text">
+                    <h1>Kepala BLU Kantor UPBU Kelas I APT. Pranoto Samarinda</h1>
+                    <div class="decoration-line"></div>
+                    <h2>Sambutan</h2>
+                    <p>"Dalam era yang penuh tantangan ini, di mana teknologi dan informasi berkembang begitu pesat, kita di BLU Kantor UPBU Kelas I APT. Pranoto Samarinda merasa penting untuk terus beradaptasi. Teknologi telah membawa kita ke Era Revolusi Industri 4.0, yang menuntut kita untuk memanfaatkannya dengan efektif dan efisien."</p>
+                    <p>Sejalan dengan semangat revolusi ini, kami berkomitmen untuk memberikan pelayanan yang terbaik kepada masyarakat. Melalui website ini, kami berharap dapat memberikan kemudahan akses informasi seputar kegiatan, tugas, dan fungsi BLU Kantor UPBU Kelas I APT. Pranoto Samarinda."</p>
+                    <p>Kami mengundang Anda untuk menjelajahi situs web kami, mendapatkan informasi yang berguna, dan memberikan masukan yang konstruktif. Semoga dengan kehadiran situs ini, kita dapat meningkatkan kualitas interaksi, informasi, dan komunikasi antara BLU Kantor UPBU Kelas I APT. Pranoto Samarinda dengan masyarakat."</p>
+                    <div class="signature">Maeka Rindra Hariyanto, SE., M.Si</div>
+                    <div class="title">Kepala BLU Kantor UPBU Kelas I APT. Pranoto Samarinda</div>
+                    <a class="action-button mt-3">Hubungi Kami</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="container-fluid">
+            <section class="news-section py-5">
+                <h2>Topik Utama</h2>
+                <div class="decoration-line"></div>
+                <div class="news-container">
+                @foreach ($topikUtama as $news)
+                    <div class="news-card">
+                        <img src="{{ asset('uploads/' . $news->image) }}" class="w-100" alt="{{ $news->title }}" loading="lazy">
+                        <div class="card-overlay"></div>
+                        <div class="card-content">
+                            <h3>{{ $news->title }}</h3>
+                            <a href="{{ route('showNews', $news->slug) }}" class="text-decoration-none">Lihat Detail</a>
                         </div>
                     </div>
+                @endforeach
+                </div>
+                <div class="news-more">
+                    <a href="{{ route('berita') }}">Lihat Berita Lainnya <i class='bx bx-right-arrow-alt'></i></a>
                 </div>
             </section>
         </div>
 
-        <div class="container-fluid">
-            <section class="classes py-5 bg-black text-white mb-5">
-                <div class="container">
-                    <div class="mb-4">
-                        <h2>Topik Utama</h2>
-                    </div>
-                    <div class="row g-4">
-                        @foreach ($topikUtama as $news)
-                            <div class="col-md-4">
-                                <a href="{{ route('showNews', $news->slug) }}" class="text-decoration-none text-white">
-                                    <div class="ratio ratio-4x3 overflow-hidden pilates">
-                                        <img src="{{ asset('uploads/' . $news->image) }}" class="w-100"
-                                            style="object-position: center center; object-fit: cover;"
-                                            alt="{{ $news->title }}">
-                                    </div>
-                                    <div class="">
-                                        <p class="mt-2 email">{{ $news->title }}</p>
-                                    </div>
-                                </a>
-                            </div>
-                        @endforeach
-                    </div>
-
-                    <div class="d-flex justify-content-center mt-4">
-                        <a href="{{ route('berita') }}"
-                            class="other-news d-flex align-items-center text-white text-decoration-none ">
-                            <span class="fs-7">Lihat Berita Lainnya</span>
-                            <i class="bx bx-right-arrow-alt fs-6"></i>
-                        </a>
-                    </div>
-                </div>
-            </section>
-            
-        </div>
         {{-- Section Kerja sama Mitra --}}
         <div class="container-fluid mb-5">
             <div class="marquee-container">

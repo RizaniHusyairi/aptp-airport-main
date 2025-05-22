@@ -19,12 +19,18 @@ class AirportApiService
     public function getKeberangkatan()
     {
         $response = Http::get("{$this->baseUrl}/keberangkatan");
+        if ($response->failed()) {
+            return [];
+        }
         return $response->successful() ? $response->json() : [];
     }
 
     public function getKedatangan()
     {
         $response = Http::get("{$this->baseUrl}/kedatangan");
+        if ($response->failed()) {
+            return [];
+        }
 
         return $response->successful() ? $response->json() : [];
     }

@@ -18,6 +18,11 @@ const folder = {
  |
  */
 
+mix.js("resources/js/app.js", "public/js").postCss("resources/css/app.css", "public/css", [
+    require("@tailwindcss/postcss"),
+]);
+
+
 var third_party_assets = {
     css_js: [
         { "name": "jquery", "assets": ["./node_modules/jquery/dist/jquery.min.js"] },

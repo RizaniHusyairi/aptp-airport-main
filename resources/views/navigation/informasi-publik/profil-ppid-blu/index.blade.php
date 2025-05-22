@@ -50,7 +50,7 @@
   <div class="mb-5">
     <h4>Struktur Organisasi</h4>
     <div class="text-center">
-      <img src="https://aptpairport.id/wp-content/uploads/2025/01/STAFF-1-1536x1152.png" class="img-fluid mt-3 rounded shadow" alt="Struktur Organisasi PPID">
+      <img src="" class="img-fluid mt-3 rounded shadow" alt="Struktur Organisasi PPID">
     </div>
   </div>
 </section>

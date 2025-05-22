@@ -224,11 +224,97 @@
 
     </main>
 
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.1/ScrollTrigger.min.js"></script>
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.2/dist/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <script src="{{ asset('frontend/script.js') }}"></script>
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     @stack('scripts')
     <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Inisialisasi Swiper
+            const swiper = new Swiper('.swiper-container', {
+                loop: true,
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true,
+                },
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev',
+                },
+                autoplay: {
+                    delay: 3000,
+                    disableOnInteraction: false,
+                },
+            });
+
+            // Inisialisasi AOS
+            AOS.init({
+                duration: 1000,
+                once: true,
+            });
+        });
+    
+        document.addEventListener('DOMContentLoaded', () => {
+            // Inisialisasi Swiper
+            const swiper = new Swiper('.swiper-container', {
+                loop: true,
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true,
+                },
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev',
+                },
+            });
+
+            // Sinkronisasi tab dengan slide
+            const tabs = document.querySelectorAll('#officialTabs .nav-link');
+            tabs.forEach((tab, index) => {
+                tab.addEventListener('click', () => {
+                    swiper.slideTo(index);
+                });
+            });
+
+            swiper.on('slideChange', () => {
+                const activeIndex = swiper.activeIndex % (swiper.slides.length - 1) || 0;
+                tabs.forEach((tab, idx) => tab.classList.toggle('active', idx === activeIndex));
+            });
+
+            // Animasi detail profil
+            document.querySelectorAll('.read-more').forEach(button => {
+                button.addEventListener('click', () => {
+                    const targetId = button.getAttribute('data-target');
+                    const detail = document.querySelector(targetId);
+                    if (detail.style.display === 'none' || !detail.style.display) {
+                        detail.style.display = 'block';
+                        gsap.from(detail, { height: 0, opacity: 0, duration: 0.5, ease: 'power2.out' });
+                    } else {
+                        gsap.to(detail, { height: 0, opacity: 0, duration: 0.5, ease: 'power2.out', onComplete: () => detail.style.display = 'none' });
+                    }
+                });
+            });
+        });
+        document.addEventListener('DOMContentLoaded', () => {
+            gsap.registerPlugin(ScrollTrigger);
+
+            gsap.from('.news-card', {
+                opacity: 0,
+                y: 50,
+                duration: 1,
+                stagger: 0.2, // Animasi bertahap untuk setiap kartu
+                scrollTrigger: {
+                    trigger: '.news-section',
+                    start: 'top 80%',
+                    toggleActions: 'play none none reverse'
+                }
+            });
+        });
+    
+
         
 document.addEventListener('DOMContentLoaded', function () {
   var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
