@@ -66,41 +66,52 @@ class CustomerController extends Controller
     }
 
     public function index(Request $request)
-    {
-        if ($request->ajax()) {
-            $acceptedData = User::where('is_accepted', 1)->withCount('tickets');
-            $unacceptedData = User::where('is_accepted', 0)->withCount('tickets');
-            
-            $data = User::whereIn('is_accepted', [0, 1])->withCount('tickets');
-            if ($request->has('search') && $request->search['value']) {
-                $search = $request->search['value'];
-                $data->where(function($query) use ($search) {
-                    $query->where('name', 'like', "%$search%")
-                        ->orWhere('email', 'like', "%$search%")
-                        ->orWhere('phone', 'like', "%$search%");
-                });
-            }
-            
-            return DataTables::of($data)
-                ->addIndexColumn()
-                ->setRowClass(fn ($row) => 'align-middle')
-                ->addColumn('action', function ($row) {
-                    $td = '<td>';
-                    $td .= '<div class="d-flex">';
-                    $td .= '<a href="' . route('customers.show', $row->id) . '" type="button" class="btn btn-sm  btn-primary waves-effect waves-light me-1">Lihat</a>';
-                    $td .= "</div>";
-                    $td .= "</td>";
-                    return $td;
-                })
-                ->editColumn('tickets_count', function ($row) {
-                    return '<span class="badge badge-pill badge-soft-info font-size-14">' . $row->tickets_count . '</span>';
-                })
-                ->editColumn('created_at', fn ($row) => formatDate($row->created_at))
-                ->rawColumns(['action', 'tickets_count', 'is_accepted'])
-                ->make(true);
-        }
-        return view('admin.customers.index');
+{
+    if ($request->ajax()) {
+        $data = User::whereIn('is_accepted', [0, 1])
+            ->withCount('tickets')
+            ->select(['id', 'name', 'email', 'phone', 'is_accepted', 'created_at']);
+
+        return DataTables::eloquent($data)
+            ->addIndexColumn()
+            ->filter(function ($query) use ($request) {
+                if ($request->has('search') && !empty($request->search['value'])) {
+                    $search = $request->search['value'];
+                    $query->where(function($q) use ($search) {
+                        $q->where('name', 'like', "%$search%")
+                          ->orWhere('email', 'like', "%$search%")
+                          ->orWhere('phone', 'like', "%$search%");
+                    });
+                }
+            })
+            ->addColumn('action', function ($row) {
+                return '<div class="d-flex">
+                    <a href="' . route('customers.show', $row->id) . '" 
+                       class="btn btn-sm btn-primary waves-effect waves-light me-1">
+                       Lihat
+                    </a>
+                </div>';
+            })
+            // ->editColumn('tickets_count', function ($row) {
+            //     return '<span class="badge badge-pill badge-soft-info font-size-14">' 
+            //            . $row->tickets_count . '</span>';
+            // })
+            ->editColumn('is_accepted', function($row) {
+                return $row->is_accepted 
+                    ? '<span class="badge bg-success">Terverifikasi</span>'
+                    : '<span class="badge bg-danger">Belum Terverifikasi</span>';
+            })
+            ->editColumn('created_at', function($row) {
+                // dd($row->created_at);
+                // Format the created_at date
+                return \Carbon\Carbon::parse($row->created_at)->format('d/m/Y');
+                // return $row->created_at ? $row->created_at->format('d/m/Y H:i') : '';
+            })
+            ->rawColumns(['action', 'tickets_count', 'is_accepted'])
+            ->toJson();
     }
+    return view('admin.customers.index');
+}
 
 
     public function show(Request $request, User $user)

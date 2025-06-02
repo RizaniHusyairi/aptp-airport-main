@@ -1,0 +1,158 @@
+/* Cuaca */
+.weather-widget {
+      position: fixed;
+      top: 82%;
+      right: 1%;
+      z-index: 1000;
+      background-color: rgba(255, 255, 255, 0.9);
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      padding: 15px;
+      max-width: 300px;
+      transition: transform 0.3s ease-in-out;
+    }
+
+    .weather-widget:hover {
+      transform: scale(1.05);
+      cursor: pointer;
+    }
+
+    .weather-content {
+      display: flex;
+      align-items: center;
+    }
+
+    .weather-icon {
+      width: 50px;
+      height: 50px;
+      margin-right: 10px;
+    }
+
+    .weather-info h4 {
+      margin: 0;
+      font-size: 16px;
+      color: #333;
+    }
+
+    .weather-info p {
+      margin: 5px 0;
+      font-size: 14px;
+      color: #555;
+    }
+
+    .weather-time {
+      font-size: 12px;
+      color: #777;
+    }
+
+
+/* Styles for contact form */
+.php-email-form .error-message {
+    display: none;
+    color: #dc3545;
+    background: #f8d7da;
+    border: 1px solid #dc3545;
+    padding: 15px;
+    border-radius: 4px;
+    margin-bottom: 15px;
+}
+
+.php-email-form .sent-message {
+    display: none;
+    color: #28a745;
+    background: #d4edda;
+    border: 1px solid #28a745;
+    padding: 15px;
+    border-radius: 4px;
+    margin-bottom: 15px;
+}
+
+.php-email-form .loading {
+    display: none;
+    color: #007bff;
+    background: #e7f1ff;
+    border: 1px solid #007bff;
+    padding: 15px;
+    border-radius: 4px;
+    margin-bottom: 15px;
+}
+
+.php-email-form .loading.show,
+.php-email-form .error-message.show,
+.php-email-form .sent-message.show {
+    display: block;
+}
+
+/* Tambahan untuk animasi ikon panah */
+.news .container-news .back .inner .more-link {
+    display: inline-flex;
+    align-items: center;
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: 500;
+    margin-top: 10px;
+    transition: color 0.3s ease;
+}
+
+.news .container-news .back .inner .more-link:hover {
+    color: #e0e0e0;
+}
+
+.news .container-news .back .inner .more-link i {
+    margin-left: 5px;
+    transition: transform 0.3s ease;
+}
+
+.news .container-news .back .inner .more-link:hover i {
+    transform: translateX(5px);
+}
+/*----------------- */
+
+.btn-lihat-pesawat{
+    opacity: 0;
+    transform: translateY(10px);
+}
+
+.info-dekstop-pesawat:hover .btn-lihat-pesawat{
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity .5s ease, transform .3s ease-in;
+
+}
+
+.info-pesawat{
+    display: none;
+}
+
+.box-kedatangan{
+    background-color: white;
+    color: #d99e4e;
+    text-align: center;
+    padding: 30px;
+}
+
+.box-kedatangan h3{
+    color: #d99e4e;
+    font-weight: 700;
+    font-size: 34px;
+}
+.box-kedatangan .more-btn{
+    display: inline-block;
+    padding: 8px 40px 10px 40px;
+    background: #d99e4e;
+    color: #ffffff;
+    transition: all ease-in-out 0.4s;
+    border-radius: 50px;
+}
+
+.box-kedatangan .more-btn:hover{
+    background: #8a6532;
+    color: white;
+}
+
+@media (max-width: 768px) {
+    .info-pesawat{
+        display: block;
+    }
+}
+

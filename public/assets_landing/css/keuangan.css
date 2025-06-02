@@ -1,0 +1,39 @@
+/* Custom CSS untuk halaman Laporan Keuangan */
+    .filter-section {
+      margin-bottom: 2rem;
+    }
+    .chart-container {
+      position: relative;
+      margin-bottom: 3rem;
+      width: 100%;
+      height: 400px; /* Tinggi default untuk grafik */
+    }
+    #monthFilterContainer {
+      transition: opacity 0.3s ease; /* Animasi untuk menyembunyikan/menampilkan */
+    }
+    #monthFilterContainer.hidden {
+      transition: opacity 0.3s ease .5s; /* Animasi untuk menyembunyikan/menampilkan */
+      opacity: 0;
+      visibility: hidden;
+      height: 0;
+      margin: 0;
+    }
+    #yearFilter , #monthFilter {
+        box-shadow: none;
+
+    }
+
+     #yearFilter:focus,#monthFilter:focus {
+        box-shadow: 0 0 0 0.2rem rgba(255, 193, 7, 0.25);
+        border-color: rgb(160, 123, 4);
+    } 
+    @media (max-width: 768px) {
+      .chart-container {
+        height: 300px; /* Tinggi lebih kecil untuk smartphone */
+      }
+    }
+    @media (max-width: 576px) {
+      .filter-section .col-12 {
+        margin-bottom: 1rem;
+      }
+    }

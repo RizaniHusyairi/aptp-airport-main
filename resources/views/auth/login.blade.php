@@ -1,127 +1,136 @@
-@extends('layouts.master-without-nav')
-
-@section('title')
-  @lang('translation.Login')
-@endsection
-
-@section('body')
-
-  <body>
-  @endsection
-
-  @section('content')
-  <div class="account-pages vh-100 d-flex align-items-center">
-    <div class="container">
-      <div class="row justify-content-center">
-          <div class="col-md-8 col-lg-6 col-xl-5">
-            <div class="card overflow-hidden">
-              <div class="bg-primary bg-soft">
-                <div class="row">
-                  <div class="col-8">
-                    <div class="text-primary p-4">
-                      <h5 class="text-primary">Selamat Datang !</h5>
-                      <p>Masuk untuk Melanjutkan ke Dasbor Bandara APT Pranoto.</p>
-                    </div>
-                  </div>
-                  <div class="col-4 align-self-end mb-3">
-                    <img src="{{ URL::asset('/assets/images/logo-blu.png') }}" alt="" class="img-fluid">
-                  </div>
-                </div>
-              </div>
-              <div class="card-body pt-0">
-                <div class="auth-logo">
-                  <a href="index" class="auth-logo-light">
-                    <div class="avatar-md profile-user-wid mb-4">
-                      <span class="avatar-title rounded-circle bg-light">
-                        <img src="{{ URL::asset('/assets/images/logo-light.svg') }}" alt="" class="rounded-circle" height="34">
-                      </span>
-                    </div>
-                  </a>
-
-                  <div class="auth-logo-dark">
-                    <div>
-                      <div>
-                        <div class="mb-4">
-                          <!-- <span class="avatar-title rounded-circle bg-light">
-                            <img src="{{ URL::asset('/assets/images/air-plane-icon.jpg') }}" alt="" class="rounded-circle" height="90">
-                          </span> -->
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="">
-                  <form class="form-horizontal" method="POST" action="{{ route('login') }}">
-                    @csrf
-                    <div class="mb-3">
-                    @if (session('unverified'))
-                      <div class="alert alert-warning">
-                        {{ session('unverified') }}
-                      </div>
-                    @endif
-                    @error('unverified')
-                      <div class="alert alert-warning">
-                          {{ $message }}
-                      </div>
-                    @enderror
-                    @error('credentials')
-                      <div class="alert alert-danger">
-                          {{ $message }}
-                      </div>
-                    @enderror
-                      <label for="email" class="form-label">Email</label>
-                      <input name="email" type="email" class="form-control @error('email') is-invalid @enderror" id="email" placeholder="Enter Email" autocomplete="email" autofocus>
-                      @error('email')
-                        <span class="invalid-feedback" role="alert">
-                          <strong>{{ $message }}</strong>
-                        </span>
-                      @enderror
-                    </div>
-
-                    <div class="mb-3">
-                      <div class="float-end">
-                        <!-- @if (Route::has('password.request'))
-                          <a href="{{ route('password.request') }}" class="text-muted">Forgot password?</a>
-                        @endif -->
-                      </div>
-                      <label class="form-label">Kata Sandi</label>
-                      <div class="input-group auth-pass-inputgroup @error('password') is-invalid @enderror">
-                        <input type="password" name="password" class="form-control @error('password') is-invalid @enderror" id="userpassword" placeholder="Enter password" aria-label="Password" aria-describedby="password-addon">
-                        <button class="btn btn-light" type="button" id="password-addon"><i class="mdi mdi-eye-outline"></i></button>
-                        @error('password')
-                          <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                          </span>
-                        @enderror
-                      </div>
-                    </div>
-
-                    <div class="form-check">
-                      <input class="form-check-input" type="checkbox" id="remember" {{ old('rememberd') ? 'checked' : '' }}>
-                      <label class="form-check-label" for="remember">
-                        Ingat saya
-                      </label>
-                    </div>
-
-                    <div class="d-grid mt-3">
-                      <button class="btn btn-primary waves-effect waves-light" type="submit">Masuk</button>
-                    </div>
-                  </form>
-                </div>
-
-              </div>
-            </div>
-            <div class="mt-3 text-center">
-              <div>
-                <p>
-                  Belum punya akun ? <a href="{{ route('register') }}" class="fw-medium text-primary">Daftar sekarang! </a>
-                </p>
-              </div>
-            </div>
-
-          </div>
+<!DOCTYPE html>
+<!-- Created by CodingLab |www.youtube.com/c/CodingLabYT-->
+<html lang="id" dir="ltr">
+  <head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ asset('assets_login/css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets_login/bootstrap-icons/bootstrap-icons.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   </head>
+<body>
+  <div class="container">
+    <input type="checkbox" id="flip">
+    <div class="cover">
+      <div class="front">
+        <img src="{{ asset('assets_login/images/APT_1682.JPG') }}" alt="photo" class="background-form">
+        <div class="text">
+          <span class="text-1">Selamat Datang di Bandara A.P.T Pranoto</span>
+          <span class="text-2">Masuk untuk akses layanan kami</span>
+        </div>
+      </div>
+      <div class="back">
+        <img src="{{ asset('assets_login/images/APT04948.JPG') }}" alt="" class="background-form">
+        <div class="text">
+          <span class="text-1">Bergabung untuk pengalaman terbaik</span>
+          <span class="text-2">Daftar sekarang</span>
         </div>
       </div>
     </div>
-    <!-- end account-pages -->
-  @endsection
+    <div class="forms">
+      <div class="form-content">
+        <div class="login-form">
+            <img src="{{ asset('assets_login/images/logo-apt.svg') }}" alt="" class="logo-text-left">
+            <div class="title">Login</div>
+          <form method="POST" action="{{ route('login') }}">
+            @csrf
+            <div class="input-boxes">
+              <div class="input-box">
+                <i class="bi bi-envelope"></i>
+                <input id="email" type="email" class="@error('email') is-invalid @enderror" name="email" placeholder="Masukkan email Anda" value="{{ old('email') }}" required autocomplete="email" autofocus>
+              </div>
+              @error('email')
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                </span>
+              @enderror
+              <div class="input-box">
+                <i class="bi bi-lock"></i>
+                <input id="password" type="password" class="@error('password') is-invalid @enderror" name="password" placeholder="Masukkan kata sandi Anda" required autocomplete="current-password">
+              </div>
+              @error('password')
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                </span>
+              @enderror
+              <div class="button input-box">
+                <input type="submit" value="Masuk">
+              </div>
+              <div class="text sign-up-text">Belum punya akun? <label for="flip">Daftar sekarang</label></div>
+            </div>
+        </form>
+      </div>
+        <div class="signup-form">
+          <img src="{{ asset('assets_login/images/logo-apt.svg') }}" alt="" class="logo-text-right">
+
+          <div class="title">Daftar</div>
+        <form method="POST" action="{{ route('register') }}" >
+            @csrf
+            <div class="input-boxes">
+              <div class="input-box">
+                  <i class="bi bi-person"></i>
+                  <input id="name" type="text" class="@error('name') is-invalid @enderror" name="name" placeholder="Masukkan nama Anda" value="{{ old('name') }}" required autocomplete="name" autofocus>
+                </div>
+                @error('name')
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                </span>
+              @enderror
+                <div class="input-box">
+                  <i class="bi bi-envelope"></i>
+                  <input id="email_new" type="email" class="@error('email_new') is-invalid @enderror" name="email_new" placeholder="Masukkan Email Anda" value="{{ old('email_new') }}" required autocomplete="email_new" autofocus>
+                </div>
+                @error('email_new')
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                </span>
+                @enderror
+                <div class="input-box">
+                  <i class="bi bi-telephone"></i>
+                  <input id="phone" type="tel" class="@error('phone') is-invalid @enderror" name="phone" pattern="[0-9]{10,13}" placeholder="Masukkan Nomor Telepon Anda" value="{{ old('phone') }}" required autocomplete="phone" autofocus>
+                </div>
+                @error('phone')
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                </span>
+                @enderror
+                <div class="input-box">
+                  <i class="bi bi-geo-alt"></i>
+                  <input id="address" type="text" class="@error('address') is-invalid @enderror" name="address" placeholder="Masukkan Alamat Anda" value="{{ old('address') }}" required autocomplete="address" autofocus>
+                </div>
+                @error('phone')
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                </span>
+                @enderror
+
+                <div class="input-box">
+                  <i class="bi bi-lock"></i>
+                  <input id="password_new" type="password" name="password_new" class="@error('password_new') is-invalid @enderror" placeholder="Masukkan Kata sandi Anda" required>
+                </div>
+                @error('password_new')
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                </span>
+                @enderror
+
+                <div class="input-box">
+                  <i class="bi bi-lock"></i>
+                  <input type="password" name="confirm_password_new" class="@error('confirm_password_new') is-invalid @enderror" placeholder="Konfirmasi kata sandi Anda" required>
+                </div>
+                @error('confirm_password_new')
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                </span>
+                @enderror
+              <div class="button input-box">
+                <input type="submit" value="Daftar">
+              </div>
+              <div class="text sign-up-text">Sudah punya akun? <label for="flip">Masuk sekarang</label></div>
+            </div>
+      </form>
+    </div>
+    </div>
+    </div>
+  </div>
+</body>
+</html>

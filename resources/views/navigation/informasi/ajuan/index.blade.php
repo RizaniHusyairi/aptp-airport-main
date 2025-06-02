@@ -10,8 +10,8 @@
         @case('tenant')
           Syarat & Ketentuan Pengajuan Tenant
           @break
-        @case('sewa-lahan')
-          Syarat & Ketentuan Sewa Lahan
+        @case('sewa')
+          Syarat & Ketentuan Sewa
           @break
         @case('perijinan-usaha')
           Syarat & Ketentuan Perijinan Usaha
@@ -114,7 +114,7 @@
       $routeSegment = request()->segment(2);
       $pengajuanRoute = match($routeSegment) {
           'tenant' => 'dashboard/tenant',
-          'sewa-lahan' => 'dashboard/sewa',
+          'sewa' => 'dashboard/sewa',
           'perijinan-usaha' => 'dashboard/perijinan',
           'pengiklanan' => 'dashboard/pengiklanan',
           'field-trip' => 'dashboard/fieldtrip',

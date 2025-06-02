@@ -1,106 +1,154 @@
 <?php
 namespace App\Services;
 
-use Carbon\Carbon;
+use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Cache;
+use GuzzleHttp\Exception\RequestException;
 
 class AirportApiService
 {
     protected $baseUrl;
+    protected $timeout;
     protected $baseUrlCuaca;
 
     public function __construct()
     {
         $this->baseUrl = config('services.bandara.base_uri');
+        $this->timeout = config('services.bandara.timeout');
         $this->baseUrlCuaca = "https://api.bmkg.go.id/publik/prakiraan-cuaca?adm4=64.72.05.1004";
         
     }
 
-    public function getKeberangkatan()
+    public function getDepartures()
     {
-        $response = Http::get("{$this->baseUrl}/keberangkatan");
-        if ($response->failed()) {
-            return [];
-        }
-        return $response->successful() ? $response->json() : [];
-    }
+        return Cache::remember('flight_departures', now()->addMinutes(15), function () {
+            try {
+                $response = Http::timeout($this->timeout)
+                    ->get($this->baseUrl . '/keberangkatan');
 
-    public function getKedatangan()
-    {
-        $response = Http::get("{$this->baseUrl}/kedatangan");
-        if ($response->failed()) {
-            return [];
-        }
-
-        return $response->successful() ? $response->json() : [];
-    }
-
-    public function getCuaca()
-    {
-       try {
-            $response = Http::get($this->baseUrlCuaca);
-            
-            if ($response->successful()) {
-                $data = $response->json();
-                $forecasts = $data['data'][0]['cuaca'] ?? [];
-                
-                // Waktu utama (WITA): 07:00, 13:00, 16:00, 19:00
-                $now = Carbon::now('Asia/Makassar'); // 2025-05-14 10:12 WITA
-                $twoHoursLater = $now->copy()->addHours(2); // 12:12 WITA
-
-                $nearestForecast = null;
-                $minTimeDiff = null;
-
-                foreach ($forecasts as $dayForecasts) {
-                    foreach ($dayForecasts as $forecast) {
-                        $forecastTime = Carbon::parse($forecast['local_datetime'], 'Asia/Makassar');
-                        
-                        // Hanya pilih waktu setelah sekarang
-                        if ($forecastTime->greaterThan($now)) {
-                            $timeDiff = $forecastTime->diffInSeconds($now);
-                            
-                            // Pilih prakiraan dengan selisih waktu terkecil
-                            if ($minTimeDiff === null || $timeDiff < $minTimeDiff) {
-                                $minTimeDiff = $timeDiff;
-                                $nearestForecast = [
-                                    'time' => $forecastTime->format('H:i'),
-                                    'temperature' => $forecast['t'],
-                                    'weather_desc' => $forecast['weather_desc'],
-                                    'weather_image' => $forecast['image'],
-                                    'humidity' => $forecast['hu'],
-                                    'wind_speed' => round($forecast['ws'] * 3.6, 1), // m/s ke km/h
-                                    'wind_direction' => $forecast['wd'],
-                                ];
-                            }
-                        }
-                    }
+                if ($response->successful()) {
+                    return $response->json();
                 }
 
-                if ($nearestForecast) {
+                Log::error('Departures API Request Failed', [
+                    'url' => $this->baseUrl . '/keberangkatan',
+                    'status' => $response->status(),
+                    'response' => $response->body()
+                ]);
+
+                return null;
+            } catch (\Exception $e) {
+                Log::error('Departures API Connection Error', [
+                    'url' => $this->baseUrl . '/keberangkatan',
+                    'error' => $e->getMessage()
+                ]);
+
+                return null;
+            }
+        });
+    }
+
+    /**
+     * Get flight arrivals data from API
+     */
+    public function getArrivals()
+    {
+        return Cache::remember('flight_arrivals', now()->addMinutes(15), function () {
+            try {
+                $response = Http::timeout($this->timeout)
+                    ->get($this->baseUrl . '/kedatangan');
+
+                if ($response->successful()) {
+                    return $response->json();
+                }
+
+                Log::error('Arrivals API Request Failed', [
+                    'url' => $this->baseUrl . '/kedatangan',
+                    'status' => $response->status(),
+                    'response' => $response->body()
+                ]);
+
+                return null;
+            } catch (\Exception $e) {
+                Log::error('Arrivals API Connection Error', [
+                    'url' => $this->baseUrl . '/kedatangan',
+                    'error' => $e->getMessage()
+                ]);
+
+                return null;
+            }
+        });
+    }
+
+    /**
+     * Get flight statistics (movements, arrivals, departures)
+     */
+    public function getFlightStats()
+    {
+        $departures = $this->getDepartures();
+        $arrivals = $this->getArrivals();
+        
+        // Fallback data if API is not available
+        if (!$departures || !isset($departures['data']['sukses'])) {
+            return [
+                'movements' => 0,
+                'arrivals' => 0,
+                'departures' => 0
+            ];
+        }
+
+        return [
+            'movements' => 0,
+            'arrivals' => $arrivals['data']['result']['total'] ?? 0,
+            'departures' => $departures['data']['result']['total'] ?? 0
+        ];
+    }
+
+    public function getCurrentWeather()
+    {
+         $client = new Client([
+            'base_uri' => $this->baseUrlCuaca,
+            'timeout' => $this->timeout,
+        ]);
+
+        try {
+            $response = $client->request('GET');
+            $data = json_decode($response->getBody()->getContents(), true);
+
+            // Ambil cuaca saat ini berdasarkan waktu terdekat
+            $currentTime = now()->setTimezone('Asia/Makassar');
+            $weatherData = $data['data'][0]['cuaca'][0]; // Ambil data cuaca pertama untuk hari ini
+
+            foreach ($weatherData as $forecast) {
+                $forecastTime = \Carbon\Carbon::parse($forecast['local_datetime'], 'Asia/Makassar');
+                if ($forecastTime->greaterThanOrEqualTo($currentTime)) {
                     return [
-                        'success' => true,
-                        'data' => $nearestForecast,
-                        'location' => $data['lokasi']['desa'] . ', ' . $data['lokasi']['kecamatan'],
+                        'temperature' => $forecast['t'],
+                        'weather_desc' => $forecast['weather_desc'],
+                        'weather_icon' => $forecast['image'],
+                        'humidity' => $forecast['hu'],
+                        'wind_speed' => $forecast['ws'],
+                        'wind_direction' => $forecast['wd'],
+                        'local_datetime' => $forecast['local_datetime'],
                     ];
                 }
-
-                return [
-                    'success' => false,
-                    'message' => 'Tidak ada prakiraan cuaca dalam 2 jam ke depan.',
-                ];
             }
 
+            // Jika tidak ada data yang sesuai, kembalikan data pertama
             return [
-                'success' => false,
-                'message' => 'Gagal mengambil data cuaca dari BMKG.',
+                'temperature' => $weatherData[0]['t'],
+                'weather_desc' => $weatherData[0]['weather_desc'],
+                'weather_icon' => $weatherData[0]['image'],
+                'humidity' => $weatherData[0]['hu'],
+                'wind_speed' => $weatherData[0]['ws'],
+                'wind_direction' => $weatherData[0]['wd'],
+                'local_datetime' => $weatherData[0]['local_datetime'],
             ];
-        } catch (\Exception $e) {
-            return [
-                'success' => false,
-                'message' => 'Terjadi kesalahan saat mengambil data cuaca: ' . $e->getMessage(),
-            ];
+        } catch (RequestException $e) {
+            Log::error('Failed to fetch weather data from BMKG: ' . $e->getMessage());
+            return null;
         }
-
-        // return $response->successful() ? $response->json() : [];
     }
 }

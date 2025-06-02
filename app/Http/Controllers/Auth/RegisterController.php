@@ -40,19 +40,19 @@ class RegisterController extends Controller
     {
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
+            'email_new' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
             'phone' => ['required', 'numeric', 'digits_between:10,15', 'unique:users,phone'], // validasi numeric
             'address' => ['required', 'string', 'max:100'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'password_new' => ['required', 'string', 'min:8', 'confirmed'],
         ], [
             'name.required' => 'Nama lengkap wajib diisi.',
             'name.string' => 'Nama lengkap harus berupa teks.',
             'name.max' => 'Nama lengkap maksimal 255 karakter.',
             
-            'email.required' => 'Email wajib diisi.',
-            'email.email' => 'Format email tidak valid.',
-            'email.max' => 'Email maksimal 255 karakter.',
-            'email.unique' => 'Email ini sudah terdaftar.',
+            'email_new.required' => 'Email wajib diisi.',
+            'email_new.email' => 'Format email tidak valid.',
+            'email_new.max' => 'Email maksimal 255 karakter.',
+            'email_new.unique' => 'Email ini sudah terdaftar.',
             
             'phone.required' => 'Nomor telepon wajib diisi.',
             'phone.numeric' => 'Nomor telepon harus berupa angka.',
@@ -63,10 +63,10 @@ class RegisterController extends Controller
             'address.string' => 'Alamat harus berupa teks.',
             'address.max' => 'Alamat maksimal 100 karakter.',
             
-            'password.required' => 'Password wajib diisi.',
-            'password.string' => 'Password harus berupa teks.',
-            'password.min' => 'Password minimal terdiri dari 8 karakter.',
-            'password.confirmed' => 'Konfirmasi password tidak cocok.',
+            'password_new.required' => 'Password wajib diisi.',
+            'password_new.string' => 'Password harus berupa teks.',
+            'password_new.min' => 'Password minimal terdiri dari 8 karakter.',
+            'password_new.confirmed' => 'Konfirmasi password tidak cocok.',
         ]);
     }
 

@@ -1,0 +1,68 @@
+/* Custom CSS untuk halaman Surat Edaran */
+    .table-container {
+      margin-top: 2rem;
+      margin-bottom: 2rem;
+    }
+    .tabulator {
+      background-color: #eeeee9;
+      border: 1px solid #dee2e6;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Bayangan lembut */
+    }
+    .tabulator .tabulator-header .tabulator-col { 
+      background-color: #d99e4e; /* Warna oranye untuk header tabel */
+      color: #ffffff; /* Teks putih untuk kontras */
+      transition: background-color 0.3s ease;
+      font-weight: 600;
+      
+    }
+    .tabulator .tabulator-header .tabulator-col.tabulator-sortable.tabulator-col-sorter-element:hover {
+        /* cursor: pointer; */
+        transition: background-color 0.3s ease;
+        background-color: #c59046;
+    }
+
+    .tabulator .tabulator-header .tabulator-col:hover {
+      background-color: #c59046; /* Warna hover lebih gelap */
+    }
+
+    .tabulator .tabulator-row {
+        background-color: #f8f9fa; /* Latar belakang abu-abu muda */
+        transition: background-color 0.3s ease;
+        color: #333333; /* Teks gelap untuk kontras */
+    }
+    .tabulator .tabulator-row:hover {
+        background-color: #e9ecef; /* Warna hover lebih terang */
+    }
+    .tabulator .tabulator-col-title {
+      padding: 10px;
+      font-size: 1rem;
+    }
+    .tabulator .tabulator-cell {
+      padding: 10px;
+      font-size: 0.95rem;
+    }
+    .download-btn {
+      background-color: #d99e4e;
+      color: #ffffff;
+      padding: 5px 10px;
+      border-radius: 5px;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+    .download-btn:hover {
+      background-color: #c59046;
+      color: #ffffff;
+    }
+    @media (max-width: 768px) {
+      .table-container {
+        overflow-x: auto; /* Scroll horizontal pada smartphone */
+      }
+      .tabulator {
+        min-width: 600px; /* Pastikan tabel tetap terlihat pada layar kecil */
+      }
+      .tabulator .tabulator-cell, .tabulator .tabulator-col-title {
+        font-size: 0.85rem; /* Ukuran font lebih kecil pada smartphone */
+        padding: 8px;
+      }
+    }

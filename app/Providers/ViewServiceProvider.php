@@ -34,20 +34,39 @@ class ViewServiceProvider extends ServiceProvider
                     ['name' => 'Informasi Publik', 'dropdown' => [
                         ['name' => 'Profil Bandara', 'route' => route('profilBandara')],
                         ['name' => 'Struktur Organisasi', 'route' => route('strukturOrganisasi')],
-                        ['name' => 'Profil PPID BLU', 'route' => route('profilPPID')],
                         ['name' => 'Pejabat Bandara', 'route' => route('pejabatBandara')],
-                        ['name' => 'SOP PPID', 'route' => route('sopPpid')],
-                        ['name' => 'Pengajuan Informasi Publik', 'route' => route('pengajuanInformasiPublik')],
+                        [
+                            'name' => 'PPID',
+                            'dropdown' => [
+                                [
+                                    'name' => 'Profil PPID BLU',
+                                    'route' => route('profilPPID'),
+                                ],
+                                [
+                                    'name' => 'SOP PPID',
+                                    'route' => route('sopPpid'),
+                                ],
+                                
+                                [
+                                    'name' => 'Pengajuan Informasi Publik', 
+                                    'route' => route('pengajuanInformasiPublik')
+                                ],
+                            ],
                         ]
+                        // ['name' => 'Profil PPID BLU', 'route' => route('profilPPID')],
+                        // ['name' => 'SOP PPID', 'route' => route('sopPpid')],
+                        ],
+
                     ],
+                    
                     ['name' => 'Informasi', 'dropdown' => [
                         ['name' => 'Berita', 'route' => route('berita')],
                         ['name' => 'Laporan Keuangan', 'route' => route('laporanKeuangan')],
                     ]],
                     
                     ['name' => 'Regulasi','dropdown' =>[
-                        ['name' => 'Surat Utusan', 'route' => route('suratUtusan')],
-                        ['name' => 'Surat Edaran', 'route' => route('suratEdaran')],
+                        ['name' => 'Surat Utusan', 'route' => route('letters.utusan')],
+                        ['name' => 'Surat Edaran', 'route' => route('letters.edaran')],
                         ]
                     ],
 
@@ -59,12 +78,11 @@ class ViewServiceProvider extends ServiceProvider
                         ['name' => 'Pengiklanan', 'route' => route('pengiklanan')],
                         ['name' => 'Field Trip', 'route' => route('fieldTrip')],
                         ['name' => 'Beauty Contest', 'route' => route('lelang')],
-                        ['name' => 'Pengajuan Slot', 'route' => route('lelang')],
+                        ['name' => 'Pengajuan Slot', 'route' => route('slot')],
                     ]
                     ]
-                ],
+                ]
             ];
-            $footerSliders = Slider::where('is_visible_footer', true)->get();
             $headlineCount = News::where('is_published', true)
                           ->where('is_headline', true)
                           ->count();
@@ -81,7 +99,7 @@ class ViewServiceProvider extends ServiceProvider
                                 ->take(3)
                                 ->get();
 
-            $view->with(compact('footerSliders', 'topikUtama', 'menuItems'));
+            $view->with(compact('topikUtama', 'menuItems'));
         });
     }
 }

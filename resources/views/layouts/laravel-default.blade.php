@@ -42,7 +42,7 @@
                 <!-- Navbar Items -->
                 <div class="collapse navbar-collapse justify-content-center" id="navbarContent">
                     <ul class="navbar-nav gap-lg-4 text-center text-lg-start">
-                        @foreach ($menuItems['header'] as $item)
+                        {{-- @foreach ($menuItems['header'] as $item)
                         <li class="nav-item dropdown">
 
                             @if (isset($item['dropdown']))
@@ -64,7 +64,7 @@
                             
                             @endif
                         </li>
-                        @endforeach
+                        @endforeach --}}
 
                     </ul>
                 </div>
@@ -90,27 +90,14 @@
             <div class="footer row">
                 <div id="carouselExampleSlidesOnly" class="carousel slide col-lg-6 d-flex align-items-end "
                     data-bs-ride="carousel">
-                    <div class="carousel-inner h-75">
-                        @forelse ($footerSliders as $key => $slider)
-                            <div class="carousel-item {{ $key === 0 ? 'active' : '' }}">
-                                <img src="{{ asset('uploads/' . $slider->documents) }}"
-                                    class="carousel-footer d-block w-100 object-fit-cover"
-                                    alt="Slider Image {{ $key + 1 }}">
-                            </div>
-                        @empty
-                            <div class="carousel-item active">
-                                <img src="{{ asset('frontend/assets/tes/tes1.jpg') }}"
-                                    class="carousel-footer d-block w-100 object-fit-cover" alt="Default Slider">
-                            </div>
-                        @endforelse
-                    </div>
+                    
                 </div>
                 <div class="col align-content-end">
                     @if ($topikUtama->isNotEmpty())
                         <section class="text-white">
                             <div class="container">
                                 <div class="row">
-                                    @foreach ($topikUtama as $news)
+                                    {{-- @foreach ($topikUtama as $news)
                                         <div class="col-md-4">
                                             <a href="{{ route('showNews', $news->slug) }}"
                                                 class="text-decoration-none text-white">
@@ -124,7 +111,7 @@
                                                 </div>
                                             </a>
                                         </div>
-                                    @endforeach
+                                    @endforeach --}}
                                 </div>
 
                                 <div class="d-flex justify-content-center mt-2">
@@ -144,7 +131,7 @@
                 <div class="col mb-5 mb-md-0">
                     <h4 class="text-start fs-3 mb-4">Navigasi Halaman</h4>
                     <div class="accordion accordion-flush p-0" id="accordionFlushExample">
-                        @foreach ($menuItems['header'] as $menu)
+                        {{-- @foreach ($menuItems['header'] as $menu)
                             @if (isset($menu['dropdown']))
                                 <div class="accordion-item bg-transparent border-bottom">
                                     <h2 class="accordion-header p-0">
@@ -175,7 +162,7 @@
                                     </h2>
                                 </div>
                             @endif
-                        @endforeach
+                        @endforeach --}}
                     </div>
                 </div>
                 <div class="col text-end fs-8">

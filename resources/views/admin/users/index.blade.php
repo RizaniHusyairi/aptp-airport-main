@@ -40,7 +40,7 @@
             <a href="{{ route('users.create') }}" class="btn btn-rounded btn-success waves-effect waves-light"><i class="bx bx-plus font-size-16 me-2 align-middle"></i>@lang('translation.user.add_user')</a>
 
           </div>
-          <table id="datatable" class="table-hover table-bordered nowrap w-100 table">
+          <table id="datatable_user" class="table-hover table-bordered nowrap w-100 table">
             <thead class="table-light">
               <tr>
                 <th>#</th>
@@ -65,9 +65,9 @@
   <script src="{{ URL::asset('/assets/libs/datatables/datatables.min.js') }}"></script>
 
   {{-- datatable init --}}
-  <script type="text/javascript">
+  <script>
     $(function() {
-      let table = $('#datatable').DataTable({
+      let table = $('#datatable_user').DataTable({
         processing: true,
         serverSide: true,
         lengthChange: true,

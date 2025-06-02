@@ -1,0 +1,29 @@
+.member-info p{
+    text-align: start;
+    max-height: 35vh;
+    overflow-y: scroll;
+
+}
+
+.team-member{
+    max-height: 80vh;
+}
+
+.member-info p::-webkit-scrollbar {
+    width: 5px; /* Lebar scrollbar */
+}
+
+.member-info p::-webkit-scrollbar-track {
+    background: #cfcfcf; /* Warna latar belakang track */
+    border-radius: 4px;
+}
+
+.member-info p::-webkit-scrollbar-thumb {
+    background: #d99e4e; /* Warna thumb (bagian yang bisa digeser) */
+    border-radius: 4px;
+}
+
+.member-info p::-webkit-scrollbar-thumb:hover {
+    background: #c59046; /* Warna thumb saat di-hover */
+}
+

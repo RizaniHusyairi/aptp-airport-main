@@ -1,0 +1,48 @@
+.section-profil{
+  background: #ffffff;
+background: linear-gradient(149deg,rgba(255, 255, 255, 1) 48%, rgba(255, 242, 242, 0.86) 80%, rgba(250, 250, 250, 0.23) 100%);padding: 60px 0;
+  
+}
+.background-sejarah{
+    position: fixed;
+    height: 100vh;
+    width: 100vw;
+    object-fit: cover;
+    z-index: -1;
+}
+
+.swiper-slide img {
+    height: 300px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.swiper-slide:hover img {
+    transform: scale(1.05);
+}
+
+.swiper-button-prev, .swiper-button-next {
+    color: #2ECC71;
+}
+
+.swiper-pagination-bullet {
+    background: #2ECC71;
+}
+
+@media (max-width: 768px) {
+    .swiper-slide img {
+        height: 200px;
+    }
+
+    .display-4 {
+        font-size: 2rem;
+    }
+
+    .h3 {
+        font-size: 1.5rem;
+    }
+
+    .h4 {
+        font-size: 1.25rem;
+    }
+}

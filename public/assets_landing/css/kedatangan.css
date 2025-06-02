@@ -1,0 +1,49 @@
+.tabulator {
+  background-color: #fff;
+  border: 1px solid #dee2e6;
+  border-radius: 0.25rem;
+  font-family: 'Inter', sans-serif;
+}
+
+.tabulator .tabulator-header {
+  background-color: #f8f9fa;
+  border-bottom: 2px solid #007bff;
+}
+
+.tabulator .tabulator-header .tabulator-col {
+  font-weight: 600;
+  color: #333;
+}
+
+.tabulator .tabulator-row {
+  border-bottom: 1px solid #dee2e6;
+  transition: background-color .3s;
+}
+
+.tabulator .tabulator-row:hover {
+  background-color: #efc987;
+  transition: background-color .3s;
+}
+
+
+.tabulator .tabulator-cell {
+  padding: 10px;
+  font-size: 14px;
+}
+
+.tabulator .tabulator-footer {
+  padding: 10px;
+  background-color: #f8f9fa;
+}
+
+.tabulator .tabulator-paginator {
+  font-size: 14px;
+}
+
+.tabulator .tabulator-header-filter input,
+.tabulator .tabulator-header-filter select {
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+  padding: 5px;
+  width: 100%;
+}

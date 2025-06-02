@@ -1,0 +1,258 @@
+.news-card {
+    width: 100%;
+    position: relative;
+    background-size: cover;
+    background-position: center;
+    height: 100%; /* Tinggi default untuk desktop */
+    border: none;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+}
+
+.news-card.recomd {
+    height: 130px;
+    
+}
+
+.card-overlay-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.news-card.recomd:hover .card-overlay-img {
+    transform: scale(1.2);
+    transition: transform 0.3s ease;
+}
+
+.news-card:not(.recomd):hover {
+    transform: scale(1.02);
+}
+
+.card-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Overlay semi-transparan hitam */
+    display: flex;
+    align-items: flex-end;
+}
+
+.card-overlay-recomd {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: flex-end;
+}
+
+.card-overlay-recomd::after {
+    z-index: 1;
+    position: absolute;
+    top: 50%;
+    bottom: -10px;
+    left: 0;
+    content: "";
+    background: linear-gradient(0deg, #815402, #af8207d9, transparent);
+    width: 100%;
+}
+
+.card-body {
+    padding: 20px;
+    color: white;
+    height: 100%;
+}
+
+.card-title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.card-title-recomd {
+    display: -webkit-box;
+    font-size: 1rem;
+    font-weight: 600;
+    -webkit-line-clamp: 2; /* Batasi teks menjadi 2 baris */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: center;
+    color: white;
+    z-index: 2;
+}
+
+.card-text {
+    font-size: 1rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 3; /* Batasi teks menjadi 3 baris */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 1rem;
+}
+
+.utility-list {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+.utility-list li {
+    margin: 0 15px 0 0;
+    padding: 0 0 0 22px;
+    display: inline-block;
+    color: #dce3e7;
+    font-family: "Roboto", sans-serif;
+}
+
+.utility-list li.comments {
+    background: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/1765/icon-chat.svg) no-repeat 0 0.1em;
+}
+
+.utility-list li.date {
+    background: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/1765/icon-calendar.svg) no-repeat 0 0.1em;
+}
+
+.news-list {
+    max-height: 68vh;
+    overflow: hidden; /* Swiper akan mengambil alih scroll */
+}
+
+.news-swiper {
+    --swiper-scrollbar-color: #d99e4e; /* Warna navigasi Swiper */
+    --swiper-navigation-size: 30px; /* Ukuran tombol navigasi */
+    height: 68vh; /* Tinggi tetap untuk desktop */
+}
+
+.newsFirstSwiper swiper-slide{
+  padding: 10px;
+
+}
+
+.card-news-more {
+    margin: 1rem 0;
+    transition: transform 0.3s ease;
+}
+
+.card-news-more:hover {
+    transform: scale(1.02);
+}
+
+.card-news-more:hover h5 {
+    color: #d99e4e;
+    transition: color 0.3s ease;
+}
+
+.news-more-title {
+    display: -webkit-box;
+    text-align: start;
+    font-size: 1.5rem;
+    font-weight: 600;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: color 0.3s ease;
+}
+
+.news-more-content {
+    display: -webkit-box;
+    -webkit-line-clamp: 3; /* Batasi teks menjadi 3 baris */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.img-news {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+/* Responsivitas untuk tablet */
+@media (max-width: 992px) {
+    .news-card {
+        height: 350px; /* Tinggi lebih kecil untuk tablet */
+    }
+    .card-title {
+    font-size: 1.5rem;
+  
+    }
+    .card-title-recomd {
+        font-size: 0.9rem; /* Ukuran font lebih kecil */
+        -webkit-line-clamp: 2; /* Batasi teks menjadi 3 baris */
+    }
+
+    .news-list {
+        max-height: none; /* Hapus batasan tinggi */
+        overflow: hidden; /* Swiper mengambil alih */
+    }
+
+    .news-swiper {
+        --swiper-navigation-size: 30px; /* Ukuran tombol navigasi */
+        height: auto; /* Tinggi menyesuaikan konten */
+    }
+
+    .news-card.recomd {
+        width: 250px; /* Lebar tetap untuk kartu di Swiper */
+        height: 150px; /* Tinggi konsisten */
+        margin: 0 auto; /* Pusatkan kartu di slide */
+    }
+}
+
+/* Responsivitas untuk smartphone */
+@media (max-width: 768px) {
+    .news-card {
+        height: 250px; /* Tinggi lebih kecil untuk smartphone */
+    }
+
+    .news-list {
+        max-height: none; /* Hapus batasan tinggi */
+        overflow: hidden; /* Swiper mengambil alih */
+    }
+
+    .news-swiper {
+        --swiper-navigation-size: 25px; /* Ukuran tombol navigasi lebih kecil */
+        height: auto; /* Tinggi menyesuaikan konten */
+    }
+
+    .news-card.recomd {
+        width: 200px; /* Lebar lebih kecil untuk smartphone */
+        height: 120px; /* Tinggi lebih kecil untuk smartphone */
+        margin: 0 auto; /* Pusatkan kartu di slide */
+    }
+
+    
+
+    .news-more-content {
+        display: none;
+    }
+
+    .news-more-title {
+        font-size: 1rem;
+        -webkit-line-clamp: 3; /* Batasi teks menjadi 3 baris */
+    }
+
+    .card-title {
+        font-size: 1.2rem;
+    }
+
+    .card-text {
+        font-size: 0.9rem;
+        -webkit-line-clamp: 2; /* Batasi teks menjadi 2 baris di smartphone */
+    }
+
+    .card-body {
+        padding: 15px;
+    }
+}

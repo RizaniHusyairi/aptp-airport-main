@@ -31,7 +31,7 @@
     <div class="col-12">
       <div class="card">
         <div class="card-body">
-          <table id="datatable" class="table-hover table-bordered nowrap w-100 table">
+          <table id="datatable_user" class="table-hover table-bordered nowrap w-100 table">
             <h5>Daftar Pengguna</h5>
             <thead class="table-light">
               <tr>
@@ -39,7 +39,6 @@
                 <th>Nama</th>
                 <th>Email</th>
                 <th>Telepon</th>
-                <th>Tiket</th>
                 <th>Dibuat Pada</th>
                 <th>Status</th>
                 <th>Aksi</th>
@@ -60,7 +59,7 @@
   {{-- datatable init --}}
   <script type="text/javascript">
     $(function() {
-      let table = $('#datatable').DataTable({
+      let table = $('#datatable_user').DataTable({
         processing: true,
         serverSide: true,
         lengthChange: true,
@@ -85,22 +84,20 @@
         },
         ajax: {
             url: "{{ route('customers.index') }}",
-            data: function(d) {}
+            type: "GET",
+            error: function(xhr, error, thrown) {
+                console.log('AJAX Error:', xhr.responseText);
+                alert('Terjadi kesalahan saat memuat data. Silakan coba lagi.');
+            }
         },
         columns: [
-          { data: 'id' },
-          { data: 'name' },
-          { data: 'email' },
-          { data: 'phone', orderable: false },
-          { data: 'tickets_count', searchable: false },
-          { data: 'created_at' },
-          {
-            data: 'is_accepted',
-            render: function(data) {
-              return data == 1 ? '<span class="badge bg-success">Terverikasi</span>' : '<span class="badge bg-danger">Belum Terverikasi</span>';
-            }
-          },
-          { data: 'action', orderable: false, searchable: false }
+            { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
+            { data: 'name', name: 'name' },
+            { data: 'email', name: 'email' },
+            { data: 'phone', name: 'phone' },
+            { data: 'created_at', name: 'created_at' },
+            { data: 'is_accepted', name: 'is_accepted' },
+            { data: 'action', name: 'action', orderable: false, searchable: false }
         ],
       });
 

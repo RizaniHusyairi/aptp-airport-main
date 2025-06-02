@@ -21,6 +21,7 @@ return [
     ],
     'bandara' => [
         'base_uri' => env('BANDARA_API_URL'),
+        'timeout' => env('BANDARA_API_TIMEOUT'),
     ],
     'postmark' => [
         'token' => env('POSTMARK_TOKEN'),

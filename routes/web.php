@@ -248,12 +248,30 @@ Route::group(["prefix" => 'dashboard'], function () {
 
 
 Route::get('/', [LandingPageController::class, 'home'])->name('home');
+Route::get('/lalu-lintas-angkutan', [LandingPageController::class, 'lalulintas'])->name('lalulintas');
+Route::get('/keberangkatan', [LandingPageController::class, 'keberangkatan'])->name('keberangkatan');
+Route::get('/kedatangan', [LandingPageController::class, 'kedatangan'])->name('kedatangan');
 
-Route::post('/pengaduan', [LandingPageController::class, 'storePengaduan'])->name('pengaduan.store');
+Route::post('/contact', [LandingPageController::class, 'submitContact'])->name('contact.submit');
+// Route::post('/pengaduan', [LandingPageController::class, 'storePengaduan'])->name('pengaduan.store');
+
+
+
+// API Routes
+Route::prefix('api')->group(function () {
+    Route::get('/flight-stats', [LandingPageController::class, 'getFlightStats']);
+    Route::get('/departures', [LandingPageController::class, 'getDepartures']);
+});
+
 
 Route::get('/informasi/berita', [LandingPageController::class, 'berita'])->name('berita');
-Route::get('/informasi/berita/{slug}', [LandingPageController::class, 'showNews'])->name('showNews');
-Route::get('/informasi/laporan-keuangan', [LandingPageController::class, 'laporanKeuangan'])->name('laporanKeuangan');
+Route::get('/informasi/berita/{slug}', [LandingPageController::class, 'showNews'])->name('news.show');
+
+Route::prefix('informasi')->group(function () {
+    Route::get('/laporan-keuangan', [LandingPageController::class, 'laporanKeuangan'])->name('laporanKeuangan');
+    Route::get('/laporan-keuangan/api/financial-data', [LandingPageController::class, 'getFinancialData']);
+});
+
 Route::get('/informasi-keuangan/data', [LandingPageController::class, 'getFinanceData'])->name('informasiKeuangan.data');
 
 Route::get('/informasi/tenant', [LandingPageController::class, 'tenant'])->name('tenant');
@@ -262,6 +280,7 @@ Route::get('/informasi/perijinan-usaha', [LandingPageController::class, 'perijin
 Route::get('/informasi/pengiklanan', [LandingPageController::class, 'pengiklanan'])->name('pengiklanan');
 Route::get('/informasi/field-trip', [LandingPageController::class, 'fieldTrip'])->name('fieldTrip');
 Route::get('/informasi/lelang', [LandingPageController::class, 'lelang'])->name('lelang');
+Route::get('/informasi/slot', [LandingPageController::class, 'slot'])->name('slot');
 
 Route::get('/informasi-publik/profil-bandara', [LandingPageController::class, 'profilBandara'])->name('profilBandara');
 Route::get('/informasi-publik/struktur-organisasi', [LandingPageController::class, 'strukturOrganisasi'])->name('strukturOrganisasi');
@@ -271,9 +290,16 @@ Route::get('/informasi-publik/sop-ppid', [LandingPageController::class, 'sopPpid
 Route::get('/informasi-publik/pengajuan-informasi-publik', [LandingPageController::class, 'pengajuanInformasiPublik'])->name('pengajuanInformasiPublik');
 Route::post('/informasi-publik/pengajuan-informasi-publik', [LandingPageController::class, 'storePengajuanInformasiPublik'])->name('storePengajuanInformasiPublik');
 
-// Regulasi
-Route::get('/regulasi/surat-edaran', [LetterController::class, 'suratEdaran'])->name('suratEdaran');
-Route::get('/regulasi/surat-utusan', [LetterController::class, 'suratUtusan'])->name('suratUtusan');
+
+Route::prefix('regulasi')->group(function () {
+    Route::get('/surat-utusan', [LandingPageController::class, 'suratUtusan'])->name('letters.utusan');
+    Route::get('/surat-edaran', [LandingPageController::class, 'suratEdaran'])->name('letters.edaran');
+    Route::get('/surat-utusan/api', [LandingPageController::class, 'getLettersUtusan'])->name('letters.utusan.api');
+    Route::get('/surat-edaran/api', [LandingPageController::class, 'getLettersEdaran'])->name('letters.edaran.api');
+});
+// // Regulasi
+// Route::get('/regulasi/surat-edaran', [LetterController::class, 'suratEdaran'])->name('suratEdaran');
+// Route::get('/regulasi/surat-utusan', [LetterController::class, 'suratUtusan'])->name('suratUtusan');
 
 //Language Translation
 Route::get('/keberangkatan', [LandingPageController::class, 'keberangkatan'])->name('keberangkatan');

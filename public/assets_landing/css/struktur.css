@@ -1,0 +1,33 @@
+
+        .struktur-img {
+            max-height: 600px;
+            object-fit: contain;
+            transition: transform 0.3s ease;
+        }
+
+        .struktur-img:hover {
+            transform: scale(1.02);
+        }
+
+        .btn-struktur{
+            background-color: #d99e4e;
+            color: white;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+
+        .btn-struktur:hover{
+            background-color: #9c7338;
+            color: white;
+            transform: scale(1.03);
+        }
+
+        @media (max-width: 768px) {
+            .struktur-img {
+                max-height: 400px;
+            }
+
+            .display-4 {
+                font-size: 2rem;
+            }
+        }
+

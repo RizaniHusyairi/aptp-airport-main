@@ -22,6 +22,7 @@ class User extends Authenticatable implements HasMedia
      * @var array
      */
     protected $guarded = [];
+    
 
     /**
      * The attributes that should be hidden for arrays.
@@ -40,11 +41,14 @@ class User extends Authenticatable implements HasMedia
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+    
     ];
     public function rentals()
-{
-    return $this->belongsToMany(Rental::class, 'rental_user', 'user_id', 'rental_id');
-}
+    {
+        return $this->belongsToMany(Rental::class, 'rental_user', 'user_id', 'rental_id');
+    }
 
     public function getCreatedAtAttribute($value)
     {
@@ -68,10 +72,7 @@ class User extends Authenticatable implements HasMedia
         return $this->roles()->where('name', $role)->exists();
     }
 
-    public function tickets()
-    {
-        return $this->hasMany(Ticket::class, 'user_id');
-    }
+    
 
     public function tenants()
     {
@@ -82,6 +83,10 @@ class User extends Authenticatable implements HasMedia
     {
         return $this->belongsToMany(License::class)
                     ->withTimestamps();
+    }
+    public function tickets()
+    {
+        return $this->hasMany(Ticket::class);
     }
     
     public function ads()

@@ -505,7 +505,7 @@
                 <a href="https://www.bmkg.go.id/cuaca/prakiraan-cuaca/64.72.05.1004" target="_blank" class="weather-widget">
                 
                     <h6><i class='bx bx-cloud'></i>Prakiraan Cuaca</h6>
-                    @if ($weatherData['success'])
+                    {{-- @if ($weatherData['success'])
 
                         <div class="weather-info">
                             <img src="{{ $weatherData['data']['weather_image'] }}"
@@ -526,7 +526,7 @@
                         <div class="weather-error">
                             {{ $weatherData['message'] }}
                         </div>
-                    @endif
+                    @endif --}}
                 </a>
 
             </div>
