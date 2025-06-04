@@ -21,12 +21,15 @@ class AirportApiService
         
     }
 
-    public function getDepartures()
+    /**
+     * Get flight departures data from API
+     */
+    public function getDepartures($page = 1)
     {
-        return Cache::remember('flight_departures', now()->addMinutes(15), function () {
+        return Cache::remember("flight_departures_page_{$page}", now()->addMinutes(15), function () use ($page) {
             try {
                 $response = Http::timeout($this->timeout)
-                    ->get($this->baseUrl . '/keberangkatan');
+                    ->get($this->baseUrl . '/keberangkatan', ['page' => $page]);
 
                 if ($response->successful()) {
                     return $response->json();
@@ -51,14 +54,37 @@ class AirportApiService
     }
 
     /**
+     * Get all departures list across all pages
+     */
+    public function getDeparturesList()
+    {
+        $allData = [];
+        $page = 1;
+
+        do {
+            $data = $this->getDepartures($page);
+
+            if (!$data || !isset($data['data']['sukses']) || !$data['data']['sukses']) {
+                break;
+            }
+
+            $allData = array_merge($allData, $data['data']['result']['data'] ?? []);
+            $nextPageUrl = $data['data']['result']['next_page_url'] ?? null;
+            $page++;
+        } while ($nextPageUrl);
+
+        return $allData;
+    }
+
+    /**
      * Get flight arrivals data from API
      */
-    public function getArrivals()
+    public function getArrivals($page = 1)
     {
-        return Cache::remember('flight_arrivals', now()->addMinutes(15), function () {
+        return Cache::remember("flight_arrivals_page_{$page}", now()->addMinutes(15), function () use ($page) {
             try {
                 $response = Http::timeout($this->timeout)
-                    ->get($this->baseUrl . '/kedatangan');
+                    ->get($this->baseUrl . '/kedatangan', ['page' => $page]);
 
                 if ($response->successful()) {
                     return $response->json();
@@ -81,6 +107,30 @@ class AirportApiService
             }
         });
     }
+
+    /**
+     * Get detailed arrivals list
+     */
+    public function getArrivalsList()
+    {
+        $allData = [];
+        $page = 1;
+
+        do {
+            $data = $this->getArrivals($page);
+
+            if (!$data || !isset($data['data']['sukses']) || !$data['data']['sukses']) {
+                break;
+            }
+
+            $allData = array_merge($allData, $data['data']['result']['data'] ?? []);
+            $nextPageUrl = $data['data']['result']['next_page_url'] ?? null;
+            $page++;
+        } while ($nextPageUrl);
+
+        return $allData;
+    }
+
 
     /**
      * Get flight statistics (movements, arrivals, departures)

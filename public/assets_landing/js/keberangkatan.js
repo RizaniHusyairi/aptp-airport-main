@@ -1,27 +1,74 @@
 $(document).ready(function() {
-      // Inisialisasi DataTables
-      $('#arrivalTable').DataTable({
-        info:false,
-        ordering:false,
-        paging:false,
-        scrollX:true,
-        data: [
-          ['JT123', 'Lion Air', 'Soekarno-Hatta (Jakarta)', '2025-05-23 08:30',"A3", 'Arrived'],
-          ['GA456', 'Garuda Indonesia', 'Ngurah Rai (Denpasar)', '2025-05-23 10:15',"A1", 'Arrived'],
-          ['IW789', 'Wings Air', 'Sultan Aji Muhammad Sulaiman (Balikpapan)', '2025-05-23 12:00',"B1", 'Estimate'],
-          ['QG321', 'Citilink', 'Juanda (Surabaya)', '2025-05-23 14:45', "B2",'Estimate'],
-          ['SJ654', 'Sriwijaya Air', 'Adisutjipto (Yogyakarta)', '2025-05-23 16:30',"B1", 'Estimate']
-        ],
+    // Inisialisasi toast
+    const toastElement = document.getElementById('toastNotification');
+    const toast = new bootstrap.Toast(toastElement);
+
+    // Inisialisasi DataTables
+    const table = $('#departureTable').DataTable({
+        info: false,
+        ordering: false,
+        paging: false,
+        scrollX: true,
         columns: [
-          { title: 'Kode Penerbangan' },
-          { title: 'Maskapai' },
-          { title: 'Tujuan Bandara (Kota)' },
-          { title: 'Waktu Kedatangan' },
-          { title: 'Gate' },
-          { title: 'Status' }
+            { title: 'Kode Penerbangan' },
+            { title: 'Maskapai' },
+            { title: 'Tujuan Bandara (Kota)' },
+            { title: 'Waktu Keberangkatan' },
+            { title: 'Gate' },
+            { title: 'Status' }
         ],
         language: {
-          url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/id.json'
+            url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/id.json'
         }
-      });
     });
+
+    // Fungsi untuk memuat data keberangkatan
+    function loadDepartures() {
+        $('#loadingIndicator').show();
+        $('#errorMessage').hide();
+
+        $.ajax({
+            url: '/api/departures',
+            method: 'GET',
+            dataType: 'json',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function(response) {
+                $('#loadingIndicator').hide();
+
+                if (response.success && response.data.length > 0) {
+                    // Map data API ke format DataTables
+                    const data = response.data.map(item => [
+                        item.pesawat.kode_penerbangan,
+                        item.maskapai.nama,
+                        `${item.bandara_tujuan.nama} (${item.bandara_tujuan.kota_provinsi})`,
+                        `${item.tanggal} ${item.jam}`,
+                        item.gate.nama,
+                        item.remark.status
+                    ]);
+
+                    // Perbarui tabel
+                    table.clear().rows.add(data).draw();
+                } else {
+                    $('#errorMessage').text(response.message || 'Tidak ada data keberangkatan tersedia.').show();
+                }
+            },
+            error: function(xhr) {
+                $('#loadingIndicator').hide();
+                const errorMsg = xhr.responseJSON?.message || 'Gagal memuat data keberangkatan. Silakan coba lagi.';
+                $('#errorMessage').text(errorMsg).show();
+                
+                // Tampilkan toast
+                $('#toastNotification').find('.toast-body').text(errorMsg);
+                toast.show();
+            }
+        });
+    }
+
+    // Muat data saat halaman dimuat
+    loadDepartures();
+
+    // Refresh data setiap 5 menit
+    setInterval(loadDepartures, 300000);
+});

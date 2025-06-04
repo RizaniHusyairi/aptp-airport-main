@@ -28,12 +28,7 @@
                                 <td>{{ $flight['pesawat']['kode_penerbangan'] }}</td>
                                 <td>
                                     <div class="d-flex align-items-center">
-                                        <img 
-                                            src="http://103.210.122.2/storage/logo/{{ $flight['maskapai']['logo']}}" 
-                                            class="img-fluid"
-                                            alt="{{ $flight['maskapai']['nama'] }}"
-                                            style="max-width: 150px; height: auto;"
-                                        >
+                                        <img src="http://103.210.122.2/storage/logo/{{ $flight['maskapai']['logo']}}" class="img-fluid" alt="{{ $flight['maskapai']['nama'] }}" style="max-width: 150px; height: auto;">
                                     </div>
                                 </td>
                                 <td>{{ $flight['bandara_asal']['nama'] }}</td>

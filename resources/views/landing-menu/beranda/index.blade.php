@@ -405,15 +405,7 @@
             </div>
           </div><!-- End Info Item -->
 
-          <!-- <div class="col-md-6">
-            <div class="info-item d-flex align-items-center" data-aos="fade-up" data-aos-delay="500">
-              <i class="icon bi bi-clock flex-shrink-0"></i>
-              <div>
-                <h3>Opening Hours<br></h3>
-                <p><strong>Mon-Sat:</strong> 11AM - 23PM; <strong>Sunday:</strong> Closed</p>
-              </div>
-            </div>
-          </div>End Info Item -->
+          
 
         </div>
 

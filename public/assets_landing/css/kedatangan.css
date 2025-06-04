@@ -47,3 +47,69 @@
   padding: 5px;
   width: 100%;
 }
+
+.jadwal-kedatangan .table {
+    font-size: 14px;
+}
+
+.jadwal-kedatangan .table th,
+.jadwal-kedatangan .table td {
+    vertical-align: middle;
+    padding: 12px;
+}
+
+.jadwal-kedatangan .table thead th {
+    background-color: var(--accent-color);
+    color: var(--contrast-color);
+    font-weight: 600;
+}
+
+.jadwal-kedatangan .table-striped tbody tr:nth-of-type(odd) {
+    background-color: color-mix(in srgb, var(--surface-color), transparent 90%);
+}
+
+.jadwal-kedatangan #loadingIndicator {
+    margin: 20px 0;
+    font-size: 16px;
+    color: var(--default-color);
+}
+
+.jadwal-kedatangan #errorMessage {
+    margin: 20px 0;
+    font-size: 16px;
+}
+
+.jadwal-kedatangan .toast-container {
+    z-index: 1050;
+}
+
+.jadwal-kedatangan .toast {
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    font-size: 14px;
+}
+
+.jadwal-kedatangan .toast-header {
+    font-weight: 600;
+}
+
+.jadwal-kedatangan .toast-body {
+    padding: 15px;
+}
+
+@media (max-width: 575px) {
+    .jadwal-kedatangan .table {
+        font-size: 12px;
+    }
+    .jadwal-kedatangan .table th,
+    .jadwal-kedatangan .table td {
+        padding: 8px;
+    }
+    .jadwal-kedatangan #loadingIndicator,
+    .jadwal-kedatangan #errorMessage {
+        font-size: 14px;
+    }
+    .jadwal-kedatangan .toast {
+        font-size: 12px;
+    }
+}

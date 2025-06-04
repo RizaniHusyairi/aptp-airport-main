@@ -29,6 +29,8 @@ return new class extends Migration
             $table->text('tujuan_informasi');
             $table->string('cara_memperoleh');
             $table->string('cara_salinan');
+            $table->enum('status',['Belum dibalas', 'Sudah dibalas'])->default('Belum dibalas');  // belum dibalas, sudah dibalas
+            $table->string('link_balasan')->nullable(); // link balasan jika sudah dibalas
 
             $table->timestamps(); // created_at & updated_at
         });

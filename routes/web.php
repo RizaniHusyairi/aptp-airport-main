@@ -260,7 +260,9 @@ Route::post('/contact', [LandingPageController::class, 'submitContact'])->name('
 // API Routes
 Route::prefix('api')->group(function () {
     Route::get('/flight-stats', [LandingPageController::class, 'getFlightStats']);
-    Route::get('/departures', [LandingPageController::class, 'getDepartures']);
+    Route::get('/departures', [LandingPageController::class, 'getDepartures'])->name('api.departures');
+    Route::get('/arrivals', [LandingPageController::class, 'getArrivals'])->name('api.arrivals');
+    
 });
 
 

@@ -1,0 +1,63 @@
+
+.pengajuan-informasi .card {
+    border: none;
+    border-radius: 8px;
+}
+
+.pengajuan-informasi .list-group-item {
+    border: none;
+    padding: 15px 0;
+    font-size: 16px;
+    color: var(--default-color);
+}
+
+.pengajuan-informasi .btn-outline-primary {
+    border-color: var(--accent-color);
+    color: var(--accent-color);
+}
+
+.pengajuan-informasi .btn-outline-primary:hover {
+    background-color: var(--accent-color);
+    color: var(--contrast-color);
+}
+
+/* Kustomisasi Toast */
+.pengajuan-informasi .toast-container {
+    z-index: 1050; /* Pastikan toast di atas elemen lain */
+}
+
+.pengajuan-informasi .toast {
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    font-size: 14px;
+}
+
+.pengajuan-informasi .toast-header {
+    font-weight: 600;
+}
+
+.pengajuan-informasi .toast-body {
+    padding: 15px;
+}
+
+@media (max-width: 575px) {
+    .pengajuan-informasi .card {
+        padding: 15px;
+    }
+    .pengajuan-informasi .list-group-item {
+        font-size: 14px;
+    }
+    .pengajuan-informasi .toast {
+        font-size: 12px;
+    }
+    .sv_main .sv_q_file input[type="file"] {
+        font-size: 14px;
+        padding: 8px;
+    }
+}
+
+@media (max-width: 768px) {
+    .pengajuan-informasi .section-title p {
+        font-size: 28px;
+    }
+}

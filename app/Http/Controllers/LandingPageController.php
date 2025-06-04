@@ -45,11 +45,42 @@ class LandingPageController extends Controller
      */
     public function getDepartures(Request $request)
     {
-        $departures = $this->airportApi->getDepartures();
+        $departures = $this->airportApi->getDeparturesList();
         
+        if (empty($departures)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal mengambil data keberangkatan. Silakan coba lagi nanti.',
+                'data' => []
+            ], 500);
+        }
+
+
         return response()->json([
             'success' => true,
             'data' => $departures
+        ]);
+
+    }
+
+    /**
+     * Get arrivals list for frontend
+     */
+    public function getArrivals()
+    {
+        $arrivals = $this->airportApi->getArrivalsList();
+
+        if (empty($arrivals)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal mengambil data kedatangan. Silakan coba lagi nanti.',
+                'data' => []
+            ], 500);
+        }
+
+        return response()->json([
+            'success' => true,
+            'data' => $arrivals
         ]);
     }
     
@@ -196,7 +227,7 @@ class LandingPageController extends Controller
     // public function pejabatBandara(){return view('navigation.informasi-publik.pejabat-bandara.index');}
     // public function profilPPID(){return view('navigation.informasi-publik.profil-ppid-blu.index');}
     // public function sopPpid(){return view('navigation.informasi-publik.sop-ppid.index');}
-    public function pengajuanInformasiPublik(){return view('navigation.informasi-publik.pengajuan-informasi-publik.index');}
+    public function pengajuanInformasiPublik(){return view('landing-menu.informasi-publik.pengajuan.index');}
     
     // aktivitas bandara
     // public function keberangkatan(){
@@ -543,63 +574,99 @@ class LandingPageController extends Controller
 
     public function storePengajuanInformasiPublik(Request $request)
     {
-        
-        $validated = $request->validate([
+        $validator = Validator::make($request->all(), [
             
-            'ktp' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
-            'surat_pertanggungjawaban' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
+            'ktp' => 'required|file|mimes:jpg,png,pdf|max:2048',
+            'surat_pertanggungjawaban' => 'required|file|mimes:jpg,png,pdf|max:2048',
             'surat_permintaan' => 'required|string',
-            
             'nama' => 'required|string|max:255',
             'alamat' => 'required|string',
             'pekerjaan' => 'required|string|max:255',
             'npwp' => 'required|string|max:100',
-            'no_hp' => 'required|string|max:20',
-            'email' => 'required|email',
-
+            'no_hp' => 'required|string|regex:/^\+?\d{10,13}$/|max:20',
+            'email' => 'required|email|max:255',
             'rincian_informasi' => 'required|string',
             'tujuan_informasi' => 'required|string',
             'cara_memperoleh' => 'required|string',
             'cara_salinan' => 'required|string',
         ], [
-            'required' => ':attribute wajib diisi.',
-            'email' => 'Format email tidak valid.',
-            'file' => ':attribute harus berupa file.',
-            'mimes' => ':attribute harus berupa file dengan format: :values.',
-            'max' => ':attribute tidak boleh lebih dari :max kilobyte.',
+            'ktp.required' => 'Scan KTP wajib diunggah.',
+            'ktp.file' => 'Scan KTP harus berupa file.',
+            'ktp.mimes' => 'Scan KTP harus berupa file dengan format: JPG, PNG, atau PDF.',
+            'ktp.max' => 'Ukuran file KTP tidak boleh melebihi 2MB.',
+            'surat_pertanggungjawaban.required' => 'Surat pernyataan pertanggung jawaban wajib diunggah.',
+            'surat_pertanggungjawaban.file' => 'Surat pernyataan harus berupa file.',
+            'surat_pertanggungjawaban.mimes' => 'Surat pernyataan harus berupa file dengan format: JPG, PNG, atau PDF.',
+            'surat_pertanggungjawaban.max' => 'Ukuran file surat pernyataan tidak boleh melebihi 2MB.',
+            'surat_permintaan.required' => 'Surat Permintaan wajib diisi.',
+            'nama.required' => 'Nama lengkap wajib diisi.',
+            'alamat.required' => 'Alamat wajib diisi.',
+            'pekerjaan.required' => 'Pekerjaan wajib diisi.',
+            'npwp.required' => 'Nomor NPWP wajib diisi.',
+            'no_hp.required' => 'Nomor HP/WA wajib diisi.',
+            'no_hp.regex' => 'Nomor HP/WA tidak valid.',
+            'email.required' => 'Email wajib diisi.',
+            'email.email' => 'Email tidak valid.',
+            'rincian_informasi.required' => 'Rincian informasi wajib diisi.',
+            'tujuan_informasi.required' => 'Tujuan penggunaan informasi wajib diisi.',
+            'cara_memperoleh.required' => 'Cara memperoleh informasi wajib dipilih.',
+            'cara_salinan.required' => 'Cara mendapat salinan informasi wajib dipilih.'
         ]);
 
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'errors' => $validator->errors()->all()
+            ], 422);
+        }
+
+        try {
+            // Pastikan file ada
+            if (!$request->hasFile('ktp') || !$request->hasFile('surat_pertanggungjawaban')) {
+                return response()->json([
+                    'success' => false,
+                    'errors' => ['File KTP atau surat pernyataan tidak ditemukan.']
+                ], 422);
+            }
+
+            // Simpan file KTP dengan nama kustom
+            $ktpFile = $request->file('ktp');
+            $ktpFileName = time() . '_' . $ktpFile->getClientOriginalName();
+            $ktpPath = $ktpFile->storeAs('documents/pengajuan-informasi/ktp', $ktpFileName, 'public');
+
+            // Simpan file surat pernyataan dengan nama kustom
+            $suratFile = $request->file('surat_pertanggungjawaban');
+            $suratFileName = time() . '_' . $suratFile->getClientOriginalName();
+            $suratPertanggungjawabanPath = $suratFile->storeAs('documents/pengajuan-informasi/surat-pertanggung-jawaban', $suratFileName, 'public');
+            $publicInformation = PublicInformation::create([
+                'ktp' => $ktpPath,
+                'surat_pertanggungjawaban' => $suratPertanggungjawabanPath,
+                'surat_permintaan' => $request->surat_permintaan,
+                'nama' => $request->nama,
+                'alamat' => $request->alamat,
+                'pekerjaan' => $request->pekerjaan,
+                'npwp' => $request->npwp,
+                'no_hp' => $request->no_hp,
+                'email' => $request->email,
+                'rincian_informasi' => $request->rincian_informasi,
+                'tujuan_informasi' => $request->tujuan_informasi,
+                'cara_memperoleh' => $request->cara_memperoleh,
+                'cara_salinan' => $request->cara_salinan,
+                'status' => 'belum_dibalas',
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Pengajuan informasi publik berhasil dikirim.'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'errors' => ['Terjadi kesalahan saat menyimpan data: ' . $e->getMessage()]
+            ], 500);
+        }
         
-        $ktpPath = $request->file('ktp')->storeAs(
-            'documents/pengajuan-informasi/ktp',
-            time() . '_' . $request->file('ktp')->getClientOriginalName(),
-            'public'
-        );
-
-        $suratPertanggungjawabanPath = $request->file('surat_pertanggungjawaban')->storeAs(
-            'documents/pengajuan-informasi/surat-pertanggung-jawaban',
-            time() . '_' . $request->file('surat_pertanggungjawaban')->getClientOriginalName(),
-            'public'
-        );
-
         
-        PublicInformation::create([
-            'ktp' => $ktpPath,
-            'surat_pertanggungjawaban' => $suratPertanggungjawabanPath,
-            'surat_permintaan' => $validated['surat_permintaan'],
-            'nama' => $validated['nama'],
-            'alamat' => $validated['alamat'],
-            'pekerjaan' => $validated['pekerjaan'],
-            'npwp' => $validated['npwp'],
-            'no_hp' => $validated['no_hp'],
-            'email' => $validated['email'],
-            'rincian_informasi' => $validated['rincian_informasi'],
-            'tujuan_informasi' => $validated['tujuan_informasi'],
-            'cara_memperoleh' => $validated['cara_memperoleh'],
-            'cara_salinan' => $validated['cara_salinan'],
-        ]);
-
-        return redirect()->back()->with('success', 'Pengajuan informasi berhasil dikirim.');
     }
 
     public function kontak(){

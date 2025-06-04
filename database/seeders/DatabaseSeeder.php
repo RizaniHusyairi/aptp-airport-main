@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Airport;
+use App\Models\Finance;
 use App\Models\Zone;
 use Illuminate\Database\Seeder;
 
@@ -21,7 +22,10 @@ class DatabaseSeeder extends Seeder
             CitySeeder::class,
             AirportSeeder::class,
             FlightSeeder::class,
-            PermissionSeeder::class
+            PermissionSeeder::class,
+            NewsSeeder::class,
+            LetterSeeder::class,
+            FinanceSeeder::class
         ]);
     }
 }
