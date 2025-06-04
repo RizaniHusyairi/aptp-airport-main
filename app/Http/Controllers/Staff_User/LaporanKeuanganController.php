@@ -34,7 +34,7 @@ class LaporanKeuanganController extends Controller
         }
 
         // Ambil data dari database dan eager load data pengeluaran terkait anggaran (jika ada)
-        $finances = $finances->with('expenses')->get();
+        $finances = $finances->with('budgetExpenses')->get();
 
         // Ambil daftar tahun yang tersedia untuk filter (dari date)
         $years = Finance::selectRaw('DISTINCT YEAR(date) as year')

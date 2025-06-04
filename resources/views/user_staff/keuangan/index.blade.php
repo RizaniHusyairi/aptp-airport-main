@@ -1,3 +1,4 @@
+
 @extends('layouts.master')
 
 @section('title')
@@ -107,14 +108,14 @@
                                     </tr>
                                   </thead>
                                   <tbody>
-                                    @foreach($finance->expenses as $expense)
+                                    @foreach($finance->budgetExpenses as $expense)
                                       <tr>
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ $expense->description }}</td>
                                         <td>Rp {{ number_format($expense->amount, 0, ',', '.') }}</td>
                                       </tr>
                                     @endforeach
-                                    @if($finance->expenses->isEmpty())
+                                    @if($finance->budgetExpenses->isEmpty())
                                       <tr>
                                         <td colspan="3" class="text-center">Tidak ada pengeluaran untuk anggaran ini.</td>
                                       </tr>

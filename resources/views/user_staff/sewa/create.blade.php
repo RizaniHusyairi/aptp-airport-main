@@ -18,6 +18,54 @@
     <div class="col-xl-12">
       <div class="card">
         <div class="card-body">
+          <h4 class="card-title mb-4">Syarat & Ketentuan Pengajuan Sewa</h4>
+
+          <div class="accordion" id="accordionTenant">
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="headingOne">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                  Dokumen yang Diperlukan
+                </button>
+              </h2>
+              <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionTenant">
+                <div class="accordion-body">
+                  <ul>
+                    <li>Nomor Induk Berusaha</li>
+                    <li>Kartu Tanda Penduduk (KTP)</li>
+                    <li>Akta Pendirian Perusahaan</li>
+                    <li>NPWP</li>
+                    <li>Bukti bayar pajak 3 bulan terakhir</li>
+                    <li>Proposal usaha</li>
+                    <li>Desain dan gambar teknis Booth/Tempat Usaha (Softdrawing Sipil, Elektrikal, Plumbing, Internal, dll)</li>
+                    <li>Surat pernyataan sanggup mengikuti aturan yang berlaku (Bermaterai)</li>
+                    <li>Laporan keuangan perusahaan</li>
+                    <li>Service Level Agreement (Jika Berlaku)</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="headingThree">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                  Cara Pendaftaran
+                </button>
+              </h2>
+              <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionTenant">
+                <div class="accordion-body">
+                  <ul>
+                    <li>Mendisposisikan surat permohonan kepada Kasi Pelayanan dan Kerjasama</li>
+                    <li>Mendisposisikan surat permohonan kepada petugas pengembangan usaha untuk verifikasi</li>
+                    <li>Melakukan verifikasi permohonan usaha sesuai inventaris usaha yang akan dikembangkan dan membuat draft surat undangan presentasi bisnis beserta nota dinas</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-body">
           <h4 class="card-title mb-4">Formulir Pengajuan Sewa</h4>
           <form method="POST" action="{{ route('sewa.store') }}" enctype="multipart/form-data" class="needs-validation" novalidate>
             @csrf
@@ -35,11 +83,20 @@
                   @foreach ($rentalTypes as $type => $config)
                       <option value="{{ $type }}">{{ $config['name'] }}</option>
                   @endforeach
+                  <option value="Lainnya">Lainnya</option>
               </select>
               @error('rental_type')
                 <div class="invalid-feedback d-block">{{ $message }}</div>
               @enderror
-          </div>
+            </div>
+
+            <div class="mb-3" id="rental_more" style="display: none;">
+                <label for="rental_more" class="form-label">jenis Sewa Lainnya</label>
+                <input type="text" class="form-control" id="rental_more" name="rental_more" value="{{ old('rental_more') }}" placeholder="masukkan jenis sewa lainnya" >
+                @error('rental_more')
+                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                @enderror
+            </div>
             
             <div class="mb-3">
               <label for="description" class="form-label">Deskripsi Sewa</label>
@@ -48,23 +105,7 @@
                 <div class="invalid-feedback d-block">{{ $message }}</div>
               @enderror
             </div>
-            <div class="mb-3" id="area_field" style="display: none;">
-              <label for="area" class="form-label">Luas (m²)</label>
-              <input type="number" name="area" id="area" class="form-control" value="{{ old('area') }}">
-          </div>
-          <div class="mb-3" id="location_field" style="display: none;">
-              <label for="location" class="form-label">Lokasi</label>
-              <input type="text" name="location" id="location" class="form-control" value="{{ old('location') }}">
-          </div>
-          <div class="mb-3" id="quantity_field" style="display: none;">
-              <label for="quantity" class="form-label">Jumlah</label>
-              <input type="number" name="quantity" id="quantity" class="form-control" value="{{ old('quantity') }}">
-          </div>
-          <div class="mb-3" id="design_file_field" style="display: none;">
-              <label for="design_file" class="form-label">File Desain (JPG/PNG)</label>
-              <input type="file" name="design_file" id="design_file" class="form-control" accept="image/jpeg,image/png">
-          </div>
-          <div class="mb-3">
+            <div class="mb-3">
               <label for="documents" class="form-label">Dokumen yang Diperlukan (PDF)</label>
               <input type="file" name="documents" id="documents" class="form-control" accept=".pdf" required>
               @error('documents')
@@ -94,28 +135,21 @@
       this.classList.add('was-validated');
     });
 
-    function toggleFields() {
-            const rentalType = document.getElementById('rental_type').value;
-            const areaField = document.getElementById('area_field');
-            const locationField = document.getElementById('location_field');
-            const quantityField = document.getElementById('quantity_field');
-            const designFileField = document.getElementById('design_file_field');
-
-            // Reset visibility
-            areaField.style.display = 'none';
-            locationField.style.display = 'none';
-            quantityField.style.display = 'none';
-            designFileField.style.display = 'none';
-
-            // Show fields based on rental type
-            if (rentalType === 'ruang' || rentalType === 'lahan') {
-                areaField.style.display = 'block';
-                locationField.style.display = 'block';
-            } else if (rentalType === 'xray_kabin' || rentalType === 'xray_kargo' || rentalType === 'bus' || rentalType === 'workshop') {
-                quantityField.style.display = 'block';
-            } else if (rentalType === 'reklame') {
-                designFileField.style.display = 'block';
+    // Show/hide additional documents based on lelang_type
+        document.getElementById('rental_type').addEventListener('change', function() {
+            const additionalDocs = document.getElementById('rental_more');
+            if (this.value === 'Lainnya') {
+                additionalDocs.style.display = 'block';
+                document.getElementById('rental_more').setAttribute('required', 'required');
+            } else {
+                additionalDocs.style.display = 'none';
+                document.getElementById('rental_more').removeAttribute('required');
             }
-        }
+        });
+
+        // Trigger change on page load to handle edit mode
+        document.getElementById('rental_type').dispatchEvent(new Event('change'));
+
+    
   </script>
 @endsection

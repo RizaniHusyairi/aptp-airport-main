@@ -85,17 +85,13 @@ class SewaLahanController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'rental_type' => 'required|in:' . implode(',', array_keys($this->rentalTypes)),
+            'rental_type' => 'required|string|max:50',
             'rental_name' => 'required|string|max:255',
             'description' => 'required|string',
             'documents' => 'required|file|mimes:pdf|max:2048',
         ];
 
-        // Tambahkan validasi khusus berdasarkan jenis sewa
-        $rentalType = $request->input('rental_type');
-        if (isset($this->rentalTypes[$rentalType])) {
-            $rules = array_merge($rules, $this->rentalTypes[$rentalType]['validation']);
-        }
+        
 
         $validated = $request->validate($rules, [
             'rental_type.required' => 'Jenis sewa wajib dipilih.',
@@ -109,16 +105,17 @@ class SewaLahanController extends Controller
             'documents.file' => 'File dokumen tidak valid.',
             'documents.mimes' => 'Dokumen harus berupa file dengan format: PDF',
             'documents.max' => 'Ukuran dokumen maksimal 2MB.',
-            'area.required' => 'Luas wajib diisi.',
-            'area.integer' => 'Luas harus berupa angka.',
-            'location.required' => 'Lokasi wajib diisi.',
-            'location.string' => 'Lokasi harus berupa teks.',
-            'quantity.required' => 'Jumlah wajib diisi.',
-            'quantity.integer' => 'Jumlah harus berupa angka.',
-            'design_file.required' => 'File desain reklame wajib diunggah.',
-            'design_file.mimes' => 'File desain harus berupa JPG atau PNG.',
-            'design_file.max' => 'Ukuran file desain maksimal 2MB.',
         ]);
+
+        if($validated['rental_type'] === 'Lainnya') {
+            // Tambahkan validasi khusus untuk sewa lainnya
+            $request->validate([
+                'rental_more' => 'required|string|max:150',
+            ], [
+                'rental_more.required' => 'Jenis sewa lainnya wajib diunggah.',
+                'rental_more.max' => 'Jenis sewa maksimal 150 karakter.',
+            ]);
+        }
 
         // Simpan file dokumen
         $file = $request->file('documents');
@@ -137,21 +134,10 @@ class SewaLahanController extends Controller
         $rentalData = [
             'rental_name' => $validated['rental_name'],
             'description' => $validated['description'],
-            'rental_type' => $rentalType,
+            'rental_type' => $validated['rental_type'],
+            'rental_more' => $validated['rental_more'] ?? null,
             'documents' => $filePath,
         ];
-
-        // Tambahkan field khusus
-        if (isset($this->rentalTypes[$rentalType])) {
-            foreach ($this->rentalTypes[$rentalType]['fields'] as $field) {
-                if (isset($validated[$field])) {
-                    $rentalData[$field] = $validated[$field];
-                }
-            }
-        }
-        if ($designFilePath) {
-            $rentalData['design_file'] = $designFilePath;
-        }
 
         // Simpan Rental
         $rental = Rental::create($rentalData);
@@ -175,10 +161,7 @@ class SewaLahanController extends Controller
         if ($rental->documents && Storage::disk('public')->exists($rental->documents)) {
             Storage::disk('public')->delete($rental->documents);
         }
-        // Hapus file desain jika ada
-        if ($rental->design_file && Storage::disk('public')->exists($rental->design_file)) {
-            Storage::disk('public')->delete($rental->design_file);
-        }
+        
 
         // Hapus relasi pivot
         $rental->users()->detach();

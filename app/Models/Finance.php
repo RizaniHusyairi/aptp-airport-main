@@ -1,30 +1,30 @@
 <?php
 
 namespace App\Models;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\BudgetExpense;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Finance extends Model
 {
     use HasFactory;
 
     protected $fillable = [
+        'date',
         'flow_type',
         'amount',
-        'date',
         'note',
     ];
 
-    protected $dates = [
-        'date',
+    protected $casts = [
+        'date' => 'date',
     ];
 
-    /**
-     * Mendapatkan daftar pengeluaran yang terkait dengan anggaran ini
-     */
-    public function expenses()
+    public function budgetExpenses(): HasMany
     {
-        return $this->hasMany(BudgetExpense::class);
+        return $this->hasMany(BudgetExpense::class, 'finance_id');
     }
 
 
@@ -49,7 +49,7 @@ class Finance extends Model
      */
     public function getTotalExpenses()
     {
-        return $this->expenses()->sum('amount');
+        return $this->budgetExpenses()->sum('amount');
     }
     
     /**

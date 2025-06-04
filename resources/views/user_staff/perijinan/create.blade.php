@@ -18,6 +18,56 @@
     <div class="col-xl-12">
       <div class="card">
         <div class="card-body">
+          <h4 class="card-title mb-4">Syarat & Ketentuan Pengajuan Perijinan Usaha</h4>
+
+          <div class="accordion" id="accordionTenant">
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="headingOne">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                  Dokumen yang Diperlukan
+                </button>
+              </h2>
+              <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionTenant">
+                <div class="accordion-body">
+                  <ul>
+                    <li>Nomor Induk Berusaha</li>
+                    <li>Kartu Tanda Penduduk (KTP)</li>
+                    <li>Akta Pendirian Perusahaan</li>
+                    <li>NPWP</li>
+                    <li>Bukti bayar pajak 3 bulan terakhir</li>
+                    <li>Proposal usaha</li>
+                    <li>Desain dan gambar teknis Booth/Tempat Usaha (Softdrawing Sipil, Elektrikal, Plumbing, Internal, dll)</li>
+                    <li>Surat pernyataan sanggup mengikuti aturan yang berlaku (Bermaterai)</li>
+                    <li>Laporan keuangan perusahaan</li>
+                    <li>Service Level Agreement (Kecuali untuk Kargo)</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            
+
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="headingThree">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                  Cara Pendaftaran
+                </button>
+              </h2>
+              <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionTenant">
+                <div class="accordion-body">
+                  <ul>
+                    <li>Mendisposisikan surat permohonan kepada Kasi Pelayanan dan Kerjasama</li>
+                    <li>Mendisposisikan surat permohonan kepada petugas pengembangan usaha untuk verifikasi</li>
+                    <li>Melakukan verifikasi permohonan usaha sesuai inventaris usaha yang akan dikembangkan dan membuat draft surat undangan presentasi bisnis beserta nota dinas</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-body">
 
           <h4 class="card-title mb-4">Formulir Pengajuan Perizinan Usaha</h4>
 
@@ -39,11 +89,19 @@
                   @foreach ($license_type as $type)
                       <option value="{{ $type }}">{{ $type }}</option>
                   @endforeach
+                  <option value="Lainnya">Lainnya</option>
               </select>  
             
               @error('license_type')
                 <div class="invalid-feedback d-block">{{ $message }}</div>
               @enderror
+            </div>
+            <div class="mb-3" id="license_more" style="display: none;">
+                <label for="license_more" class="form-label">jenis Perijinan Lainnya</label>
+                <input type="text" class="form-control" id="license_more" name="license_more" value="{{ old('license_more') }}" placeholder="Masukkan jenis perijinan lainnya" >
+                @error('license_more')
+                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                @enderror
             </div>
 
             <div class="mb-3">
@@ -82,6 +140,21 @@
         e.stopPropagation();
       }
       this.classList.add('was-validated');
+      // Show/hide additional documents based on lelang_type
+        document.getElementById('license_type').addEventListener('change', function() {
+            const additionalDocs = document.getElementById('license_more');
+            if (this.value === 'Lainnya') {
+                additionalDocs.style.display = 'block';
+                document.getElementById('license_more').setAttribute('required', 'required');
+            } else {
+                additionalDocs.style.display = 'none';
+                document.getElementById('license_more').removeAttribute('required');
+            }
+        });
+
+        // Trigger change on page load to handle edit mode
+        document.getElementById('license_type').dispatchEvent(new Event('change'));
+
     });
   </script>
 @endsection

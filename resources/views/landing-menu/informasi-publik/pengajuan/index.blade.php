@@ -24,9 +24,8 @@
                         <li class="list-group-item">
                             <i class="bi bi-check-circle-fill text-success me-2"></i>
                             Surat Pernyataan Pertanggung Jawaban Informasi Publik. 
-                            <a href="{{ asset('assets_landing/docs/surat_pernyataan_pertanggungjawaban.pdf') }}" 
-                               class="btn btn-sm btn-outline-primary ms-2" 
-                               download>
+                            <a href="https://docs.google.com/document/d/1hdV1e_SkNHG5KNDiYxGXsX125EaGPZwN/edit?usp=sharing&ouid=116067769203631007023&rtpof=true&sd=true" 
+                               class="btn btn-sm btn-outline-primary ms-2" target="_blank">
                                 <i class="bi bi-download me-1"></i> Unduh Template
                             </a>
                         </li>
@@ -48,7 +47,7 @@
         </div>
 
         <!-- Toast Container -->
-        <div class="toast-container position-fixed top-0 end-0 p-3">
+        <div class="toast-container position-fixed text-white top-0 end-0 p-3">
             <div id="toastNotification" class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-delay="5000">
                 <div class="toast-header">
                     <strong class="me-auto toast-title"></strong>
@@ -197,7 +196,7 @@
                         {
                             type: "text",
                             name: "surat_permintaan",
-                            title: "Surat Permintaan Informasi",
+                            title: "Surat Permintaan Informasi dari",
                             isRequired: true,
                             description: "Masukkan nama instansi/organisasi pengaju.",
                             placeHolder: "Contoh: PT. XYZ / Individu",
@@ -270,18 +269,20 @@
                             requiredErrorText: "Email wajib diisi."
                         },
                         {
-                            type: "text",
+                            type: "comment",
                             name: "rincian_informasi",
                             title: "Rincian Informasi yang Dibutuhkan",
                             isRequired: true,
+                            rows: 4,
                             placeHolder: "Jelaskan informasi yang Anda butuhkan secara rinci",
                             requiredErrorText: "Rincian informasi wajib diisi."
                         },
                         {
-                            type: "text",
+                            type: "comment",
                             name: "tujuan_informasi",
                             title: "Tujuan Penggunaan Informasi",
                             isRequired: true,
+                            rows: 4,
                             placeHolder: "Jelaskan tujuan penggunaan informasi",
                             requiredErrorText: "Tujuan informasi wajib diisi."
                         },

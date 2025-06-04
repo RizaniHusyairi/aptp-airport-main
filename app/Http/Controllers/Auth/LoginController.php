@@ -29,22 +29,12 @@ class LoginController extends Controller
      *
      * @var string
      */
-    // protected $redirectTo = RouteServiceProvider::HOME;
+    
+    public function __construct()
+    {
+        $this->middleware('guest')->except('logout');
+    }
 
-    // public function redirectTo()
-    // {
-    //     if (Auth::user()->is_admin) {
-    //         return route('root');
-    //     } 
-    //     else if (Auth::user()->is_accepted){
-    //         return route('profile');
-    //     } else {
-    //         Auth::logout();
-    //         return redirect()->back()->withErrors([
-    //             'unverified' => 'Akun Anda belum disetujui. Silakan hubungi admin.',
-    //         ]);        
-    //     }
-    // }
     public function redirectTo()
     {
         return Auth::user()->is_admin ? route('root') : route('profile');
@@ -64,57 +54,13 @@ class LoginController extends Controller
                 ]);
             }
 
-            // Sudah disetujui, lanjut redirect
-            return redirect()->intended($this->redirectPath());
+            // Login berhasil
+            return redirect()->intended($this->redirectPath())->with('success', 'Login Berhasil');
         }
 
-        // Kalau gagal login karena email/password salah
+        // Login gagal karena email/password salah
         throw ValidationException::withMessages([
             'credentials' => ['Email atau password salah'],
         ]);
-    }
-    // public function redirectTo(Request $request)
-    // {
-    //     $credentials = $request->only('email', 'password');
-
-    //     if (Auth::attempt($credentials)) {
-    //         $user = Auth::user();
-
-    //         if (!$user->is_accepted) {
-    //             Auth::logout();
-    //             return redirect()->back()->withErrors([
-    //                 'unverified' => 'Akun Anda belum disetujui. Silakan hubungi admin.',
-    //             ]);
-    //         }
-
-    //         // sudah disetujui, boleh lanjut
-    //         return route('profile');;
-    //     }
-    // }
-
-    // public function redirectTo()
-    // {
-    //     $user = Auth::user();
-
-    //     if ($user->hasRole('Admin')) {
-    //         return route('admin.dashboard');
-    //     } elseif ($user->hasRole('Staff')) {
-    //         return route('staff.dashboard');
-    //     } elseif ($user->hasRole('Tenant')) {
-    //         return route('tenant.dashboard');
-    //     }
-
-    //     // Default fallback jika role tidak terdaftar
-    //     return route('profile');
-    // }
-    
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('guest')->except('logout');
     }
 }

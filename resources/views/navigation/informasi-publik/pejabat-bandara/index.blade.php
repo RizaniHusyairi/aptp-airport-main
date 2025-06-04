@@ -150,15 +150,24 @@
                         <div class="card official-card">
                             <img src="{{ asset('frontend/assets/pejabat/denny.jpg') }}" class="card-img-top" alt="Denny Armanto" loading="lazy">
                             <div class="card-body text-center">
-                                <h5 class="card-title">Denny Armanto, S.E, M.A</h5>
+                                <h5 class="card-title">Roslan, S.E.</h5>
                                 <p class="card-text">Kepala Seksi Pelayanan dan Kerjasama</p>
                                 <button class="btn btn-primary read-more" data-target="#detail-denny">Baca Profil Selengkapnya</button>
                             </div>
                         </div>
                         <div id="detail-denny" class="profile-detail" style="display: none;">
-                            <p><strong>Riwayat Jabatan:</strong> Berbagai posisi pelayanan bandara sejak 2018, Kepala Seksi Pelayanan dan Kerjasama.</p>
-                            <p><strong>Pendidikan:</strong> S2 Ilmu Administrasi.</p>
-                            <p><strong>Penghargaan:</strong> Satya Lancana Karya Satya 10 Tahun.</p>
+                            <p><strong>Riwayat Jabatan:</strong> -	Pegawai Perintis Subsidi (2001 – 2004) <br>
+-	Bendahara Proyek Prop. Kaltim Bandara Kelas I Khusus Juwata (2003-2004) <br>
+-	Bendahara Bandara Long Apung (2005 – 2009) <br>
+-	Petugas Pelayanan Jasa Kebandarudaraan Bandara Juwata Tarakan (2013-2015) <br>
+-	Penyusun Rencana dan Program Bandara Juwata Tarakan (2015-2018) <br>
+-	Kepala Seksi Pelayanan Bandara Juwata Tarakan (2018-2025) <br>
+-	Kepala Seksi Pelayanan dan Kerjasama (2025-sekarang) <br>
+</p>
+                            <p><strong>Pendidikan:</strong> STIE Bulungan Tarakan Jurusan S-1 Managemen.</p>
+                            <p><strong>Penghargaan:</strong> -	Satya Lancana Karya Satya 10 Tahun (2012) <br>
+-	Satya Lancana Karya Satya 20 Tahun (2020)
+</p>
                         </div>
                     </div>
                 </div>

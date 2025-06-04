@@ -39,6 +39,17 @@ class TenantController extends Controller
             'rental_type.string'     => 'Jenis sewa tidak valid.',
         ]);
 
+        if($request->rental_type === 'Lainnya') {
+            // Tambahkan validasi khusus untuk sewa lainnya
+            $request->validate([
+                'rental_more' => 'required|string|max:150',
+            ], [
+                'rental_more.required' => 'Jenis sewa lainnya wajib diunggah.',
+                'rental_more.max' => 'Jenis sewa maksimal 150 karakter.',
+            ]);
+        }
+
+
         // Simpan file
         $file = $request->file('documents');
         $filename = time() . '_' . $file->getClientOriginalName();
@@ -50,6 +61,7 @@ class TenantController extends Controller
             'business_type' => $request->business_type,
             'description'   => $request->description,
             'rental_type'   => $request->rental_type,
+            'rental_type'   => $request->rental_more ?? null,
             'documents'     => $filePath,
         ]);
 

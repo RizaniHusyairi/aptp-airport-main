@@ -15,7 +15,7 @@
             <swiper-container class="newsFirstSwiper" autoplay-delay="2500" autoplay-disable-on-interaction="false" init="false" style="height: 100%;">
               @forelse ($topHeadlines as $index => $headline)
               <swiper-slide>
-                <div class="card news-card shadow" style="background-image: url('{{ asset($headline->image ?? '/assets/img/bandara/_MG_0131.JPG') }}');">
+                <div class="card news-card shadow" style="background-image: url('{{ asset('uploads/'.$headline->image) ?? asset('/assets_landing/img/bandara/_MG_0131.JPG') }}');">
                   <a href="{{ route('news.show', $headline->slug) }}" class="text-decoration-none text-white">
                     <div class="card-overlay">
                       <div class="card-body d-flex flex-column justify-content-between">
@@ -54,7 +54,7 @@
                 <swiper-slide>
                   <div class="card news-card recomd shadow">
                     <a href="{{ route('news.show', $news->slug) }}" class="text-decoration-none text-white">
-                      <img class="card-overlay-img" src="{{ asset('upload/'.$news->image ?? '/assets/img/bandara/DJI_0038.JPG') }}" alt="foto">
+                      <img class="card-overlay-img" src="{{ asset('uploads/'.$news->image) ?? asset('/assets_landing/img/bandara/DJI_0038.JPG') }}" alt="foto">
                       <div class="card-overlay-recomd">
                         <div class="card-body d-flex flex-column justify-content-end p-1">
                           <h5 class="card-title-recomd mx-3">{{ $news->title }}</h5>
@@ -84,7 +84,7 @@
             @forelse ($otherNews as $index => $news)
             <div class="card-news-more shadow row rounded">
               <div class="col-3 p-0">
-                <img src="{{ asset($news->image ?? '/assets/img/bandara/APT_1682.JPG') }}" alt="foto" class="img-news">
+                <img src="{{ asset('uploads/' . $news->image) ?? asset('/assets_landing/img/bandara/APT_1682.JPG') }}" alt="foto" class="img-news">
               </div>
               <div class="col-9 p-3">
                 <h5 class="news-more-title">{{ $news->title }}</h5>

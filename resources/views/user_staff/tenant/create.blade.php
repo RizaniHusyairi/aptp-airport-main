@@ -117,7 +117,7 @@
             </div>
 
             <div class="mb-3">
-              <label for="rental_type" class="form-label">Jenis Sewa</label>
+              <label for="rental_type" class="form-label">Jenis Tenant</label>
               <select class="form-select" id="rental_type" name="rental_type" required>
                 <option value="" selected disabled>Pilih jenis sewa</option>
                 <option value="Ruangan di dalam terminal terbuka tanpa AC">Ruangan di dalam terminal terbuka tanpa AC</option>
@@ -130,11 +130,20 @@
                 <option value="ATM">ATM</option>
                 <option value="Tanah">Tanah</option>
                 <option value="Tiang pancang reklame">Tiang pancang reklame</option>
+                <option value="Lainnya">Lainnya</option>
               </select>
               @error('rental_type')
                 <div class="invalid-feedback d-block">{{ $message }}</div>
               @enderror
             </div>
+            <div class="mb-3" id="rental_more" style="display: none;">
+                <label for="rental_more" class="form-label">jenis Tenant Lainnya</label>
+                <input type="text" class="form-control" id="rental_more" name="rental_more" value="{{ old('rental_more') }}" placeholder="Masukkan Jenis Tenant Lainnya" >
+                @error('rental_more')
+                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                @enderror
+            </div>
+
 
             <div class="mb-3">
               <label for="documents" class="form-label">Dokumen yang Diperlukan</label>
@@ -165,5 +174,21 @@
       }
       this.classList.add('was-validated');
     });
+
+    // Show/hide additional documents based on lelang_type
+        document.getElementById('rental_type').addEventListener('change', function() {
+            const additionalDocs = document.getElementById('rental_more');
+            if (this.value === 'Lainnya') {
+                additionalDocs.style.display = 'block';
+                document.getElementById('rental_more').setAttribute('required', 'required');
+            } else {
+                additionalDocs.style.display = 'none';
+                document.getElementById('rental_more').removeAttribute('required');
+            }
+        });
+
+        // Trigger change on page load to handle edit mode
+        document.getElementById('rental_type').dispatchEvent(new Event('change'));
+
   </script>
 @endsection

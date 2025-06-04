@@ -25,7 +25,8 @@ class DatabaseSeeder extends Seeder
             PermissionSeeder::class,
             NewsSeeder::class,
             LetterSeeder::class,
-            FinanceSeeder::class
+            FinanceSeeder::class,
+            AirFreightTrafficSeeder::class,
         ]);
     }
 }

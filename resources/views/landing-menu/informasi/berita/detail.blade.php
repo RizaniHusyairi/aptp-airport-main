@@ -14,15 +14,15 @@
     <div class="container section-title" data-aos="fade-up">
     </div>
     <div class="container">
-        <div class="row gy-4">
+        <div class="row gy-2">
             <div class="col-lg-6" data-aos="fade-up" data-aos-delay="100">
-                <img src="{{ asset($news->image) }}" class="img-fluid" alt="{{ $news->title }}">
+                <img src="{{ asset('uploads/'.$news->image) }}" class="img-fluid" alt="{{ $news->title }}">
             </div>
             <div class="col-lg-6" data-aos="fade-up" data-aos-delay="200">
                 <div class="content">
                     <p>{!! nl2br(e($news->content)) !!}</p>
                     <p class="text-muted">Diterbitkan pada: {{ $news->created_at->format('d M Y') }}</p>
-                    <a href="{{ route('home') }}" class="btn btn-primary">Kembali ke Beranda</a>
+                    <a href="{{ route('berita') }}" class="btn btn-primary">Lihat Berita Lainnya</a>
                 </div>
             </div>
         </div>

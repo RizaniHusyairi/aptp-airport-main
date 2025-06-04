@@ -51,10 +51,17 @@
             <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
         </nav>
         @auth
-        <a class="btn-getstarted" href="{{ route('root') }}">Dashboard</a>
-        @else
-        <a class="btn-getstarted" href="{{ route('login') }}">Masuk</a>
-
+            <div class="justify-content-end">
+                @if (Auth::user()->is_admin)
+                    <a class="btn-getstarted" href="{{ route('root') }}">Dashboard</a>
+                @else
+                    <a class="btn-getstarted" href="{{ route('root') }}/profile">Dashboard</a>
+                @endif
+            </div>
+            @else
+            <div class="justify-content-end">
+                <a href="{{ route('login') }}" class="btn-getstarted">Masuk</a>
+            </div>
         @endauth
     </div>
 </header>

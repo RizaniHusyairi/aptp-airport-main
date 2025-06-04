@@ -340,8 +340,82 @@ class LandingPageController extends Controller
 
     public function lalulintas() 
     {
-        return view('landing-menu.beranda.lalulintas');    
+        // Ambil daftar tahun yang tersedia
+        $years = AirFreightTraffic::selectRaw('YEAR(date) as year')
+            ->distinct()
+            ->orderBy('year', 'desc')
+            ->pluck('year')
+            ->toArray();
+
+        return view('landing-menu.beranda.lalulintas', compact('years'));
     }
+
+    /**
+     * Mengambil data lalu lintas untuk grafik
+     */
+    public function getTrafficData(Request $request)
+    {
+        $year = $request->query('year', 'all');
+        $month = $request->query('month', 'all');
+
+        // Query dasar
+        $query = AirFreightTraffic::select(
+            DB::raw('YEAR(date) as year'),
+            DB::raw('MONTH(date) as month'),
+            'type',
+            DB::raw('SUM(arrival + departure) as total')
+        )
+        ->groupBy('year', 'month', 'type');
+
+        // Filter tahun
+        if ($year !== 'all') {
+            $query->whereYear('date', $year);
+        }
+
+        // Filter bulan
+        if ($month !== 'all') {
+            $query->whereMonth('date', $month);
+        }
+
+        $data = $query->get();
+
+        // Format data untuk frontend
+        $formattedData = [];
+        $availableYears = $data->pluck('year')->unique()->sort()->values()->toArray();
+
+        foreach ($availableYears as $y) {
+            $formattedData[$y] = [
+                'aircraft' => array_fill(0, 12, 0),
+                'passengers' => array_fill(0, 12, 0),
+                'transit' => array_fill(0, 12, 0),
+                'cargo' => array_fill(0, 12, 0),
+                'baggage' => array_fill(0, 12, 0),
+                'mail' => array_fill(0, 12, 0),
+            ];
+
+            $yearData = $data->where('year', $y);
+            foreach ($yearData as $row) {
+                $monthIndex = $row->month - 1;
+                $typeKey = match ($row->type) {
+                    'Pesawat' => 'aircraft',
+                    'Penumpang' => 'passengers',
+                    'Penumpang Transit' => 'transit',
+                    'Kargo' => 'cargo',
+                    'Bagasi' => 'baggage',
+                    'Pos' => 'mail',
+                };
+                $formattedData[$y][$typeKey][$monthIndex] = $row->total;
+            }
+        }
+
+        return response()->json([
+            'success' => true,
+            'data' => $formattedData,
+            'years' => $availableYears,
+        ]);
+    }
+
+
     public function keberangkatan()
     {
         return view('landing-menu.beranda.keberangkatan');

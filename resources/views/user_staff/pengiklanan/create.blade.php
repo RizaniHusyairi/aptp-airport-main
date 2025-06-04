@@ -18,6 +18,48 @@
     <div class="col-xl-12">
       <div class="card">
         <div class="card-body">
+          <h4 class="card-title mb-4">Syarat & Ketentuan Pengajuan Pengiklanan</h4>
+
+          <div class="accordion" id="accordionTenant">
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="headingOne">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                  Dokumen yang Diperlukan
+                </button>
+              </h2>
+              <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionTenant">
+                <div class="accordion-body">
+                  <ul>
+                    <li>Surat Permohonan</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            
+
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="headingThree">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                  Cara Pendaftaran
+                </button>
+              </h2>
+              <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionTenant">
+                <div class="accordion-body">
+                  <ul>
+                    <li>Mengajukan surat permohonan kepada Kasi Pelayanan dan Kerjasama</li>
+                    <li>Verifikasi dokumen dan persyaratan oleh petugas pengembangan usaha</li>
+                    <li>Presentasi bisnis sesuai dengan bidang usaha yang diajukan</li>
+                    <li>Melengkapi administrasi dan kontrak jika disetujui</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-body">
 
           <h4 class="card-title mb-4">Formulir Pengajuan Pengiklanan</h4>
 

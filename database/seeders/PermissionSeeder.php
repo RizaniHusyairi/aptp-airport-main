@@ -13,7 +13,7 @@ class PermissionSeeder extends Seeder
         $permissions = [
             'Manajemen Berita',
             'Manajemen Tenant',
-            'Manajemen Sewa Lahan',
+            'Manajemen Sewa',
             'Manajemen Perijinan Usaha',
             'Manajemen Pengiklanan',
             'Manajemen Field Trip',

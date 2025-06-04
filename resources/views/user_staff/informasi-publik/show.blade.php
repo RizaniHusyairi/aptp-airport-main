@@ -10,6 +10,12 @@
     @slot('title') Detail Permintaan Informasi Publik @endslot
   @endcomponent
 
+  @if(session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+  @endif
+
   <div class="row">
     <div class="col-xl-12">
       <div class="card">
@@ -51,6 +57,11 @@
             <input type="text" class="form-control" value="{{ \Carbon\Carbon::parse($publicInformation->created_at)->format('d M Y - H:i') }}" disabled>
           </div>
 
+          <div class="mb-3">
+            <label class="form-label">Status Pengajuan</label>
+            <input type="text" class="form-control" value="{{ $publicInformation->status }}" disabled>
+          </div>
+
           <hr>
 
           <h5 class="mb-3">Informasi yang Diminta</h5>
@@ -67,14 +78,7 @@
 
           <div class="mb-3">
             <label class="form-label">Cara Memperoleh</label>
-            @php
-              $caraMemperoleh = match($publicInformation->cara_memperoleh) {
-                  'Melihat' => 'Melihat / Membaca / Mendengarkan / Mencatat',
-                  'Salinan' => 'Mendapatkan copy salinan (hard copy)',
-                  default => '-',
-              };
-            @endphp
-            <input type="text" class="form-control" value="{{ $caraMemperoleh }}" disabled>
+            <input type="text" class="form-control" value="{{ $publicInformation->cara_memperoleh }}" disabled>
           </div>
 
           <div class="mb-3">
@@ -89,7 +93,7 @@
           <div class="mb-3 d-flex flex-column">
             <label class="form-label">KTP</label>
             @if ($publicInformation->ktp)
-              <a href="{{ asset('uploads/' . $publicInformation->ktp) }}" class="btn btn-outline-primary" target="_blank">Lihat KTP</a>
+              <a href="{{ asset('Uploads/' . $publicInformation->ktp) }}" class="btn btn-outline-primary" target="_blank">Lihat KTP</a>
             @else
               <input type="text" class="form-control" value="Tidak ada file" disabled>
             @endif
@@ -98,7 +102,7 @@
           <div class="mb-3 d-flex flex-column">
             <label class="form-label">Surat Pertanggungjawaban</label>
             @if ($publicInformation->surat_pertanggungjawaban)
-              <a href="{{ asset('uploads/' . $publicInformation->surat_pertanggungjawaban) }}" class="btn btn-outline-primary" target="_blank">Lihat Surat</a>
+              <a href="{{ asset('Uploads/' . $publicInformation->surat_pertanggungjawaban) }}" class="btn btn-outline-primary" target="_blank">Lihat Surat</a>
             @else
               <input type="text" class="form-control" value="Tidak ada file" disabled>
             @endif
@@ -108,6 +112,44 @@
             <label class="form-label">Surat Permintaan Dari</label>
             <input type="text" class="form-control" value="{{ $publicInformation->surat_permintaan }}" disabled>
           </div>
+
+          <hr>
+
+          <h5 class="mb-3">Balasan Pengajuan</h5>
+
+          @if($publicInformation->status == 'Belum dibalas')
+            <form action="{{ route('informasiPublik.reply', $publicInformation->id) }}" method="POST">
+              @csrf
+              @method('PATCH')
+              <div class="mb-3">
+                <label for="link_balasan" class="form-label">Link Balasan</label>
+                <input type="url" class="form-control @error('link_balasan') is-invalid @enderror" id="link_balasan" name="link_balasan" value="{{ old('link_balasan') }}" placeholder="Masukkan URL balasan">
+                @error('link_balasan')
+                  <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+              </div>
+
+              <div class="mb-3">
+                <label for="replied_at" class="form-label">Tanggal Balasan</label>
+                <input type="date" class="form-control @error('replied_at') is-invalid @enderror" id="replied_at" name="replied_at" value="{{ old('replied_at', now()->format('Y-m-d')) }}">
+                @error('replied_at')
+                  <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+              </div>
+
+              <button type="submit" class="btn btn-primary">Simpan Balasan</button>
+            </form>
+          @else
+            <div class="mb-3">
+              <label class="form-label">Link Balasan</label>
+              <input type="url" class="form-control" value="{{ $publicInformation->link_balasan ?? 'Tidak ada link' }}" disabled>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Tanggal Balasan</label>
+              <input type="text" class="form-control" value="{{ $publicInformation->replied_at ? \Carbon\Carbon::parse($publicInformation->replied_at)->format('d M Y') : 'Belum dibalas' }}" disabled>
+            </div>
+          @endif
 
           <div class="d-flex justify-content-between mt-4">
             <a href="{{ route('informasiPublik.staffIndex') }}" class="btn btn-secondary">Kembali</a>

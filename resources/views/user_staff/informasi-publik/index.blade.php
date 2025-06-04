@@ -31,6 +31,8 @@
                   <th>Pekerjaan</th>
                   <th>No. HP</th>
                   <th>Email</th>
+                  <th>Status</th>
+                  <th>Link Balasan</th>
                   <th>Dibuat</th>
                   <th>Aksi</th>
                 </tr>
@@ -44,12 +46,26 @@
                     <td>{{ $item->pekerjaan }}</td>
                     <td>{{ $item->no_hp }}</td>
                     <td>{{ $item->email }}</td>
-                    <td>{{ $item->created_at }}</td>
-                    <td><a href="{{ route('informasiPublik.show', $item->id) }}" class="btn btn-primary btn-sm">Lihat Berkas</a></td>
+                    <td>
+                      <span class="badge {{ $item->status == 'Sudah dibalas' ? 'bg-success' : 'bg-warning' }}">
+                        {{ $item->status }}
+                      </span>
+                    </td>
+                    <td>
+                      @if($item->link_balasan)
+                        <a href="{{ $item->link_balasan }}" target="_blank" class="btn btn-outline-info btn-sm">Lihat</a>
+                      @else
+                        -
+                      @endif
+                    </td>
+                    <td>{{ \Carbon\Carbon::parse($item->created_at)->format('d M Y - H:i') }}</td>
+                    <td>
+                      <a href="{{ route('informasiPublik.show', $item->id) }}" class="btn btn-primary btn-sm">Lihat Berkas</a>
+                    </td>
                   </tr>
                 @empty
                   <tr>
-                    <td colspan="6" class="text-center">Belum ada data pengajuan</td>
+                    <td colspan="10" class="text-center">Belum ada data pengajuan</td>
                   </tr>
                 @endforelse
               </tbody>

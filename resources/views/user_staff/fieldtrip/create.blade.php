@@ -18,6 +18,57 @@
     <div class="col-xl-12">
       <div class="card">
         <div class="card-body">
+          <h4 class="card-title mb-4">Syarat & Ketentuan Pengajuan Fieldtrip</h4>
+
+          <div class="accordion" id="accordionTenant">
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="headingOne">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                  Dokumen yang Diperlukan
+                </button>
+              </h2>
+              <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionTenant">
+                <div class="accordion-body">
+                  <ul>
+                    <li>Nomor Induk Berusaha</li>
+                    <li>Kartu Tanda Penduduk (KTP)</li>
+                    <li>Akta Pendirian Perusahaan</li>
+                    <li>NPWP</li>
+                    <li>Sertifikat penjamah makanan (Khusus untuk food & beverage)</li>
+                    <li>Bukti bayar pajak 3 bulan terakhir</li>
+                    <li>Proposal usaha</li>
+                    <li>Desain dan gambar teknis Booth/Tempat Usaha (Softdrawing Sipil, Elektrikal, Plumbing, Internal, dll)</li>
+                    <li>Surat pernyataan sanggup mengikuti aturan yang berlaku (Bermaterai)</li>
+                    <li>Laporan keuangan perusahaan</li>
+                    <li>Service Level Agreement (Maskapai, Cargo)</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            
+
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="headingThree">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                  Cara Pendaftaran
+                </button>
+              </h2>
+              <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionTenant">
+                <div class="accordion-body">
+                  <ul>
+                    <li>Mendisposisikan surat permohonan kepada Kasi Pelayanan dan Kerjasama</li>
+                    <li>Mendisposisikan surat permohonan kepada petugas pengembangan usaha untuk verifikasi</li>
+                    <li>Melakukan verifikasi permohonan usaha sesuai inventaris usaha yang akan dikembangkan dan membuat draft surat undangan presentasi bisnis beserta nota dinas</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-body">
 
           <h4 class="card-title mb-4">Formulir Pengajuan Fieldtrip</h4>
 

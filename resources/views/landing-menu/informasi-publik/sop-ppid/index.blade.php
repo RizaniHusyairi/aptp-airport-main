@@ -33,7 +33,7 @@
             <a href="{{ asset('assets_landing/img/sop/prosedur-pengajuan-sengketa-informasi-publik.png') }}" class="glightbox">
             <div class="team-member">
               <div class="member-img">
-                <img src="{{ asset('assets/img/sop/prosedur-pengajuan-sengketa-informasi-publik.png') }}" class="img-fluid" alt="">
+                <img src="{{ asset('assets_landing/img/sop/prosedur-pengajuan-sengketa-informasi-publik.png') }}" class="img-fluid" alt="">
                 <!-- <div class="social">
                     Lihat Detail
                   </div> -->
@@ -54,10 +54,10 @@ bersengketa menarik diri dari perundingan, maka Komisi Informasi melanjutkan pro
           </div><!-- End Chef Team Member -->
 
           <div class="col-lg-4 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="200">
-            <a href="/assets/img/sop/prosedur-permohonan-informasi-publik.png" class="glightbox">
+            <a href="{{ asset('/assets_landing/img/sop/prosedur-permohonan-informasi-publik.png') }}" class="glightbox">
             <div class="team-member">
               <div class="member-img">
-                <img src="assets/img/sop/prosedur-permohonan-informasi-publik.png" class="img-fluid" alt="Prosedur Permohonan Informasi Publik">
+                <img src="{{ asset('assets_landing/img/sop/prosedur-permohonan-informasi-publik.png') }}" class="img-fluid" alt="Prosedur Permohonan Informasi Publik">
                 <!-- <div class="social">
                     Lihat Detail
                 </div> -->
@@ -75,10 +75,10 @@ bersengketa menarik diri dari perundingan, maka Komisi Informasi melanjutkan pro
           </div><!-- End Chef Team Member -->
 
           <div class="col-lg-4 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="300">
-            <a href="/assets/img/sop/prosedur-permohonan-keberatan-informasi.png" class="glightbox">
+            <a href="{{ asset('/assets_landing/img/sop/prosedur-permohonan-keberatan-informasi.png') }}" class="glightbox">
             <div class="team-member">
               <div class="member-img">
-                <img src="assets/img/sop/prosedur-permohonan-keberatan-informasi.png" class="img-fluid" alt="">
+                <img src="{{ asset('assets_landing/img/sop/prosedur-permohonan-keberatan-informasi.png') }}" class="img-fluid" alt="">
                 <!-- <div class="social">
                     Lihat Detail
                 </div> -->
@@ -110,11 +110,11 @@ bersengketa menarik diri dari perundingan, maka Komisi Informasi melanjutkan pro
 
 @push('page-styles')
 
-  <link href="{{ asset('assets/css/sop.css') }}" rel="stylesheet">
+  <link href="{{ asset('assets_landing/css/sop.css') }}" rel="stylesheet">
 @endpush
 
 @push('page-scripts')
     <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
 
-  <script src="{{ asset('assets/js/sop.js') }}"></script>
+  <script src="{{ asset('assets_landing/js/sop.js') }}"></script>
 @endpush

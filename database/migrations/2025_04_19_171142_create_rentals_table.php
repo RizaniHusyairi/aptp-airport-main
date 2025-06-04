@@ -13,6 +13,7 @@ return new class extends Migration
             $table->string('rental_name');
             $table->text('description');
             $table->string('rental_type');
+            $table->string('rental_more')->nullable();
             $table->string('documents'); 
             $table->enum('submission_status', ['diajukan', 'disetujui', 'ditolak'])->default('diajukan');
             $table->timestamps();

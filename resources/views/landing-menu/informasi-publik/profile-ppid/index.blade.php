@@ -65,7 +65,10 @@
             <section class="bg-white p-4 rounded shadow mb-5" data-aos="fade-up" data-aos-delay="400">
                 <h2 class="h3 mb-2 text-dark">Struktur Organisasi PPID</h2>
                 <hr class="my-3">
-                <img src="/assets/img/profil/struktur-organisasi.jpg" alt="" class="img-fluid rounded shadow-lg" id="struktur-image">
+                <a href="{{ asset('assets_landing/img/profil/struktur_ppid.jpg') }}" class="glightbox">
+                  <img src="{{ asset('assets_landing/img/profil/struktur_ppid.jpg') }}" alt="struktur PPID" class="img-fluid rounded shadow-lg" id="struktur-image">
+                
+                </a>
             </section>
 
             

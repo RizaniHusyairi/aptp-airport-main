@@ -63,10 +63,10 @@
 @endsection
 
 @push('page-styles')
-  <link href="{{ asset('assets/css/keuangan.css') }}" rel="stylesheet">
+  <link href="{{ asset('assets_landing/css/keuangan.css') }}" rel="stylesheet">
 @endpush
 
 @push('page-scripts')
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="{{ asset('assets/js/keuangan.js') }}"></script>
+  <script src="{{ asset('assets_landing/js/keuangan.js') }}"></script>
 @endpush

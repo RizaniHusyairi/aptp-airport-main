@@ -158,6 +158,8 @@ Route::group(["prefix" => 'dashboard'], function () {
             // Public Information Staff Routes
             Route::get('staff/informasi-publik', [InformasiPublikController::class, 'index'])->name('informasiPublik.staffIndex');
             Route::get('staff/informasi-publik/{id}', [InformasiPublikController::class, 'show'])->name('informasiPublik.show');
+            Route::patch('staff/informasi-publik/{id}/reply', [InformasiPublikController::class, 'reply'])->name('informasiPublik.reply');
+
             
             // Traffic Staff Routes
             Route::get('staff/lalu-lintas', [LaluLintasController::class, 'index'])->name('laluLintas.staffIndex');
@@ -249,6 +251,8 @@ Route::group(["prefix" => 'dashboard'], function () {
 
 Route::get('/', [LandingPageController::class, 'home'])->name('home');
 Route::get('/lalu-lintas-angkutan', [LandingPageController::class, 'lalulintas'])->name('lalulintas');
+Route::get('/api/air-freight-traffic', [LandingPageController::class, 'getTrafficData'])->name('api.air-freight-traffic');
+
 Route::get('/keberangkatan', [LandingPageController::class, 'keberangkatan'])->name('keberangkatan');
 Route::get('/kedatangan', [LandingPageController::class, 'kedatangan'])->name('kedatangan');
 

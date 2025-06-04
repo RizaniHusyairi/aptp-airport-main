@@ -13,6 +13,7 @@ return new class extends Migration
             $table->string('license_name');
             $table->text('description');
             $table->string('license_type');
+            $table->string('license_more')->nullable();
             $table->string('documents'); 
             $table->enum('submission_status', ['diajukan', 'disetujui', 'ditolak'])->default('diajukan');
             $table->timestamps();

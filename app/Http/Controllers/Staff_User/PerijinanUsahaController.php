@@ -39,6 +39,17 @@ class PerijinanUsahaController extends Controller
 
         ]);
 
+        if($request->licence_type === 'Lainnya') {
+            // Tambahkan validasi khusus untuk sewa lainnya
+            $request->validate([
+                'license_more' => 'required|string|max:150',
+            ], [
+                'license_more.required' => 'Jenis sewa lainnya wajib diunggah.',
+                'license_more.max' => 'Jenis sewa maksimal 150 karakter.',
+            ]);
+        }
+
+
         // Simpan file
         $file = $request->file('documents');
         $filename = time() . '_' . $file->getClientOriginalName();
@@ -48,6 +59,7 @@ class PerijinanUsahaController extends Controller
         $license = License::create([
             'license_name' => $request->license_name,
             'license_type'   => $request->license_type,
+            'license_more'   => $request->license_more ?? null,
             'description'   => $request->description,
             'documents'     => $filePath,
         ]);
