@@ -82,15 +82,18 @@
 
           <div class="news-more">
             @forelse ($otherNews as $index => $news)
-            <div class="card-news-more shadow row rounded">
-              <div class="col-3 p-0">
-                <img src="{{ asset('uploads/' . $news->image) ?? asset('/assets_landing/img/bandara/APT_1682.JPG') }}" alt="foto" class="img-news">
+            <a href="{{ route('news.show', $news->slug) }}" class="text-decoration-none">
+              <div class="card-news-more shadow row rounded">
+                <div class="col-3 p-0">
+                  <img src="{{ asset('uploads/' . $news->image) ?? asset('/assets_landing/img/bandara/APT_1682.JPG') }}" alt="foto" class="img-news">
+                </div>
+                <div class="col-9 p-3">
+                  <h5 class="news-more-title">{{ $news->title }}</h5>
+                  <p class="news-more-content text-black">{{ Str::limit($news->content, 150) }}</p>
+                </div>
               </div>
-              <div class="col-9 p-3">
-                <h5 class="news-more-title">{{ $news->title }}</h5>
-                <p class="news-more-content">{{ Str::limit($news->content, 150) }}</p>
-              </div>
-            </div>
+
+            </a>
           @empty
             <div class="text-center">
               <p>Tidak ada berita lainnya saat ini.</p>

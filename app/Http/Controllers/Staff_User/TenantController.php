@@ -102,7 +102,7 @@ class TenantController extends Controller
         $tenants = $user->tenants()->latest()->get();
         return view('user_staff.tenant.index', compact('tenants'));    
     }
-
+    
     /* ================== STAFF ROUTES ================== */
     public function index()
     {

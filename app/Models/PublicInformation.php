@@ -23,4 +23,7 @@ class PublicInformation extends Model
         'tujuan_informasi',
         'cara_memperoleh',
         'cara_salinan',
+        'link_balasan',
+        'status',
+        'replied_at',
     ];}

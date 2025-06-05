@@ -18,6 +18,7 @@
             'Manajemen Pengiklanan' => ['route' => 'pengiklanan.staffIndex', 'icon' => 'bx bx-broadcast', 'label' => 'Pengiklanan'],
             'Manajemen Field Trip' => ['route' => 'fieldtrip.staffIndex', 'icon' => 'bx bx-walk', 'label' => 'Field Trip'],
             'Manajemen Lelang' => ['route' => 'lelang.staffIndex', 'icon' => 'bx bx-walk', 'label' => 'Lelang/Beauty Contest'],
+            'Manajemen Slot Charter' => ['route' => 'slot.staffIndex', 'icon' => 'fa fa-plane', 'label' => 'Slot Charter'],
             'Manajemen Laporan Keuangan' => ['route' => 'keuangan.staffIndex', 'icon' => 'bx bx-money', 'label' => 'Laporan Keuangan'],
             'Manajemen Slider' => ['route' => 'slider.staffIndex', 'icon' => 'bx bx-slider', 'label' => 'Slider'],
             'Manajemen Ajuan Informasi Publik' => ['route' => 'informasiPublik.staffIndex', 'icon' => 'bx bx-info-circle', 'label' => 'Informasi Publik'],
@@ -32,6 +33,7 @@
             'Ajukan Pengiklanan' => ['route' => 'pengiklanan.index', 'icon' => 'bx bx-broadcast', 'label' => 'Ajukan Pengiklanan'],
             'Ajukan Field Trip' => ['route' => 'fieldtrip.index', 'icon' => 'bx bx-walk', 'label' => 'Ajukan Field Trip'],
             'Ajukan Lelang' => ['route' => 'lelang.index', 'icon' => 'fas fa-gavel', 'label' => 'Ajukan Lelang/Beauty Contest'],
+            'Ajukan Slot Charter' => ['route' => 'slot.index', 'icon' => 'fa fa-plane', 'label' => 'Ajukan Slot Charter'],
           ];
         @endphp
 
@@ -71,7 +73,7 @@
             <a href="{{ route('root') }}" class="waves-effect">
               <i class="bx bx-home-circle"></i>
               <span key="t-contact">@lang('sidebar.dashboard')</span>
-            </a>
+          </a>
           </li>
           <li class="{{ request()->routeIs('customers.*') ? 'mm-active' : '' }}">
             <a href="{{ route('customers.index') }}" class="waves-effect">

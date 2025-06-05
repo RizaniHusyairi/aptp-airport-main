@@ -50,6 +50,7 @@ class InformasiPublikController extends Controller
             'status' => 'Sudah dibalas',
         ]);
 
+
         return redirect()->route('informasiPublik.show', $publicInformation->id)
             ->with('success', 'Balasan berhasil disimpan.');
     }

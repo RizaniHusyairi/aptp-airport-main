@@ -32,7 +32,7 @@
           Lelang/Beauty contest
           @break
         @case('slot')
-          Slot
+          Slot Charter
           @break
         @default
           Pengajuan
@@ -65,7 +65,7 @@
           Syarat & Ketentuan Lelang/Beauty contest
           @break
         @case('slot')
-          Syarat & Ketentuan Pengajuan Slot
+          Syarat & Ketentuan Pengajuan Slot Charter
           @break
         @default
           Syarat & Ketentuan Pengajuan
@@ -76,28 +76,38 @@
               <div class="title">Dokumen yang Diperlukan</div>
               <div class="content">
                 <ul class="list-group list-group-flush">
-                    @if (in_array(request()->segment(2), ['field-trip', 'pengiklanan']))
-                    <li class="list-group-item">Surat Permohonan</li>
-                    @else
+                  @if (in_array(request()->segment(2), ['field-trip', 'pengiklanan']))
+                  <li class="list-group-item">Surat Permohonan</li>
+                  @else
                     <li class="list-group-item">Nomor Induk Berusaha</li>
                     <li class="list-group-item">Kartu Tanda Penduduk (KTP)</li>
+                    @if (request()->segment(2) == 'slot')
+                    <li class="list-group-item">Surat Permohonan Slot Charter</li>
+                    <li class="list-group-item">Sertifikat Kelaikan Udara Pesawat</li>
+                    <li class="list-group-item">Proposal Oprasional Penerbangan</li>
+                    <li class="list-group-item">Surat Izin Operasi Penerbangan (untuk Operator)</li>
+                    @endif
+
+                    @if(!request()->segment(2) == 'slot')
                     <li class="list-group-item">Akta Pendirian Perusahaan</li>
                     <li class="list-group-item">NPWP</li>
                     <li class="list-group-item">Proposal Usaha</li>
+                    <li class="list-group-item">Desain Teknis Booth/Tempat Usaha</li>
+                    <li class="list-group-item">Surat Pernyataan Mengikuti Aturan (bermaterai)</li>
+                    <li class="list-group-item">Laporan Keuangan</li>
+
+                    @endif
                     @if(!request()->segment(2) == 'perijinan-usaha')
                     <li class="list-group-item">Sertifikat Penjamah Makanan (jika F&B)</li>
                     @endif
                     <li class="list-group-item">Bukti Bayar Pajak 3 Bulan Terakhir</li>
-                    <li class="list-group-item">Desain Teknis Booth/Tempat Usaha</li>
-                    <li class="list-group-item">Surat Pernyataan Mengikuti Aturan (bermaterai)</li>
-                    <li class="list-group-item">Laporan Keuangan</li>
                     @if(request()->segment(2) == 'perijinan-usaha')
                     <li class="list-group-item">Service Level Agreement (Kecuali untuk kargo)</li>
                     @else
                     <li class="list-group-item">Service Level Agreement (jika berlaku)</li>
 
                     @endif
-                    @endif
+                  @endif
                     
                 </ul>
               </div>

@@ -60,7 +60,7 @@
                                 </td>
                                 <td>
                                   @if($lelang->additional_documents)
-                                      <a href="{{ asset('storage/' . $lelang->additional_documents) }}" target="_blank">
+                                      <a href="{{ asset('uploads/' . $lelang->additional_documents) }}" target="_blank">
                                           {{ preg_replace('/^\d+_additional_/', '', basename($lelang->additional_documents)) }}
                                       </a>
                                   @else

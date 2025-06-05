@@ -140,21 +140,22 @@
         e.stopPropagation();
       }
       this.classList.add('was-validated');
-      // Show/hide additional documents based on lelang_type
-        document.getElementById('license_type').addEventListener('change', function() {
-            const additionalDocs = document.getElementById('license_more');
-            if (this.value === 'Lainnya') {
-                additionalDocs.style.display = 'block';
-                document.getElementById('license_more').setAttribute('required', 'required');
-            } else {
-                additionalDocs.style.display = 'none';
-                document.getElementById('license_more').removeAttribute('required');
-            }
-        });
-
-        // Trigger change on page load to handle edit mode
-        document.getElementById('license_type').dispatchEvent(new Event('change'));
-
+      
     });
+    // Show/hide additional documents based on lelang_type
+      document.getElementById('license_type').addEventListener('change', function() {
+        console.log(this.value);
+          const additionalDocs = document.getElementById('license_more');
+          if (this.value === 'Lainnya') {
+              additionalDocs.style.display = 'block';
+              document.getElementById('license_more').setAttribute('required', 'required');
+          } else {
+              additionalDocs.style.display = 'none';
+              document.getElementById('license_more').removeAttribute('required');
+          }
+      });
+
+      // Trigger change on page load to handle edit mode
+      document.getElementById('license_type').dispatchEvent(new Event('change'));
   </script>
 @endsection

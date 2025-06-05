@@ -206,7 +206,7 @@
 
         <div class="row gy-4">
           <div class="col-lg-5" data-aos="fade-up" data-aos-delay="100">
-            <img src="{{ asset('assets_landing/img/pejabat/DSC08182.JPG') }}" class="chief-image object-fit-cover text-center" alt="">
+            <img src="{{ asset('assets_landing/img/pejabat/Kadek.jpeg') }}" class="chief-image object-fit-cover text-center" alt="">
             
           </div>
           <div class="col-lg-7" data-aos="fade-up" data-aos-delay="200">
@@ -227,7 +227,7 @@
                 memberikan masukan yang konstruktif. Semoga dengan kehadiran situs ini, kita dapat meningkatkan 
                 kualitas interaksi, informasi, dan komunikasi antara BLU Kantor UPBU Kelas I APT. Pranoto Samarinda dengan masyarakat."
               </p>
-              <div class="signature">Maeka Rindra Hariyanto, SE., M.Si</div>
+              <div class="signature">I Kadek Yuli Sastrawan, S.Ikom., S.SiT.</div>
               <div class="title">Kepala BLU Kantor UPBU Kelas I APT. Pranoto Samarinda</div>
 
               

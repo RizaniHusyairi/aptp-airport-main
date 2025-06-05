@@ -15,7 +15,7 @@
       <div class="container">
         <!-- Daftar Nama Pejabat -->
         <div class="nav nav-tabs justify-content-center mb-4" id="officialTabs" role="tablist">
-            <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#tab-maeka" type="button" role="tab" aria-controls="tab-maeka" aria-selected="true">Maeka Rindra Hariyanto</button>
+            <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#tab-kadek" type="button" role="tab" aria-controls="tab-kadek" aria-selected="true">I Kadek Yuli Sastrawan</button>
             <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-zaldi" type="button" role="tab" aria-controls="tab-zaldi" aria-selected="false">Zaldi Ardian</button>
             <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-mochamad" type="button" role="tab" aria-controls="tab-mochamad" aria-selected="false">Mochamad Ikhsan Fadilah</button>
             <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-roslan" type="button" role="tab" aria-controls="tab-roslan" aria-selected="false">Roslan</button>
@@ -23,15 +23,15 @@
         </div>
         <div class="swiper-container">
             <div class="swiper-wrapper">
-                <!-- Slide 1: Maeka Rindra Hariyanto -->
+                <!-- Slide 1: I Kadek Yuli Sastrawan, S.Ikom., S.SiT. -->
                 <div class="swiper-slide">
                     <div class="row card official-card card-pejabat">
-                        <img src="{{ asset('/assets_landing/img/pejabat/maeka.JPG') }}" class="card-img-pejabat p-0 col-lg-4" alt="Maeka Rindra Hariyanto" loading="lazy">
+                        <img src="{{ asset('/assets_landing/img/pejabat/kadek.jpeg') }}" class="card-img-pejabat p-0 col-lg-4" alt="Maeka Rindra Hariyanto" loading="lazy">
                         <div class="card-body text-left col-lg-8">
-                            <h5 class="card-title">Maeka Rindra Hariyanto, SE. M.Si</h5>
+                            <h5 class="card-title">I Kadek Yuli Sastrawan, S.Ikom., S.SiT.</h5>
                             <p class="card-text">Kepala BLU Kantor UPBU Kelas I A.P.T. Pranoto</p>
                             <!-- <button class="btn btn-pejabat read-more" data-target="#detail-maeka">Baca Profil Selengkapnya</button> -->
-                            <button class="btn btn-pejabat read-more" data-target="#profile-maeka">Baca Profil Selengkapnya</button>
+                            <button class="btn btn-pejabat read-more" data-target="#profile-kadek">Baca Profil Selengkapnya</button>
                             </div>
                     </div>
                     
@@ -40,7 +40,7 @@
                 <!-- Slide 2: Zaldi Ardian -->
                 <div class="swiper-slide">
                     <div class="card official-card row card-pejabat">
-                        <img src="{{ asset('/assets_landing/img/pejabat/zaldi.JPG') }}" class="card-img-pejabat p-0 col-lg-4" alt="Zaldi Ardian" loading="lazy">
+                        <img src="{{ asset('/assets_landing/img/pejabat/zaldi.JPG') }}"  class="card-img-pejabat p-0 col-lg-4" alt="Zaldi Ardian" loading="lazy">
                         <div class="card-body col-lg-8">
                             <h5 class="card-title">Zaldi Ardian, A.Md</h5>
                             <p class="card-text">Kepala Subbagian Keuangan dan Tata Usaha</p>
@@ -68,7 +68,7 @@
                 <!-- Slide 4: Denny Armanto -->
                 <div class="swiper-slide">
                     <div class="card official-card row card-pejabat">
-                        <img src="{{ asset('/assets_landing/img/pejabat/denny2.JPG') }}" class="card-img-pejabat p-0 col-lg-4" alt="Denny Armanto" loading="lazy">
+                        <img src="{{ asset('/assets_landing/img/pejabat/ruslam.png') }}" class="card-img-pejabat p-0 col-lg-4" alt="Denny Armanto" loading="lazy">
                         <div class="card-body col-lg-8">
                             <h5 class="card-title">Roslan, S.E.</h5>
                             <p class="card-text">Kepala Seksi Pelayanan dan Kerjasama</p>
@@ -80,7 +80,7 @@
                 <!-- Slide 5: MURDOKO, S.H. -->
                 <div class="swiper-slide">
                     <div class="card official-card row card-pejabat">
-                        <img src="{{ asset('/assets_landing/img/pejabat/murdoko.JPG') }}" class="card-img-pejabat p-0 col-lg-4" alt="Murdoko" loading="lazy">
+                        <img src="{{ asset('/assets_landing/img/pejabat/murdoko5.jpg') }}" class="card-img-pejabat p-0 col-lg-4" alt="Murdoko" loading="lazy">
                         <div class="card-body col-lg-8">
                             <h5 class="card-title">MURDOKO, S.H.</h5>
                             <p class="card-text">Kepala Seksi Teknik dan Operasi</p>
@@ -100,7 +100,7 @@
         <div class="modal-content">
             <span class="close-btn">&times;</span>
             <div class="profile-card">
-                <img src="" alt="Profile Image" class="profile-img">
+                <img src="" alt="Profile Image" class="profile-img" style="object-position: top;">
                 <h5 class="profile-name"></h5>
                 <p class="profile-position"></p>
                 <div class="profile-details"></div>
@@ -109,10 +109,20 @@
     </div>
 
     <!-- Hidden Profile Details -->
-    <div id="profile-maeka" class="hidden-profile">
-        <p><strong>Riwayat Jabatan:</strong> Plt. Kepala Seksi Angkutan Udara Dishub Kaltim (2012–2014), berbagai posisi struktural lainnya, Kepala Kantor UPBU A.P.T. Pranoto (2023–Sekarang).</p>
-        <p><strong>Pendidikan:</strong> S2 Magister Ekonomi Universitas Mulawarman.</p>
-        <p><strong>Penghargaan:</strong> Satya Lancana Karya Satya 10 & 20 Tahun.</p>
+    <div id="profile-kadek" class="hidden-profile">
+        <p><strong>Riwayat Jabatan:</strong> <br> 
+-	Kepala Kantor Otoritas Bandara Wilayah VII Sepinggan – Balikpapan (Juni 2024 – Agustus 2024) <br>
+-	Kepala Bidang Pelayanan dan Pengoperasian Bandar Udara Kantor Otoritas Bandara Wilayah IV Bali (2024-2025) <br>
+-	Kepala BLU Kantor UPBU Kelas I A.P.T. Pranoto – Samarinda (2025 – sekarang) 
+</p>
+        <p><strong>Pendidikan:</strong> <br> -	D-II PLP Curug Jurusan Lalu Lintas Udara <br>
+-	D-III ATKP Makassar Jurusan Lalu Lintas Udara <br>
+-	D-IV STPI Curug Jurusan Lalu Lintas Udara <br>
+-	S-1 Ilmu Komunikasi Universitas Terbuka Palu 
+</p>
+        <p><strong>Penghargaan:</strong>  <br> - Satya Lancana Karya Satya 10 Tahun (2014) <br>
+-	Satya Lancana Karya Satya 20 Tahun (2018)
+.</p>
     </div>
     <div id="profile-zaldi" class="hidden-profile">
         <p><strong>Riwayat Jabatan:</strong> Kepala Kantor UPBU Maratua (2020–2024), kini Kepala Subbagian Tata Usaha A.P.T. Pranoto.</p>

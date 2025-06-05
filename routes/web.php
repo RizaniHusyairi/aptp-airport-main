@@ -35,6 +35,8 @@ use App\Http\Controllers\{
     LandingPageController,
     SandboxController,
     SidebarControler,
+    SlotController
+
 };
 
 Auth::routes();
@@ -67,6 +69,11 @@ Route::group(["prefix" => 'dashboard'], function () {
         Route::get('/lelang/create', [LelangController::class, 'create'])->name('lelang.create');
         Route::post('/lelang/store', [LelangController::class, 'store'])->name('lelang.store');
         Route::delete('/lelang/{id}', [LelangController::class, 'destroy'])->name('lelang.destroy');
+        
+        Route::get('/slot', [SlotController::class, 'indexUser'])->name('slot.index');
+        Route::get('/slot/create', [SlotController::class, 'create'])->name('slot.create');
+        Route::post('/slot/store', [SlotController::class, 'store'])->name('slot.store');
+        Route::delete('/slot/{id}', [SlotController::class, 'destroy'])->name('slot.destroy');
         
         // Pengiklanan User Routes
         Route::get('/pengiklanan', [PengiklananController::class, 'indexUser'])->name('pengiklanan.index');
@@ -124,6 +131,12 @@ Route::group(["prefix" => 'dashboard'], function () {
             Route::get('staff/lelang/{id}', [LelangController::class, 'show'])->name('lelang.show');
             Route::patch('staff/lelang/{id}/approve', [LelangController::class, 'approve'])->name('lelang.approve');
             Route::patch('staff/lelang/{id}/reject', [LelangController::class, 'reject'])->name('lelang.reject');
+            
+            // Slot Staff Routes
+            Route::get('staff/slot', [SlotController::class, 'index'])->name('slot.staffIndex');
+            Route::get('staff/slot/{id}', [SlotController::class, 'show'])->name('slot.show');
+            Route::patch('staff/slot/{id}/approve', [SlotController::class, 'approve'])->name('slot.approve');
+            Route::patch('staff/slot/{id}/reject', [SlotController::class, 'reject'])->name('slot.reject');
             
             // Pengiklanan Staff Routes
             Route::get('staff/pengiklanan', [PengiklananController::class, 'index'])->name('pengiklanan.staffIndex');
