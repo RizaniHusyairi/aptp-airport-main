@@ -1,0 +1,135 @@
+/* Logo styling */
+.sidebar-wrapper .sidebar-header .logo-apt img,
+html[data-bs-theme=dark] .sidebar-wrapper .sidebar-header .logo-apt img {
+    width: 5.5rem;
+    height: 5.5rem;
+    transition: all 0.3s ease;
+}
+
+.sidebar-wrapper .sidebar-header .logo-mini-apt img,
+html[data-bs-theme=dark] .sidebar-wrapper .sidebar-header .logo-mini-apt img {
+    width: 2.5rem;
+    height: 2.5rem;
+    transition: all 0.3s ease;
+}
+
+.sidebar-wrapper .sidebar-header,
+html[data-bs-theme=dark] .sidebar-wrapper .sidebar-header {
+    padding: 2rem 2rem 0;
+    text-align: center;
+}
+
+/* DataTables fix */
+.dataTables_scrollHeadInner,
+.dataTables_scrollHeadInner table {
+    width: 100% !important;
+}
+
+/* Mode icon-only untuk sidebar */
+.sidebar-wrapper,
+html[data-bs-theme=dark] .sidebar-wrapper {
+    transition: all 0.3s ease;
+    overflow-x: hidden;
+}
+
+.sidebar-wrapper.icon-only,
+html[data-bs-theme=dark] .sidebar-wrapper.icon-only {
+    width: 80px;
+}
+
+.sidebar-wrapper.icon-only .sidebar-menu .sidebar-link span {
+    display: none;
+}
+
+.sidebar-wrapper.icon-only .sidebar-menu .sidebar-link {
+    justify-content: center;
+    position: relative;
+}
+
+.sidebar-wrapper.icon-only .sidebar-menu .sidebar-link i {
+    margin-right: 0;
+    font-size: 1.2rem;
+}
+
+/* Logo toggle */
+.sidebar-wrapper .logo .logo-apt {
+    display: block;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+.sidebar-wrapper.icon-only .logo .logo-apt {
+    display: none;
+    opacity: 0;
+}
+
+.sidebar-wrapper .logo .logo-mini-apt {
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.sidebar-wrapper.icon-only .logo .logo-mini-apt {
+    display: block;
+    opacity: 1;
+}
+
+.sidebar-wrapper.icon-only .sidebar-title {
+    display: none;
+}
+
+.sidebar-wrapper.icon-only .theme-toggle {
+    display: none !important;
+    justify-content: center;
+    margin-left: 10px;
+}
+
+.sidebar-wrapper.icon-only .sidebar-header .logo {
+    text-align: center;
+}
+
+/* Sesuaikan konten utama */
+#main {
+    transition: margin-left 0.3s ease;
+}
+
+#main.icon-only-margin {
+    margin-left: 80px !important;
+}
+
+/* Responsivitas */
+@media (max-width: 767px) {
+    .sidebar-wrapper {
+        display: none;
+    }
+
+    .sidebar-wrapper.active {
+        display: block;
+    }
+
+    .burger-btn-dekstop {
+        display: none;
+    }
+
+    .burger-btn, html[data-bs-theme=dark] .burger-btn {
+        display: block;
+    }
+
+    
+}
+
+@media (min-width: 768px) {
+    .sidebar-wrapper {
+        display: block !important;
+    }
+
+    .burger-btn, html[data-bs-theme=dark] .burger-btn {
+        display: none;
+    }
+
+    .burger-btn-dekstop {
+        display: block;
+    }
+
+    
+}

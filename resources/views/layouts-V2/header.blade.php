@@ -11,7 +11,7 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
-                @include('components.user-dropdown')
+                @include('components.userDropdowns')
             </div>
         </div>
     </nav>

@@ -1,0 +1,23 @@
+/* Logo styling */
+.sidebar-wrapper .sidebar-header .logo-apt img,
+html[data-bs-theme=dark] .sidebar-wrapper .sidebar-header .logo-apt img {
+    width: 5.5rem;
+    height: 5.5rem;
+    transition: all 0.3s ease;
+}
+
+.sidebar-wrapper .sidebar-header .logo-mini-apt img,
+html[data-bs-theme=dark] .sidebar-wrapper .sidebar-header .logo-mini-apt img {
+    width: 2.5rem;
+    height: 2.5rem;
+    transition: all 0.3s ease;
+}
+
+
+
+.sidebar-wrapper .sidebar-header, html[data-bs-theme=dark] .sidebar-wrapper .sidebar-header{
+    padding: 2rem 2rem 0;
+}
+.dataTables_scrollHeadInner, .dataTables_scrollHeadInner table{
+    width: 100%;
+}

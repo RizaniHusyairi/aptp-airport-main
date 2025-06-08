@@ -171,11 +171,12 @@ class HomeController extends Controller
             "flightStatusChart" => $flightStatusChart,
         ];
 
-        return view('admin.index', compact(
-            'data', 'dates', 'totals', 'years', 'filterTahun', 'filterTahunPie',
-            'jenis_filter', 'labels', 'dataPemasukan',
-            'anggaran', 'totalPengeluaran', 'showPieChart'
-        ));
+        // return view('admin.index', compact(
+        //     'data', 'dates', 'totals', 'years', 'filterTahun', 'filterTahunPie',
+        //     'jenis_filter', 'labels', 'dataPemasukan',
+        //     'anggaran', 'totalPengeluaran', 'showPieChart'
+        // ));
+        return view('admin2.dashboard.index');
     }
 
 
