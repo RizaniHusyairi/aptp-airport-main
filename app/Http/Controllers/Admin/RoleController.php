@@ -12,59 +12,35 @@ class RoleController extends Controller
 {
     public function index(Request $request)
     {
-        if ($request->ajax()) {
-            $data = Role::with('permissions');
-            return DataTables::of($data)->addIndexColumn()
-                ->setRowClass(fn ($row) => 'align-middle')
-                ->addColumn('permissions', function ($row) {
-                    $colorMap = [
-                        'Manajemen Tenant' => 'primary',
-                        'Manajemen Sewa Lahan' => 'success',
-                        'Manajemen Perijinan Usaha' => 'warning',
-                        'Manajemen Pengiklanan' => 'info',
-                        'Manajemen Field Trip' => 'secondary',
-                        'Manajemen Berita' => 'danger',
-                        'Manajemen Laporan Keuangan' => 'dark',
-                        'Manajemen Slider' => 'light',
-                    ];
-                
-                    return $row->permissions->map(function ($p) use ($colorMap) {
-                        $color = $colorMap[$p->permission_name] ?? 'secondary'; // fallback jika tidak ditemukan
-                        return '<span class="badge bg-' . $color . ' me-1">' . $p->permission_name . '</span>';
-                    })->implode(' ');
-                })
-                ->addColumn('action', function ($row) {
-                    $td = '<td>';
-                    $td .= '<div class="d-flex">';
-                    $td .= '<a href="' . route('roles.edit', $row->id) . '" type="button" class="btn btn-sm btn-primary waves-effect waves-light me-1">Edit</a>';
-                    $td .= '<form action="' . route('roles.destroy', $row->id) . '" method="POST" style="display:inline;">';
-                    $td .= method_field('DELETE');
-                    $td .= csrf_field();
-                    $td .= '<button type="submit" class="btn btn-sm btn-danger waves-effect waves-light">Hapus</button>';
-                    $td .= '</form>';
-                    $td .= "</div>";
-                    $td .= "</td>";
-                    return $td;
-                })
-                ->editColumn('created_at', fn ($row) => formatDate($row->created_at))
-                ->rawColumns(['permissions', 'action'])
-                ->make(true);
-        }
-        return view('admin.roles.index');
+        
+        $roles = Role::with('permissions')->get();
+        
+
+        return view('admin2.roles.index', compact('roles'));
+
     }
 
     public function create(Request $request){
-        $permissions = Permission::all();
-        return view('admin.roles.create')->with('permissions', $permissions);
+        $permissions = Permission::all(['id', 'permission_name']);
+
+        return view('admin2.roles.create', compact('permissions'));
+        
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|unique:roles,name',
-            'permissions' => 'array',
-            'permissions.*' => 'exists:permissions,id',
+            'name' => ['required', 'string', 'max:255', 'unique:roles,name'],
+            'permissions' => ['required', 'array', 'min:1'],
+            'permissions.*' => ['exists:permissions,id'],
+        ], [
+            'name.required' => 'Nama role wajib diisi.',
+            'name.unique' => 'Nama role sudah digunakan.',
+            'permissions.required' => 'Pilih setidaknya satu izin.',
+            'permissions.min' => 'Pilih setidaknya satu izin.',
+            'permissions.*.exists' => 'Izin yang dipilih tidak valid.',
         ]);
+        
 
         $role = Role::create(['name' => $request->name]);
 

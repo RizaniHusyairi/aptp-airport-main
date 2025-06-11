@@ -67,70 +67,63 @@ class CustomerController extends Controller
 
     public function index(Request $request)
 {
-    if ($request->ajax()) {
-        $data = User::whereIn('is_accepted', [0, 1])
-            ->withCount('tickets')
-            ->select(['id', 'name', 'email', 'phone', 'is_accepted', 'created_at']);
+    // if ($request->ajax()) {
+    //     $data = User::whereIn('is_accepted', [0, 1])
+    //         ->withCount('tickets')
+    //         ->select(['id', 'name', 'email', 'phone', 'is_accepted', 'created_at']);
 
-        return DataTables::eloquent($data)
-            ->addIndexColumn()
-            ->filter(function ($query) use ($request) {
-                if ($request->has('search') && !empty($request->search['value'])) {
-                    $search = $request->search['value'];
-                    $query->where(function($q) use ($search) {
-                        $q->where('name', 'like', "%$search%")
-                          ->orWhere('email', 'like', "%$search%")
-                          ->orWhere('phone', 'like', "%$search%");
-                    });
-                }
-            })
-            ->addColumn('action', function ($row) {
-                return '<div class="d-flex">
-                    <a href="' . route('customers.show', $row->id) . '" 
-                       class="btn btn-sm btn-primary waves-effect waves-light me-1">
-                       Lihat
-                    </a>
-                </div>';
-            })
-            // ->editColumn('tickets_count', function ($row) {
-            //     return '<span class="badge badge-pill badge-soft-info font-size-14">' 
-            //            . $row->tickets_count . '</span>';
-            // })
-            ->editColumn('is_accepted', function($row) {
-                return $row->is_accepted 
-                    ? '<span class="badge bg-success">Terverifikasi</span>'
-                    : '<span class="badge bg-danger">Belum Terverifikasi</span>';
-            })
-            ->editColumn('created_at', function($row) {
-                // dd($row->created_at);
-                // Format the created_at date
-                return \Carbon\Carbon::parse($row->created_at)->format('d/m/Y');
-                // return $row->created_at ? $row->created_at->format('d/m/Y H:i') : '';
-            })
-            ->rawColumns(['action', 'tickets_count', 'is_accepted'])
-            ->toJson();
-    }
-    return view('admin.customers.index');
+    //     return DataTables::eloquent($data)
+    //         ->addIndexColumn()
+    //         ->filter(function ($query) use ($request) {
+    //             if ($request->has('search') && !empty($request->search['value'])) {
+    //                 $search = $request->search['value'];
+    //                 $query->where(function($q) use ($search) {
+    //                     $q->where('name', 'like', "%$search%")
+    //                       ->orWhere('email', 'like', "%$search%")
+    //                       ->orWhere('phone', 'like', "%$search%");
+    //                 });
+    //             }
+    //         })
+    //         ->addColumn('action', function ($row) {
+    //             return '<div class="d-flex">
+    //                 <a href="' . route('customers.show', $row->id) . '" 
+    //                    class="btn btn-sm btn-primary waves-effect waves-light me-1">
+    //                    Lihat
+    //                 </a>
+    //             </div>';
+    //         })
+    //         // ->editColumn('tickets_count', function ($row) {
+    //         //     return '<span class="badge badge-pill badge-soft-info font-size-14">' 
+    //         //            . $row->tickets_count . '</span>';
+    //         // })
+    //         ->editColumn('is_accepted', function($row) {
+    //             return $row->is_accepted 
+    //                 ? '<span class="badge bg-success">Terverifikasi</span>'
+    //                 : '<span class="badge bg-danger">Belum Terverifikasi</span>';
+    //         })
+    //         ->editColumn('created_at', function($row) {
+    //             // dd($row->created_at);
+    //             // Format the created_at date
+    //             return \Carbon\Carbon::parse($row->created_at)->format('d/m/Y');
+    //             // return $row->created_at ? $row->created_at->format('d/m/Y H:i') : '';
+    //         })
+    //         ->rawColumns(['action', 'tickets_count', 'is_accepted'])
+    //         ->toJson();
+    // }
+    $users = User::select('id', 'name', 'email', 'phone', 'created_at', 'is_accepted')
+            ->where('is_admin', false) // Hanya pengguna non-admin
+            ->get();
+
+    return view('admin2.users.index', compact('users'));
 }
 
 
     public function show(Request $request, User $user)
     {
-        $user->load('tickets');
         $roles = Role::with('permissions')->get(); 
         $userRoles = $user->roles->pluck('id')->toArray();
-        $colorMap = [
-            'Manajemen Tenant' => 'primary',
-            'Manajemen Sewa Lahan' => 'success',
-            'Manajemen Perijinan Usaha' => 'warning',
-            'Manajemen Pengiklanan' => 'info',
-            'Manajemen Field Trip' => 'secondary',
-            'Manajemen Pergudangan' => 'danger',
-            'Manajemen Laporan Keuangan' => 'dark',
-            'Manajemen Slider' => 'light',
-            'Manajemen Lelang' => 'pink',
-            'Manajemen Pengaduan' => 'purple',
-        ];
+        
+
 
         if ($request->ajax()) {
             return Datatables::of($user->tickets)->addIndexColumn()
@@ -180,7 +173,7 @@ class CustomerController extends Controller
                 ->make(true);
         }
 
-        return view('admin.customers.show', compact('user', 'roles', 'colorMap', 'userRoles'));
+        return view('admin2.users.show', compact('user', 'roles', 'userRoles'));
     }
     
     public function updateRole(Request $request, User $user)

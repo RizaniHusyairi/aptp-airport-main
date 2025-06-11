@@ -2,22 +2,23 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
+use Carbon\Carbon;
+use App\Models\User;
+use App\Models\Plane;
+use App\Models\Flight;
+use App\Models\Slider;
+use App\Models\Ticket;
 use App\Models\Airline;
 use App\Models\Airport;
-use App\Models\Flight;
-use App\Models\Plane;
-use App\Models\Ticket;
-use App\Models\User;
 use App\Models\Finance;
-use App\Models\BudgetExpense;
-use App\Models\Slider;
 use App\Models\Visitor;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\App;
+use App\Models\BudgetExpense;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\App;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 
 class HomeController extends Controller
@@ -41,6 +42,10 @@ class HomeController extends Controller
 
     public function root(Request $request)
     {
+        // Total Pengunjung
+        $totalVisitors = Visitor::count();
+        
+        // 1. DATA GRAFIK BAR (PEMASUKAN)
         // Ambil semua tahun unik dari tabel finances
         $years = Finance::selectRaw('YEAR(date) as year')
             ->distinct()
@@ -52,74 +57,179 @@ class HomeController extends Controller
         $filterTahunPie = $request->get('tahun_pie', date('Y'));
         $jenis_filter = $request->get('jenis_filter', 'bulan');
 
-        // 1. DATA GRAFIK BAR (PEMASUKAN)
-        $labels = [];
-        $dataPemasukan = [];
+        // Grafik Pemasukan
+        // Untuk semua tahun
+        // Grafik Pemasukan
+        // Untuk semua tahun
+        $allYearsPemasukan = Finance::select(
+            DB::raw('YEAR(date) as year'),
+            DB::raw('SUM(amount) / 1000000 as total') // Bagi 1 juta
+        )
+            ->where('flow_type', 'in')
+            ->groupBy('year')
+            ->orderBy('year')
+            ->get()
+            ->pluck('total', 'year')
+            ->toArray();
 
-        if ($jenis_filter == 'bulan') {
-            // Label bulan
-            $labels = [
-                'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
-                'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
-            ];
-
-            // Inisialisasi data 0 untuk 12 bulan
-            $dataPemasukan = array_fill(0, 12, 0);
-
-            // Query pemasukan per bulan di tahun terpilih
-            $pemasukanPerBulan = Finance::selectRaw('MONTH(date) as month, SUM(amount) as total')
+        // Untuk setiap tahun (data bulanan)
+        $pemasukanByYear = [];
+        foreach ($years as $year) {
+            $monthlyPemasukan = Finance::select(
+                DB::raw('DATE_FORMAT(date, "%b %Y") as month'),
+                DB::raw('SUM(amount) / 1000000 as total') // Bagi 1 juta
+            )
                 ->where('flow_type', 'in')
-                ->whereYear('date', $filterTahun)
+                ->whereYear('date', $year)
                 ->groupBy('month')
-                ->get();
-
-            // Masukkan ke array
-            foreach ($pemasukanPerBulan as $item) {
-                $index = $item->month - 1; // Index bulan (0-11)
-                $dataPemasukan[$index] = (float) $item->total;
-            }
-        } else {
-            // jenis_filter == tahun
-
-            // Ambil semua tahun dari finances flow_type = in
-            $tahunRange = Finance::selectRaw('YEAR(date) as year')
-                ->where('flow_type', 'in')
-                ->distinct()
-                ->orderBy('year')
-                ->pluck('year')
+                ->orderBy(DB::raw('MIN(date)'))
+                ->get()
+                ->pluck('total', 'month')
                 ->toArray();
 
-            foreach ($tahunRange as $year) {
-                $labels[] = $year;
+            $months = array_map(function ($i) use ($year) {
+                return Carbon::create($year, $i, 1)->format('M Y');
+            }, range(1, 12));
 
-                $total = Finance::where('flow_type', 'in')
-                    ->whereYear('date', $year)
-                    ->sum('amount');
-
-                $dataPemasukan[] = (float) $total;
+            $data = array_fill(0, 12, 0);
+            foreach ($monthlyPemasukan as $month => $total) {
+                $index = array_search($month, $months);
+                if ($index !== false) {
+                    $data[$index] = (float)$total; // Gunakan float untuk presisi
+                }
             }
+
+            $pemasukanByYear[$year] = [
+                'categories' => $months,
+                'data' => $data,
+            ];
         }
 
+        $pemasukanData = [
+            'all' => [
+                'categories' => $years,
+                'data' => array_map(function ($year) use ($allYearsPemasukan) {
+                    return isset($allYearsPemasukan[$year]) ? (float)$allYearsPemasukan[$year] : 0;
+                }, $years),
+            ],
+        ] + $pemasukanByYear;
+
+
         // 2. DATA GRAFIK PIE (ANGGARAN VS PENGELUARAN)
-        $anggaran = Finance::where('flow_type', 'budget')
-            ->whereYear('date', $filterTahunPie)
-            ->sum('amount');
+// Grafik Anggaran dan Belanja
+        // Untuk semua tahun
+        $allYearsAnggaran = Finance::select(
+            DB::raw('YEAR(date) as year'),
+            DB::raw('SUM(amount) / 1000000 as total') // Bagi 1 juta
+        )
+            ->where('flow_type', 'budget')
+            ->groupBy('year')
+            ->orderBy('year')
+            ->get()
+            ->pluck('total', 'year')
+            ->toArray();
 
-        $totalPengeluaran = BudgetExpense::whereHas('finance', function ($query) use ($filterTahunPie) {
-            $query->whereYear('date', $filterTahunPie);
-        })->sum('amount');
+        $allYearsBelanja = BudgetExpense::select(
+            DB::raw('YEAR(finances.date) as year'),
+            DB::raw('SUM(budget_expenses.amount) / 1000000 as total') // Bagi 1 juta
+        )
+            ->join('finances', 'budget_expenses.finance_id', '=', 'finances.id')
+            ->where('finances.flow_type', 'budget')
+            ->groupBy('year')
+            ->orderBy(DB::raw('MIN(finances.date)'))
+            ->get()
+            ->pluck('total', 'year')
+            ->toArray();
 
-        $showPieChart = ($anggaran > 0 || $totalPengeluaran > 0);
+        // Untuk setiap tahun (data bulanan)
+        $anggaranBelanjaByYear = [];
+        foreach ($years as $year) {
+            $monthlyAnggaran = Finance::select(
+                DB::raw('DATE_FORMAT(date, "%b %Y") as month'),
+                DB::raw('SUM(amount) / 1000000 as total') // Bagi 1 juta
+            )
+                ->where('flow_type', 'budget')
+                ->whereYear('date', $year)
+                ->groupBy('month')
+                ->orderBy(DB::raw('MIN(date)'))
+                ->get()
+                ->pluck('total', 'month')
+                ->toArray();
+
+            $monthlyBelanja = BudgetExpense::select(
+                DB::raw('DATE_FORMAT(finances.date, "%b %Y") as month'),
+                DB::raw('SUM(budget_expenses.amount) / 1000000 as total') // Bagi 1 juta
+            )
+            ->join('finances', 'budget_expenses.finance_id', '=', 'finances.id')
+            ->where('finances.flow_type', 'budget')
+            ->whereYear('finances.date', $year)
+            ->groupBy('month')
+            ->orderBy(DB::raw('MIN(finances.date)'))
+            ->get()
+            ->pluck('total', 'month')
+            ->toArray();
+
+            $months = array_map(function ($i) use ($year) {
+                return Carbon::create($year, $i, 1)->format('M Y');
+            }, range(1, 12));
+
+            $anggaranData = array_fill(0, 12, 0);
+            $belanjaData = array_fill(0, 12, 0);
+
+            foreach ($monthlyAnggaran as $month => $total) {
+                $index = array_search($month, $months);
+                if ($index !== false) {
+                    $anggaranData[$index] = (float)$total;
+                }
+            }
+
+            foreach ($monthlyBelanja as $month => $total) {
+                $index = array_search($month, $months);
+                if ($index !== false) {
+                    $belanjaData[$index] = (float)$total;
+                }
+            }
+
+            $anggaranBelanjaByYear[$year] = [
+                'categories' => $months,
+                'anggaran' => $anggaranData,
+                'belanja' => $belanjaData,
+            ];
+        }
+
+        $anggaranBelanjaData = [
+            'all' => [
+                'categories' => $years,
+                'anggaran' => array_map(function ($year) use ($allYearsAnggaran) {
+                    return isset($allYearsAnggaran[$year]) ? (float)$allYearsAnggaran[$year] : 0;
+                }, $years),
+                'belanja' => array_map(function ($year) use ($allYearsBelanja) {
+                    return isset($allYearsBelanja[$year]) ? (float)$allYearsBelanja[$year] : 0;
+                }, $years),
+            ],
+        ] + $anggaranBelanjaByYear;
 
         // 3. DATA KUNJUNGAN (VISITORS)
-        $visitors = Visitor::select(DB::raw('DATE(created_at) as date'), DB::raw('count(*) as total'))
-            ->whereDate('created_at', '>=', now()->subDays(6))
+        $visitorData = Visitor::select(
+            DB::raw('DATE(created_at) as date'),
+            DB::raw('COUNT(*) as count')
+        )
+            ->where('created_at', '>=', Carbon::today()->subDays(7))
             ->groupBy('date')
-            ->orderBy('date', 'asc')
-            ->get();
+            ->orderBy('date', 'desc')
+            ->get()
+            ->pluck('count', 'date')
+            ->toArray();
 
-        $dates = $visitors->pluck('date');
-        $totals = $visitors->pluck('total');
+        $visitorCategories = [];
+        $visitorSeries = [];
+        for ($i = 6; $i >= 0; $i--) {
+            $date = Carbon::today()->subDays($i)->format('d/m/Y');
+            $visitorCategories[] = $date;
+            $visitorSeries[] = isset($visitorData[Carbon::today()->subDays($i)->format('Y-m-d')]) 
+                ? $visitorData[Carbon::today()->subDays($i)->format('Y-m-d')] 
+                : 0;
+        }
 
         // 4. DATA SUMMARY
         $totalAirline = Airline::count();
@@ -176,7 +286,14 @@ class HomeController extends Controller
         //     'jenis_filter', 'labels', 'dataPemasukan',
         //     'anggaran', 'totalPengeluaran', 'showPieChart'
         // ));
-        return view('admin2.dashboard.index');
+        return view('admin2.dashboard.index', compact(
+            'totalVisitors',
+            'visitorCategories',
+            'visitorSeries',
+            'years',
+            'pemasukanData',
+            'anggaranBelanjaData'
+        ));
     }
 
 

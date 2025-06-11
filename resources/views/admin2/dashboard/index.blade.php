@@ -34,7 +34,7 @@
                             </div>
                             <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
                                 <h6 class="text-muted font-semibold">Total Pengunjung website</h6>
-                                <h6 class="font-extrabold mb-0">112.000</h6>
+                                <h6 class="font-extrabold mb-0">{{ number_format($totalVisitors) }}</h6>
                             </div>
                         </div>
                     </div>
@@ -57,8 +57,10 @@
                         <div class="card-header d-flex justify-content-between align-items-center">
                             <h4>Grafik Pemasukan</h4>
                             <select id="pemasukan-filter" class="form-select w-auto">
-                                <option value="monthly">Bulanan</option>
-                                <option value="yearly">Tahunan</option>
+                                <option value="all">Semua Tahun</option>
+                                    @foreach ($years as $year)
+                                        <option value="{{ $year }}">{{ $year }}</option>
+                                    @endforeach
                             </select>
                         </div>
                         <div class="card-body">
@@ -71,8 +73,10 @@
                         <div class="card-header d-flex justify-content-between align-items-center">
                             <h4>Grafik Perbandingan Anggaran dan Belanja</h4>
                             <select id="anggaran-belanja-filter" class="form-select w-auto">
-                                <option value="monthly">Bulanan</option>
-                                <option value="yearly">Tahunan</option>
+                                <option value="all">Semua Tahun</option>
+                                    @foreach ($years as $year)
+                                        <option value="{{ $year }}">{{ $year }}</option>
+                                    @endforeach
                             </select>
                         </div>
                         <div class="card-body">
@@ -84,6 +88,13 @@
             </div>
         </section>
     </div>
+    <script>
+            // Kirim data dari PHP ke JavaScript
+            window.visitorCategories = @json($visitorCategories);
+            window.visitorSeries = @json($visitorSeries);
+            window.pemasukanData = @json($pemasukanData);
+            window.anggaranBelanjaData = @json($anggaranBelanjaData);
+    </script>
 @endsection
 @section('scripts_admin')
     <script src="{{ asset('assetsv2/extensions/apexcharts/apexcharts.min.js') }}"></script>

@@ -107,7 +107,7 @@ class TenantController extends Controller
     public function index()
     {
         $tenants = Tenant::with('users')->latest()->get();
-        return view('user_staff.tenant.index', compact('tenants'));     
+        return view('user_staff2.tenant.index', compact('tenants'));     
     }
     public function show($id)
     {

@@ -21,7 +21,7 @@ $(document).ready(function() {
         var $sidebar = $('.sidebar-wrapper');
         var $main = $('#main');
 
-        if ($(window).width() >= 768) {
+        if ($(window).width() >= 1200) {
             $sidebar.show();
         }else{
             if ($('.sidebar-wrapper').hasClass('icon-only')) {

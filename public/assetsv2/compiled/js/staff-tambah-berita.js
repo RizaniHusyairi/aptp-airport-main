@@ -19,13 +19,18 @@ $(document).ready(function() {
         placeholder: 'Tulis isi berita di sini...'
     });
 
+    var initialContent = $('#content').val();
+    if (initialContent) {
+        quill.root.innerHTML = initialContent;
+    }
+
     // Update hidden input dengan konten Quill
     quill.on('text-change', function() {
-        $('#isi').val(quill.root.innerHTML);
+        $('#content').val(quill.root.innerHTML);
     });
 
     // Pratinjau gambar
-    $('#gambar').on('change', function(e) {
+    $('#image').on('change', function(e) {
         const file = e.target.files[0];
         if (file) {
             const reader = new FileReader();
@@ -41,7 +46,7 @@ $(document).ready(function() {
     // Validasi file extension dan ukuran
     Parsley.addValidator('fileextension', {
         validateString: function(value, requirement) {
-            const file = $('#gambar')[0].files[0];
+            const file = $('#image')[0].files[0];
             if (!file) return true;
             const extension = file.name.split('.').pop().toLowerCase();
             return requirement.split(',').includes(extension);
@@ -53,7 +58,7 @@ $(document).ready(function() {
 
     Parsley.addValidator('maxfilesize', {
         validateString: function(value, maxSizeMB) {
-            const file = $('#gambar')[0].files[0];
+            const file = $('#image')[0].files[0];
             if (!file) return true;
             const maxSizeBytes = maxSizeMB * 1024 * 1024;
             return file.size <= maxSizeBytes;
@@ -63,38 +68,5 @@ $(document).ready(function() {
         }
     });
 
-    // Handle submit form
-    $('#form-tambah-berita').on('submit', function(e) {
-        e.preventDefault();
-        if ($(this).parsley().isValid()) {
-            const formData = new FormData();
-            formData.append('gambar', $('#gambar')[0].files[0]);
-            formData.append('judul', $('#judul').val());
-            formData.append('isi', $('#isi').val());
-
-            console.log('Form data:', {
-                judul: $('#judul').val(),
-                isi: $('#isi').val(),
-                gambar: $('#gambar')[0].files[0]?.name
-            });
-
-            // Placeholder untuk AJAX
-            /*
-            $.ajax({
-                url: '/api/berita/tambah',
-                method: 'POST',
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function(response) {
-                    alert('Berita berhasil disimpan!');
-                    window.location.href = 'staff-berita.html';
-                },
-                error: function() {
-                    alert('Gagal menyimpan berita.');
-                }
-            });
-            */
-        }
-    });
+    
 });

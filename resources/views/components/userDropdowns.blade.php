@@ -18,7 +18,17 @@
             <div class="user-img d-flex align-items-center">
                 <div class="avatar avatar-md">
                     {{-- <img src="{{ asset('assetsv2/compiled/jpg/' . (auth()->user()->is_admin ? '1.jpg' : auth()->user()->is_staff ? '2.jpg' : '3.jpg')) }}"> --}}
-                    
+                    @admin
+                    <img src="{{ asset('assetsv2/compiled/jpg/1.jpg') }}">
+                    @endadmin
+                    @staff
+                    <img src="{{ asset('assetsv2/compiled/jpg/2.jpg') }}">
+                    @endstaff
+                    @notadmin
+                    @notstaff
+                    <img src="{{ asset('assetsv2/compiled/jpg/3.jpg') }}">
+                    @endnotstaff
+                    @endnotadmin
                 </div>
             </div>
         </div>

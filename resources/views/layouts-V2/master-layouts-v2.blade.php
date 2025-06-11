@@ -23,17 +23,20 @@
             @if (auth()->check())
                 @admin
                     @include('layouts-V2.sidebars.admin')
-                @elseadmin
-                    @staff
-                        @include('layouts-V2.sidebars.staff')
-                    @elsestaff
-                        @if (auth()->user()->is_accepted)
-                            @include('layouts-V2.sidebars.pengaju')
-                        @else
-                            <div class="alert alert-warning">Akun Anda belum disetujui.</div>
-                        @endif
-                    @endstaff
                 @endadmin
+                @staff
+                @include('layouts-V2.sidebars.staff')
+                @endstaff
+                @notadmin
+                @notstaff
+                    @if (auth()->user()->is_accepted)
+                        @include('layouts-V2.sidebars.pengaju')
+                    @else
+                        <div class="alert alert-warning">Akun Anda belum disetujui.</div>
+                    @endif
+
+                @endnotstaff
+                @endnotadmin
             @endif
         
         </div>
