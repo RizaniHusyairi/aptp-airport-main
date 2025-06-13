@@ -269,3 +269,14 @@ body {
     display: none;
   }
 }
+
+@media(max-width: 500px) {
+  .logo-text-left{
+    left: 70%;
+  }
+}
+@media(max-width: 380px) {
+  .logo-text-left{
+    left: 65%;
+  }
+}

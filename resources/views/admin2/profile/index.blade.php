@@ -1,6 +1,7 @@
 @extends('layouts-V2.master-layouts-v2')
 @section('title', 'Profile')
 @section('styles_admin')
+    <link rel="stylesheet" href="{{ asset('../assetsv2/compiled/css/profil-user.css') }}">
 
 @endsection
 
@@ -23,7 +24,7 @@
         <div class="col-lg-8">
             <div class="card">
                 <div class="card-content text-center pt-4 pb-0">
-                    <img src="../assets/compiled/jpg/1.jpg" class="img-profil" alt="Profile photo of John Ducky">
+                    <img src="{{ asset('../assetsv2/compiled/jpg/1.jpg') }}" class="img-profil" alt="Profile photo of John Ducky">
                     <div class="card-body pb-1">
                         <div class="title-content">
                             <h5 class="card-title">{{ Auth::user()->name }}</h5>
@@ -43,6 +44,8 @@
                         <button class="btn btn-primary rounded-pill" data-bs-toggle="modal" data-bs-target="#editProfileModal">Edit Profil</button>
                     </li>
                 </ul>
+                @if ($data['is_staff'])
+                    
                 <div class="accordion" id="accordionExample">
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="headingOne">
@@ -56,41 +59,18 @@
                             aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                             <div class="accordion-body">
                                 <div class="row">
-                                    <div class="col-lg-6">
-                                        <span class="badge bg-danger">Manajemen Berita</span>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <span class="badge bg-primary">Manajemen Tenant</span>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <span class="badge bg-success">Manajemen Pengiklanan</span>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <span class="badge bg-info">Manajemen Penyewaan</span>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <span class="badge bg-warning">Manajemen Perijinan Usaha</span>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <span class="badge bg-secondary">Manajemen Slider</span>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <span class="badge bg-success">Manajemen Ajuan Informasi Publik</span>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <span class="badge bg-primary">Manajemen Lalu Lintas Angkutan Udara</span>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <span class="badge bg-info">Manajemen Pengaduan</span>  
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <span class="badge bg-secondary">Manajemen Laporan Keuangan</span>  
-                                    </div>
+                                    @foreach ($data['permissions'] as $permission)
+                                        <div class="col-lg-6">
+                                            <span class="badge bg-{{ $colorMap[$permission->permission_name] }}">{{ $permission->permission_name }}</span>
+                                        </div>
+                                    @endforeach
+                                    
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+                @endif
             </div>
         </div>
     </div>
@@ -99,7 +79,8 @@
 <!-- Edit Profile Modal -->
 <div class="modal fade text-left" id="editProfileModal" tabindex="-1" role="dialog"
     aria-labelledby="editProfileModalLabel" aria-hidden="true">
-    <form id="editProfileForm" action="#" method="POST" enctype="multipart/form-data">
+    <form id="editProfileForm" action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data">
+        @csrf
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header bg-primary">
@@ -125,20 +106,16 @@
                         <label for="address" class="form-label">Alamat</label>
                         <textarea id="address" name="address" class="form-control" rows="4" required>{{ old('address', auth()->user()->address) }}</textarea>
                     </div>
-                    <div class="form-group mb-3">
-                        <label for="profilePhoto" class="form-label">Foto Profil</label>
-                        <input type="file" id="profilePhoto" name="profilePhoto" class="form-control" accept="image/jpeg,image/png">
-                        <div class="mt-2">
-                            <img id="imagePreview" src="{{ asset('uploads/' . $news->image) }}" alt="Profile photo preview" class="img-thumbnail" style="max-width: 150px;">
-                        </div>
-                    </div>
+                    
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
                         <i class="bx bx-x d-block d-sm-none"></i>
                         <span class="d-none d-sm-block">Batal</span>
                     </button>
-                    <button type="submit" class="btn btn-primary ms-1">
+                    
+                    <button type="submit" class="btn btn-primary ms-1" id="saveProfile">
+                        <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
                         <i class="bx bx-check d-block d-sm-none"></i>
                         <span class="d-none d-sm-block">Simpan</span>
                     </button>
@@ -151,89 +128,55 @@
 <!-- Change Password Modal -->
 <div class="modal fade text-left" id="changePasswordModal" tabindex="-1" role="dialog"
     aria-labelledby="changePasswordModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
-        <div class="modal-content">
-            <div class="modal-header bg-warning">
-                <h5 class="modal-title white" id="changePasswordModalLabel">Ubah Kata Sandi</h5>
-                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                    <i data-feather="x"></i>
-                </button>
+    <form id="changePasswordForm"  action="{{ route('profile.updatePassword') }}"  method="POST">
+        @csrf
+    
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-warning">
+                    <h5 class="modal-title white" id="changePasswordModalLabel">Ubah Kata Sandi</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <i data-feather="x"></i>
+                    </button>
+                </div>
+                    <div class="modal-body">
+                        <div class="form-group mb-3">
+                            <label for="current_password" class="form-label">Kata Sandi Saat Ini</label>
+                            <input type="password" id="current_password" name="current_password" class="form-control" required>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="new_password" class="form-label">Kata Sandi Baru</label>
+                            <input type="password" id="new_password" name="new_password" class="form-control" minlength="8" required>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="new_password_confirmation" class="form-label">Konfirmasi Kata Sandi</label>
+                            <input type="password" id="new_password_confirmation" name="new_password_confirmation" class="form-control" minlength="8" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
+                            <i class="bx bx-x d-block d-sm-none"></i>
+                            <span class="d-none d-sm-block">Batal</span>
+                        </button>
+                        <button type="submit" class="btn btn-warning ms-1" id="savePassword">
+                            <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                            <i class="bx bx-check d-block d-sm-none"></i>
+                            <span class="d-none d-sm-block">Simpan</span>
+                        </button>
+                        {{-- <button type="submit" class="btn btn-warning ms-1">
+                            <span class="d-none d-sm-block">Simpan</span>
+                        </button> --}}
+                    </div>
+                </div>
             </div>
-            <form id="changePasswordForm" action="#" method="POST">
-                <div class="modal-body">
-                    <div class="form-group mb-3">
-                        <label for="currentPassword" class="form-label">Kata Sandi Saat Ini</label>
-                        <input type="password" id="currentPassword" name="currentPassword" class="form-control" required>
-                    </div>
-                    <div class="form-group mb-3">
-                        <label for="newPassword" class="form-label">Kata Sandi Baru</label>
-                        <input type="password" id="newPassword" name="newPassword" class="form-control" minlength="8" required>
-                    </div>
-                    <div class="form-group mb-3">
-                        <label for="confirmPassword" class="form-label">Konfirmasi Kata Sandi</label>
-                        <input type="password" id="confirmPassword" name="confirmPassword" class="form-control" minlength="8" required>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
-                        <i class="bx bx-x d-block d-sm-none"></i>
-                        <span class="d-none d-sm-block">Batal</span>
-                    </button>
-                    <button type="submit" class="btn btn-warning ms-1">
-                        <i class="bx bx-check d-block d-sm-none"></i>
-                        <span class="d-none d-sm-block">Simpan</span>
-                    </button>
-                </div>
-            </form>
         </div>
-    </div>
+    </form>
 </div>
-</div>
+
 @endsection
 @section('scripts_admin')
-        <script src="../assets/extensions/feather-icons/feather.min.js"></script>
-        <script>
-        // Initialize Feather Icons
-        feather.replace();
-        
-        window.previewImage = function(e) {
-            console.log('previewImage function called');
-            const reader = new FileReader();
-            reader.onload = function() {
-                const output = document.getElementById('imagePreview');
-                output.src = reader.result;
-            };
-            reader.readAsDataURL(e.target.files[0]);
-        };
-
-        // Initialize event listener for file input
-            const profilePhotoInput = document.getElementById('profilePhoto');
-            profilePhotoInput.addEventListener('change', (e)=> {
-                console.log('File input changed');
-                previewImage(e);
-            });
-            
-
-        
-
-        // Basic form validation for Change Password
-        $('#changePasswordForm').on('submit', function(e) {
-            e.preventDefault();
-            const form = this;
-            const newPassword = $('#newPassword').val();
-            const confirmPassword = $('#confirmPassword').val();
-            if (newPassword !== confirmPassword) {
-                alert('Kata sandi baru dan konfirmasi tidak cocok!');
-                return;
-            }
-            if (form.checkValidity()) {
-                // Simulate form submission (replace with actual AJAX call to backend)
-                alert('Kata sandi berhasil diubah!');
-                $('#changePasswordModal').modal('hide');
-            } else {
-                form.reportValidity();
-            }
-        });
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="{{ asset('../assetsv2/extensions/feather-icons/feather.min.js') }}"></script>
+    <script src="{{ asset('assetsv2/compiled/js/profile.js') }}"></script>
 
 @endsection

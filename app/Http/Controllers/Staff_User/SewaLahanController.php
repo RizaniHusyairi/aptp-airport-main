@@ -73,13 +73,13 @@ class SewaLahanController extends Controller
     {
         $user = Auth::user();
         $rentals = $user->rentals()->latest()->get();
-        return view('user_staff.sewa.index', compact('rentals'));
+        return view('user_staff2.sewa.index', compact('rentals'));
     }
     
     public function create()
     {
         $rentalTypes = $this->rentalTypes;
-        return view('user_staff.sewa.create', compact('rentalTypes'));
+        return view('user_staff2.sewa.create', compact('rentalTypes'));
     }
 
     public function store(Request $request)
@@ -122,13 +122,6 @@ class SewaLahanController extends Controller
         $filename = time() . '_' . $file->getClientOriginalName();
         $filePath = $file->storeAs('documents/rental', $filename, 'public');
 
-        // Simpan file desain (jika ada)
-        $designFilePath = null;
-        if ($request->hasFile('design_file')) {
-            $designFile = $request->file('design_file');
-            $designFilename = time() . '_' . $designFile->getClientOriginalName();
-            $designFilePath = $designFile->storeAs('documents/rental', $designFilename, 'public');
-        }
 
         // Siapkan data untuk pembuatan Rental
         $rentalData = [
@@ -181,13 +174,13 @@ class SewaLahanController extends Controller
     public function indexStaff()
     {
         $rentals = Rental::with('users')->latest()->get();
-        return view('user_staff.sewa.index', compact('rentals'));
+        return view('user_staff2.sewa.index', compact('rentals'));
     }
 
     public function show($id)
     {
         $rental = Rental::with('users')->findOrFail($id);
-        return view('user_staff.sewa.show', compact('rental'));
+        return view('user_staff2.sewa.show', compact('rental'));
     }
 
     public function approve($id)

@@ -88,7 +88,7 @@
                     <li class="list-group-item">Surat Izin Operasi Penerbangan (untuk Operator)</li>
                     @endif
 
-                    @if(!request()->segment(2) == 'slot')
+                    @if(request()->segment(2) != 'slot')
                     <li class="list-group-item">Akta Pendirian Perusahaan</li>
                     <li class="list-group-item">NPWP</li>
                     <li class="list-group-item">Proposal Usaha</li>
@@ -97,7 +97,7 @@
                     <li class="list-group-item">Laporan Keuangan</li>
 
                     @endif
-                    @if(!request()->segment(2) == 'perijinan-usaha')
+                    @if(request()->segment(2) != 'perijinan-usaha')
                     <li class="list-group-item">Sertifikat Penjamah Makanan (jika F&B)</li>
                     @endif
                     <li class="list-group-item">Bukti Bayar Pajak 3 Bulan Terakhir</li>

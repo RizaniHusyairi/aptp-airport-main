@@ -44,7 +44,7 @@ Auth::routes();
 Route::group(["prefix" => 'dashboard'], function () {
     Route::group(['middleware' => 'auth'], function () {
         /* ================== USER ROUTES ================== */
-        // Tenant User Routes
+        //  User Routes
         Route::get('/tenant', [TenantController::class, 'indexUser'])->name('tenant.index');
         Route::get('/tenant/create', [TenantController::class, 'create'])->name('tenant.create');
         Route::post('/tenant/store', [TenantController::class, 'store'])->name('tenant.store');

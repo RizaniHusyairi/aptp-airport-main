@@ -206,7 +206,7 @@
 
         <div class="row gy-4">
           <div class="col-lg-5" data-aos="fade-up" data-aos-delay="100">
-            <img src="{{ asset('assets_landing/img/pejabat/Kadek.jpeg') }}" class="chief-image object-fit-cover text-center" alt="">
+            <img src="{{ asset('assets_landing/img/pejabat/kadek2.jpeg') }}" class="chief-image object-fit-cover text-center" alt="">
             
           </div>
           <div class="col-lg-7" data-aos="fade-up" data-aos-delay="200">

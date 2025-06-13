@@ -59,7 +59,7 @@ class FieldTripController extends Controller
 
     public function create()
     {
-        return view('user_staff.fieldtrip.create');
+        return view('user_staff2.fieldtrip.create');
     }
 
     public function destroy($id)
@@ -84,20 +84,20 @@ class FieldTripController extends Controller
     {
         $user = Auth::user();
         $fieldtrips = $user->fieldtrips()->latest()->get();
-        return view('user_staff.fieldtrip.index', compact('fieldtrips'));    
+        return view('user_staff2.fieldtrip.index', compact('fieldtrips'));    
     }
 
     /* ================== STAFF ROUTES ================== */
     public function index()
     {
         $fieldtrips = FieldTrip::with('users')->latest()->get();
-        return view('user_staff.fieldtrip.index', compact('fieldtrips'));     
+        return view('user_staff2.fieldtrip.index', compact('fieldtrips'));     
     }
 
     public function show($id)
     {
         $fieldtrip = Fieldtrip::with('users')->findOrFail($id);
-        return view('user_staff.fieldtrip.show', compact('fieldtrip'));
+        return view('user_staff2.fieldtrip.show', compact('fieldtrip'));
     }
 
     public function approve($id)

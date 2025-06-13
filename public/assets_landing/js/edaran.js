@@ -1,4 +1,3 @@
-// Fungsi untuk mengambil data dari API
 async function fetchLetters(type) {
     try {
         const response = await fetch(`/regulasi/surat-${type}/api`);
@@ -25,10 +24,9 @@ async function fetchLetters(type) {
     }
 }
 
-// Inisialisasi Tabulator berdasarkan tipe surat
 document.addEventListener('DOMContentLoaded', () => {
     const pathSegments = window.location.pathname.split('/');
-    const typeSegment = pathSegments[pathSegments.length - 1]; // Ambil bagian terakhir dari URL
+    const typeSegment = pathSegments[pathSegments.length - 1];
     const type = typeSegment === 'surat-utusan' ? 'utusan' : typeSegment === 'surat-edaran' ? 'edaran' : null;
 
     if (!type || !['utusan', 'edaran'].includes(type)) {
@@ -38,22 +36,42 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const tableId = `#surat${type.charAt(0).toUpperCase() + type.slice(1)}Table`;
     const table = new Tabulator(tableId, {
-        data: [], // Data akan diisi dari API
+        data: [],
         layout: "fitColumns",
-        responsiveLayout: "hide",
+        responsiveLayout: "collapse", // Ubah ke collapse untuk responsivitas
         columns: [
-            { title: "Nomor Surat", field: "nomor_surat", headerSort: true, width: 150 },
-            { title: "Judul", field: "judul", headerSort: true, minWidth: 200 },
+            { 
+                title: "Nomor Surat", 
+                field: "nomor_surat", 
+                headerSort: true, 
+                width: 150, 
+                headerFilter: "input", // Tambahkan filter pencarian
+                headerFilterPlaceholder: "Cari nomor..." 
+            },
+            { 
+                title: "Judul", 
+                field: "judul", 
+                headerSort: true, 
+                minWidth: 200, 
+                headerFilter: "input", // Tambahkan filter pencarian
+                headerFilterPlaceholder: "Cari judul..." 
+            },
             { 
                 title: "Tanggal Terbit", 
                 field: "tanggal_terbit", 
                 headerSort: true, 
-                 
                 width: 150 
             },
-            { title: "Unduh", field: "unduh", formatter: function(cell) {
-                return `<a href="${cell.getValue()}" class="download-btn" target="_blank">Unduh</a>`;
-            }, headerSort: false, width: 100, hozAlign: "center" }
+            { 
+                title: "Unduh", 
+                field: "unduh", 
+                formatter: function(cell) {
+                    return `<a href="${cell.getValue()}" class="download-btn" target="_blank">Unduh</a>`;
+                }, 
+                headerSort: false, 
+                width: 100, 
+                hozAlign: "center" 
+            }
         ],
         pagination: "local",
         paginationSize: 6,
@@ -66,7 +84,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Ambil data dan isi tabel
     fetchLetters(type).then(data => {
         if (Array.isArray(data)) {
             table.setData(data);
@@ -77,7 +94,6 @@ document.addEventListener('DOMContentLoaded', () => {
         console.error('Error setting table data:', error);
     });
 
-    // Event listener untuk responsivitas
     window.addEventListener("resize", () => {
         table.redraw(true);
     });

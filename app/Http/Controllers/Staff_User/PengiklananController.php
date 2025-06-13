@@ -59,7 +59,7 @@ class PengiklananController extends Controller
 
     public function create()
     {
-        return view('user_staff.pengiklanan.create');
+        return view('user_staff2.pengiklanan.create');
     }
 
     public function destroy($id)
@@ -80,20 +80,20 @@ class PengiklananController extends Controller
     {
         $user = Auth::user();
         $ads = $user->ads()->latest()->get();
-        return view('user_staff.pengiklanan.index', compact('ads'));    
+        return view('user_staff2.pengiklanan.index', compact('ads'));    
     }
 
     /* ================== STAFF ROUTES ================== */
     public function index()
     {
         $ads = Ad::with('users')->latest()->get();
-        return view('user_staff.pengiklanan.index', compact('ads'));     
+        return view('user_staff2.pengiklanan.index', compact('ads'));     
     }
 
     public function show($id)
     {
         $ad = Ad::with('users')->findOrFail($id);
-        return view('user_staff.pengiklanan.show', compact('ad'));
+        return view('user_staff2.pengiklanan.show', compact('ad'));
     }
 
     public function approve($id)

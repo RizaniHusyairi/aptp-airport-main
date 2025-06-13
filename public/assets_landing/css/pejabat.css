@@ -134,7 +134,12 @@
     to { opacity: 0; }
 }
 
+
 @media (max-width: 768px) {
+    
+    .official-card{
+        text-align: center;
+    }
     .card-img-top {
         height: 150px;
     }

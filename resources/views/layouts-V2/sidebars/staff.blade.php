@@ -5,7 +5,7 @@ $currentRoute = Route::currentRouteName();
 $permissionRoutes = [
 'Manajemen Berita' => ['route' => 'berita.staffIndex', 'icon' => 'bi bi-newspaper', 'label' => 'Berita'],
 'Manajemen Tenant' => ['route' => 'tenant.staffIndex', 'icon' => 'bi bi-shop', 'label' => 'Tenant'],
-'Manajemen Penyewaan' => ['route' => 'staffSewa.index', 'icon' => 'bi bi-building', 'label' => 'Penyewaan'],
+'Manajemen Sewa' => ['route' => 'staffSewa.index', 'icon' => 'bi bi-building', 'label' => 'Penyewaan'],
 'Manajemen Perijinan Usaha' => ['route' => 'perijinan.staffIndex', 'icon' => 'bi bi-file-earmark-check', 'label' => 'Perijinan Usaha'],
 'Manajemen Pengiklanan' => ['route' => 'pengiklanan.staffIndex', 'icon' => 'bi bi-megaphone', 'label' => 'Pengiklanan'],
 'Manajemen Field Trip' => ['route' => 'fieldtrip.staffIndex', 'icon' => 'bi bi-geo-alt', 'label' => 'Field Trip'],

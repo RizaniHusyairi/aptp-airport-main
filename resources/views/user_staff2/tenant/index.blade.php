@@ -23,8 +23,19 @@
                     </div>
                     <section class="section">
                         <div class="card">
-                            <div class="card-header">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                @if(session('success'))
+                                <div class="alert alert-primary alert-dismissible fade show" role="alert">
+                                    {{ session('success') }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                                @endif
                                 <h5 class="card-title">Daftar Pengajuan Tenant</h5>
+                                @notadmin
+                                @notstaff
+                                    <a href="{{ route('tenant.create') }}" class="btn btn-primary"><i class="bi bi-plus"></i> Tambah Pengajuan</a>
+                                @endnotstaff
+                                @endnotadmin
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
@@ -63,13 +74,13 @@
                                                             @if ($tenant->documents)
                                                             <div class="row">
                                                                 <form class="col">
-                                                                    <a href="{{ asset('uploads/documents/tenant/' . basename($tenant->documents)) }}" class="btn btn-sm btn-info text-white" data-bs-toggle="tooltip" title="Lihat Detail" target="_blank"><i class="bi bi-eye"></i></a>
+                                                                    <a href="{{ asset('uploads/documents/tenant/' . basename($tenant->documents)) }}" class="btn btn-sm btn-info text-white btn-tooltip" data-bs-toggle="tooltip" title="Lihat Detail" target="_blank"><i class="bi bi-eye"></i></a>
                                                                 </form>
                                                                 @if ($tenant->submission_status == 'diajukan')
                                                                 <form class="col" action="{{ route('tenant.destroy', $tenant->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus pengajuan ini?')">
                                                                     @csrf
                                                                     @method('DELETE')
-                                                                    <button type="submit" class="btn btn-danger btn-sm text-white" data-bs-toggle="tooltip" title="Hapus Pengajuan"><i class="bi bi-trash"></i></button>
+                                                                    <button type="submit" class="btn btn-danger btn-sm text-white btn-tooltip" data-bs-toggle="tooltip" title="Hapus Pengajuan"><i class="bi bi-trash"></i></button>
                                                                 </form>
                                                                 @endif
                                                             </div>
@@ -109,7 +120,7 @@
                                                         <td>
                                                         <div class="row g-1">
                                                             <div class="col-12 mb-1">
-                                                            <a href="{{ route('tenant.show', $tenant->id) }}" class="btn btn-sm btn-primary text-white" data-bs-toggle="tooltip" title="Lihat Detail">
+                                                            <a href="{{ route('tenant.show', $tenant->id) }}" class="btn btn-sm btn-primary text-white btn-tooltip" data-bs-toggle="tooltip" title="Lihat Detail">
                                                                 <i class="bi bi-eye"></i>
                                                             </a>
                                                             </div>

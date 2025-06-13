@@ -79,9 +79,9 @@
                         @enderror
                         <div class="input-box">
                             <i class="bi bi-envelope"></i>
-                            <input id="email" type="email" class="@error('email') is-invalid @enderror" name="email" placeholder="Masukkan email Anda" value="{{ old('email') }}" required autocomplete="email">
+                            <input id="email_new" type="email" class="@error('email_new') is-invalid @enderror" name="email_new" placeholder="Masukkan email Anda" value="{{ old('email_new') }}" required autocomplete="email">
                         </div>
-                        @error('email')
+                        @error('email_new')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
                             </span>
@@ -106,18 +106,18 @@
                         @enderror
                         <div class="input-box">
                             <i class="bi bi-lock"></i>
-                            <input id="password" type="password" class="@error('password') is-invalid @enderror" name="password" placeholder="Masukkan kata sandi Anda" required autocomplete="new-password">
+                            <input id="password_new" type="password" class="@error('password_new') is-invalid @enderror" name="password_new" placeholder="Masukkan kata sandi Anda" required autocomplete="new-password">
                         </div>
-                        @error('password')
+                        @error('password_new')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
                             </span>
                         @enderror
                         <div class="input-box">
                             <i class="bi bi-lock"></i>
-                            <input id="password_confirmation" type="password" class="@error('password_confirmation') is-invalid @enderror" name="password_confirmation" placeholder="Konfirmasi kata sandi Anda" required autocomplete="new-password">
+                            <input id="password_new_confirmation" type="password" class="@error('password_new_confirmation') is-invalid @enderror" name="password_new_confirmation" placeholder="Konfirmasi kata sandi Anda" required autocomplete="new-password">
                         </div>
-                        @error('password_confirmation')
+                        @error('password_new_confirmation')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
                             </span>
@@ -170,7 +170,7 @@
     @endif
 
     // Cek error registrasi
-    @if ($errors->has('name') || $errors->has('email') || $errors->has('phone') || $errors->has('address') || $errors->has('password') || $errors->has('password_confirmation'))
+    @if ($errors->has('name') || $errors->has('email_new') || $errors->has('phone') || $errors->has('address') || $errors->has('password_new') || $errors->has('password_confirmation'))
         showAlert('error', 'Registrasi Gagal', 'Silakan periksa kembali data yang Anda masukkan.');
     @endif
 </script>

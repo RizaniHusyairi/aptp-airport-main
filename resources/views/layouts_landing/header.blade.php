@@ -1,6 +1,6 @@
 <header id="header" class="header d-flex align-items-center @yield('header-class', '')">
     <div class="container position-relative d-flex align-items-center justify-content-between">
-        <a href="{{ route('home') }}" class="logo d-flex align-items-center me-auto me-xl-0">
+        <a href="{{ route('home') }}" class="logo d-flex align-items-center">
             <img src="{{ asset('assets_landing/img/logo/logo-apt.svg') }}" alt="logo apt" class="logo-apt">
             <img src="{{ asset('assets_landing/img/logo/logo-white-apt.svg') }}" alt="logo apt" class="logo-white-apt">
         </a>
@@ -51,7 +51,7 @@
             <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
         </nav>
         @auth
-            <div class="justify-content-end">
+            <div >
                 @if (Auth::user()->is_admin)
                     <a class="btn-getstarted" href="{{ route('root') }}">Dashboard</a>
                 @else
@@ -59,7 +59,7 @@
                 @endif
             </div>
             @else
-            <div class="justify-content-end">
+            <div >
                 <a href="{{ route('login') }}" class="btn-getstarted">Masuk</a>
             </div>
         @endauth

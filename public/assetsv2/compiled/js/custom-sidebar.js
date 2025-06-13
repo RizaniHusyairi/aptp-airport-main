@@ -1,3 +1,5 @@
+
+
 $(document).ready(function() {
     // Toggle sidebar saat tombol burger diklik
     $('.burger-btn-dekstop').on('click', function(e) {
@@ -75,3 +77,11 @@ $(document).ready(function() {
         initializeTooltips();
     });
 });
+
+document.addEventListener('DOMContentLoaded', function () {
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('.btn-tooltip[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+        })
+    }, false);
+    

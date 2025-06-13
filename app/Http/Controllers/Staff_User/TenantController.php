@@ -61,7 +61,7 @@ class TenantController extends Controller
             'business_type' => $request->business_type,
             'description'   => $request->description,
             'rental_type'   => $request->rental_type,
-            'rental_type'   => $request->rental_more ?? null,
+            'rental_more'   => $request->rental_more ?? null,
             'documents'     => $filePath,
         ]);
 
@@ -76,7 +76,7 @@ class TenantController extends Controller
 
     public function create()
     {
-        return view('user_staff.tenant.create');
+        return view('user_staff2.tenant.create');
     }
     public function destroy($id)
     {
@@ -100,7 +100,7 @@ class TenantController extends Controller
     {
         $user = Auth::user();
         $tenants = $user->tenants()->latest()->get();
-        return view('user_staff.tenant.index', compact('tenants'));    
+        return view('user_staff2.tenant.index', compact('tenants'));    
     }
     
     /* ================== STAFF ROUTES ================== */

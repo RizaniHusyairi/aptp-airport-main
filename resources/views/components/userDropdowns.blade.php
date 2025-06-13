@@ -37,7 +37,7 @@
         <li><h6 class="dropdown-header">Halo, {{ auth()->user()->name }}!</h6></li>
 
         {{-- <li><a class="dropdown-item" href="{{ route((auth()->user()->is_admin ? 'admin' : auth()->user()->is_staff ? 'staff' : 'pengaju') . '.profile') }}"><i class="icon-mid bi bi-person me-2"></i> Profil Saya</a></li> --}}
-        <li><a class="dropdown-item" href=""><i class="icon-mid bi bi-person me-2"></i> Profil Saya</a></li>
+        <li><a class="dropdown-item" href="{{ route('profile') }}"><i class="icon-mid bi bi-person me-2"></i> Profil Saya</a></li>
         <li><hr class="dropdown-divider"></li>
         <li>
             <a class="dropdown-item" href="{{ route('logout') }}"

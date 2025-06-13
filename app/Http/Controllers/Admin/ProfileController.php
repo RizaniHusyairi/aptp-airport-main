@@ -21,10 +21,26 @@ class ProfileController extends Controller
             'is_admin' => $user->is_admin,
             'permissions' => $user->getAllPermissions(), // sesuai method sebelumnya
         ];
+        $colorMap = [
+                    'Manajemen Tenant' => 'primary',
+                    'Manajemen Sewa' => 'success',
+                    'Manajemen Perijinan Usaha' => 'warning',
+                    'Manajemen Pengiklanan' => 'info',
+                    'Manajemen Field Trip' => 'secondary',
+                    'Manajemen Berita' => 'danger',
+                    'Manajemen Laporan Keuangan' => 'dark',
+                    'Manajemen Slider' => 'light',
+                    'Manajemen Ajuan Informasi Publik' => 'primary',
+                    'Manajemen Lalu Lintas Angkutan Udara' => 'danger',
+                    'Manajemen Regulasi' => 'success',
+                    'Manajemen Lelang' => 'info',
+                    'Manajemen Pengaduan' => 'secondary',
+                    'Manajemen Slot Charter' => 'warning',
+                ];
 
         // $lastFlights = Flight::latest()->take(5)->get();
 
-        return view('admin.profile.index', compact('data'));
+        return view('admin2.profile.index', compact('data', 'colorMap'));
     }
 
     public function updateProfile(Request $request)
@@ -37,10 +53,11 @@ class ProfileController extends Controller
             "phone" => ['sometimes', 'unique:users,phone,' . auth()->id()],
         ]);
 
+        
         if ($validator->fails()) {
             return $this->josnResponse(false, __('api.invalid_inputs'), Response::HTTP_UNPROCESSABLE_ENTITY, null, $validator->errors()->all());
         }
-
+        
         try {
             // Retirve the validated input data 
             $validated = $validator->validated();
@@ -50,23 +67,7 @@ class ProfileController extends Controller
             // Update the user
             $user->update($validated);
 
-            if ($request->has('file')) {
-                // delete old product image
-                $mediaItems = $user->getMedia();
-
-                if (count($mediaItems) > 0) {
-                    $mediaItems->each(function ($item, $key) {
-                        $item->delete();
-                    });
-                }
-
-                // get file name from requets and find this file in the storage
-                $filePath = storage_path('tmp/uploads/' . $request->file);
-
-                // attach image to product
-                // this will move the file from its current path to the storage path
-                $user->addMedia($filePath)->usingName($request->name)->toMediaCollection();
-            }
+            
 
             $data  = [
                 'id' => $user->id,
