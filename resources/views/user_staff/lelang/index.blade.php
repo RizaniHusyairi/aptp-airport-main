@@ -124,7 +124,7 @@
                             <td>
                               <div class="row g-1">
                                 <div class="col-12 mb-1">
-                                  <a href="{{  route('perijinan.show', $lelang->id) }}" class="btn btn-sm btn-primary w-100">
+                                  <a href="{{  route('lelang.show', $lelang->id) }}" class="btn btn-sm btn-primary w-100">
                                     Lihat
                                   </a>
                                 </div>
