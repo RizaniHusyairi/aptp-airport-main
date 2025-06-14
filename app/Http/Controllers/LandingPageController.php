@@ -803,7 +803,7 @@ class LandingPageController extends Controller
                 'phone_number' => $request->phone_number,
                 'subject' => $request->subject,
                 'message' => $request->message,
-                'status' => 'pending',
+                'status' => 'Menunggu',
             ]);
     
             if ($request->ajax()) {

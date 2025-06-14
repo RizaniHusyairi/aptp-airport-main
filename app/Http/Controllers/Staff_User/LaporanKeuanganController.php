@@ -13,37 +13,13 @@ class LaporanKeuanganController extends Controller
 {
     public function index(Request $request)
     {
-        $filter = $request->input('filter');
-        $year = $request->input('year');
-
-        // Mulai query Finance
-        $finances = Finance::query();
-
-        // Filter berdasarkan jenis aliran dana (in, out, atau budget)
-        if ($filter === 'in') {
-            $finances->where('flow_type', 'in');
-        } elseif ($filter === 'out') {
-            $finances->where('flow_type', 'out');
-        } elseif ($filter === 'budget') {
-            $finances->where('flow_type', 'budget');
-        }
-
-        // Filter berdasarkan tahun (dari date)
-        if ($year) {
-            $finances->whereYear('date', $year);
-        }
 
         // Ambil data dari database dan eager load data pengeluaran terkait anggaran (jika ada)
-        $finances = $finances->with('budgetExpenses')->get();
+        $finances = Finance::with('budgetExpenses')->get();
 
-        // Ambil daftar tahun yang tersedia untuk filter (dari date)
-        $years = Finance::selectRaw('DISTINCT YEAR(date) as year')
-                            ->whereNotNull('date')
-                            ->orderBy('year', 'desc')
-                            ->pluck('year');
 
         // Kembalikan ke view dengan data yang telah difilter
-        return view('user_staff.keuangan.index', compact('finances', 'filter', 'years', 'year'));
+        return view('user_staff2.keuangan.index', compact('finances'));
     }
 
 
@@ -51,18 +27,18 @@ class LaporanKeuanganController extends Controller
     {
         $finances = old('finance', []);
 
-        $allFinance = \App\Models\Finance::select('note', 'flow_type')
-            ->whereNotNull('note')
-            ->get();
+        
 
-        $uniqueNotes = $allFinance->groupBy('flow_type')->map(function ($items) {
-            return $items->pluck('note')->unique()->values();
-        });
-
-        return view('user_staff.keuangan.create', [
+        return view('user_staff2.keuangan.create', [
             'finances' => $finances,
-            'uniqueNotes' => $uniqueNotes,
         ]);
+    }
+
+    public function edit($id)
+    {
+
+        $finance = Finance::with('budgetExpenses')->findOrFail($id);
+        return view('user_staff2.keuangan.edit', compact('finance'));
     }
 
 
@@ -127,7 +103,7 @@ class LaporanKeuanganController extends Controller
         // Simpan data pengeluaran yang terkait dengan anggaran
         if ($totalExpense > 0) {
             foreach ($budgetExpenses as $expense) {
-                $financeRecord->expenses()->create([
+                $financeRecord->budgetExpenses()->create([
                     'description' => $expense['description'],
                     'amount' => $expense['amount'],
                 ]);
@@ -135,6 +111,79 @@ class LaporanKeuanganController extends Controller
         }
 
         return redirect()->route('keuangan.staffIndex')->with('success', 'Data keuangan berhasil disimpan.');
+    }
+
+    public function update(Request $request, $id)
+    {
+
+        $finance = Finance::findOrFail($id);
+        $financeData = $request->input('finance');
+        $budgetExpenses = $request->input('budget_expenses', []);
+        $totalExpense = array_sum(array_column($budgetExpenses, 'amount'));
+        $budgetAmount = $financeData[0]['amount'] ?? 0;
+
+        if ($financeData[0]['flow_type'] === 'budget' && $totalExpense > $budgetAmount) {
+            $errors = new MessageBag([
+                'budget_expenses' => 'Total pengeluaran tidak boleh melebihi jumlah anggaran.',
+            ]);
+            return redirect()->back()->withErrors($errors)->withInput();
+        }
+
+        $validator = Validator::make($request->all(), [
+            'finance' => 'required|array|min:1',
+            'finance.*.flow_type' => 'required|in:in,budget',
+            'finance.*.amount' => 'required|integer|min:1',
+            'finance.*.date' => 'required|date_format:Y-m',
+            'finance.*.note' => 'nullable|string',
+            'budget_expenses' => 'nullable|array',
+            'budget_expenses.*.description' => 'required_if:finance.*.flow_type,budget|string',
+            'budget_expenses.*.amount' => 'required_if:finance.*.flow_type,budget|integer|min:1',
+        ], [
+            'finance.required' => 'Minimal satu baris data harus diisi.',
+            'finance.*.flow_type.required' => 'Aliran dana wajib diisi.',
+            'finance.*.amount.required' => 'Jumlah wajib diisi.',
+            'finance.*.date.required' => 'Periode wajib diisi.',
+            'budget_expenses.*.description.required_if' => 'Deskripsi pengeluaran wajib diisi untuk anggaran.',
+            'budget_expenses.*.amount.required_if' => 'Jumlah pengeluaran wajib diisi untuk anggaran.',
+            'budget_expenses.*.amount.min' => 'Jumlah pengeluaran minimal adalah 1.',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        $finance->update([
+            'flow_type' => $financeData[0]['flow_type'],
+            'amount' => $financeData[0]['amount'],
+            'date' => $financeData[0]['date'] . '-01',
+            'note' => $financeData[0]['note'] ?? null,
+        ]);
+
+        if ($financeData[0]['flow_type'] === 'budget') {
+            $finance->budgetExpenses()->delete();
+            foreach ($budgetExpenses as $expense) {
+                $finance->budgetExpenses()->create([
+                    'description' => $expense['description'],
+                    'amount' => $expense['amount'],
+                ]);
+            }
+        } else {
+            $finance->budgetExpenses()->delete();
+        }
+
+        return redirect()->route('keuangan.staffIndex')->with('success', 'Data keuangan berhasil diperbarui.');
+    }
+
+    public function destroy($id)
+    {
+
+        $finance = Finance::findOrFail($id);
+        $finance->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Data keuangan berhasil dihapus.'
+        ]);
     }
 
 

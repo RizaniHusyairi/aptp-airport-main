@@ -81,7 +81,7 @@
                       @forelse ($finances as $index => $finance)
                         <tr>
                           <td>{{ $index + 1 }}</td>
-                          <td>{{ \Carbon\Carbon::parse($finance->date)->format('d M Y') }}</td>
+                          <td>{{ \Carbon\Carbon::parse($finance->date)->format('d/M/Y') }}</td>
                           <td>
                             @if($finance->flow_type === 'in')
                               <span class="badge bg-success">Pemasukan</span>

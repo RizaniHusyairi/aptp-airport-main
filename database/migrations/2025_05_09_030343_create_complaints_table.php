@@ -14,7 +14,7 @@ return new class extends Migration
             $table->string('email');
             $table->string('subject');
             $table->text('message');
-            $table->enum('status', ['pending', 'processed', 'resolved'])->default('pending');
+            $table->enum('status', ['Menunggu', 'Diproses', 'Resolved'])->default('Menunggu');
             $table->timestamps();        
         });
     }

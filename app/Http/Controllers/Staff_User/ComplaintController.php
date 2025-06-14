@@ -11,13 +11,13 @@ class ComplaintController extends Controller
     public function index()
     {
         $complaints = Complaint::all();
-        return view('user_staff.pengaduan.index', compact('complaints'));
+        return view('user_staff2.pengaduan.index', compact('complaints'));
     }
 
     public function updateStatus(Request $request, Complaint $complaint)
     {
         $request->validate([
-            'status' => 'required|in:pending,processed,resolved',
+            'status' => 'required|in:Menunggu,Diproses,Selesai',
         ]);
 
         $complaint->update([

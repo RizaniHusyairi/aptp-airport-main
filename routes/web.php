@@ -167,6 +167,9 @@ Route::group(["prefix" => 'dashboard'], function () {
             Route::get('staff/keuangan', [LaporanKeuanganController::class, 'index'])->name('keuangan.staffIndex');
             Route::get('staff/keuangan/create', [LaporanKeuanganController::class, 'create'])->name('keuangan.create');
             Route::post('staff/keuangan/store', [LaporanKeuanganController::class, 'store'])->name('keuangan.store');
+            Route::get('staff/keuangan/{id}/edit', [LaporanKeuanganController::class, 'edit'])->name('keuangan.edit');
+            Route::put('staff/keuangan/{id}', [LaporanKeuanganController::class, 'update'])->name('keuangan.update');
+            Route::delete('staff/keuangan/{id}', [LaporanKeuanganController::class, 'destroy'])->name('keuangan.destroy');
             
             // Public Information Staff Routes
             Route::get('staff/informasi-publik', [InformasiPublikController::class, 'index'])->name('informasiPublik.staffIndex');

@@ -23,7 +23,7 @@ class LelangController extends Controller
     public function create()
     {
     
-        return view('user_staff2.lelang.create', compact('lelang_type'));
+        return view('user_staff2.lelang.create');
     }
 
     public function store(Request $request)

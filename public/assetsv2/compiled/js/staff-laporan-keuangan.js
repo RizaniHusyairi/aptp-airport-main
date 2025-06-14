@@ -27,26 +27,32 @@ $(document).ready(function() {
                 sortDescending: ": aktifkan untuk mengurutkan kolom secara turun"
             }
         },
-        columnDefs: [
-            { targets: 0, responsivePriority: 1 }, // Tanggal
-            { targets: 4, orderable: false, responsivePriority: 2 }, // Aksi
-            { targets: 2, responsivePriority: 3 }, // Jumlah
-            { targets: 1, responsivePriority: 4 }, // Jenis
-            { targets: 3, responsivePriority: 5 } // Catatan
-        ],
-        order: [[0, 'desc']], // Urutkan berdasarkan Tanggal
+        order: [[0, 'desc']],
         pageLength: 10,
         lengthMenu: [5, 10, 25, 50]
     });
 
     // Isi dropdown tahun
     const years = [...new Set(table.column(0).data().toArray().map(date => {
-        return date ? date.split('/')[2] : null;
+        return date ? date.split(' ')[1] : null;
     }).filter(Boolean))].sort((a, b) => b - a);
     years.forEach(year => {
         $('#filter-tahun').append(`<option value="${year}">${year}</option>`);
     });
 
+    // Filter tahun dan arus dana
+    // $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
+    //     const selectedYear = $('#filter-tahun').val();
+    //     const selectedArusDana = $('#filter-arus-dana').val();
+    //     const tanggal = data[0]; // Kolom Tanggal
+    //     const jenis = table.row(dataIndex).node().querySelector('td[data-jenis]').getAttribute('data-jenis');
+
+    //     const year = tanggal ? tanggal.split(' ')[1] : '';
+    //     const yearMatch = !selectedYear || year === selectedYear;
+    //     const arusDanaMatch = !selectedArusDana || jenis === selectedArusDana;
+
+    //     return yearMatch && arusDanaMatch;
+    // });
     // Filter tahun dan arus dana
     $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
         const selectedYear = $('#filter-tahun').val();
@@ -61,7 +67,7 @@ $(document).ready(function() {
 
         console.log('Data[1]:', data[1], 'Jenis:', jenis); // Debugging
         
-        const year = tanggal ? tanggal.split('/')[2] : '';
+        const year = tanggal ? tanggal.split(' ')[1] : '';
         const yearMatch = !selectedYear || year === selectedYear;
         const arusDanaMatch = !selectedArusDana || jenis === selectedArusDana;
         console.log('year', yearMatch); // Debugging
@@ -75,36 +81,24 @@ $(document).ready(function() {
         table.draw();
     });
 
-    // Data dummy untuk pengeluaran (ganti dengan AJAX di produksi)
-    const dataPengeluaran = {
-        2: [
-            { nomor: 1, deskripsi: "Pembelian peralatan kantor", jumlah: "Rp 1.500.000" },
-            { nomor: 2, deskripsi: "Biaya listrik", jumlah: "Rp 1.000.000" },
-            { nomor: 3, deskripsi: "Biaya internet", jumlah: "Rp 1.000.000" }
-        ],
-        4: [
-            { nomor: 1, deskripsi: "Perbaikan AC", jumlah: "Rp 2.000.000" },
-            { nomor: 2, deskripsi: "Pembersihan gedung", jumlah: "Rp 1.200.000" },
-            { nomor: 3, deskripsi: "Pembelian lampu", jumlah: "Rp 1.000.000" }
-        ]
-    };
-
     // Handle klik tombol Lihat Pengeluaran
     $(document).on('click', '.btn-lihat-pengeluaran', function() {
-        const transaksiId = $(this).closest('tr').data('id');
-        const pengeluaran = dataPengeluaran[transaksiId] || [];
+        const row = $(this).closest('tr');
+        const transaksiId = row.data('id');
+        const expenses = row.find('.expense');
 
-        // Kosongkan tbody
         $('#table-detail-pengeluaran tbody').empty();
 
-        // Isi tabel detail pengeluaran
-        if (pengeluaran.length > 0) {
-            pengeluaran.forEach(item => {
+        if (expenses.length > 0) {
+            expenses.each(function() {
+                const nomor = $(this).find('.nomor').text();
+                const deskripsi = $(this).find('.deskripsi').text();
+                const jumlah = $(this).find('.jumlah').text();
                 $('#table-detail-pengeluaran tbody').append(`
                     <tr>
-                        <td>${item.nomor}</td>
-                        <td>${item.deskripsi}</td>
-                        <td>${item.jumlah}</td>
+                        <td>${nomor}</td>
+                        <td>${deskripsi}</td>
+                        <td>${jumlah}</td>
                     </tr>
                 `);
             });
@@ -116,39 +110,60 @@ $(document).ready(function() {
             `);
         }
 
-        // Tampilkan modal
         $('#modal-pengeluaran').modal('show');
+    });
 
-        // Placeholder untuk AJAX
-        /*
-        $.ajax({
-            url: `/api/laporan-keuangan/${transaksiId}/pengeluaran`,
-            method: 'GET',
-            success: function(data) {
-                $('#table-detail-pengeluaran tbody').empty();
-                if (data.length > 0) {
-                    data.forEach((item, index) => {
-                        $('#table-detail-pengeluaran tbody').append(`
-                            <tr>
-                                <td>${index + 1}</td>
-                                <td>${item.deskripsi}</td>
-                                <td>${item.jumlah}</td>
-                            </tr>
-                        `);
-                    });
-                } else {
-                    $('#table-detail-pengeluaran tbody').append(`
-                        <tr>
-                            <td colspan="3" class="text-center">Tidak ada data pengeluaran</td>
-                        </tr>
-                    `);
-                }
-                $('#modal-pengeluaran').modal('show');
-            },
-            error: function() {
-                alert('Gagal memuat data pengeluaran.');
+    // Handle klik tombol Hapus
+    $(document).on('click', '.btn-hapus', function() {
+        const financeId = $(this).data('id');
+        Swal.fire({
+            title: 'Konfirmasi Hapus',
+            text: 'Yakin ingin menghapus laporan keuangan ini? Data pengeluaran terkait juga akan dihapus.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Hapus',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: `/dashboard/staff/keuangan/${financeId}`,
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Berhasil!',
+                                text: 'Laporan keuangan berhasil dihapus.',
+                                confirmButtonText: 'OK'
+                            }).then(() => {
+                                
+                                table.row($(`tr[data-id="${financeId}"]`)).remove().draw();
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Gagal!',
+                                text: response.message || 'Terjadi kesalahan saat menghapus data.',
+                                confirmButtonText: 'OK'
+                            });
+                        }
+                    },
+                    error: function() {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error!',
+                            text: 'Terjadi kesalahan saat menghapus data.',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                });
             }
         });
-        */
     });
+
+    // Inisialisasi tooltip
+    $('[data-bs-toggle="tooltip"]').tooltip();
 });
