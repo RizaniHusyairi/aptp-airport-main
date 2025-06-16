@@ -95,8 +95,11 @@
                 @endsection
                 
 @section('scripts_admin')
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
     <script src="{{ asset('assetsv2/extensions/datatables.net/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('assetsv2/extensions/datatables.net-bs5/js/dataTables.bootstrap5.min.js') }}"></script>
+    <script src="{{ asset('assetsv2/extensions/cleave.js/cleave.min.js') }}"></script>
     
     <script src="{{ asset('../assetsv2/compiled/js/staff-tambah-laporan.js') }}"></script>
 @endsection

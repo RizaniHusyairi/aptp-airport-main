@@ -1,3 +1,4 @@
+document.addEventListener('DOMContentLoaded', () => {
 try {
     const lightbox = GLightbox({
         touchNavigation: true,
@@ -11,3 +12,5 @@ try {
 } catch (error) {
     console.error('GLightbox initialization failed:', error);
 }
+
+});

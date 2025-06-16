@@ -726,7 +726,7 @@ class LandingPageController extends Controller
                 'tujuan_informasi' => $request->tujuan_informasi,
                 'cara_memperoleh' => $request->cara_memperoleh,
                 'cara_salinan' => $request->cara_salinan,
-                'status' => 'belum_dibalas',
+                'status' => 'Belum dibalas',
             ]);
 
             return response()->json([

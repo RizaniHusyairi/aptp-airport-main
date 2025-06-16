@@ -15,12 +15,12 @@ class LetterController extends Controller
     public function index()
     {
         $letters = Letter::latest()->get();
-        return view('user_staff.regulasi.index', compact('letters'));
+        return view('user_staff2.regulasi.index', compact('letters'));
     }
 
     public function create()
     {
-        return view('user_staff.regulasi.create');
+        return view('user_staff2.regulasi.create');
     }
 
     public function store(Request $request)
@@ -49,7 +49,8 @@ class LetterController extends Controller
 
     public function edit(Letter $letter)
     {   
-         return view('user_staff.regulasi.edit', compact('letter'));
+        // dd($letter);
+         return view('user_staff2.regulasi.edit', compact('letter'));
     }
 
     public function update(Request $request, Letter $letter)
@@ -85,7 +86,10 @@ class LetterController extends Controller
         Storage::disk('public')->delete($letter->file_path);
         $letter->delete();
 
-        return redirect()->route('letters.staff.index')->with('success', 'Surat berhasil dihapus.');
+        return response()->json([
+            'success' => true,
+            'message' => 'Data Surat berhasil dihapus.'
+        ]);
     }
 
 

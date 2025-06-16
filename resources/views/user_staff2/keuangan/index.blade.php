@@ -79,7 +79,7 @@
                                 <td>
                                     @if($finance->flow_type == 'budget')
                                     
-                                    <button class="btn btn-sm btn-info btn-lihat-pengeluaran btn-tooltip" data-bs-toggle="tooltip" title="Lihat Pengeluaran"><i class="bi bi-eye"></i></button>
+                                    <button class="btn btn-sm btn-info btn-lihat-pengeluaran text-white btn-tooltip" data-bs-toggle="tooltip" title="Lihat Belanja"><i class="bi bi-eye"></i></button>
                                     @foreach($finance->budgetExpenses as $expense)
                                     
                                     <div  class="expense d-none" data-id="{{ $expense->id }}">
@@ -92,7 +92,7 @@
                                     
                                     
                                     @endif
-                                    <a href="{{ route('keuangan.edit', $finance->id) }}" class="btn btn-sm btn-primary btn-tooltip" data-bs-toggle="tooltip" title="Edit"><i class="bi bi-pencil"></i></a>
+                                    <a href="{{ route('keuangan.edit', $finance->id) }}" class="btn btn-sm btn-warning btn-tooltip text-white" data-bs-toggle="tooltip" title="Edit"><i class="bi bi-pencil"></i></a>
                                     <button class="btn btn-sm btn-danger btn-hapus btn-tooltip" data-id="{{ $finance->id }}" data-bs-toggle="tooltip" title="Hapus"><i class="bi bi-trash"></i></button>
                                 </td>
                             </tr>

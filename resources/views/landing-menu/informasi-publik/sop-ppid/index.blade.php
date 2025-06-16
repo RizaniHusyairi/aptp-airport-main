@@ -30,7 +30,7 @@
         <div class="row gy-4">
 
           <div class="col-lg-4 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="100">
-            <a href="{{ asset('assets_landing/img/sop/prosedur-pengajuan-sengketa-informasi-publik.png') }}" class="glightbox">
+            <a href="{{ asset('assets_landing/img/sop/prosedur-pengajuan-sengketa-informasi-publik.png') }}" class="glightbox" >
             <div class="team-member">
               <div class="member-img">
                 <img src="{{ asset('assets_landing/img/sop/prosedur-pengajuan-sengketa-informasi-publik.png') }}" class="img-fluid" alt="">
@@ -78,7 +78,7 @@ bersengketa menarik diri dari perundingan, maka Komisi Informasi melanjutkan pro
             <a href="{{ asset('/assets_landing/img/sop/prosedur-permohonan-keberatan-informasi.png') }}" class="glightbox">
             <div class="team-member">
               <div class="member-img">
-                <img src="{{ asset('assets_landing/img/sop/prosedur-permohonan-keberatan-informasi.png') }}" class="img-fluid" alt="">
+                <img src="{{ asset('assets_landing/img/sop/prosedur-permohonan-keberatan-informasi.png') }}" class="img-fluid" alt="sop ppid">
                 <!-- <div class="social">
                     Lihat Detail
                 </div> -->
@@ -114,7 +114,6 @@ bersengketa menarik diri dari perundingan, maka Komisi Informasi melanjutkan pro
 @endpush
 
 @push('page-scripts')
-    <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
 
   <script src="{{ asset('assets_landing/js/sop.js') }}"></script>
 @endpush

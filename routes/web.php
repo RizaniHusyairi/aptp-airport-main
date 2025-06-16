@@ -107,9 +107,8 @@ Route::group(["prefix" => 'dashboard'], function () {
             
             // Lelang Staff Routes
             // Route::get('staff/letter', [LetterController::class, 'index'])->name('lelang.staffIndex');
-            Route::resource('staff/letters', LetterController::class)->names('letters.staff');
-            Route::patch('staff/tenant/{id}/approve', [TenantController::class, 'approve'])->name('tenant.approve');
-            Route::patch('staff/tenant/{id}/reject', [TenantController::class, 'reject'])->name('tenant.reject');
+            Route::resource('staff/letter', LetterController::class)->names('letters.staff');
+            
 
 
             Route::prefix('staff/sewa')->controller(SewaLahanController::class)->group(function () {
@@ -181,6 +180,11 @@ Route::group(["prefix" => 'dashboard'], function () {
             Route::get('staff/lalu-lintas', [LaluLintasController::class, 'index'])->name('laluLintas.staffIndex');
             Route::get('staff/lalu-lintas/create', [LaluLintasController::class, 'create'])->name('laluLintas.create');
             Route::post('staff/lalu-lintas/store', [LaluLintasController::class, 'store'])->name('laluLintas.store');
+            Route::get('staff/lalu-lintas/{id}/edit', [LaluLintasController::class, 'edit'])->name('laluLintas.edit');
+            Route::put('staff/lalu-lintas/{id}', [LaluLintasController::class, 'update'])->name('laluLintas.update');
+            Route::delete('staff/lalu-lintas/{id}', [LaluLintasController::class, 'destroy'])->name('laluLintas.destroy');
+            
+        
         });
 
 

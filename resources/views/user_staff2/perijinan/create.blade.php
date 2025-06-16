@@ -136,7 +136,7 @@
                         </div>
                         @enderror
                         
-                        <small class="form-text text-muted">Unggah dokumen dalam format PDF, DOC, atau DOCX. Maksimal 10 file.</small>
+                        <small class="form-text text-muted">Unggah dokumen dalam format PDF, DOC, atau DOCX.</small>
                     </div>
                     <div class="col-12">
                         <button type="submit" class="btn btn-primary">Kirim Pengajuan</button>

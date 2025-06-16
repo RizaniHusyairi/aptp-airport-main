@@ -20,7 +20,7 @@
             </div>
             <div class="col-lg-6" data-aos="fade-up" data-aos-delay="200">
                 <div class="content">
-                    <p>{!! nl2br(e($news->content)) !!}</p>
+                    <p>{!! $news->content !!}</p>
                     <p class="text-muted">Diterbitkan pada: {{ $news->created_at->format('d M Y') }}</p>
                     <a href="{{ route('berita') }}" class="btn btn-primary">Lihat Berita Lainnya</a>
                 </div>
