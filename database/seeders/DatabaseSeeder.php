@@ -27,6 +27,7 @@ class DatabaseSeeder extends Seeder
             LetterSeeder::class,
             FinanceSeeder::class,
             AirFreightTrafficSeeder::class,
+            TourismSeeder::class
         ]);
     }
 }

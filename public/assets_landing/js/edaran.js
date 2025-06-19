@@ -27,10 +27,10 @@ async function fetchLetters(type) {
 document.addEventListener('DOMContentLoaded', () => {
     const pathSegments = window.location.pathname.split('/');
     const typeSegment = pathSegments[pathSegments.length - 1];
-    const type = typeSegment === 'surat-utusan' ? 'utusan' : typeSegment === 'surat-edaran' ? 'edaran' : null;
+    const type = typeSegment === 'surat-utusan' ? 'keputusan' : typeSegment === 'surat-edaran' ? 'edaran' : null;
 
-    if (!type || !['utusan', 'edaran'].includes(type)) {
-        alert('Halaman tidak valid. Silakan akses halaman surat utusan atau surat edaran.');
+    if (!type || !['keputusan', 'edaran'].includes(type)) {
+        alert('Halaman tidak valid. Silakan akses halaman surat keputusan atau surat edaran.');
         return;
     }
 

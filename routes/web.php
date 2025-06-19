@@ -308,6 +308,9 @@ Route::get('/informasi/field-trip', [LandingPageController::class, 'fieldTrip'])
 Route::get('/informasi/lelang', [LandingPageController::class, 'lelang'])->name('lelang');
 Route::get('/informasi/slot', [LandingPageController::class, 'slot'])->name('slot');
 
+// GANTI DENGAN SATU ROUTE INI:
+Route::get('/layanan/{service:slug}', [LandingPageController::class, 'showServicePage'])->name('layanan.show');
+
 Route::get('/informasi-publik/profil-bandara', [LandingPageController::class, 'profilBandara'])->name('profilBandara');
 Route::get('/informasi-publik/struktur-organisasi', [LandingPageController::class, 'strukturOrganisasi'])->name('strukturOrganisasi');
 Route::get('/informasi-publik/profil-ppid-blu', [LandingPageController::class, 'profilPPID'])->name('profilPPID');
@@ -316,11 +319,14 @@ Route::get('/informasi-publik/sop-ppid', [LandingPageController::class, 'sopPpid
 Route::get('/informasi-publik/pengajuan-informasi-publik', [LandingPageController::class, 'pengajuanInformasiPublik'])->name('pengajuanInformasiPublik');
 Route::post('/informasi-publik/pengajuan-informasi-publik', [LandingPageController::class, 'storePengajuanInformasiPublik'])->name('storePengajuanInformasiPublik');
 
+Route::get('/pariwisata', [LandingPageController::class, 'pariwisata'])->name('pariwisata.index');
+Route::get('/pariwisata/{slug}', [LandingPageController::class, 'detailPariwisata'])->name('pariwisata.show');
+
 
 Route::prefix('regulasi')->group(function () {
     Route::get('/surat-utusan', [LandingPageController::class, 'suratUtusan'])->name('letters.utusan');
     Route::get('/surat-edaran', [LandingPageController::class, 'suratEdaran'])->name('letters.edaran');
-    Route::get('/surat-utusan/api', [LandingPageController::class, 'getLettersUtusan'])->name('letters.utusan.api');
+    Route::get('/surat-keputusan/api', [LandingPageController::class, 'getLettersUtusan'])->name('letters.utusan.api');
     Route::get('/surat-edaran/api', [LandingPageController::class, 'getLettersEdaran'])->name('letters.edaran.api');
 });
 // // Regulasi

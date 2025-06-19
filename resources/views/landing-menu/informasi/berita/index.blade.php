@@ -20,7 +20,7 @@
                     <div class="card-overlay">
                       <div class="card-body d-flex flex-column justify-content-between">
                         <h5 class="card-title my-auto mx-3">{{ $headline->title }}</h5>
-                        <p class="card-text mt-auto">{{ Str::limit($headline->content, 150) }}</p>
+                        <p class="card-text mt-auto">{!! Str::limit($headline->content, 150) !!}</p>
                         <div class="utility-info">
                           <ul class="utility-list">
                             <li class="date">{{ $headline->created_at->format('d.m.Y') }}</li>
@@ -87,9 +87,11 @@
                 <div class="col-3 p-0">
                   <img src="{{ asset('uploads/' . $news->image) ?? asset('/assets_landing/img/bandara/APT_1682.JPG') }}" alt="foto" class="img-news">
                 </div>
-                <div class="col-9 p-3">
+                <div class="col-9 p-3 text-black">
                   <h5 class="news-more-title">{{ $news->title }}</h5>
-                  <p class="news-more-content text-black">{{ Str::limit($news->content, 150) }}</p>
+                  <p class="news-more-content ">
+                    {!! Str::limit($news->content, 150) !!}
+                  </p>
                 </div>
               </div>
 

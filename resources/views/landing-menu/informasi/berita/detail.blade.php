@@ -11,8 +11,7 @@
         <p> <span class="description-title">{{ $news->title }}</span></p>
         
     </div>
-    <div class="container section-title" data-aos="fade-up">
-    </div>
+    
     <div class="container">
         <div class="row gy-2">
             <div class="col-lg-6" data-aos="fade-up" data-aos-delay="100">

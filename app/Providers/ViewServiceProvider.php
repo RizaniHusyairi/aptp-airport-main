@@ -2,10 +2,11 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\View;
-use App\Models\Slider;
 use App\Models\News;
+use App\Models\Slider;
+use App\Models\Service;
+use Illuminate\Support\Facades\View;
+use Illuminate\Support\ServiceProvider;
 
 class ViewServiceProvider extends ServiceProvider
 {
@@ -27,6 +28,26 @@ class ViewServiceProvider extends ServiceProvider
     public function boot()
     {
         View::composer('*', function ($view) {
+
+            // --- AWAL BAGIAN YANG DIUBAH ---
+
+            // 2. Ambil semua layanan yang aktif dari database, diurutkan berdasarkan nama
+            $activeServices = Service::where('is_active', true)->orderBy('name', 'asc')->get();
+
+            // 3. Siapkan item menu statis yang ingin dipertahankan di atas
+            $serviceMenuItems = [
+                ['name' => 'PAS', 'route' => 'https://aptpranoto.id/website/layanan/pas_orang.html', 'external' => true],
+                ['name' => 'TIM', 'route' => 'https://aptpranoto.id/website/layanan/tim.html', 'external' => true],
+            ];
+
+            // 4. Loop hasil query dan ubah menjadi format array menu, lalu gabungkan
+            foreach ($activeServices as $service) {
+                $serviceMenuItems[] = [
+                    'name' => $service->name,
+                    'route' => route('layanan.show', $service->slug) // Menggunakan route dinamis yang baru
+                ];
+            }
+            
             $menuItems = [
                 'header' => [
                     ['name' => 'Beranda', 'route' => route('home')],
@@ -53,8 +74,6 @@ class ViewServiceProvider extends ServiceProvider
                                 ],
                             ],
                         ]
-                        // ['name' => 'Profil PPID BLU', 'route' => route('profilPPID')],
-                        // ['name' => 'SOP PPID', 'route' => route('sopPpid')],
                         ],
 
                     ],
@@ -65,22 +84,12 @@ class ViewServiceProvider extends ServiceProvider
                     ]],
                     
                     ['name' => 'Regulasi','dropdown' =>[
-                        ['name' => 'Surat Utusan', 'route' => route('letters.utusan')],
+                        ['name' => 'Surat Keputusan', 'route' => route('letters.utusan')],
                         ['name' => 'Surat Edaran', 'route' => route('letters.edaran')],
                         ]
                     ],
 
-                    ['name' => 'Layanan', 'dropdown' => [
-                        ['name' => 'PAS', 'route' => 'https://aptpranoto.id/website/layanan/pas_orang.html'],
-                        ['name' => 'Tenant', 'route' => route('tenant')],
-                        ['name' => 'Sewa', 'route' => route('sewa')],
-                        ['name' => 'Perijinan Usaha', 'route' => route('perijinanUsaha')],
-                        ['name' => 'Pengiklanan', 'route' => route('pengiklanan')],
-                        ['name' => 'Field Trip', 'route' => route('fieldTrip')],
-                        ['name' => 'Beauty Contest', 'route' => route('lelang')],
-                        ['name' => 'Pengajuan Slot', 'route' => route('slot')],
-                    ]
-                    ]
+                    ['name' => 'Layanan', 'dropdown' => $serviceMenuItems]
                 ]
             ];
             $headlineCount = News::where('is_published', true)

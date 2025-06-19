@@ -6,10 +6,10 @@
 <section id="surat-{{ $type }}" class="section pt-6">
     <div class="container section-title" data-aos="fade-up">
         <h2>Regulasi<br></h2>
-        <p><span>{{ $type == 'utusan' ? 'Surat Utusan' : 'Surat Edaran' }}</span> <span class="description-title">Bandara A.P.T. Pranoto Samarinda</span></p>
+        <p><span>{{ $type == 'utusan' ? 'Surat Keputusan' : 'Surat Edaran' }}</span> <span class="description-title">Bandara A.P.T. Pranoto Samarinda</span></p>
     </div>
     <div class="container light-background table-container">
-        <div id="surat{{ $type == 'utusan' ? 'Utusan' : 'Edaran' }}Table"></div>
+        <div id="surat{{ $type == 'utusan' ? 'Keputusan' : 'Edaran' }}Table"></div>
     </div>
 </section>
 @endsection

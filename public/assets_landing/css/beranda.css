@@ -185,6 +185,96 @@
     font-weight: 300;
 }
 
+/*--------------------------------------------------------------
+# Facilities Section
+--------------------------------------------------------------*/
+.facilities .facility-item {
+    background: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease-in-out;
+    height: 100%;
+}
+
+.facilities .facility-item .facility-icon {
+    margin-bottom: 20px;
+}
+
+.facilities .facility-item .facility-icon i {
+    font-size: 48px;
+    color: var(--accent-color); /* Menggunakan variabel warna utama Anda */
+    transition: all 0.3s;
+}
+
+.facilities .facility-item h3 {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+
+.facilities .facility-item p {
+    color: #6c757d;
+}
+
+.facilities .facility-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.12);
+}
+
+.facilities .facility-item:hover .facility-icon i {
+    color: var(--primary-color);
+}
+
+/*--------------------------------------------------------------
+# Tourism Section
+--------------------------------------------------------------*/
+.tourism .tourism-item {
+    overflow: hidden;
+    position: relative;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.tourism .tourism-item img {
+    transition: transform 0.5s ease;
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+}
+
+.tourism .tourism-item .tourism-info {
+    background: rgba(0, 0, 0, 0.5);
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 20px;
+    color: #fff;
+    transition: all 0.3s ease;
+}
+
+.tourism .tourism-item .tourism-info h4 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 5px;
+    color: #fff;
+}
+
+.tourism .tourism-item .tourism-info span {
+    font-size: 14px;
+    display: block;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.tourism .tourism-item:hover img {
+    transform: scale(1.1);
+}
+
+.tourism .tourism-item:hover .tourism-info {
+    background: rgba(var(--accent-color-rgb), 0.8); /* Warna aksen Anda */
+}
+
 @media screen and (max-width: 64rem) {
     .col {
         width: calc(33.333333% - 2rem);

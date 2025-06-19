@@ -17,13 +17,13 @@ class SlotController extends Controller
         $slots = slot::with('user')->orderBy('created_at', 'desc');
         $slots = $slots->get();
         
-        return view('user_staff.slot.index', compact('slots'));
+        return view('user_staff2.slot.index', compact('slots'));
              
     }
     public function show($id)
     {
         $slot = slot::with('user')->findOrFail($id);
-        return view('user_staff.slot.show', compact('slot'));
+        return view('user_staff2.slot.show', compact('slot'));
     }
     public function approve($id)
     {
@@ -131,7 +131,7 @@ class SlotController extends Controller
 
     public function create()
     {
-        return view('user_staff.slot.create');
+        return view('user_staff2.slot.create');
     }
     public function destroy($id)
     {
@@ -157,7 +157,7 @@ class SlotController extends Controller
         $slots = $slots->latest()->get();
         
 
-        return view('user_staff.slot.index', compact('slots'));
+        return view('user_staff2.slot.index', compact('slots'));
     
 
         

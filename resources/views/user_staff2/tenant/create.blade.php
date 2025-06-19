@@ -48,7 +48,7 @@
                                 <li>Desain dan Gambar Teknis Booth/Tempat Usaha (Softdrawing Sipil, Elektrikal, Plumbing, Internal, dll)</li>
                                 <li>Surat Pernyataan Sanggup Mengikuti Aturan yang Berlaku (Bermaterai)</li>
                                 <li>Laporan Keuangan Perusahaan</li>
-                                <li>Service Level Agreement (Maskapai, Cargo)</li>
+                                <li>Service Level Agreement (Khusus untuk Maskapai)</li>
                             </ul>
                         </div>
                     </div>
@@ -79,6 +79,7 @@
                     <div id="collapsePendaftaran" class="accordion-collapse collapse" aria-labelledby="headingPendaftaran" data-bs-parent="#accordionSyaratKetentuan">
                         <div class="accordion-body">
                             <ol>
+                                <li>Mendisposisikan surat permohonan kepada Kabandara</li>
                                 <li>Mendisposisikan surat permohonan kepada Kasi Pelayanan dan Kerjasama</li>
                                 <li>Mendisposisikan surat permohonan kepada petugas pengembangan usaha untuk verifikasi</li>
                                 <li>Melakukan verifikasi permohonan usaha sesuai inventaris usaha yang akan dikembangkan dan membuat draft surat undangan presentasi bisnis beserta nota dinas</li>

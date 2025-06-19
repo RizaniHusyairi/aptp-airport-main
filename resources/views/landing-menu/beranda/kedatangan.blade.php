@@ -5,7 +5,7 @@
 @section('content')
 
 <section id="jadwal-kedatangan" class="section pt-6">
-      <div class="container section-title" data-aos="fade-up">
+      <div class="container section-title pb-2" data-aos="fade-up">
         <h2>Jadwal<br></h2>
         <p><span>Kedatangan Pesawat</span> <span class="description-title">Bandara A.P.T. Pranoto Samarinda</span></p>
       </div>

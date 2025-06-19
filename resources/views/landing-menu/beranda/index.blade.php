@@ -54,7 +54,7 @@
           <div class="col-md-4">
             <a href='{{ route("lalulintas") }}' class="info-dekstop-pesawat">
 
-              <div class="card-body text-center" data-aos="fade-up">
+              <div class="card-body text-center row justify-self-center" data-aos="fade-up">
                 <div class="row align-items-center self-around">
                   <div class="col-md-12 text-white btn-lihat-pesawat">
                     <span >Lihat Detail</span>
@@ -73,7 +73,7 @@
                   
                 </div>
                 <div class="card-text-container">
-                  <p class="card-text text-muted">Pergerakan Pesawat</p>
+                  <p class="card-text text-muted">Pergerakan Lalu Lintas Angkutan Udara</p>
                 </div>
               
               </div>
@@ -102,7 +102,7 @@
                   
                 </div>
                 <div class="card-text-container">
-                  <p class="card-text text-muted">Kedatangan Pesawat</p>
+                  <p class="card-text text-muted">Kedatangan Pesawat hari ini</p>
                 </div>
                 
               </div>
@@ -130,7 +130,7 @@
                   
                 </div>
                 <div class="card-text-container">
-                  <p class="card-text text-muted">Keberangkatan Pesawat</p>
+                  <p class="card-text text-muted">Keberangkatan Pesawat hari ini</p>
                 </div>
                 
               </div>
@@ -238,6 +238,88 @@
       </div>
   </section>
 
+  <section id="facilities" class="facilities section light-background">
+    <div class="container section-title" data-aos="fade-up">
+        <h2>Fasilitas Kami</h2>
+        <p><span>Temukan Kenyamanan</span> <span class="description-title">Selama di Bandara</span></p>
+    </div><div class="container">
+        <div class="row gy-4">
+
+            <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="100">
+                <div class="facility-item text-center">
+                    <div class="facility-icon">
+                        <i class="bi bi-shop"></i>
+                    </div>
+                    <h3>Area Belanja & Retail</h3>
+                    <p>Jelajahi berbagai pilihan toko yang menjual oleh-oleh, kebutuhan perjalanan, dan produk lokal.</p>
+                </div>
+            </div><div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="200">
+                <div class="facility-item text-center">
+                    <div class="facility-icon">
+                        <i class="bi bi-cup-hot-fill"></i>
+                    </div>
+                    <h3>Restoran & Kafe</h3>
+                    <p>Nikmati hidangan lezat dan minuman segar di berbagai pilihan restoran dan kafe kami.</p>
+                </div>
+            </div><div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="300">
+                <div class="facility-item text-center">
+                    <div class="facility-icon">
+                      <i class="bi bi-suitcase"></i>
+                    </div>
+                    <h3>Ruang Tunggu Nyaman</h3>
+                    <p>Bersantailah sebelum penerbangan Anda di ruang tunggu kami yang bersih dan nyaman.</p>
+                </div>
+            </div><div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="400">
+                <div class="facility-item text-center">
+                    <div class="facility-icon">
+                        <i class="bi bi-p-circle-fill"></i>
+                    </div>
+                    <h3>Area Parkir Luas</h3>
+                    <p>Kapasitas parkir yang luas dan aman untuk kendaraan Anda selama bepergian.</p>
+                </div>
+            </div>
+          </div>
+      </div>
+  </section>
+<section id="tourism" class="tourism section ">
+    <div class="container section-title" data-aos="fade-up">
+        <h2>Jelajahi Samarinda</h2>
+        <p><span>Destinasi Wisata</span> <span class="description-title">Populer di Sekitar</span></p>
+    </div><div class="container">
+        <div class="row gy-4">
+
+          @foreach ($destinations as $item )
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">  
+              <div class="tourism-item">
+                    <a href="{{ route('pariwisata.show', $item->slug) }}">
+                        <img src="{{ asset('uploads/' . $item->cover_image) }}" class="img-fluid rounded img-tour" alt="{{ $item->name }}">
+                        <div class="tourism-info">
+                            <h4>{{ $item->name }}</h4>
+                            <span>{{ $item['short_desc'] }}</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+              @endforeach  
+            
+          <div class="text-center" data-aos="fade-left">
+              <button id="pariwisata-lain" class="learn-more">
+                  <span class="circle" aria-hidden="true">
+                  <span class="icon arrow"></span>
+                  </span>
+                  <span class="button-text">Lihat semua Destinasi</span>
+              </button>
+              <script>
+                const b = document.getElementById('pariwisata-lain');
+                b.addEventListener('click',()=> {
+                  window.location.href = '{{ route("pariwisata.index") }}';
+                })
+              </script>
+            </div>
+         
+    </div>
+</section>
+
   <!-- News Section -->
   <section id="news" class="news section light-background">
     <!-- Section Title -->
@@ -280,19 +362,20 @@
                 @endif
             </div>
             <div class="text-center" data-aos="fade-left">
-            <button id="berita-lain" class="learn-more">
-                <span class="circle" aria-hidden="true">
-                <span class="icon arrow"></span>
-                </span>
-                <span class="button-text">Berita Lainnya</span>
-            </button>
-            <script>
-              const b = document.getElementById('berita-lain');
-              b.addEventListener('click',()=> {
-                window.location.href = '{{ route("berita") }}';
-              })
-            </script>
+              <button id="berita-lain" class="learn-more">
+                  <span class="circle" aria-hidden="true">
+                  <span class="icon arrow"></span>
+                  </span>
+                  <span class="button-text">Berita Lainnya</span>
+              </button>
+              <script>
+                const b = document.getElementById('berita-lain');
+                b.addEventListener('click',()=> {
+                  window.location.href = '{{ route("berita") }}';
+                })
+              </script>
             </div>
+            
         </div>        
     </div>
   </section>
