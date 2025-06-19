@@ -103,7 +103,9 @@ class LandingPageController extends Controller
         ]);
         // Panggil API
         $flightStats = $this->airportApi->getFlightStats();
-        $totalAngkutanUdara = AirFreightTraffic::sum(DB::raw('arrival + departure'));
+        $totalAngkutanUdara = AirFreightTraffic::whereYear('date', now()->year)
+                                                  ->whereMonth('date', now()->month)
+                                                  ->sum(DB::raw('arrival + departure'));
         $weather = $this->airportApi->getCurrentWeather();
         $headlines = News::where('is_published', true)
                         ->where('is_headline', true)
