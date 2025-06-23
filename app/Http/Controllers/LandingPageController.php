@@ -171,6 +171,7 @@ class LandingPageController extends Controller
     //berita
     public function berita()
     {
+        
         // Ambil 3 berita headline pertama untuk newsFirstSwiper
         $topHeadlines = News::where('is_headline', true)
                            ->where('is_published', true)
@@ -199,8 +200,17 @@ class LandingPageController extends Controller
 
     public function showNews($slug)
     {
+        // Ambil berita utama yang sedang dibuka
         $news = News::where('slug', $slug)->where('is_published', true)->firstOrFail();
-        return view('landing-menu.informasi.berita.detail', compact('news'));
+
+        // Ambil 3 berita terbaru lainnya sebagai "Berita Terkait"
+        // Pastikan untuk tidak menyertakan berita yang sedang dibuka
+        $relatedNews = News::where('is_published', true)
+                            ->where('id', '!=', $news->id) // Exclude the current news
+                            ->latest() // Ambil yang paling baru
+                            ->take(3)  // Batasi hanya 3 berita
+                            ->get();
+        return view('landing-menu.informasi.berita.detail', compact('news','relatedNews'));
     
     }
 

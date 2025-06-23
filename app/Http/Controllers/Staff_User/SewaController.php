@@ -8,7 +8,7 @@ use Auth;
 use App\Models\Rental;
 use Illuminate\Support\Facades\Storage;
 
-class SewaLahanController extends Controller
+class SewaController extends Controller
 {
 
     // Konfigurasi jenis sewa

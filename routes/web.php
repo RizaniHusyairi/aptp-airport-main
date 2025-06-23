@@ -5,13 +5,9 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Admin\{
     HomeController,
-    AirlineController,
-    AirportController,
     CustomerController,
-    PlaneController,
-    FlightController,
+
     ProfileController,
-    TicketController,
     RoleController,
 };
 use App\Http\Controllers\Staff_User\{
@@ -20,9 +16,8 @@ use App\Http\Controllers\Staff_User\{
     FieldTripController,
     LaporanKeuanganController,
     PengiklananController,
-    PergudanganController,
     PerijinanUsahaController,
-    SewaLahanController,
+    SewaController,
     SliderController,
     TenantController,
     InformasiPublikController,
@@ -34,7 +29,6 @@ use App\Http\Controllers\Staff_User\{
 use App\Http\Controllers\{
     LandingPageController,
     SandboxController,
-    SidebarControler,
     SlotController
 
 };
@@ -51,7 +45,7 @@ Route::group(["prefix" => 'dashboard'], function () {
         Route::delete('/tenant/{id}', [TenantController::class, 'destroy'])->name('tenant.destroy');
         Route::get('/tenant', [TenantController::class, 'indexUser'])->name('tenant.index');
         
-        Route::prefix('/sewa')->controller(SewaLahanController::class)->group(function () {
+        Route::prefix('/sewa')->controller(SewaController::class)->group(function () {
             Route::get('/', 'index')->name('sewa.index');
             Route::get('/create', 'create')->name('sewa.create');
             Route::post('/store', 'store')->name('sewa.store');
@@ -111,7 +105,7 @@ Route::group(["prefix" => 'dashboard'], function () {
             
 
 
-            Route::prefix('staff/sewa')->controller(SewaLahanController::class)->group(function () {
+            Route::prefix('staff/sewa')->controller(SewaController::class)->group(function () {
                 Route::get('/', 'indexStaff')->name('staffSewa.index');
                 Route::get('/{id}', 'show')->name('staffSewa.show');
                 Route::patch('/{id}/approve', 'approve')->name('sewa.approve');
@@ -194,37 +188,12 @@ Route::group(["prefix" => 'dashboard'], function () {
         Route::post('/profile/update-password', [ProfileController::class, 'updatePassword'])->name('profile.updatePassword');
 
 
-        //tickets
-        Route::get('tickets/show-flights', [TicketController::class, 'showFlights'])->name('tickets.flights');
-        Route::get('tickets/user-tickets', [TicketController::class, 'userTickets'])->name('tickets.userTickets');
-        Route::post('tickets/book', [TicketController::class, 'book'])->name('tickets.book');
-        Route::post('tickets/cancel-flight', [TicketController::class, 'cancel'])->name('tickets.cancel');
 
 
 
         /* ================== ADMIN ROUTES ================== */
         Route::group(['middleware' => 'admin'], function () {
             Route::get('/', [HomeController::class, 'root'])->name('root');
-
-            //get count of tickets
-            Route::get('/ticket-status-count', [SidebarControler::class, 'ticketStatusCount'])->name('ticketStatusCount');
-
-            //airlines
-            Route::resource("airlines", AirlineController::class);
-
-            //planes
-            Route::resource("planes", PlaneController::class)->except('show');
-
-            //airports
-            Route::resource("airports", AirportController::class)->except('show');
-
-            //flights
-            Route::get("flights/get-planes-by-airline", [FlightController::class, 'getPlanesByAirline'])->name('flights.getPlanesByAirline');
-            Route::resource("flights", FlightController::class)->except('show');
-
-            //tickets
-            Route::get('tickets', [TicketController::class, 'index'])->name('tickets.index');
-            Route::post('tickets/change-status/{ticket}', [TicketController::class, 'changeStatus'])->name('tickets.changeStatus');
 
             //customers
             Route::get("customers", [CustomerController::class, "index"])->name('customers.index');
@@ -243,7 +212,7 @@ Route::group(["prefix" => 'dashboard'], function () {
     });
     Route::middleware(['auth'])->group(function () {
         // Sewa Routes
-        Route::get('/sewa', [SewaLahanController::class, 'index'])->name('sewa.index');
+        Route::get('/sewa', [SewaController::class, 'index'])->name('sewa.index');
         
         // Lelang Routes
         Route::get('/lelang', [LelangController::class, 'index'])->name('lelang.index');
@@ -257,8 +226,6 @@ Route::group(["prefix" => 'dashboard'], function () {
         // Field Trip Routes
         Route::get('/fieldtrip', [FieldTripController::class, 'index'])->name('fieldtrip.index');
         
-        // Pergudangan Routes
-        Route::get('/gudang', [PergudanganController::class, 'index'])->name('gudang.index');
         
         // Laporan Keuangan Routes
         Route::get('/keuangan', [LaporanKeuanganController::class, 'index'])->name('keuangan.index');

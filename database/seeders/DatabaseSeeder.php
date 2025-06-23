@@ -22,12 +22,14 @@ class DatabaseSeeder extends Seeder
             CitySeeder::class,
             AirportSeeder::class,
             FlightSeeder::class,
+            RoleSeeder::class,
             PermissionSeeder::class,
             NewsSeeder::class,
             LetterSeeder::class,
             FinanceSeeder::class,
             AirFreightTrafficSeeder::class,
-            TourismSeeder::class
+            TourismSeeder::class,
+
         ]);
     }
 }

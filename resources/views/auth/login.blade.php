@@ -172,6 +172,8 @@
     // Cek error registrasi
     @if ($errors->has('name') || $errors->has('email_new') || $errors->has('phone') || $errors->has('address') || $errors->has('password_new') || $errors->has('password_confirmation'))
         showAlert('error', 'Registrasi Gagal', 'Silakan periksa kembali data yang Anda masukkan.');
+        // Jika ada error registrasi, kita centang checkbox #flip secara paksa.
+            document.getElementById('flip').checked = true;
     @endif
 </script>
 

@@ -1,3 +1,14 @@
+// Ambil elemen chart
+const chartProfileVisitEl = document.getElementById('chart-profile-visit');
+const chartPemasukanEl = document.getElementById('chart-pemasukan');
+const chartAnggaran = document.getElementById('chart-anggaran-belanja');
+
+// Ambil data dari atribut data-*
+const categories = JSON.parse(chartProfileVisitEl.dataset.categories);
+const series = JSON.parse(chartProfileVisitEl.dataset.series);
+const pemasukan = JSON.parse(chartPemasukanEl.dataset.pemasukan);
+const anggaran = JSON.parse(chartAnggaran.dataset.anggaran);
+
 var optionsProfileVisit = {
     annotations: {
         position: "back",
@@ -16,12 +27,12 @@ var optionsProfileVisit = {
     series: [
         {
             name: "pengunjung",
-            data: window.visitorSeries,
+            data: series,
         },
     ],
     colors: "#435ebe",
     xaxis: {
-        categories: window.visitorCategories,
+        categories: categories,
     },
 };
 
@@ -43,12 +54,12 @@ var optionsPemasukan = {
     series: [
         {
             name: "pemasukan",
-            data: window.pemasukanData.all.data,
+            data: pemasukan.all.data,
         },
     ],
     colors: "#435ebe",
     xaxis: {
-        categories: window.pemasukanData.all.categories,
+        categories: pemasukan.all.categories,
     },
     yaxis: {
         labels: {
@@ -82,16 +93,16 @@ var optionsAnggaranBelanja = {
     series: [
         {
             name: "Anggaran",
-            data: window.anggaranBelanjaData.all.anggaran,
+            data: anggaran.all.anggaran,
         },
         {
             name: "Belanja",
-            data: window.anggaranBelanjaData.all.belanja,
+            data: anggaran.all.belanja,
         },
     ],
     colors: ["#435ebe", "#55c6e8"],
     xaxis: {
-        categories: window.anggaranBelanjaData.all.categories,
+        categories: anggaran.all.categories,
     },
     yaxis: {
         labels: {
@@ -116,16 +127,16 @@ var optionsAnggaranBelanja = {
 
 // Fungsi untuk memperbarui grafik pemasukan berdasarkan filter
 function updatePemasukanChart(period) {
-    optionsPemasukan.series[0].data = window.pemasukanData[period].data;
-    optionsPemasukan.xaxis.categories = window.pemasukanData[period].categories;
+    optionsPemasukan.series[0].data = pemasukan[period].data;
+    optionsPemasukan.xaxis.categories = pemasukan[period].categories;
     chartPemasukan.updateOptions(optionsPemasukan);
 }
 
 // Fungsi untuk memperbarui grafik anggaran dan belanja berdasarkan filter
 function updateAnggaranBelanjaChart(period) {
-    optionsAnggaranBelanja.series[0].data = window.anggaranBelanjaData[period].anggaran;
-    optionsAnggaranBelanja.series[1].data = window.anggaranBelanjaData[period].belanja;
-    optionsAnggaranBelanja.xaxis.categories = window.anggaranBelanjaData[period].categories;
+    optionsAnggaranBelanja.series[0].data = anggaran[period].anggaran;
+    optionsAnggaranBelanja.series[1].data = anggaran[period].belanja;
+    optionsAnggaranBelanja.xaxis.categories = anggaran[period].categories;
     chartAnggaranBelanja.updateOptions(optionsAnggaranBelanja);
 }
 

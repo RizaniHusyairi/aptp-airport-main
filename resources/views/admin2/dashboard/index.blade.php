@@ -48,7 +48,11 @@
                             <h4>Grafik pengunjung (7 hari terakhir)</h4>
                         </div>
                         <div class="card-body">
-                            <div id="chart-profile-visit"></div>
+                            <div id="chart-profile-visit" 
+                                data-categories='@json($visitorCategories)' 
+                                data-series='@json($visitorSeries)'>
+                            </div>
+                            
                         </div>
                     </div>
                 </div>
@@ -64,7 +68,8 @@
                             </select>
                         </div>
                         <div class="card-body">
-                            <div id="chart-pemasukan"></div>
+                            <div id="chart-pemasukan"
+                            data-pemasukan='@json($pemasukanData)'></div>
                         </div>
                     </div>
                 </div>
@@ -80,7 +85,9 @@
                             </select>
                         </div>
                         <div class="card-body">
-                            <div id="chart-anggaran-belanja"></div>
+                            <div id="chart-anggaran-belanja"
+                            data-anggaran='@json($anggaranBelanjaData)'
+                            ></div>
                         </div>
                     </div>
                 </div>
@@ -89,11 +96,7 @@
         </section>
     </div>
     <script>
-            // Kirim data dari PHP ke JavaScript
-            window.visitorCategories = @json($visitorCategories);
-            window.visitorSeries = @json($visitorSeries);
-            window.pemasukanData = @json($pemasukanData);
-            window.anggaranBelanjaData = @json($anggaranBelanjaData);
+            
     </script>
 @endsection
 @section('scripts_admin')

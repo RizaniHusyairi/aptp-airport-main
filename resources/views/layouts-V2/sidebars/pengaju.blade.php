@@ -1,17 +1,4 @@
-@php
-    
-use Illuminate\Support\Str; 
-$currentRoute = Route::currentRouteName();
-$userRoutes = [
-            'Ajukan Tenant' => ['route' => 'tenant.index', 'icon' => 'bi bi-shop', 'label' => 'Ajukan Tenant'],
-            'Ajukan Sewa' => ['route' => 'sewa.index', 'icon' => 'bi bi-cart', 'label' => 'Ajukan Sewa'],
-            'Ajukan Perijinan Usaha' => ['route' => 'perijinan.index', 'icon' => 'bi bi-file-earmark-text', 'label' => 'Ajukan Perijinan Usaha'],
-            'Ajukan Pengiklanan' => ['route' => 'pengiklanan.index', 'icon' => 'bi bi-megaphone', 'label' => 'Ajukan Pengiklanan'],
-            'Ajukan Field Trip' => ['route' => 'fieldtrip.index', 'icon' => 'bi bi-bus-front', 'label' => 'Ajukan Field Trip'],
-            'Ajukan Lelang' => ['route' => 'lelang.index', 'icon' => 'bi bi-hammer', 'label' => 'Ajukan Lelang/Beauty Contest'],
-            'Ajukan Slot Charter' => ['route' => 'slot.index', 'icon' => 'bi bi-clock', 'label' => 'Ajukan Slot Charter'],
-          ];
-@endphp
+
 
 <div class="sidebar-wrapper active">
     <div class="sidebar-header position-relative">
@@ -37,7 +24,7 @@ $userRoutes = [
     <div class="sidebar-menu">
         <ul class="menu">
             <li class="sidebar-title">Menu</li>
-            @foreach ($userRoutes as $permissionName => $data)
+            @foreach ($userRoutes as $menu => $data)
                 <li class="sidebar-item {{ Route::is($data['route']) ? 'active' : '' }}">
                 <a href="{{ route($data['route']) }}" class='sidebar-link' data-bs-toggle="tooltip" data-bs-placement="right" title="Berita">
                         <i class="{{ $data['icon'] }}"></i>

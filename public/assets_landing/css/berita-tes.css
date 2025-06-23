@@ -179,60 +179,50 @@
     border-radius: 10px;
 }
 
-/* Responsivitas untuk tablet */
+/* GANTI SELURUH BLOK INI */
 @media (max-width: 992px) {
+    .row.justify-content-around > .col-lg-3 {
+        margin-top: 40px; /* Memberi jarak saat slider kanan pindah ke bawah */
+    }
+
     .news-card {
-        height: 350px; /* Tinggi lebih kecil untuk tablet */
+        height: 400px; /* Tinggi konsisten untuk tablet */
     }
     .card-title {
-    font-size: 1.5rem;
-  
+        font-size: 1.8rem;
     }
     .card-title-recomd {
-        font-size: 0.9rem; /* Ukuran font lebih kecil */
-        -webkit-line-clamp: 2; /* Batasi teks menjadi 3 baris */
+        font-size: 0.9rem;
     }
 
-    .news-list {
-        max-height: none; /* Hapus batasan tinggi */
-        overflow: hidden; /* Swiper mengambil alih */
-    }
-
-    .news-swiper {
-        --swiper-navigation-size: 30px; /* Ukuran tombol navigasi */
-        height: auto; /* Tinggi menyesuaikan konten */
+    .news-list, .news-swiper {
+        /* Hapus batasan tinggi agar slider horizontal bisa menyesuaikan */
+        height: auto;
+        max-height: none;
     }
 
     .news-card.recomd {
-        width: 250px; /* Lebar tetap untuk kartu di Swiper */
-        height: 150px; /* Tinggi konsisten */
-        margin: 0 auto; /* Pusatkan kartu di slide */
+        /* Atur ukuran kartu untuk slider horizontal */
+        width: 250px;
+        height: 150px;
+        margin: 0;
     }
 }
-
-/* Responsivitas untuk smartphone */
+/* GANTI SELURUH BLOK INI JUGA */
 @media (max-width: 768px) {
     .news-card {
-        height: 250px; /* Tinggi lebih kecil untuk smartphone */
+        height: 300px; /* Tinggi untuk mobile */
     }
 
-    .news-list {
-        max-height: none; /* Hapus batasan tinggi */
-        overflow: hidden; /* Swiper mengambil alih */
-    }
-
-    .news-swiper {
-        --swiper-navigation-size: 25px; /* Ukuran tombol navigasi lebih kecil */
-        height: auto; /* Tinggi menyesuaikan konten */
+    .news-list, .news-swiper {
+        height: auto;
+        max-height: none;
     }
 
     .news-card.recomd {
-        width: 200px; /* Lebar lebih kecil untuk smartphone */
-        height: 120px; /* Tinggi lebih kecil untuk smartphone */
-        margin: 0 auto; /* Pusatkan kartu di slide */
+        width: 220px; /* Lebar kartu di mobile */
+        height: 130px;
     }
-
-    
 
     .news-more-content {
         display: none;
@@ -240,16 +230,16 @@
 
     .news-more-title {
         font-size: 1rem;
-        -webkit-line-clamp: 3; /* Batasi teks menjadi 3 baris */
+        -webkit-line-clamp: 3;
     }
 
     .card-title {
-        font-size: 1.2rem;
+        font-size: 1.5rem;
     }
 
     .card-text {
         font-size: 0.9rem;
-        -webkit-line-clamp: 2; /* Batasi teks menjadi 2 baris di smartphone */
+        -webkit-line-clamp: 2;
     }
 
     .card-body {
