@@ -239,6 +239,14 @@ Route::group(["prefix" => 'dashboard'], function () {
 Route::get('/', [LandingPageController::class, 'home'])->name('home');
 Route::get('/lalu-lintas-angkutan', [LandingPageController::class, 'lalulintas'])->name('lalulintas');
 Route::get('/api/air-freight-traffic', [LandingPageController::class, 'getTrafficData'])->name('api.air-freight-traffic');
+Route::get('/api/monthly-traffic-stats', [LandingPageController::class, 'getMonthlyTrafficStats']);
+
+Route::post('api/ai/generate-trip-plan', [LandingPageController::class, 'generateTripPlan']);
+
+// routes/api.php
+Route::get('/api/routes/domestic', [LandingPageController::class, 'getDomesticRoutesData']);
+
+
 
 Route::get('/keberangkatan', [LandingPageController::class, 'keberangkatan'])->name('keberangkatan');
 Route::get('/kedatangan', [LandingPageController::class, 'kedatangan'])->name('kedatangan');

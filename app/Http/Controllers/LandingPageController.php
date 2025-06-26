@@ -11,6 +11,7 @@ use App\Models\Service;
 use App\Models\Tourism;
 use App\Models\Visitor;
 use App\Models\Complaint;
+use App\Jobs\LogVisitorJob;
 use Illuminate\Http\Request;
 use App\Models\BudgetExpense;
 use App\Models\AirFreightTraffic;
@@ -20,7 +21,9 @@ use App\Services\AirportApiService;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Validator;
+
 
 
 class LandingPageController extends Controller
@@ -88,30 +91,44 @@ class LandingPageController extends Controller
     
     public function home(Request $request)
     {
-        $query = Tourism::where('status', 'published');
-        $destinations = $query->latest()->take(3)->get();
+        // BARU: Cache query untuk destinasi wisata selama 1 jam
+        $destinations = Cache::remember('home_destinations', now()->addHour(), function() {
+            return Tourism::where('status', 'published')->latest()->take(3)->get();
+        });
+
+        // BARU: Cache query untuk sliders selama 1 jam
+        $sliders = Cache::remember('home_sliders', now()->addHour(), function() {
+            return Slider::where('is_visible_home', 1)->take(3)->get();
+        });
+
+        // BARU: Cache query untuk total angkutan udara selama 3 jam
+        $totalAngkutanUdara = Cache::remember('total_air_freight_monthly', now()->addHours(3), function() {
+            return AirFreightTraffic::whereYear('date', now()->year)
+                                      ->whereMonth('date', now()->month)
+                                      ->sum(DB::raw('arrival + departure'));
+        });
+
+        // BARU: Cache query untuk berita utama selama 15 menit
+        $headlines = Cache::remember('home_headlines', now()->addMinutes(15), function() {
+            return News::where('is_published', true)
+                       ->where('is_headline', true)
+                       ->orderBy('created_at', 'desc')
+                       ->take(3)
+                       ->get();
+        });
 
         $ip = $request->ip(); // IP Address pengunjung
         $userAgent = $request->header('User-Agent'); // Informasi browser/device
-        $sliders = Slider::where('is_visible_home', 1)
-                        ->take(3)
-                        ->get();
+    
 
-        Visitor::create([
-            'ip_address' => $request->ip(),
-            'user_agent' => $request->header('User-Agent'),
-        ]);
+        
+        // SESUDAH:
+        LogVisitorJob::dispatch($request->ip(), $request->header('User-Agent'));
+        // =========================
         // Panggil API
         $flightStats = $this->airportApi->getFlightStats();
-        $totalAngkutanUdara = AirFreightTraffic::whereYear('date', now()->year)
-                                                  ->whereMonth('date', now()->month)
-                                                  ->sum(DB::raw('arrival + departure'));
         $weather = $this->airportApi->getCurrentWeather();
-        $headlines = News::where('is_published', true)
-                        ->where('is_headline', true)
-                        ->orderBy('created_at', 'desc')
-                        ->take(3)
-                        ->get();
+        
         
         $meta = [
             'title' => 'APT Pranoto - Bandara Samarinda',
@@ -128,6 +145,167 @@ class LandingPageController extends Controller
             'weather',
             'meta'
         ));
+    }
+
+    // app/Http/Controllers/LandingPageController.php
+
+    // METHOD BARU UNTUK MENYEDIAKAN DATA RUTE DOMESTIK
+    public function getDomesticRoutesData()
+    {
+        $routesData = [
+            [
+                'kota' => 'Jakarta (CGK)',
+                'provinsi' => 'Banten',
+                'lat' => -6.1256, 'lon' => 106.6559,
+                'maskapai' => [
+                    ['nama' => 'Batik Air', 'logo' => asset('assets_landing/img/mitra/logo-batik.png')],
+                    ['nama' => 'Citilink', 'logo' => asset('assets_landing/img/mitra/logo-citilink.png')],
+                ]
+            ],
+            [
+                'kota' => 'Surabaya (SUB)',
+                'provinsi' => 'Jawa Timur',
+                'lat' => -7.3798, 'lon' => 112.786,
+                'maskapai' => [
+                    ['nama' => 'Super Air Jet', 'logo' => asset('assets_landing/img/mitra/logo-SAJ.png')],
+                    ['nama' => 'Citilink', 'logo' => asset('assets_landing/img/mitra/logo-citilink.png')],
+                ]
+            ],
+             [
+                'kota' => 'Yogyakarta (YIA)',
+                'provinsi' => 'DI Yogyakarta',
+                'lat' => -7.9048, 'lon' => 110.055,
+                'maskapai' => [
+                    ['nama' => 'Super Air Jet', 'logo' => asset('assets_landing/img/mitra/logo-SAJ.png')],
+                ]
+            ],
+             [
+                'kota' => 'Berau (BEJ)',
+                'provinsi' => 'Kalimantan Timur',
+                'lat' => 2.1533, 'lon' => 117.498,
+                'maskapai' => [
+                    ['nama' => 'Wings Air', 'logo' => asset('assets_landing/img/mitra/logo-wings.png')],
+                ]
+            ],
+             [
+                'kota' => 'Maratua (RTU)',
+                'provinsi' => 'Kalimantan Timur',
+                'lat' => 2.2514, 'lon' => 118.634,
+                'maskapai' => [
+                    ['nama' => 'Smart Aviation', 'logo' => asset('assets_landing/img/mitra/logo-smart.jpg')],
+                ]
+            ],
+            [
+                'kota' => 'Long Apung (LPU)',
+                'provinsi' => 'Kalimantan Utara',
+                'lat' => 1.1017, 'lon' => 115.723,
+                'maskapai' => [
+                    ['nama' => 'Smart Aviation', 'logo' => asset('assets_landing/img/mitra/logo-smart.jpg')],
+                ]
+            ],
+            [
+                'kota' => 'Datah Dawai (DTD)',
+                'provinsi' => 'Kalimantan Timur',
+                'lat' => -0.1167, 'lon' => 115.55,
+                'maskapai' => [
+                    ['nama' => 'Smart Aviation', 'logo' => asset('assets_landing/img/mitra/logo-smart.jpg')],
+                ]
+            ],
+             [
+                'kota' => 'Muara Wahau (MWV)',
+                'provinsi' => 'Kalimantan Timur',
+                'lat' => 1.05, 'lon' => 116.783,
+                'maskapai' => [
+                    ['nama' => 'Smart Aviation', 'logo' => asset('assets_landing/img/mitra/logo-smart.jpg')],
+                ]
+            ],
+        ];
+
+        return response()->json(['success' => true, 'data' => $routesData]);
+    }
+    
+
+    // METHOD BARU UNTUK MENGHUBUNGI GEMINI API
+    public function generateTripPlan(Request $request)
+    {
+        // 1. Validasi input dari frontend
+        $validator = Validator::make($request->all(), [
+            'tujuan' => 'required|string|max:100',
+            'durasi' => 'required|integer|min:1|max:10',
+        ]);
+        // dd($request);
+        if ($validator->fails()) {
+            return response()->json(['success' => false, 'error' => 'Input tidak valid.'], 422);
+        }
+
+        $tujuan = $request->input('tujuan');
+        $durasi = $request->input('durasi');
+        
+        // 2. Ambil API Key dari config (yang membaca .env)
+        $apiKey = config('services.gemini.api_key');
+
+        if (!$apiKey) {
+            return response()->json(['success' => false, 'error' => 'Kunci API Gemini tidak dikonfigurasi.'], 500);
+        }
+
+        // 3. Buat prompt untuk Gemini
+        $prompt = "Anda adalah asisten perjalanan yang ramah dan antusias. Buatkan contoh rencana perjalanan (itinerary) yang menarik dan detail untuk liburan ke kota \"{$tujuan}\" selama {$durasi} hari. Berikan jawaban dalam format Markdown. Untuk setiap hari, buat judul (misal: \"**Hari 1: Petualangan Kuliner dan Sejarah**\") diikuti dengan daftar kegiatan dalam bentuk unordered list (menggunakan tanda -). Sertakan juga beberapa rekomendasi tempat makan khas di setiap harinya.";
+
+        // 4. Kirim permintaan ke Google menggunakan Laravel HTTP Client
+        $response = Http::timeout(60)->post("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={$apiKey}", [
+            'contents' => [
+                [
+                    'role' => 'user',
+                    'parts' => [
+                        ['text' => $prompt]
+                    ]
+                ]
+            ]
+        ]);
+
+        // 5. Periksa dan teruskan jawaban kembali ke frontend
+        if ($response->successful() && isset($response->json()['candidates'][0]['content']['parts'][0]['text'])) {
+            $generatedText = $response->json()['candidates'][0]['content']['parts'][0]['text'];
+            return response()->json(['success' => true, 'plan' => $generatedText]);
+        }
+        
+        // Tangani jika ada error dari API Google
+        Log::error('Gemini API Error:', ['response' => $response->body()]);
+        return response()->json(['success' => false, 'error' => 'Gagal mendapatkan jawaban dari AI.'], 500);
+    }
+
+    public function getMonthlyTrafficStats()
+    {
+        try {
+            // Menggunakan cache untuk menyimpan hasil selama 3 jam agar tidak membebani database
+            $stats = \Illuminate\Support\Facades\Cache::remember('monthly_traffic_stats', now()->addHours(3), function () {
+                $now = \Carbon\Carbon::now();
+                $query = \App\Models\AirFreightTraffic::whereYear('date', $now->year)
+                                                    ->whereMonth('date', $now->month);
+
+                $aircraft = (clone $query)->where('type', 'Pesawat')->sum(\Illuminate\Support\Facades\DB::raw('arrival + departure'));
+                $passengers = (clone $query)->where('type', 'Penumpang')->sum(\Illuminate\Support\Facades\DB::raw('arrival + departure'));
+                $cargo = (clone $query)->where('type', 'Kargo')->sum(\Illuminate\Support\Facades\DB::raw('arrival + departure'));
+
+                return [
+                    'aircraft'   => (int) $aircraft,
+                    'passengers' => (int) $passengers,
+                    'cargo'      => (int) $cargo,
+                ];
+            });
+
+            return response()->json([
+                'success' => true,
+                'data'    => $stats,
+            ]);
+
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Error fetching monthly traffic stats: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal mengambil data statistik.'
+            ], 500);
+        }
     }
 
     public function pariwisata(Request $request){
@@ -213,15 +391,6 @@ class LandingPageController extends Controller
         return view('landing-menu.informasi.berita.detail', compact('news','relatedNews'));
     
     }
-
-
-    public function tenant(){return view('landing-menu.layanan.index');}
-    public function sewa(){return view('landing-menu.layanan.index');}
-    public function perijinanUsaha(){return view('landing-menu.layanan.index');}
-    public function pengiklanan(){return view('landing-menu.layanan.index');}
-    public function fieldTrip(){return view('landing-menu.layanan.index');}
-    public function lelang(){return view('landing-menu.layanan.index');}
-    public function slot(){return view('landing-menu.layanan.index');}
 
     public function showServicePage($slug)
     {

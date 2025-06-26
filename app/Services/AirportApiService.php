@@ -158,47 +158,60 @@ class AirportApiService
 
     public function getCurrentWeather()
     {
-         $client = new Client([
-            'base_uri' => $this->baseUrlCuaca,
-            'timeout' => $this->timeout,
-        ]);
+        return Cache::remember('current_weather_data', now()->addMinutes(30), function () {
+        
+        //     $client = new Client([
+        //        'base_uri' => $this->baseUrlCuaca,
+        //        'timeout' => $this->timeout,
+        //    ]);
+           
+           try {
+               // REFAKTOR: Menggunakan Http Facade agar konsisten
+                $response = Http::timeout($this->timeout)->get($this->baseUrlCuaca);
 
-        try {
-            $response = $client->request('GET');
-            $data = json_decode($response->getBody()->getContents(), true);
-
-            // Ambil cuaca saat ini berdasarkan waktu terdekat
-            $currentTime = now()->setTimezone('Asia/Makassar');
-            $weatherData = $data['data'][0]['cuaca'][0]; // Ambil data cuaca pertama untuk hari ini
-
-            foreach ($weatherData as $forecast) {
-                $forecastTime = \Carbon\Carbon::parse($forecast['local_datetime'], 'Asia/Makassar');
-                if ($forecastTime->greaterThanOrEqualTo($currentTime)) {
-                    return [
-                        'temperature' => $forecast['t'],
-                        'weather_desc' => $forecast['weather_desc'],
-                        'weather_icon' => $forecast['image'],
-                        'humidity' => $forecast['hu'],
-                        'wind_speed' => $forecast['ws'],
-                        'wind_direction' => $forecast['wd'],
-                        'local_datetime' => $forecast['local_datetime'],
-                    ];
+                if ($response->failed()) {
+                    Log::error('Failed to fetch weather data from BMKG', [
+                        'status' => $response->status(),
+                        'body' => $response->body()
+                    ]);
+                    return null;
                 }
-            }
 
-            // Jika tidak ada data yang sesuai, kembalikan data pertama
-            return [
-                'temperature' => $weatherData[0]['t'],
-                'weather_desc' => $weatherData[0]['weather_desc'],
-                'weather_icon' => $weatherData[0]['image'],
-                'humidity' => $weatherData[0]['hu'],
-                'wind_speed' => $weatherData[0]['ws'],
-                'wind_direction' => $weatherData[0]['wd'],
-                'local_datetime' => $weatherData[0]['local_datetime'],
-            ];
-        } catch (RequestException $e) {
-            Log::error('Failed to fetch weather data from BMKG: ' . $e->getMessage());
-            return null;
-        }
+                $data = $response->json();
+   
+               // Ambil cuaca saat ini berdasarkan waktu terdekat
+               $currentTime = now()->setTimezone('Asia/Makassar');
+               $weatherData = $data['data'][0]['cuaca'][0]; // Ambil data cuaca pertama untuk hari ini
+   
+               foreach ($weatherData as $forecast) {
+                   $forecastTime = \Carbon\Carbon::parse($forecast['local_datetime'], 'Asia/Makassar');
+                   if ($forecastTime->greaterThanOrEqualTo($currentTime)) {
+                       return [
+                           'temperature' => $forecast['t'],
+                           'weather_desc' => $forecast['weather_desc'],
+                           'weather_icon' => $forecast['image'],
+                           'humidity' => $forecast['hu'],
+                           'wind_speed' => $forecast['ws'],
+                           'wind_direction' => $forecast['wd'],
+                           'local_datetime' => $forecast['local_datetime'],
+                       ];
+                   }
+               }
+   
+               // Jika tidak ada data yang sesuai, kembalikan data pertama
+               return [
+                   'temperature' => $weatherData[0]['t'],
+                   'weather_desc' => $weatherData[0]['weather_desc'],
+                   'weather_icon' => $weatherData[0]['image'],
+                   'humidity' => $weatherData[0]['hu'],
+                   'wind_speed' => $weatherData[0]['ws'],
+                   'wind_direction' => $weatherData[0]['wd'],
+                   'local_datetime' => $weatherData[0]['local_datetime'],
+               ];
+           } catch (RequestException $e) {
+               Log::error('Failed to fetch weather data from BMKG: ' . $e->getMessage());
+               return null;
+           }
+        });
     }
 }

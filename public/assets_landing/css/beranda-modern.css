@@ -1,0 +1,506 @@
+/*
+ * File: public/assets_landing/css/beranda-modern.css
+ * Deskripsi: Stylesheet kustom untuk desain ulang halaman beranda.
+*/
+
+/* Import Font dari Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+/* Variabel Warna Modern */
+:root {
+    --primary-color: #0d2c4a; /* Biru Gelap Korporat */
+    --secondary-color: #f0a500; /* Emas sebagai Aksen */
+    --background-dark: #071a2e;
+    --background-light: #f4f7f9;
+    --text-light: #ffffff;
+    --text-dark: #333333;
+    --text-muted-dark: #8899a8; /* Muted untuk latar gelap */
+    --text-muted-light: #6c757d; /* Muted untuk latar terang */
+    --font-primary: 'Poppins', sans-serif;
+}
+
+/* Base Styling */
+.section-modern {
+    padding: 80px 0;
+    overflow: hidden;
+    font-family: var(--font-primary);
+}
+.section-title-modern {
+    margin-bottom: 60px;
+    text-align: center;
+}
+.section-title-modern h2 {
+    font-weight: 700;
+    font-size: 36px;
+    color: var(--primary-color);
+    margin-bottom: 10px;
+}
+.dark-background .section-title-modern h2,
+.dark-background .section-title-modern p {
+    color: var(--text-light);
+}
+.section-title-modern p {
+    font-size: 18px;
+    color: var(--text-muted-light);
+}
+.dark-background {
+    background-color: var(--background-dark);
+}
+
+/* =================================== */
+/* HERO SECTION (REVISED CSS)      */
+/* =================================== */
+.hero-modern {
+    position: relative; /* Konteks untuk elemen absolut di dalamnya */
+    height: 100vh;
+    width: 100%;
+    overflow: hidden;
+}
+
+.hero-modern .hero-background-image,
+.hero-modern .hero-background-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1; /* Latar belakang berada di lapisan 1 */
+}
+
+.hero-modern .hero-background-image {
+    background-size: cover;
+    background-position: center;
+    animation: kenburns 20s ease-out infinite alternate;
+}
+
+.hero-modern .hero-background-overlay {
+    background: rgba(13, 44, 74, 0.6);
+}
+
+.hero-modern .hero-container {
+    position: relative; /* Pastikan ini relatif terhadap .hero-modern */
+    z-index: 2;         /* Konten berada di lapisan 2, di atas overlay */
+    height: 100%;       /* Mengisi tinggi section untuk vertical alignment */
+    color: var(--text-light);
+    text-align: center;
+}
+
+@keyframes kenburns {
+    0% { transform: scale(1) translate(0, 0); }
+    100% { transform: scale(1.1) translate(-2%, 2%); }
+}
+
+.hero-container h1 {
+    font-family: var(--font-primary);
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    font-weight: 700;
+    text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+}
+
+.hero-container .lead {
+    font-size: clamp(1.1rem, 2vw, 1.5rem);
+    font-weight: 300;
+    margin-top: 10px;
+}
+
+#typed-destination {
+    font-weight: 600;
+    color: var(--secondary-color);
+}
+.typed-cursor {
+    font-size: clamp(1.1rem, 2vw, 1.5rem);
+    color: var(--secondary-color);
+}
+.weather-widget-modern {
+    display: inline-flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    padding: 10px 20px;
+    border-radius: 50px;
+    margin-top: 30px;
+    color: var(--text-light);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+.weather-widget-modern img {
+    width: 40px;
+    height: 40px;
+    margin-right: 15px;
+}
+.hero-scroll-indicator {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 3;
+    animation: bounce 2s infinite;
+}
+.hero-scroll-indicator a { color: white; }
+.hero-scroll-indicator i { font-size: 2rem; }
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-20px); }
+    60% { transform: translateY(-10px); }
+}
+
+
+/* =================================== */
+/* QUICK ACCESS SECTION       */
+/* =================================== */
+.quick-access { background-color: var(--background-light); }
+.access-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: var(--text-light);
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    text-decoration: none;
+    color: var(--text-dark);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 100%;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+.access-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 25px rgba(13, 44, 74, 0.1);
+    color: var(--primary-color);
+}
+.access-card .icon-wrapper {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    color: var(--text-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+    font-size: 30px;
+    transition: background-color 0.3s ease;
+}
+.access-card:hover .icon-wrapper {
+    background-color: var(--secondary-color);
+}
+.access-card span {
+    font-weight: 500;
+}
+
+/* =================================== */
+/* TRAFFIC STATS SECTION (BARU) */
+/* =================================== */
+.traffic-stats {
+    background-color: var(--background-light);
+}
+.stat-item {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+    transition: transform 0.3s ease;
+}
+.stat-item:hover {
+    transform: translateY(-5px);
+}
+.stat-item .stat-icon {
+    font-size: 48px;
+    color: var(--secondary-color);
+    margin-bottom: 15px;
+}
+.stat-item .stat-value {
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+.stat-item .stat-label {
+    font-size: 16px;
+    color: var(--text-muted-light);
+    margin-top: 5px;
+}
+.btn-modern-outline-dark {
+    border: 2px solid var(--primary-color);
+    color: var(--primary-color);
+    padding: 12px 30px;
+    border-radius: 50px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+.btn-modern-outline-dark:hover {
+    background: var(--primary-color);
+    color: var(--text-light);
+}
+
+
+/* =================================== */
+/* FLIGHT INFO SECTION        */
+/* =================================== */
+.flight-info .nav-pills .nav-link {
+    background: transparent;
+    color: rgba(255,255,255,0.6);
+    border: 1px solid rgba(255,255,255,0.2);
+    margin: 0 10px;
+    padding: 10px 30px;
+    border-radius: 50px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+.flight-info .nav-pills .nav-link.active,
+.flight-info .nav-pills .nav-link:hover {
+    background-color: var(--secondary-color);
+    color: var(--primary-color);
+    border-color: var(--secondary-color);
+}
+.flight-list {
+    margin-top: 40px;
+}
+.flight-card {
+    display: grid;
+    grid-template-columns: 1fr 2fr 2fr 1.5fr 1fr;
+    gap: 15px;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    color: var(--text-light);
+    border-bottom: 2px solid transparent;
+    transition: all 0.3s ease;
+}
+.flight-card:hover {
+    transform: scale(1.02);
+    border-bottom-color: var(--secondary-color);
+}
+.flight-card-header {
+    display: grid;
+    grid-template-columns: 1fr 2fr 2fr 1.5fr 1fr;
+    gap: 15px;
+    padding: 0 20px;
+    margin-bottom: 10px;
+    color: var(--text-muted-dark);
+    font-weight: 500;
+    text-transform: uppercase;
+    font-size: 12px;
+}
+.flight-airline { display: flex; align-items: center; }
+.flight-airline img { width: 30px; margin-right: 10px; }
+.flight-destination { font-weight: 600; font-size: 18px; }
+.flight-time { font-size: 18px; }
+.flight-number { color: var(--text-muted-dark); }
+.flight-status span {
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 12px;
+    text-transform: uppercase;
+}
+.status-ontime { background-color: #28a745; color: white; }
+.status-delayed { background-color: #dc3545; color: white; }
+.status-boarding { background-color: #007bff; color: white; }
+.status-landed { background-color: #17a2b8; color: white; }
+.btn-modern-outline {
+    border: 2px solid var(--secondary-color);
+    color: var(--secondary-color);
+    padding: 12px 30px;
+    border-radius: 50px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+.btn-modern-outline:hover {
+    background: var(--secondary-color);
+    color: var(--primary-color);
+}
+
+@media (max-width: 768px) {
+    .flight-card-header { display: none; }
+    .flight-card {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto auto auto;
+        text-align: center;
+    }
+    .flight-destination { grid-column: 1 / -1; order: 1; font-size: 20px; }
+    .flight-airline { grid-column: 1 / 2; order: 2; justify-content: center; }
+    .flight-number { grid-column: 2 / 3; order: 3; }
+    .flight-time { grid-column: 1 / 2; order: 4; }
+    .flight-status { grid-column: 2 / 3; order: 5; }
+}
+
+
+/* =================================== */
+/* AI TRIP PLANNER SECTION         */
+/* =================================== */
+.trip-planner {
+    background-color: var(--background-light);
+}
+#trip-planner-form {
+    background-color: white;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+}
+#trip-planner-form .form-label {
+    font-weight: 500;
+    color: var(--primary-color);
+}
+#trip-planner-form .form-control {
+    border-width: 2px;
+    border-color: #dee2e6;
+    transition: border-color 0.3s ease;
+}
+#trip-planner-form .form-control:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.25rem rgba(13, 44, 74, 0.25);
+}
+.btn-gemini-planner {
+    background: linear-gradient(45deg, var(--secondary-color), #ffc107);
+    border: none;
+    color: var(--primary-color);
+    font-weight: 600;
+    font-size: 1.1rem;
+    padding: 0.75rem;
+    width: 100%;
+    border-radius: 0.25rem;
+    transition: all 0.3s ease;
+}
+.btn-gemini-planner:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(240, 165, 0, 0.4);
+}
+.btn-gemini-planner:disabled {
+    cursor: not-allowed;
+    background: #e9ecef;
+}
+.modal-content {
+    background-color: var(--background-light);
+}
+.modal-header, .modal-footer {
+    border: none;
+}
+.modal-title {
+    color: var(--primary-color);
+    font-weight: 600;
+}
+#planner-result h1, #planner-result h2, #planner-result h3 {
+    color: var(--primary-color);
+    font-weight: 600;
+    margin-top: 20px;
+    border-bottom: 2px solid var(--secondary-color);
+    padding-bottom: 5px;
+}
+#planner-result ul {
+    padding-left: 20px;
+}
+#planner-result li {
+    margin-bottom: 10px;
+}
+
+/* =================================== */
+/* GAYA BARU UNTUK PETA HIGHCHARTS */
+/* =================================== */
+#highcharts-map-container {
+    width: 100%;
+    height: 550px; /* Atur tinggi peta */
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    overflow: hidden; /* Penting agar border-radius bekerja */
+}
+
+/* Kustomisasi Tooltip Highcharts */
+.highcharts-tooltip span {
+    background-color: var(--primary-color);
+    color: var(--text-light);
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    padding: 10px 15px !important;
+}
+
+.tooltip-title-highcharts {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--secondary-color);
+}
+
+.tooltip-airlines-highcharts {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-top: 5px;
+}
+
+.tooltip-airlines-highcharts img {
+    width: 24px;
+    height: 24px;
+    background: white;
+    border-radius: 50%;
+}
+
+/* =================================== */
+/* NEWS SECTION            */
+/* =================================== */
+.news-card-modern {
+    display: block;
+    background: #0c243f;
+    border-radius: 10px;
+    overflow: hidden;
+    text-decoration: none;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 100%;
+}
+.news-card-modern:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+.news-image {
+    height: 200px;
+    background-size: cover;
+    background-position: center;
+    transition: transform 0.5s ease;
+}
+.news-card-modern:hover .news-image {
+    transform: scale(1.1);
+}
+.news-content {
+    padding: 25px;
+}
+.news-date {
+    color: var(--text-muted-dark);
+    font-size: 12px;
+    font-weight: 500;
+}
+.news-title {
+    color: var(--text-light);
+    font-size: 18px;
+    font-weight: 600;
+    margin: 10px 0;
+    line-height: 1.4;
+    height: 50px;
+    overflow: hidden;
+}
+.news-excerpt {
+    color: rgba(255,255,255,0.7);
+    font-size: 14px;
+    line-height: 1.6;
+    height: 70px;
+    overflow: hidden;
+}
+.news-read-more {
+    display: inline-block;
+    color: var(--secondary-color);
+    font-weight: 600;
+    margin-top: 15px;
+    transition: all 0.3s ease;
+}
+.news-read-more i {
+    transition: transform 0.3s ease;
+    margin-left: 5px;
+}
+.news-card-modern:hover .news-read-more {
+    letter-spacing: 0.5px;
+}
+.news-card-modern:hover .news-read-more i {
+    transform: translateX(5px);
+}
