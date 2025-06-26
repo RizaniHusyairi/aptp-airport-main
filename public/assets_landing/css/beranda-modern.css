@@ -189,36 +189,59 @@
 }
 
 /* =================================== */
-/* TRAFFIC STATS SECTION (BARU) */
+/* TRAFFIC STATS SECTION (GAYA BARU) */
 /* =================================== */
 .traffic-stats {
     background-color: var(--background-light);
 }
-.stat-item {
+.stat-item-compact {
     background-color: #ffffff;
-    padding: 30px;
-    border-radius: 10px;
+    padding: 20px;
+    border-radius: 12px;
     text-align: center;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
     transition: transform 0.3s ease;
+    border: 1px solid #e9ecef;
 }
-.stat-item:hover {
+.stat-item-compact:hover {
     transform: translateY(-5px);
 }
-.stat-item .stat-icon {
-    font-size: 48px;
-    color: var(--secondary-color);
-    margin-bottom: 15px;
+.stat-item-compact .stat-icon {
+    font-size: 32px;
+    color: var(--primary-color);
+    margin-bottom: 10px;
+    opacity: 0.8;
 }
-.stat-item .stat-value {
-    font-size: 36px;
+.stat-item-compact .stat-value {
+    font-size: 28px;
     font-weight: 700;
     color: var(--primary-color);
 }
-.stat-item .stat-label {
-    font-size: 16px;
+.stat-item-compact .stat-label {
+    font-size: 14px;
     color: var(--text-muted-light);
-    margin-top: 5px;
+    margin-top: 2px;
+}
+
+/* Kartu Total Aktivitas */
+.total-stats-card {
+    background: linear-gradient(45deg, var(--primary-color), #1a4a7a);
+    color: var(--text-light);
+    border-radius: 16px;
+    padding: 40px;
+    margin-top: 40px;
+    box-shadow: 0 15px 40px rgba(13, 44, 74, 0.2);
+}
+.total-stats-label {
+    font-size: 20px;
+    font-weight: 500;
+    opacity: 0.9;
+}
+.total-stats-value {
+    font-size: clamp(2.5rem, 6vw, 4rem); /* Ukuran font responsif */
+    font-weight: 700;
+    letter-spacing: -2px;
+    line-height: 1.1;
 }
 .btn-modern-outline-dark {
     border: 2px solid var(--primary-color);
@@ -397,46 +420,98 @@
 }
 
 /* =================================== */
-/* GAYA BARU UNTUK PETA HIGHCHARTS */
+/* GAYA BARU UNTUK PETA SVG ANIMASI    */
 /* =================================== */
-#highcharts-map-container {
-    width: 100%;
-    height: 550px; /* Atur tinggi peta */
-    border-radius: 12px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-    overflow: hidden; /* Penting agar border-radius bekerja */
+.route-map { 
+    background-color: var(--background-light); 
 }
-
-/* Kustomisasi Tooltip Highcharts */
-.highcharts-tooltip span {
+.map-container {
+    position: relative;
+    width: 100%;
+    max-width: 1000px;
+    margin: auto;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    aspect-ratio: 2 / 1;
+    overflow: visible;
+}
+.map-city { 
+    fill: var(--primary-color); 
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+.map-city.city-main { 
+    fill: var(--secondary-color); 
+    stroke: white;
+    stroke-width: 2px;
+    animation: pulse-main-city 2s infinite;
+}
+.map-city:not(.city-main):hover, 
+.map-city-group:hover .map-city:not(.city-main) { 
+    fill: var(--secondary-color); 
+}
+.flight-path { 
+    stroke: var(--primary-color); 
+    stroke-width: 1.5; 
+    fill: none;
+    opacity: 0.7;
+    transition: all 0.3s ease;
+}
+.map-city-group:hover .flight-path {
+    stroke: var(--secondary-color);
+    stroke-width: 2.5;
+}
+#map-tooltip {
+    position: absolute;
     background-color: var(--primary-color);
     color: var(--text-light);
-    border: none;
+    padding: 8px 15px;
     border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    white-space: nowrap;
     box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-    padding: 10px 15px !important;
+    z-index: 2000;
+    pointer-events: none; /* Diatur oleh GSAP */
+    transform-origin: center top; /* Untuk animasi scale yang natural */
+}
+#map-tooltip {
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+#map-tooltip.show {
+    opacity: 1;
+    transform: translateY(-10px);
 }
 
-.tooltip-title-highcharts {
-    font-size: 16px;
+.tooltip-title {
     font-weight: 600;
-    margin-bottom: 8px;
+    margin-bottom: 5px;
     color: var(--secondary-color);
 }
-
-.tooltip-airlines-highcharts {
+.tooltip-airlines {
     display: flex;
     gap: 8px;
     align-items: center;
-    margin-top: 5px;
+    padding-top: 5px;
+    border-top: 1px solid rgba(255,255,255,0.2);
 }
-
-.tooltip-airlines-highcharts img {
+.tooltip-airlines img {
     width: 24px;
     height: 24px;
+    object-fit: contain;
     background: white;
     border-radius: 50%;
 }
+
+@keyframes pulse-main-city {
+  0% { r: 8; }
+  50% { r: 12; }
+  100% { r: 8; }
+}
+
+
 
 /* =================================== */
 /* NEWS SECTION            */

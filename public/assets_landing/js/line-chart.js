@@ -7,9 +7,9 @@ function updateLineChart(labels, trafficData, year, month, years, months, catego
         { key: 'aircraft', label: 'Pesawat', borderColor: 'rgba(217, 158, 78, 1)', backgroundColor: 'rgba(217, 158, 78, 0.2)' },
         { key: 'passengers', label: 'Penumpang', borderColor: 'rgba(54, 162, 235, 1)', backgroundColor: 'rgba(54, 162, 235, 0.2)' },
         { key: 'transit', label: 'Penumpang Transit', borderColor: 'rgba(75, 192, 192, 1)', backgroundColor: 'rgba(75, 192, 192, 0.2)' },
-        { key: 'cargo', label: 'Kargo (Ton)', borderColor: 'rgba(255, 99, 132, 1)', backgroundColor: 'rgba(255, 99, 132, 0.2)' },
-        { key: 'baggage', label: 'Bagasi (Ton)', borderColor: 'rgba(153, 102, 255, 1)', backgroundColor: 'rgba(153, 102, 255, 0.2)' },
-        { key: 'mail', label: 'Pos (Ton)', borderColor: 'rgba(255, 205, 86, 1)', backgroundColor: 'rgba(255, 205, 86, 0.2)' }
+        { key: 'cargo', label: 'Kargo', borderColor: 'rgba(255, 99, 132, 1)', backgroundColor: 'rgba(255, 99, 132, 0.2)' },
+        { key: 'baggage', label: 'Bagasi', borderColor: 'rgba(153, 102, 255, 1)', backgroundColor: 'rgba(153, 102, 255, 0.2)' },
+        { key: 'mail', label: 'Pos', borderColor: 'rgba(255, 205, 86, 1)', backgroundColor: 'rgba(255, 205, 86, 0.2)' }
     ];
 
     if (year === 'all') {

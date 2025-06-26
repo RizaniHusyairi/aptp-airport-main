@@ -11,17 +11,15 @@
     {{-- CDN untuk library animasi & pemformatan --}}
     <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/2.1.0/showdown.min.js"></script>
-
-    {{-- CDN BARU UNTUK HIGHCHARTS MAP --}}
-    <script src="https://code.highcharts.com/modules/proj4.js"></script>    
-    <script src="https://code.highcharts.com/maps/highmaps.js"></script>
-    <script src="https://code.highcharts.com/maps/modules/flowmap.js"></script>
-    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
-    <script src="https://code.highcharts.com/mapdata/countries/id/id-all.js"></script>
+    
+    {{-- CDN BARU UNTUK GSAP & SCROLLTRIGGER --}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
     
     {{-- File JS kustom untuk halaman ini --}}
     <script src="{{ asset('assets_landing/js/beranda-modern.js') }}"></script>
 @endpush
+
 
 
 @section('content')
@@ -40,10 +38,12 @@
         </p>
         
         @if ($weather)
+        <a href="https://www.bmkg.go.id/cuaca/prakiraan-cuaca/64.72.05.1004" target="_blank">
             <div class="weather-widget-modern" data-aos="fade-up" data-aos-delay="400">
                 <img src="{{ $weather['weather_icon'] }}" alt="Ikon Cuaca">
                 <span>{{ $weather['temperature'] }}°C, {{ $weather['weather_desc'] }} di Samarinda</span>
             </div>
+        </a>
         @endif
     </div>
 
@@ -102,16 +102,17 @@
 </section>
 
 <!-- ============================================ -->
-<!--      STATISTIK LALU LINTAS UDARA (BARU)      -->
+<!--   STATISTIK LALU LINTAS UDARA (DESAIN BARU)  -->
 <!-- ============================================ -->
-<section id="traffic-stats" class="section-modern traffic-stats">
+<section id="traffic-stats" class="section-modern traffic-stats" data-detail-url="{{ route('lalulintas') }}">
     <div class="container" data-aos="fade-up">
         <div class="section-title-modern">
             <h2>Aktivitas Bandara Bulan Ini</h2>
             <p>Data Lalu Lintas Udara hingga hari ini di bulan {{ \Carbon\Carbon::now()->translatedFormat('F Y') }}</p>
         </div>
-        <div id="monthly-stats-container" class="row g-4 justify-content-center">
-            {{-- Data akan diisi oleh JavaScript. Placeholder Loading: --}}
+        
+        {{-- Kontainer ini akan diisi oleh JavaScript. --}}
+        <div id="monthly-stats-container">
             <div class="col-12 text-center">
                 <div class="spinner-border text-primary" role="status">
                     <span class="visually-hidden">Loading...</span>
@@ -119,11 +120,10 @@
                 <p class="mt-2">Memuat statistik...</p>
             </div>
         </div>
-        <div class="text-center mt-5">
-             <a href="{{ route('lalulintas') }}" class="btn-modern-outline-dark">Lihat Laporan Lengkap</a>
-        </div>
+        
     </div>
 </section>
+
 
 <!-- ============================================ -->
 <!--              LIVE FLIGHT INFO                -->
@@ -233,7 +233,7 @@
 
 
 <!-- ============================================ -->
-<!--     PETA RUTE HIGHCHARTS (MENGGANTIKAN SVG)  -->
+<!--   PETA SVG ANIMASI (MENGGANTIKAN CARDS)      -->
 <!-- ============================================ -->
 <section id="route-map" class="section-modern route-map">
     <div class="container" data-aos="fade-up">
@@ -241,17 +241,16 @@
             <h2>Terhubung ke Seluruh Nusantara</h2>
             <p>Jelajahi jaringan rute kami yang terus berkembang, menghubungkan Samarinda dengan berbagai destinasi.</p>
         </div>
-        
-        {{-- Kontainer ini akan menjadi target untuk Highcharts --}}
-        <div id="highcharts-map-container">
-            <div class="text-center py-5">
-                <div class="spinner-border text-primary" role="status">
-                    <span class="visually-hidden">Loading...</span>
-                </div>
-                <p class="mt-2">Memuat peta interaktif...</p>
-            </div>
+        <div class="map-container" style="background-image: url({{ asset('assets_landing/img/map-indonesia-simple.svg') }})">
+        {{-- <div class="map-container" style="background-image: url({{ asset('assets_landing/img/mapsimple.svg') }})"> --}}
+        {{-- <div class="map-container"> --}}
+            {{-- Kontainer SVG di mana peta akan digambar oleh JavaScript --}}
+            <svg id="map-svg" viewBox="0 0 1000 500" preserveAspectRatio="xMidYMid meet">
+                <!-- Titik utama bandara & rute akan ditambahkan oleh JS -->
+            </svg>
+            {{-- Tooltip untuk menampilkan info saat hover --}}
+            <div id="map-tooltip" style="z-index: 10000"></div>
         </div>
-
     </div>
 </section>
 

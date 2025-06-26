@@ -156,7 +156,7 @@ class LandingPageController extends Controller
             [
                 'kota' => 'Jakarta (CGK)',
                 'provinsi' => 'Banten',
-                'lat' => -6.1256, 'lon' => 106.6559,
+                'coords' => ['cx' => 320, 'cy' => 375], // Menggunakan format coords {cx, cy}
                 'maskapai' => [
                     ['nama' => 'Batik Air', 'logo' => asset('assets_landing/img/mitra/logo-batik.png')],
                     ['nama' => 'Citilink', 'logo' => asset('assets_landing/img/mitra/logo-citilink.png')],
@@ -165,7 +165,7 @@ class LandingPageController extends Controller
             [
                 'kota' => 'Surabaya (SUB)',
                 'provinsi' => 'Jawa Timur',
-                'lat' => -7.3798, 'lon' => 112.786,
+                'coords' => ['cx' => 500, 'cy' => 412 ],
                 'maskapai' => [
                     ['nama' => 'Super Air Jet', 'logo' => asset('assets_landing/img/mitra/logo-SAJ.png')],
                     ['nama' => 'Citilink', 'logo' => asset('assets_landing/img/mitra/logo-citilink.png')],
@@ -174,7 +174,7 @@ class LandingPageController extends Controller
              [
                 'kota' => 'Yogyakarta (YIA)',
                 'provinsi' => 'DI Yogyakarta',
-                'lat' => -7.9048, 'lon' => 110.055,
+                'coords' => ['cx' => 430, 'cy' => 423],
                 'maskapai' => [
                     ['nama' => 'Super Air Jet', 'logo' => asset('assets_landing/img/mitra/logo-SAJ.png')],
                 ]
@@ -182,7 +182,7 @@ class LandingPageController extends Controller
              [
                 'kota' => 'Berau (BEJ)',
                 'provinsi' => 'Kalimantan Timur',
-                'lat' => 2.1533, 'lon' => 117.498,
+                'coords' => ['cx' => 630, 'cy' => 130],
                 'maskapai' => [
                     ['nama' => 'Wings Air', 'logo' => asset('assets_landing/img/mitra/logo-wings.png')],
                 ]
@@ -190,7 +190,7 @@ class LandingPageController extends Controller
              [
                 'kota' => 'Maratua (RTU)',
                 'provinsi' => 'Kalimantan Timur',
-                'lat' => 2.2514, 'lon' => 118.634,
+                'coords' => ['cx' => 678, 'cy' => 123],
                 'maskapai' => [
                     ['nama' => 'Smart Aviation', 'logo' => asset('assets_landing/img/mitra/logo-smart.jpg')],
                 ]
@@ -198,7 +198,7 @@ class LandingPageController extends Controller
             [
                 'kota' => 'Long Apung (LPU)',
                 'provinsi' => 'Kalimantan Utara',
-                'lat' => 1.1017, 'lon' => 115.723,
+                'coords' => ['cx' => 570, 'cy' => 148],
                 'maskapai' => [
                     ['nama' => 'Smart Aviation', 'logo' => asset('assets_landing/img/mitra/logo-smart.jpg')],
                 ]
@@ -206,7 +206,7 @@ class LandingPageController extends Controller
             [
                 'kota' => 'Datah Dawai (DTD)',
                 'provinsi' => 'Kalimantan Timur',
-                'lat' => -0.1167, 'lon' => 115.55,
+                'coords' => ['cx' => 557, 'cy' => 165],
                 'maskapai' => [
                     ['nama' => 'Smart Aviation', 'logo' => asset('assets_landing/img/mitra/logo-smart.jpg')],
                 ]
@@ -214,7 +214,7 @@ class LandingPageController extends Controller
              [
                 'kota' => 'Muara Wahau (MWV)',
                 'provinsi' => 'Kalimantan Timur',
-                'lat' => 1.05, 'lon' => 116.783,
+                'coords' => ['cx' => 615, 'cy' => 150],
                 'maskapai' => [
                     ['nama' => 'Smart Aviation', 'logo' => asset('assets_landing/img/mitra/logo-smart.jpg')],
                 ]
@@ -277,21 +277,32 @@ class LandingPageController extends Controller
     public function getMonthlyTrafficStats()
     {
         try {
-            // Menggunakan cache untuk menyimpan hasil selama 3 jam agar tidak membebani database
-            $stats = \Illuminate\Support\Facades\Cache::remember('monthly_traffic_stats', now()->addHours(3), function () {
+            // Cache hasil ini untuk mengurangi beban database
+            $stats = Cache::remember('monthly_traffic_stats_full', now()->addHours(3), function () {
                 $now = \Carbon\Carbon::now();
                 $query = \App\Models\AirFreightTraffic::whereYear('date', $now->year)
                                                     ->whereMonth('date', $now->month);
 
-                $aircraft = (clone $query)->where('type', 'Pesawat')->sum(\Illuminate\Support\Facades\DB::raw('arrival + departure'));
-                $passengers = (clone $query)->where('type', 'Penumpang')->sum(\Illuminate\Support\Facades\DB::raw('arrival + departure'));
-                $cargo = (clone $query)->where('type', 'Kargo')->sum(\Illuminate\Support\Facades\DB::raw('arrival + departure'));
+                // Ambil semua data dalam satu query untuk efisiensi
+                $monthlyData = (clone $query)
+                    ->groupBy('type')
+                    ->select('type', DB::raw('SUM(arrival + departure) as total'))
+                    ->pluck('total', 'type');
 
-                return [
-                    'aircraft'   => (int) $aircraft,
-                    'passengers' => (int) $passengers,
-                    'cargo'      => (int) $cargo,
+                // Siapkan data dengan nilai default 0
+                $data = [
+                    'aircraft'   => (int) ($monthlyData['Pesawat'] ?? 0),
+                    'passengers' => (int) ($monthlyData['Penumpang'] ?? 0),
+                    'transit'    => (int) ($monthlyData['Penumpang Transit'] ?? 0),
+                    'baggage'    => (int) ($monthlyData['Bagasi'] ?? 0),
+                    'cargo'      => (int) ($monthlyData['Kargo'] ?? 0),
+                    'mail'       => (int) ($monthlyData['Pos'] ?? 0),
                 ];
+                
+                // Hitung total semua aktivitas
+                $data['total'] = array_sum($data);
+
+                return $data;
             });
 
             return response()->json([
@@ -300,11 +311,8 @@ class LandingPageController extends Controller
             ]);
 
         } catch (\Exception $e) {
-            \Illuminate\Support\Facades\Log::error('Error fetching monthly traffic stats: ' . $e->getMessage());
-            return response()->json([
-                'success' => false,
-                'message' => 'Gagal mengambil data statistik.'
-            ], 500);
+            Log::error('Error fetching monthly traffic stats: ' . $e->getMessage());
+            return response()->json(['success' => false, 'message' => 'Gagal mengambil data statistik.'], 500);
         }
     }
 
