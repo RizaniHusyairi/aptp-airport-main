@@ -145,6 +145,114 @@
 
 
 /* =================================== */
+/* GAYA BARU UNTUK SEKSI SAMBUTAN      */
+/* =================================== */
+.welcome-section {
+    background-color: var(--background-light);
+}
+
+.welcome-image-container {
+    position: relative;
+    padding: 10px;
+}
+
+.welcome-image-container img {
+    border-radius: 16px;
+    box-shadow: 0 15px 40px rgba(13, 44, 74, 0.15);
+    max-width: 380px;
+    width: 100%;
+    object-fit: cover;
+    height: 80vh;
+    object-position: top;
+}
+
+/* Dekorasi latar belakang */
+.welcome-image-container::before {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: -10px;
+    width: 100px;
+    height: 100px;
+    background-color: var(--secondary-color);
+    opacity: 0.2;
+    border-radius: 16px;
+    z-index: -1;
+    transform: rotate(15deg);
+    transition: all 0.4s ease;
+}
+
+.welcome-image-container:hover::before {
+    transform: rotate(0deg) scale(1.1);
+}
+
+.welcome-content {
+    padding-left: 20px;
+}
+
+@media (max-width: 991px) {
+    .welcome-content {
+        padding-left: 0;
+        margin-top: 30px;
+        text-align: center;
+    }
+}
+
+.welcome-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-muted-light);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 15px;
+}
+
+/* .welcome-quote {
+    text-align: justify;
+    font-size: 16px;
+    font-weight: 500;
+    font-family: var(--font-primary);
+    color: var(--primary-color);
+    line-height: 1.6;
+    padding-left: 25px;
+    border-left: 4px solid var(--secondary-color);
+} */
+
+/* Tambahkan gaya baru untuk blok teks */
+.welcome-text-body {
+    font-size: 16px;
+    font-style: italic;
+    color: var(--text-muted-light);
+    line-height: 1.8;
+    margin-bottom: 30px;
+}
+.welcome-text-body p {
+    margin-bottom: 1.5rem;
+}
+.welcome-text-body p:last-child {
+    margin-bottom: 0;
+}
+
+.welcome-signature {
+    margin-top: 30px;
+}
+
+.signature-name {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: 5px;
+}
+
+.signature-title {
+    font-size: 15px;
+    color: var(--text-muted-light);
+    margin: 0;
+}
+
+
+
+/* =================================== */
 /* QUICK ACCESS SECTION       */
 /* =================================== */
 .quick-access { background-color: var(--background-light); }

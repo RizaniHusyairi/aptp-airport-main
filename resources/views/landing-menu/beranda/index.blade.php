@@ -54,6 +54,42 @@
     </div>
 </section>
 
+<!-- ============================================ -->
+<!--   SEKSI SAMBUTAN KEPALA BANDARA (BARU)       -->
+<!-- ============================================ -->
+<section id="welcome-section" class="section-modern welcome-section">
+    <div class="container">
+        <div class="row gy-4 align-items-center">
+            <div class="col-lg-5 text-center" data-aos="fade-right">
+                <div class="welcome-image-container">
+                    <img src="{{ asset('assets_landing/img/pejabat/Kadek.png') }}" class="img-fluid" alt="Foto Kepala Bandara I Kadek Yuli Sastrawan">
+                </div>
+            </div>
+            <div class="col-lg-7" data-aos="fade-left" data-aos-delay="200">
+                <div class="welcome-content">
+                    <h2 class="welcome-title">Sambutan dari Kepala Bandara</h2>
+                    <div class="welcome-text-body">
+                        <p>
+                            "Dalam era yang penuh tantangan ini, di mana teknologi dan informasi berkembang begitu pesat, kita di BLU Kantor UPBU Kelas I APT. Pranoto Samarinda merasa penting untuk terus beradaptasi. Teknologi telah membawa kita ke Era Revolusi Industri 4.0, yang menuntut kita untuk memanfaatkannya dengan efektif dan efisien."
+                        </p>
+                        <p>
+                            "Sejalan dengan semangat revolusi ini, kami berkomitmen untuk memberikan pelayanan yang terbaik kepada masyarakat. Melalui website ini, kami berharap dapat memberikan kemudahan akses informasi seputar kegiatan, tugas, dan fungsi BLU Kantor UPBU Kelas I APT. Pranoto Samarinda."
+                        </p>
+                        <p>
+                            "Kami mengundang Anda untuk menjelajahi situs web kami, mendapatkan informasi yang berguna, dan memberikan masukan yang konstruktif. Semoga dengan kehadiran situs ini, kita dapat meningkatkan kualitas interaksi, informasi, dan komunikasi antara BLU Kantor UPBU Kelas I APT. Pranoto Samarinda dengan masyarakat."
+                        </p>
+                    </div>
+                    <div class="welcome-signature">
+                        <h4 class="signature-name">I Kadek Yuli Sastrawan, S.Ikom., S.SiT.</h4>
+                        <p class="signature-title">Kepala BLU Kantor UPBU Kelas I APT. Pranoto</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
 
 <!-- ============================================ -->
 <!--              QUICK ACCESS SECTION            -->
