@@ -387,10 +387,34 @@
 }
 .flight-list {
     margin-top: 40px;
+    /* ### PERBAIKAN: Tambahkan properti ini ### */
+    max-height: 450px; /* Atur tinggi maksimal sesuai kebutuhan */
+    overflow-y: auto;  /* Tampilkan scrollbar vertikal jika konten melebihi max-height */
+    padding-right: 15px; /* Beri ruang agar konten tidak tertutup scrollbar */
 }
+
+.flight-list::-webkit-scrollbar {
+  width: 8px;
+}
+.flight-list::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+.flight-list::-webkit-scrollbar-thumb {
+  background-color: var(--secondary-color);
+  border-radius: 10px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+.flight-list::-webkit-scrollbar-thumb:hover {
+  background-color: #ffc107; /* Warna emas yang lebih cerah saat hover */
+}
+
+
 .flight-card {
     display: grid;
-    grid-template-columns: 1fr 2fr 2fr 1.5fr 1fr;
+    
+    grid-template-columns: 2fr 3fr 2fr 1.5fr 1fr 2fr;
     gap: 15px;
     align-items: center;
     background: rgba(255, 255, 255, 0.05);
@@ -407,7 +431,7 @@
 }
 .flight-card-header {
     display: grid;
-    grid-template-columns: 1fr 2fr 2fr 1.5fr 1fr;
+    grid-template-columns: 2fr 3fr 2fr 1.5fr 1fr 2fr;
     gap: 15px;
     padding: 0 20px;
     margin-bottom: 10px;
@@ -450,15 +474,18 @@
     .flight-card-header { display: none; }
     .flight-card {
         grid-template-columns: 1fr 1fr;
-        grid-template-rows: auto auto auto;
-        text-align: center;
+        grid-template-rows: auto auto auto auto;
+        text-align: left;
+        gap: 5px 15px;
     }
-    .flight-destination { grid-column: 1 / -1; order: 1; font-size: 20px; }
-    .flight-airline { grid-column: 1 / 2; order: 2; justify-content: center; }
-    .flight-number { grid-column: 2 / 3; order: 3; }
-    .flight-time { grid-column: 1 / 2; order: 4; }
-    .flight-status { grid-column: 2 / 3; order: 5; }
+    .flight-destination { grid-column: 1 / -1; order: 1; font-size: 20px; text-align: center; margin-bottom: 5px; }
+    .flight-airline { grid-column: 1 / 2; order: 2; }
+    .flight-number { grid-column: 2 / 3; order: 2; text-align: right;}
+    .flight-time { grid-column: 1 / 2; order: 3; }
+    .flight-gate { grid-column: 2 / 3; order: 3; text-align: right; }
+    .flight-status { grid-column: 1 / -1; order: 4; text-align: center; margin-top: 10px; }
 }
+
 
 
 /* =================================== */
@@ -619,6 +646,147 @@
   100% { r: 8; }
 }
 
+/* =================================== */
+/* GAYA BARU UNTUK SEKSI JELAJAHI      */
+/* =================================== */
+.explore-section {
+    background-color: var(--background-light);
+}
+
+/* Gaya untuk Tombol Tab */
+.explore-section .nav-pills .nav-link {
+    background: #ffffff;
+    color: var(--text-muted-light);
+    border: 1px solid #dee2e6;
+    margin: 0 10px;
+    padding: 12px 30px;
+    border-radius: 50px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+.explore-section .nav-pills .nav-link.active,
+.explore-section .nav-pills .nav-link:hover {
+    background-color: var(--primary-color);
+    color: var(--text-light);
+    border-color: var(--primary-color);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(13, 44, 74, 0.15);
+}
+.explore-section .nav-pills .nav-link i {
+    margin-right: 8px;
+}
+
+/* Gaya untuk Kartu Konten */
+.explore-card {
+    position: relative;
+    border-radius: 16px;
+    overflow: hidden;
+    height: 380px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    transition: all 0.4s ease;
+
+    /* ### PERBAIKAN DI SINI: Menyamakan perilaku display ### */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+.explore-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 40px rgba(13, 44, 74, 0.2);
+}
+.explore-card-image {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-size: cover;
+    background-position: center;
+    transition: transform 0.6s ease;
+}
+.explore-card:hover .explore-card-image {
+    transform: scale(1.1);
+}
+.explore-card-content {
+    position: relative;
+    z-index: 3;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 25px;
+    color: var(--text-light);
+    background: linear-gradient(to top, rgba(0,0,0,0.7) 20%, transparent 100%);
+}
+.explore-card-content h3 {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text-light);
+    margin-bottom: 5px;
+}
+.explore-card-content p {
+    font-size: 15px;
+    opacity: 0.9;
+    line-height: 1.6;
+}
+
+/* =================================== */
+/* GAYA BARU UNTUK SEKSI MITRA         */
+/* =================================== */
+.partners-section {
+    background-color: var(--background-light);
+    padding-top: 80px;
+    padding-bottom: 80px;
+}
+
+.partners-carousel {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    /* Efek gradasi di sisi kiri dan kanan untuk menyamarkan logo yang muncul/hilang */
+    -webkit-mask-image: linear-gradient(to right, transparent, black 20%, black 80%, transparent);
+    mask-image: linear-gradient(to right, transparent, black 20%, black 80%, transparent);
+}
+
+.partners-track {
+    display: flex;
+    width: fit-content;
+    /* Animasi pergerakan korsel */
+    animation: scroll 40s linear infinite;
+}
+
+.partners-carousel:hover .partners-track {
+    /* Jeda animasi saat mouse diarahkan */
+    animation-play-state: paused;
+}
+
+@keyframes scroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); } /* Bergerak sejauh setengah dari total lebar */
+}
+
+.partner-logo {
+    height: 80px;
+    margin: 0 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.partner-logo img {
+    max-height: 60px;
+    width: auto;
+    max-width: 150px;
+    /* Efek grayscale dan transisi */
+    filter: grayscale(100%);
+    opacity: 0.6;
+    transition: all 0.4s ease;
+}
+
+.partner-logo:hover img {
+    filter: grayscale(0%);
+    opacity: 1;
+    transform: scale(1.1);
+}
 
 
 /* =================================== */

@@ -21,30 +21,47 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     /**
-     * 2. FETCH & DISPLAY DATA PENERBANGAN
+     * 2. FETCH & DISPLAY DATA PENERBANGAN (DIPERBAIKI)
      */
     const arrivalsList = document.getElementById('arrivals-list');
     const departuresList = document.getElementById('departures-list');
 
-    const createFlightCard = (flight) => {
+    // ### FUNGSI DIPERBARUI UNTUK MEMBACA API ANDA ###
+    const createFlightCard = (flight, type) => {
+        // Menentukan data berdasarkan tipe (Kedatangan/Keberangkatan)
+        const isDeparture = type === 'Keberangkatan';
+        const destinationData = isDeparture ? flight.bandara_tujuan : flight.bandara_asal;
+        
+        // Mengambil data dari struktur JSON yang benar
+        const airline = flight.maskapai?.nama || 'N/A';
+        const logoFileName = flight.maskapai?.logo || '';
+        // Asumsi base URL untuk logo, ganti jika perlu.
+        const logoUrl = logoFileName ? `http://103.210.122.2/storage/logo/${logoFileName}` : 'https://placehold.co/100x100/png?text=LOGO';
+        const kota = destinationData?.nama || 'N/A';
+        const nomor_penerbangan = flight.pesawat?.kode_penerbangan || 'N/A';
+        const jadwal = flight.jam || '--:--';
+        const statusText = flight.remark?.status || 'SCHEDULED';
+
+        const gate = isDeparture ? (flight.gate?.nama || '-') : '-';
+
+        
+        // Menentukan kelas CSS berdasarkan status
         let statusClass = 'status-ontime';
-        let statusText = flight.status || 'ON TIME';
-        if (statusText.includes('DELAY')) statusClass = 'status-delayed';
-        if (statusText.includes('BOARDING')) statusClass = 'status-boarding';
-        if (statusText.includes('LANDED') || statusText.includes('TAKE OFF')) statusClass = 'status-landed';
+        if (statusText.toLowerCase().includes('delay')) statusClass = 'status-delayed';
+        if (statusText.toLowerCase().includes('boarding') || statusText.toLowerCase().includes('check in')) statusClass = 'status-boarding';
+        if (statusText.toLowerCase().includes('landed') || statusText.toLowerCase().includes('departured') || statusText.toLowerCase().includes('arrived')) statusClass = 'status-landed';
         
         return `
-            <div class="flight-card" data-aos="fade-up" data-aos-delay="50">
+            <div class="flight-card">
                 <div class="flight-airline">
-                    <img src="${flight.logo || 'https://placehold.co/100x100/png?text=LOGO'}" alt="${flight.airline || ''}" onerror="this.src='https://placehold.co/100x100/png?text=LOGO'">
-                    <span>${flight.airline || 'N/A'}</span>
+                    <img src="${logoUrl}" alt="${airline}" onerror="this.src='https://placehold.co/100x100/png?text=LOGO'; this.onerror=null;">
+                    <span>${airline}</span>
                 </div>
-                <div class="flight-destination">${flight.kota || 'N/A'}</div>
-                <div class="flight-number">${flight.nomor_penerbangan || 'N/A'}</div>
-                <div class="flight-time">
-                    ${flight.jadwal || '--:--'}
-                    ${flight.aktual ? `<br><small class="text-warning">Aktual: ${flight.aktual}</small>` : ''}
-                </div>
+                <div class="flight-destination">${kota}</div>
+                <div class="flight-number">${nomor_penerbangan}</div>
+                <div class="flight-time">${jadwal}</div>
+                <div class="flight-gate">${gate}</div>
+
                 <div class="flight-status"><span class="${statusClass}">${statusText}</span></div>
             </div>
         `;
@@ -62,11 +79,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 <div>${type === 'Kedatangan' ? 'Dari' : 'Ke'}</div>
                 <div>Nomor</div>
                 <div>Waktu</div>
+                <div>Pintu</div>
                 <div>Status</div>
             </div>
         `;
         
-        element.innerHTML = headerHTML + data.slice(0, 5).map(createFlightCard).join(''); 
+        element.innerHTML = headerHTML + data.map(flight => createFlightCard(flight, type)).join(''); 
+
         if(typeof AOS !== 'undefined') {
             AOS.refresh();
         }
@@ -395,6 +414,81 @@ if (mapContainer) {
                 btnSpinner.classList.add('d-none');
                 submitButton.disabled = false;
             }
+        });
+
+        /**
+     * LOGIKA BARU UNTUK INFINITE PARTNERS CAROUSEL
+     */
+    const partnersTrack = document.querySelector('.partners-track');
+    if (partnersTrack) {
+        // Gandakan semua logo untuk menciptakan efek loop yang mulus
+        const logos = partnersTrack.querySelectorAll('.partner-logo');
+        logos.forEach(logo => {
+            const clone = logo.cloneNode(true);
+            partnersTrack.appendChild(clone);
+        });
+    }
+    }
+
+    /**
+     * LOGIKA BARU UNTUK SEKSI JELAJAHI (TAB FASILITAS & WISATA)
+     */
+    const exploreSection = document.getElementById('explore-section');
+    if (exploreSection) {
+        const tourismContainer = document.getElementById('tourism-cards-container');
+        const exploreButtonContainer = document.getElementById('explore-button-container');
+        const exploreTabs = document.querySelectorAll('#explore-tab .nav-link');
+        let tourismDataLoaded = false;
+
+        // Fungsi untuk membuat kartu pariwisata
+        const createTourismCard = (tourism, index) => {
+            const imageUrl = `uploads/${tourism.cover_image}`;
+            return `
+                <div class="col-lg-4 col-md-6">
+                    <a href="/pariwisata/${tourism.slug}" class="explore-card">
+                        <div class="explore-card-image" style="background-image: url('${imageUrl}');"></div>
+                        <div class="explore-card-content">
+                            <h3>${tourism.name}</h3>
+                            <p>${tourism.short_desc}</p>
+                        </div>
+                    </a>
+                </div>
+            `;
+        };
+
+        // Event listener untuk setiap tab
+        exploreTabs.forEach(tab => {
+            tab.addEventListener('show.bs.tab', event => {
+                const buttonLink = exploreButtonContainer.querySelector('a');
+                
+                if (event.target.id === 'facilities-tab') {
+                    // Jika tab fasilitas aktif
+                    buttonLink.textContent = 'Lihat Semua Fasilitas';
+                    buttonLink.href = '#'; // Ganti dengan rute fasilitas Anda
+                } else if (event.target.id === 'tourism-tab') {
+                    // Jika tab pariwisata aktif
+                    buttonLink.textContent = 'Lihat Semua Destinasi';
+                    buttonLink.href = "{{ route('pariwisata.index') }}"; // URL dari Blade
+
+                    // Ambil data pariwisata hanya jika belum pernah dimuat
+                    if (!tourismDataLoaded) {
+                        fetch('/api/pariwisata/unggulan') // Anda perlu membuat API endpoint ini
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success && data.data.length > 0) {
+                                    tourismContainer.innerHTML = data.data.map(createTourismCard).join('');
+                                    tourismDataLoaded = true;
+                                } else {
+                                    tourismContainer.innerHTML = '<p class="text-center">Data pariwisata tidak tersedia.</p>';
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error fetching tourism data:', error);
+                                tourismContainer.innerHTML = '<p class="text-center text-danger">Gagal memuat data.</p>';
+                            });
+                    }
+                }
+            });
         });
     }
 

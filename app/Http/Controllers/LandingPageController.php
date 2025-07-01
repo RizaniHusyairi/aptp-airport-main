@@ -353,6 +353,18 @@ class LandingPageController extends Controller
 
     }
 
+    public function getFeaturedTourism(){
+        try {
+            $destinations = Cache::remember('featured_tourism', now()->addHour(), function () {
+                return Tourism::where('status', 'published')->latest()->take(3)->get();
+            });
+            return response()->json(['success' => true, 'data' => $destinations]);
+        } catch (\Exception $e) {
+            Log::error('Error fetching featured tourism: ' . $e->getMessage());
+            return response()->json(['success' => false, 'message' => 'Gagal mengambil data.'], 500);
+        }
+    }
+
 
     //berita
     public function berita()

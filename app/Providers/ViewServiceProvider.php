@@ -92,23 +92,8 @@ class ViewServiceProvider extends ServiceProvider
                     ['name' => 'Layanan', 'dropdown' => $serviceMenuItems]
                 ]
             ];
-            $headlineCount = News::where('is_published', true)
-                          ->where('is_headline', true)
-                          ->count();
-
-            $topikUtama = $headlineCount > 0
-                            ? News::where('is_published', true)
-                                ->where('is_headline', true)
-                                ->latest()
-                                ->take(3)
-                                ->get()
-                            : News::where('is_published', true)
-                                ->inRandomOrder()
-                                ->latest()
-                                ->take(3)
-                                ->get();
-
-            $view->with(compact('topikUtama', 'menuItems'));
+            
+            $view->with(compact( 'menuItems'));
         });
 
         View::composer('layouts-V2.sidebars.pengaju', function ($view) {

@@ -143,14 +143,12 @@ class AirportApiService
         // Fallback data if API is not available
         if (!$departures || !isset($departures['data']['sukses'])) {
             return [
-                'movements' => 0,
                 'arrivals' => 0,
                 'departures' => 0
             ];
         }
 
         return [
-            'movements' => 0,
             'arrivals' => $arrivals['data']['result']['total'] ?? 0,
             'departures' => $departures['data']['result']['total'] ?? 0
         ];

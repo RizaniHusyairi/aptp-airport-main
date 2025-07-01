@@ -261,6 +261,8 @@ Route::prefix('api')->group(function () {
     Route::get('/flight-stats', [LandingPageController::class, 'getFlightStats']);
     Route::get('/departures', [LandingPageController::class, 'getDepartures'])->name('api.departures');
     Route::get('/arrivals', [LandingPageController::class, 'getArrivals'])->name('api.arrivals');
+    // routes/api.php
+    Route::get('/pariwisata/unggulan', [LandingPageController::class, 'getFeaturedTourism']);
     
 });
 

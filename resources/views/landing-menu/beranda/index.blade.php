@@ -28,7 +28,7 @@
 <!--            HERO SECTION (REVISED)            -->
 <!-- ============================================ -->
 <section id="hero-modern" class="hero-modern">
-    <div class="hero-background-image"></div>
+    <div class="hero-background-image" style="background-image: url({{asset('assets_landing/img/bg-1.png')  }})"></div>
     <div class="hero-background-overlay"></div>
 
     <div class="container hero-container d-flex flex-column justify-content-center align-items-center">
@@ -161,13 +161,15 @@
 </section>
 
 
+
+
 <!-- ============================================ -->
 <!--              LIVE FLIGHT INFO                -->
 <!-- ============================================ -->
 <section id="flight-info" class="section-modern flight-info dark-background">
      <div class="container" data-aos="fade-up">
         <div class="section-title-modern">
-            <h2>Penerbangan Hari Ini</h2>
+            <h2>Jadwal Penerbangan Hari Ini</h2>
             <p>Informasi Kedatangan & Keberangkatan Langsung dari Genggaman Anda</p>
         </div>
 
@@ -184,7 +186,7 @@
             </li>
         </ul>
 
-        <div class="tab-content" id="pills-tabContent">
+        <div class="tab-content" id="pills-tabContent" data-aos="fade-up" data-aos-delay="50">
             <div class="tab-pane fade show active" id="pills-arrivals" role="tabpanel" aria-labelledby="pills-arrivals-tab">
                 <div id="arrivals-list" class="flight-list">
                     <div class="text-center p-5"><span class="spinner-border"></span><p class="mt-2 text-white-50">Memuat data kedatangan...</p></div>
@@ -196,9 +198,7 @@
                 </div>
             </div>
         </div>
-        <div class="text-center mt-5">
-             <a href="{{ route('keberangkatan') }}" class="btn-modern-outline">Lihat Jadwal Lengkap</a>
-        </div>
+        
     </div>
 </section>
 
@@ -289,6 +289,111 @@
         </div>
     </div>
 </section>
+
+<!-- ============================================ -->
+<!--   JELAJAHI BANDARA & SEKITARNYA (SEKSI BARU) -->
+<!-- ============================================ -->
+<section id="explore-section" class="section-modern explore-section">
+    <div class="container" data-aos="fade-up">
+        <div class="section-title-modern text-center">
+            <h2>Jelajahi Bandara & Sekitarnya</h2>
+            <p>Temukan kenyamanan di dalam terminal dan keindahan destinasi di sekitar kami.</p>
+        </div>
+
+        <!-- Tombol Tab Navigasi -->
+        <ul class="nav nav-pills justify-content-center mb-5" id="explore-tab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="facilities-tab" data-bs-toggle="pill" data-bs-target="#facilities-content" type="button" role="tab" aria-controls="facilities-content" aria-selected="true">
+                    <i class="bi bi-gem"></i> Fasilitas Unggulan
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="tourism-tab" data-bs-toggle="pill" data-bs-target="#tourism-content" type="button" role="tab" aria-controls="tourism-content" aria-selected="false">
+                    <i class="bi bi-compass-fill"></i> Wisata Terdekat
+                </button>
+            </li>
+        </ul>
+
+        <!-- Konten Tab -->
+        <div class="tab-content" id="explore-tab-content">
+            <!-- Konten Fasilitas -->
+            <div class="tab-pane fade show active" id="facilities-content" role="tabpanel" aria-labelledby="facilities-tab">
+                <div class="row g-4">
+                    {{-- ### PERBAIKAN: Setiap kartu dibungkus dengan tag <a> ### --}}
+                    <div class="col-lg-4 col-md-6">
+                        <a href="#" class="explore-card">
+                            <div class="explore-card-image" style="background-image: url('https://images.unsplash.com/photo-1554118811-1e0d58224f24?q=80&w=2047&auto=format&fit=crop');"></div>
+                            <div class="explore-card-content">
+                                <h3>Ruang Tunggu Premium</h3>
+                                <p>Nikmati kenyamanan eksklusif dengan fasilitas lengkap selagi menunggu penerbangan Anda.</p>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                         <a href="#" class="explore-card">
+                            <div class="explore-card-image" style="background-image: url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=2070&auto=format&fit=crop');"></div>
+                            <div class="explore-card-content">
+                                <h3>Kuliner & Restoran</h3>
+                                <p>Cicipi beragam hidangan lezat, dari cita rasa lokal hingga internasional, di area food court kami.</p>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                         <a href="#" class="explore-card">
+                            <div class="explore-card-image" style="background-image: url('https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?q=80&w=2070&auto=format&fit=crop');"></div>
+                            <div class="explore-card-content">
+                                <h3>Area Belanja & Retail</h3>
+                                <p>Temukan berbagai kebutuhan perjalanan, suvenir, dan produk gaya hidup dari brand terkemuka.</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Konten Pariwisata -->
+            <div class="tab-pane fade" id="tourism-content" role="tabpanel" aria-labelledby="tourism-tab">
+                <div id="tourism-cards-container" class="row g-4">
+                    {{-- Konten akan diisi oleh JavaScript --}}
+                    <div class="col-12 text-center"><div class="spinner-border text-primary" role="status"></div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tombol "Lihat Semua" yang Dinamis -->
+        <div id="explore-button-container" class="text-center mt-5">
+            <a href="#" class="btn-modern-outline-dark">Lihat Semua Fasilitas</a>
+        </div>
+
+    </div>
+</section>
+<!-- ============================================ -->
+<!--              SEKSI MITRA KAMI (BARU)         -->
+<!-- ============================================ -->
+<section id="partners-section" class="section-modern partners-section">
+    <div class="container" data-aos="fade-up">
+        <div class="section-title-modern text-center">
+            <h2>Dipercaya oleh Mitra Terkemuka</h2>
+            <p>Kami bangga dapat bekerja sama dengan berbagai maskapai dan instansi terbaik di bidangnya.</p>
+        </div>
+
+        <div class="partners-carousel">
+            <div class="partners-track">
+                {{-- Logo akan digandakan oleh JavaScript untuk efek tak terbatas --}}
+                <a href="https://www.airnavindonesia.co.id/" target="_blank" class="partner-logo"><img src="{{ asset('assets_landing/img/mitra/logo-airnav.png') }}" alt="Logo AirNav"></a>
+                <a href="https://www.batikair.com/id/" target="_blank" class="partner-logo"><img src="{{ asset('assets_landing/img/mitra/logo-batik.png') }}" alt="Logo Batik Air"></a>
+                <a href="https://www.bmkg.go.id/" target="_blank" class="partner-logo"><img src="{{ asset('assets_landing/img/mitra/logo-BMKG.png') }}" alt="Logo BMKG"></a>
+                <a href="https://www.lionair.co.id/" target="_blank" class="partner-logo"><img src="{{ asset('assets_landing/img/mitra/logo-lion.png') }}" alt="Logo Lion Air"></a>
+                <a href="https://kaltimprov.go.id/" target="_blank" class="partner-logo"><img src="{{ asset('assets_landing/img/mitra/Logo-Pemprov.png') }}" alt="Logo Pemprov Kaltim"></a>
+                <a href="https://pertamina.com/" target="_blank" class="partner-logo"><img src="{{ asset('assets_landing/img/mitra/logo-pertamina.png') }}" alt="Logo Pertamina"></a>
+                <a href="https://www.superairjet.com/id/" target="_blank" class="partner-logo"><img src="{{ asset('assets_landing/img/mitra/logo-SAJ.png') }}" alt="Logo Super Air Jet"></a>
+                <a href="https://kkp.go.id/" target="_blank" class="partner-logo"><img src="{{ asset('assets_landing/img/mitra/logo_kkp.svg') }}" alt="Logo KKP"></a>
+                <a href="https://www.citilink.co.id/" target="_blank" class="partner-logo"><img src="{{ asset('assets_landing/img/mitra/logo-citilink.png') }}" alt="Logo Citilink"></a>
+                <a href="https://smartaviation.co.id/home" target="_blank" class="partner-logo"><img src="{{ asset('assets_landing/img/mitra/logo-smart.jpg') }}" alt="Logo Smart Aviation"></a>
+            </div>
+        </div>
+    </div>
+</section>
+
 
 <!-- ============================================ -->
 <!--                 NEWS SECTION                 -->

@@ -130,61 +130,6 @@
                         @endforelse
                       </tbody>
                     @endstaff
-                    <tbody>
-                        
-                        <tr>
-                            <td>PK-ABC</td>
-                            <td>Airbus A320</td>
-                            <td>2025-06-01 08:00 - 10:00</td>
-                            <td>CGK - DPS</td>
-                            <td>Penumpang</td>
-                            <td>
-                                <div class="d-flex">
-                                    <a href="#" class="btn btn-primary btn-sm me-1">Lihat</a>
-                                    <a href="#" class="btn btn-danger btn-sm">Hapus</a>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>PK-XYZ</td>
-                            <td>Boeing 737</td>
-                            <td>2025-06-02 12:00 - 14:30</td>
-                            <td>SUB - BPN</td>
-                            <td>Kargo</td>
-                            <td>
-                                <div class="d-flex">
-                                    <a href="#" class="btn btn-primary btn-sm me-1">Lihat</a>
-                                    <a href="#" class="btn btn-danger btn-sm">Hapus</a>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>PK-DEF</td>
-                            <td>ATR 72-600</td>
-                            <td>2025-06-03 15:00 - 16:15</td>
-                            <td>JOG - SRG</td>
-                            <td>Penumpang</td>
-                            <td>
-                                <div class="d-flex">
-                                    <a href="#" class="btn btn-primary btn-sm me-1">Lihat</a>
-                                    <a href="#" class="btn btn-danger btn-sm">Hapus</a>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>PK-MNO</td>
-                            <td>Boeing 747-400F</td>
-                            <td>2025-06-04 20:00 - 23:00</td>
-                            <td>CGK - SIN</td>
-                            <td>Kargo</td>
-                            <td>
-                                <div class="d-flex">
-                                    <a href="#" class="btn btn-primary btn-sm me-1">Lihat</a>
-                                    <a href="#" class="btn btn-danger btn-sm">Hapus</a>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
                 </table>
             </div>
         </div>
