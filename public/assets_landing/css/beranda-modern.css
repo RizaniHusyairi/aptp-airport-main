@@ -855,3 +855,7 @@
 .news-card-modern:hover .news-read-more i {
     transform: translateX(5px);
 }
+
+.bi.bi-airplane-fill.kedatangan::before {
+    transform: rotate(180deg);
+}

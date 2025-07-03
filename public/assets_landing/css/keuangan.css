@@ -1,39 +1,140 @@
 /* Custom CSS untuk halaman Laporan Keuangan */
-    .filter-section {
-      margin-bottom: 2rem;
-    }
-    .chart-container {
-      position: relative;
-      margin-bottom: 3rem;
-      width: 100%;
-      height: 400px; /* Tinggi default untuk grafik */
-    }
-    #monthFilterContainer {
-      transition: opacity 0.3s ease; /* Animasi untuk menyembunyikan/menampilkan */
-    }
-    #monthFilterContainer.hidden {
-      transition: opacity 0.3s ease .5s; /* Animasi untuk menyembunyikan/menampilkan */
-      opacity: 0;
-      visibility: hidden;
-      height: 0;
-      margin: 0;
-    }
-    #yearFilter , #monthFilter {
-        box-shadow: none;
+:root {
+  --primary-color: #0d2c4a;
+  --secondary-color: #f0a500;
+  --background-light: #f4f7f9;
+  --text-dark: #333333;
+  --text-muted-light: #6c757d;
+}
 
-    }
+.financial-report {
+  font-family: 'Poppins', sans-serif;
+}
 
-     #yearFilter:focus,#monthFilter:focus {
-        box-shadow: 0 0 0 0.2rem rgba(255, 193, 7, 0.25);
-        border-color: rgb(160, 123, 4);
-    } 
-    @media (max-width: 768px) {
-      .chart-container {
-        height: 300px; /* Tinggi lebih kecil untuk smartphone */
-      }
-    }
-    @media (max-width: 576px) {
-      .filter-section .col-12 {
-        margin-bottom: 1rem;
-      }
-    }
+.section-title-modern .description-title {
+  color: var(--secondary-color);
+  font-weight: 700;
+}
+
+/* Bagian Atas: Filter dan Grafik Utama */
+
+/* Bagian Bawah: Komposisi Anggaran */
+#composition-report {
+  padding-top: 0;
+}
+
+.report-card {
+  background-color: #ffffff;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.report-card-title,
+.chart-title {
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--primary-color);
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.chart-container-small {
+  position: relative;
+  width: 100%;
+  max-width: 350px;
+  height: 280px;
+  margin: 0 auto;
+}
+
+.modern-table-compact {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 8px;
+}
+
+.modern-table-compact thead th {
+  border: none;
+  font-weight: 600;
+  color: var(--text-muted-light);
+  text-transform: uppercase;
+  font-size: 12px;
+  padding: 8px 12px;
+  border-bottom: 2px solid #e9ecef;
+}
+
+.modern-table-compact tbody tr {
+  background-color: transparent;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.modern-table-compact tbody tr:hover {
+  background-color: #f8f9fa;
+}
+
+.modern-table-compact td {
+  vertical-align: middle;
+  border: none;
+  padding: 12px;
+  font-weight: 500;
+}
+
+.modern-table-compact .color-indicator {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  margin-right: 10px;
+  vertical-align: middle;
+}
+
+/* Custom CSS untuk halaman Laporan Keuangan */
+
+.filter-section {
+  margin-bottom: 2rem;
+}
+
+.chart-container {
+  position: relative;
+  margin-bottom: 3rem;
+  width: 100%;
+  height: 400px; /* Tinggi default untuk grafik */
+}
+
+#monthFilterContainer {
+  transition: opacity 0.3s ease;
+}
+
+#monthFilterContainer.hidden {
+  transition: opacity 0.3s ease .5s;
+  opacity: 0;
+  visibility: hidden;
+  height: 0;
+  margin: 0;
+}
+
+#yearFilter,
+#monthFilter {
+  box-shadow: none;
+}
+
+#yearFilter:focus,
+#monthFilter:focus {
+  box-shadow: 0 0 0 0.2rem rgba(255, 193, 7, 0.25);
+  border-color: rgb(160, 123, 4);
+}
+
+@media (max-width: 768px) {
+  .chart-container {
+    height: 300px; /* Tinggi lebih kecil untuk smartphone */
+  }
+}
+
+@media (max-width: 576px) {
+  .filter-section .col-12 {
+    margin-bottom: 1rem;
+  }
+}

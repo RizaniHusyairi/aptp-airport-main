@@ -24,12 +24,13 @@ use App\Http\Controllers\Staff_User\{
     LaluLintasController,
     LelangController,
     LetterController,
+    WorkPermitController,
 };
 
 use App\Http\Controllers\{
     LandingPageController,
     SandboxController,
-    SlotController
+    SlotController,
 
 };
 
@@ -38,6 +39,13 @@ Auth::routes();
 Route::group(["prefix" => 'dashboard'], function () {
     Route::group(['middleware' => 'auth'], function () {
         /* ================== USER ROUTES ================== */
+
+        Route::group(['prefix' => 'perizinan-kerja'], function () {
+            Route::get('/', [WorkPermitController::class, 'index'])->name('kerja.userindex');
+            Route::get('/create', [WorkPermitController::class, 'create'])->name('kerja.create');
+            Route::post('/', [WorkPermitController::class, 'store'])->name('kerja.store');
+            
+        });
         //  User Routes
         Route::get('/tenant', [TenantController::class, 'indexUser'])->name('tenant.index');
         Route::get('/tenant/create', [TenantController::class, 'create'])->name('tenant.create');
@@ -93,6 +101,10 @@ Route::group(["prefix" => 'dashboard'], function () {
             Route::patch('staff/berita/{id}/toggle-publish', [NewsController::class, 'togglePublish'])->name('berita.togglePublish');
             // Route::patch('staff/slider/{id}/toggle-visibility-footer', [NewsController::class, 'toggleVisibilityFooter'])->name('slider.toggleVisibilityFooter');
             
+            Route::get('staff/perizinan-kerja', [WorkPermitController::class, 'index'])->name('kerja.index');
+            Route::get('staff/perizinan-kerja/{workPermit}', [WorkPermitController::class, 'show'])->name('kerja.show');
+            Route::patch('staff/perizinan-kerja/{workPermit}', [WorkPermitController::class, 'updateStatus'])->name('kerja.updateStatus');
+
             // Tenant Staff Routes
             Route::get('staff/tenant', [TenantController::class, 'index'])->name('tenant.staffIndex');
             Route::get('staff/tenant/{id}', [TenantController::class, 'show'])->name('tenant.show');
@@ -296,6 +308,8 @@ Route::get('/informasi-publik/sop-ppid', [LandingPageController::class, 'sopPpid
 Route::get('/informasi-publik/pengajuan-informasi-publik', [LandingPageController::class, 'pengajuanInformasiPublik'])->name('pengajuanInformasiPublik');
 Route::post('/informasi-publik/pengajuan-informasi-publik', [LandingPageController::class, 'storePengajuanInformasiPublik'])->name('storePengajuanInformasiPublik');
 
+// routes/web.php
+Route::get('/fasilitas', [LandingPageController::class, 'fasilitas'])->name('fasilitas');
 Route::get('/pariwisata', [LandingPageController::class, 'pariwisata'])->name('pariwisata.index');
 Route::get('/pariwisata/{slug}', [LandingPageController::class, 'detailPariwisata'])->name('pariwisata.show');
 

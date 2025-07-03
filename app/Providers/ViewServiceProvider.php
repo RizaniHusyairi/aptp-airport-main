@@ -105,6 +105,7 @@ class ViewServiceProvider extends ServiceProvider
                 'Ajukan Field Trip' => ['route' => 'fieldtrip.index', 'icon' => 'bi bi-bus-front', 'label' => 'Ajukan Field Trip'],
                 'Ajukan Lelang' => ['route' => 'lelang.index', 'icon' => 'bi bi-hammer', 'label' => 'Ajukan Lelang/Beauty Contest'],
                 'Ajukan Slot Charter' => ['route' => 'slot.index', 'icon' => 'bi bi-clock', 'label' => 'Ajukan Slot Charter'],
+                'Ajukan Perijinan Kerja' => ['route' => 'kerja.userindex', 'icon' => 'bi bi-person-workspace', 'label' => 'Ajukan Perizinan Kerja'],
             ];
             $view->with('userRoutes', $userRoutes);
         });
@@ -119,6 +120,7 @@ class ViewServiceProvider extends ServiceProvider
                 'Manajemen Field Trip' => ['route' => 'fieldtrip.staffIndex', 'icon' => 'bi bi-geo-alt', 'label' => 'Field Trip'],
                 'Manajemen Lelang' => ['route' => 'lelang.staffIndex', 'icon' => 'bi bi-hammer', 'label' => 'Lelang/Beauty Contest'],
                 'Manajemen Slot Charter' => ['route' => 'slot.staffIndex', 'icon' => 'bi bi-clock', 'label' => 'Slot Charter'],
+                'Manajemen Perijinan Kerja' => ['route' => 'kerja.index', 'icon' => 'bi bi-person-workspace', 'label' => 'Perizinan Kerja'],
                 'Manajemen Laporan Keuangan' => ['route' => 'keuangan.staffIndex', 'icon' => 'bi bi-graph-up', 'label' => 'Laporan Keuangan'],
                 'Manajemen Slider' => ['route' => 'slider.staffIndex', 'icon' => 'bi bi-image', 'label' => 'Slider'],
                 'Manajemen Ajuan Informasi Publik' => ['route' => 'informasiPublik.staffIndex', 'icon' => 'bi bi-info-circle', 'label' => 'Informasi Publik'],

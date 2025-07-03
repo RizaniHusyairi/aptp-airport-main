@@ -1,0 +1,71 @@
+/* Custom CSS untuk halaman Fasilitas */
+:root {
+    --primary-color: #0d2c4a;
+    --secondary-color: #f0a500;
+    --background-light: #f4f7f9;
+    --text-dark: #333333;
+    --text-muted-light: #6c757d;
+}
+
+.facilities-page {
+    font-family: 'Poppins', sans-serif;
+}
+
+.section-title-modern .description-title {
+    color: var(--secondary-color);
+    font-weight: 700;
+}
+
+.facility-category {
+    margin-bottom: 60px;
+}
+
+.category-title {
+    font-size: 28px;
+    font-weight: 600;
+    color: var(--primary-color);
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 3px solid var(--secondary-color);
+    display: inline-block;
+}
+
+.facility-card {
+    background-color: #ffffff;
+    border-radius: 16px;
+    padding: 30px;
+    text-align: center;
+    height: 100%;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.07);
+    border: 1px solid #e9ecef;
+    transition: all 0.3s ease-in-out;
+}
+
+.facility-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 12px 35px rgba(13, 44, 74, 0.12);
+    border-color: var(--secondary-color);
+}
+
+.facility-icon {
+    font-size: 48px;
+    color: var(--secondary-color);
+    margin-bottom: 20px;
+    line-height: 1;
+}
+
+.facility-name {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--primary-color);
+    margin-bottom: 15px;
+}
+
+.facility-details {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: 15px;
+    color: var(--text-muted-light);
+    line-height: 1.7;
+}

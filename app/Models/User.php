@@ -9,6 +9,7 @@ use Spatie\MediaLibrary\HasMedia;
 use Illuminate\Notifications\Notifiable;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 
@@ -81,6 +82,16 @@ class User extends Authenticatable implements HasMedia
     }
 
     
+
+    /**
+     * Mendefinisikan relasi "hasMany" ke model WorkPermit.
+     * Seorang pengguna dapat memiliki banyak izin kerja.
+     */
+    public function workPermits(): HasMany
+    {
+        return $this->hasMany(WorkPermit::class);
+    }
+
 
     public function tenants()
     {

@@ -90,53 +90,6 @@
 </section>
 
 
-
-<!-- ============================================ -->
-<!--              QUICK ACCESS SECTION            -->
-<!-- ============================================ -->
-<section id="quick-access" class="section-modern quick-access">
-    <div class="container">
-        <div class="row g-4 justify-content-center">
-            <div class="col-6 col-md-4 col-lg-2">
-                <a href="{{ route('keberangkatan') }}" class="access-card">
-                    <div class="icon-wrapper"><i class="bi bi-airplane-engines"></i></div>
-                    <span>Cek Penerbangan</span>
-                </a>
-            </div>
-            <div class="col-6 col-md-4 col-lg-2">
-                <a href="#" class="access-card">
-                    <div class="icon-wrapper"><i class="bi bi-p-circle"></i></div>
-                    <span>Akses & Parkir</span>
-                </a>
-            </div>
-            <div class="col-6 col-md-4 col-lg-2">
-                <a href="#" class="access-card">
-                    <div class="icon-wrapper"><i class="bi bi-shop"></i></div>
-                    <span>Kuliner & Belanja</span>
-                </a>
-            </div>
-            <div class="col-6 col-md-4 col-lg-2">
-                <a href="#" class="access-card">
-                    <div class="icon-wrapper"><i class="bi bi-map"></i></div>
-                    <span>Navigasi Terminal</span>
-                </a>
-            </div>
-            <div class="col-6 col-md-4 col-lg-2">
-                <a href="{{ route('berita') }}" class="access-card">
-                    <div class="icon-wrapper"><i class="bi bi-newspaper"></i></div>
-                    <span>Info & Berita</span>
-                </a>
-            </div>
-             <div class="col-6 col-md-4 col-lg-2">
-                <a href="{{ route('pariwisata.index') }}" class="access-card">
-                    <div class="icon-wrapper"><i class="bi bi-compass"></i></div>
-                    <span>Jelajahi Kaltim</span>
-                </a>
-            </div>
-        </div>
-    </div>
-</section>
-
 <!-- ============================================ -->
 <!--   STATISTIK LALU LINTAS UDARA (DESAIN BARU)  -->
 <!-- ============================================ -->
@@ -176,7 +129,7 @@
         <ul class="nav nav-pills justify-content-center mb-4" id="pills-tab" role="tablist">
             <li class="nav-item" role="presentation">
                 <button class="nav-link active" id="pills-arrivals-tab" data-bs-toggle="pill" data-bs-target="#pills-arrivals" type="button" role="tab" aria-controls="pills-arrivals" aria-selected="true">
-                    <i class="bi bi-airplane-land"></i> Kedatangan
+                    <i class="bi bi-airplane-fill kedatangan"></i> Kedatangan
                 </button>
             </li>
             <li class="nav-item" role="presentation">
@@ -361,7 +314,7 @@
 
         <!-- Tombol "Lihat Semua" yang Dinamis -->
         <div id="explore-button-container" class="text-center mt-5">
-            <a href="#" class="btn-modern-outline-dark">Lihat Semua Fasilitas</a>
+            <a href="{{ route('fasilitas') }}" class="btn-modern-outline-dark">Lihat Semua Fasilitas</a>
         </div>
 
     </div>

@@ -468,7 +468,7 @@ if (mapContainer) {
                 } else if (event.target.id === 'tourism-tab') {
                     // Jika tab pariwisata aktif
                     buttonLink.textContent = 'Lihat Semua Destinasi';
-                    buttonLink.href = "{{ route('pariwisata.index') }}"; // URL dari Blade
+                    buttonLink.href = "/pariwisata"; // URL dari Blade
 
                     // Ambil data pariwisata hanya jika belum pernah dimuat
                     if (!tourismDataLoaded) {

@@ -877,6 +877,33 @@ class LandingPageController extends Controller
             return redirect()->back()->withErrors(['error' => 'Terjadi kesalahan di server. Silakan coba lagi nanti.'])->withInput();
         }
     }
+
+    // app/Http/Controllers/LandingPageController.php
+
+    public function fasilitas()
+    {
+        // Data diambil dari dokumen Anda.
+        $facilities = [
+            'udara' => [
+                ['name' => 'Runway', 'icon' => 'bi-airplane-fill', 'details' => ['Ukuran: 2.250 m x 45 m', 'Daya Dukung: PCN 47 F/C/X/T']],
+                ['name' => 'Taxiway', 'icon' => 'bi-sign-turn-right-fill', 'details' => ['Taxiway A: 173 m x 23 m', 'Taxiway B: 148 m x 18 m']],
+                ['name' => 'Apron', 'icon' => 'bi-grid-1x2-fill', 'details' => ['Ukuran: 330 m x 123 m', 'Kapasitas: 7 Pesawat Narrow Body']],
+                ['name' => 'Hanggar', 'icon' => 'bi-building-gear', 'details' => ['Luas: 3.632 m²', 'Tipe Konstruksi: Beton/Rigid']],
+            ],
+            'darat' => [
+                ['name' => 'Gedung Terminal', 'icon' => 'bi-building', 'details' => ['Luas: 12.700 m²', 'Kapasitas Tahunan: 793.750 Penumpang']],
+                ['name' => 'Gedung Kargo', 'icon' => 'bi-box-seam', 'details' => ['Luas: 1.148 m²', 'Lokasi: Lini 1']],
+            ],
+            'umum' => [
+                ['name' => 'Area Merokok', 'icon' => 'bi-wind', 'details' => ['Tersedia di area khusus yang nyaman dan terbuka.']],
+                ['name' => 'ATM Center', 'icon' => 'bi-credit-card-2-front-fill', 'details' => ['Layanan perbankan dari berbagai bank terkemuka.']],
+                ['name' => 'Kantin & Cafe', 'icon' => 'bi-cup-hot-fill', 'details' => ['Menyajikan beragam pilihan makanan dan minuman.']],
+                ['name' => 'Mushola', 'icon' => 'bi-moon-stars-fill', 'details' => ['Ruang ibadah yang bersih dan nyaman bagi umat Muslim.']],
+            ]
+        ];
+
+        return view('landing-menu.informasi-publik.fasilitas.index', compact('facilities'));
+    }
     
     
 }
