@@ -100,26 +100,6 @@
 
 @push('scripts')
   <script>
-    $(document).ready(function() {
-      getOrderStatusCount()
-    });
-
-    const getOrderStatusCount = () => {
-      $.ajax({
-        url: "{{ route('ticketStatusCount') }}",
-        type: "GET",
-        dataType: "json",
-        success: function(data) {
-          // remove d-none class from the badge
-          $('.ticket-badge').removeClass('d-none');
-
-          $("#totalTickets").html(data.totalTickets);
-          $("#pendingTickets").html(data.pendingTickets);
-          $("#approvedTickets").html(data.approvedTickets);
-          $("#canceledTickets").html(data.canceledTickets);
-        }
-      });
-    }
-
+    
   </script>
 @endpush

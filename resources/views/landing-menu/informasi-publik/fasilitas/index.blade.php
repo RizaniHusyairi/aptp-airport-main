@@ -7,12 +7,16 @@
 @endpush
 
 @section('content')
-<section id="facilities-page" class="section-modern facilities-page light-background pt-6">
+<section id="facilities-page" class="section-modern facilities-page pt-6">
     <div class="container">
-        <div class="section-title-modern text-center" data-aos="fade-up">
-            <h2>Kenyamanan Anda Prioritas Kami</h2>
+        <div class="container section-title" data-aos="fade-up">
+            <h2>Informasi<br></h2>
             <p><span>Fasilitas Lengkap</span> <span class="description-title">Bandara A.P.T. Pranoto</span></p>
-        </div>
+        </div><!-- End Section Title -->
+        {{-- <div class="section-title-modern text-center" data-aos="fade-up">
+            <h2>Kenyamanan Anda Prioritas Kami</h2>
+            <p><span></span> <span class="description-title"></span></p>
+        </div> --}}
 
         {{-- Seksi Fasilitas Udara --}}
         <div class="facility-category" data-aos="fade-up" data-aos-delay="100">

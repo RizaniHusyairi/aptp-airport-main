@@ -55,7 +55,7 @@ class RoleController extends Controller
     {
         $role = Role::with('permissions')->findOrFail($id); // Menyertakan permissions yang dimiliki role
         $permissions = Permission::all(); // Mengambil semua permissions
-        return view('admin.roles.edit', compact('role', 'permissions'));
+        return view('admin2.roles.edit', compact('role', 'permissions'));
     }
 
     public function update(Request $request, Role $role)
