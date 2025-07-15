@@ -21,6 +21,26 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     /**
+     * INISIALISASI BARU: HERO SLIDER
+     */
+    const heroSlider = new Swiper('.hero-slider', {
+        // Opsi
+        loop: true,
+        effect: 'fade', // Efek transisi fade
+        fadeEffect: {
+            crossFade: true
+        },
+        autoplay: {
+            delay: 5000, // Ganti gambar setiap 5 detik
+            disableOnInteraction: false,
+        },
+        pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+        },
+    });
+
+    /**
      * LOGIKA BARU UNTUK QUICK NAV DI HERO SECTION
      */
     const heroNavLinks = document.querySelectorAll('.hero-nav-link');

@@ -28,7 +28,26 @@
 <!--            HERO SECTION (REVISED)            -->
 <!-- ============================================ -->
 <section id="hero-modern" class="hero-modern">
-    <div class="hero-background-image" style="background-image: url({{asset('assets_landing/img/bg-1.png')  }})"></div>
+    <div class="swiper hero-slider">
+        <div class="swiper-wrapper">
+            <!-- Slide 1 -->
+            <div class="swiper-slide">
+                <div class="hero-background-image" style="background-image: url({{asset('assets_landing/img/bg-1.png')}})"></div>
+            </div>
+            <!-- Slide 2 (Ganti dengan gambar Anda) -->
+            <div class="swiper-slide">
+                <div class="hero-background-image" style="background-image: url('https://images.unsplash.com/photo-1530521954074-e64f6810b32d?q=80&w=2070&auto=format&fit=crop')"></div>
+            </div>
+            <!-- Slide 3 (Ganti dengan gambar Anda) -->
+            <div class="swiper-slide">
+                <div class="hero-background-image" style="background-image: url('https://images.unsplash.com/photo-1568434555536-1b4a834654b8?q=80&w=1974&auto=format&fit=crop')"></div>
+            </div>
+        </div>
+        <!-- Navigasi Paginasi Slider -->
+        <div class="swiper-pagination"></div>
+    </div>
+    
+    {{-- <div class="hero-background-image" style="background-image: url({{asset('assets_landing/img/bg-1.png')  }})"></div> --}}
     <div class="hero-background-overlay"></div>
 
     <div class="container hero-container d-flex flex-column justify-content-center align-items-center">
