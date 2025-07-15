@@ -46,12 +46,23 @@
         </a>
         @endif
     </div>
-
-    <div class="hero-scroll-indicator">
-        <a href="#quick-access">
-            <i class="bi bi-mouse"></i>
-        </a>
+    <div class="hero-quick-nav-wrapper">
+        <div class="hero-quick-nav" data-aos="fade-up" data-aos-delay="600">
+            <a href="#flight-info" class="hero-nav-link">
+                <i class="bi bi-airplane-engines-fill"></i>
+                <span>Jadwal Penerbangan</span>
+            </a>
+            <a href="#explore-section" class="hero-nav-link" data-tab-target="#facilities-tab">
+                <i class="bi bi-gem"></i>
+                <span>Fasilitas</span>
+            </a>
+            <a href="#explore-section" class="hero-nav-link" data-tab-target="#tourism-tab">
+                <i class="bi bi-compass-fill"></i>
+                <span>Pariwisata</span>
+            </a>
+        </div>
     </div>
+
 </section>
 
 <!-- ============================================ -->

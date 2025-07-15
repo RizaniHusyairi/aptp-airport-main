@@ -21,6 +21,38 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     /**
+     * LOGIKA BARU UNTUK QUICK NAV DI HERO SECTION
+     */
+    const heroNavLinks = document.querySelectorAll('.hero-nav-link');
+    heroNavLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            const targetSectionId = this.getAttribute('href');
+            const targetSection = document.querySelector(targetSectionId);
+
+            if (targetSection) {
+                // Scroll ke seksi yang dituju
+                targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+                // Cek apakah link ini punya target tab
+                const tabTargetId = this.dataset.tabTarget;
+                if (tabTargetId) {
+                    const tabButton = document.querySelector(tabTargetId);
+                    if (tabButton) {
+                        // Tunggu sejenak agar scroll selesai sebelum mengaktifkan tab
+                        setTimeout(() => {
+                            const tab = new bootstrap.Tab(tabButton);
+                            tab.show();
+                        }, 500); // Jeda 500ms
+                    }
+                }
+            }
+        });
+    });
+
+
+    /**
      * 2. FETCH & DISPLAY DATA PENERBANGAN (DIPERBAIKI)
      */
     const arrivalsList = document.getElementById('arrivals-list');
@@ -464,7 +496,7 @@ if (mapContainer) {
                 if (event.target.id === 'facilities-tab') {
                     // Jika tab fasilitas aktif
                     buttonLink.textContent = 'Lihat Semua Fasilitas';
-                    buttonLink.href = '#'; // Ganti dengan rute fasilitas Anda
+                    buttonLink.href = '/fasilitas';
                 } else if (event.target.id === 'tourism-tab') {
                     // Jika tab pariwisata aktif
                     buttonLink.textContent = 'Lihat Semua Destinasi';

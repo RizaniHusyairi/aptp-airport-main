@@ -127,9 +127,77 @@
     height: 40px;
     margin-right: 15px;
 }
+
+/* =================================== */
+/* GAYA QUICK NAV DI HERO (DIPERBAIKI) */
+/* =================================== */
+
+/* Wrapper ini HANYA untuk positioning agar tidak konflik dengan animasi AOS */
+.hero-quick-nav-wrapper {
+    position: absolute;
+    bottom: 120px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 3;
+}
+
+/* Elemen ini untuk styling visual dan animasi AOS */
+.hero-quick-nav {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50px;
+    padding: 10px;
+    display: flex;
+    gap: 10px;
+}
+
+.hero-nav-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    color: var(--text-light);
+    text-decoration: none;
+    font-weight: 500;
+    border-radius: 50px;
+    transition: background-color 0.3s ease;
+}
+
+.hero-nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.hero-nav-link i {
+    font-size: 1.1rem;
+}
+
+/* Penyesuaian untuk layar kecil */
+@media (max-width: 768px) {
+    .hero-quick-nav-wrapper {
+        bottom: 100px;
+    }
+    .hero-quick-nav {
+        padding: 8px;
+        gap: 5px;
+    }
+    .hero-nav-link {
+        padding: 8px 12px;
+    }
+    .hero-nav-link span {
+        display: none; /* Sembunyikan teks, hanya tampilkan ikon */
+    }
+    .hero-nav-link i {
+        font-size: 1.3rem; /* Perbesar ikon */
+    }
+}
+
+
 .hero-scroll-indicator {
     position: absolute;
     bottom: 30px;
+
     left: 50%;
     transform: translateX(-50%);
     z-index: 3;
