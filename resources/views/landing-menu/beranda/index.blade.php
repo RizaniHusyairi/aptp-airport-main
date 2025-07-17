@@ -31,17 +31,14 @@
     <div class="swiper hero-slider">
         <div class="swiper-wrapper">
             <!-- Slide 1 -->
-            <div class="swiper-slide">
-                <div class="hero-background-image" style="background-image: url({{asset('assets_landing/img/bg-1.png')}})"></div>
-            </div>
-            <!-- Slide 2 (Ganti dengan gambar Anda) -->
-            <div class="swiper-slide">
-                <div class="hero-background-image" style="background-image: url('https://images.unsplash.com/photo-1530521954074-e64f6810b32d?q=80&w=2070&auto=format&fit=crop')"></div>
-            </div>
-            <!-- Slide 3 (Ganti dengan gambar Anda) -->
-            <div class="swiper-slide">
-                <div class="hero-background-image" style="background-image: url('https://images.unsplash.com/photo-1568434555536-1b4a834654b8?q=80&w=1974&auto=format&fit=crop')"></div>
-            </div>
+            @foreach ($sliders as $index => $slider)
+
+                <div class="swiper-slide">
+                    <div class="hero-background-image" style="background-image: url({{asset('uploads/' . $slider->documents)}})"></div>
+                </div>
+                
+            @endforeach
+            
         </div>
         <!-- Navigasi Paginasi Slider -->
         <div class="swiper-pagination"></div>
