@@ -25,13 +25,18 @@
                 @foreach($facilities['udara'] as $facility)
                 <div class="col-lg-3 col-md-6">
                     <div class="facility-card">
-                        <div class="facility-icon"><i class="bi {{ $facility['icon'] }}"></i></div>
-                        <h4 class="facility-name">{{ $facility['name'] }}</h4>
-                        <ul class="facility-details">
-                            @foreach($facility['details'] as $detail)
-                            <li>{{ $detail }}</li>
-                            @endforeach
-                        </ul>
+                        <div class="facility-card-image">
+                            <img src="{{ $facility['image'] }}" alt="Foto {{ $facility['name'] }}" onerror="this.onerror=null;this.src='https://placehold.co/600x400/0d2c4a/ffffff?text=Fasilitas';">
+                        </div>
+                        <div class="facility-card-content">
+                            {{-- Elemen Ikon Dihapus dari Sini --}}
+                            <h4 class="facility-name">{{ $facility['name'] }}</h4>
+                            <ul class="facility-details">
+                                @foreach($facility['details'] as $detail)
+                                <li>{{ $detail }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
                     </div>
                 </div>
                 @endforeach
@@ -45,13 +50,17 @@
                 @foreach($facilities['darat'] as $facility)
                 <div class="col-lg-3 col-md-6">
                     <div class="facility-card">
-                        <div class="facility-icon"><i class="bi {{ $facility['icon'] }}"></i></div>
-                        <h4 class="facility-name">{{ $facility['name'] }}</h4>
-                        <ul class="facility-details">
-                            @foreach($facility['details'] as $detail)
-                            <li>{{ $detail }}</li>
-                            @endforeach
-                        </ul>
+                         <div class="facility-card-image">
+                            <img src="{{ $facility['image'] }}" alt="Foto {{ $facility['name'] }}" onerror="this.onerror=null;this.src='https://placehold.co/600x400/0d2c4a/ffffff?text=Fasilitas';">
+                        </div>
+                        <div class="facility-card-content">
+                            <h4 class="facility-name">{{ $facility['name'] }}</h4>
+                            <ul class="facility-details">
+                                @foreach($facility['details'] as $detail)
+                                <li>{{ $detail }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
                     </div>
                 </div>
                 @endforeach
@@ -65,13 +74,17 @@
                  @foreach($facilities['umum'] as $facility)
                 <div class="col-lg-3 col-md-6">
                     <div class="facility-card">
-                        <div class="facility-icon"><i class="bi {{ $facility['icon'] }}"></i></div>
-                        <h4 class="facility-name">{{ $facility['name'] }}</h4>
-                        <ul class="facility-details">
-                            @foreach($facility['details'] as $detail)
-                            <li>{{ $detail }}</li>
-                            @endforeach
-                        </ul>
+                         <div class="facility-card-image">
+                            <img src="{{ $facility['image'] }}" alt="Foto {{ $facility['name'] }}" onerror="this.onerror=null;this.src='https://placehold.co/600x400/0d2c4a/ffffff?text=Fasilitas';">
+                        </div>
+                        <div class="facility-card-content">
+                            <h4 class="facility-name">{{ $facility['name'] }}</h4>
+                            <ul class="facility-details">
+                                @foreach($facility['details'] as $detail)
+                                <li>{{ $detail }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
                     </div>
                 </div>
                 @endforeach

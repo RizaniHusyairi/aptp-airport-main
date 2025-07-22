@@ -882,23 +882,23 @@ class LandingPageController extends Controller
 
     public function fasilitas()
     {
-        // Data diambil dari dokumen Anda.
+        // Data diperbarui dengan menghapus 'icon'
         $facilities = [
             'udara' => [
-                ['name' => 'Runway', 'icon' => 'bi-airplane-fill', 'details' => ['Ukuran: 2.250 m x 45 m', 'Daya Dukung: PCN 47 F/C/X/T']],
-                ['name' => 'Taxiway', 'icon' => 'bi-sign-turn-right-fill', 'details' => ['Taxiway A: 173 m x 23 m', 'Taxiway B: 148 m x 18 m']],
-                ['name' => 'Apron', 'icon' => 'bi-grid-1x2-fill', 'details' => ['Ukuran: 330 m x 123 m', 'Kapasitas: 7 Pesawat Narrow Body']],
-                ['name' => 'Hanggar', 'icon' => 'bi-building-gear', 'details' => ['Luas: 3.632 m²', 'Tipe Konstruksi: Beton/Rigid']],
+                ['name' => 'Runway', 'details' => ['Ukuran: 2.250 m x 45 m', 'Daya Dukung: PCN 47 F/C/X/T'], 'image' => asset('assets_landing/img/fasilitas/runway.jpg')],
+                ['name' => 'Taxiway', 'details' => ['Taxiway A: 173 m x 23 m', 'Paralel: 527 m x 18 m'], 'image' => asset('assets_landing/img/fasilitas/taxiway.jpg')],
+                ['name' => 'Apron', 'details' => ['Ukuran: 330 m x 123 m', 'Kapasitas: 7 Pesawat Narrow Body'], 'image' => asset('assets_landing/img/fasilitas/apron.jpg')],
+                ['name' => 'Hanggar', 'details' => ['Luas: 3.632 m²', 'Tipe Konstruksi: Beton/Rigid'], 'image' => asset('assets_landing/img/fasilitas/hanggar.jpg')],
             ],
             'darat' => [
-                ['name' => 'Gedung Terminal', 'icon' => 'bi-building', 'details' => ['Luas: 12.700 m²', 'Kapasitas Tahunan: 793.750 Penumpang']],
-                ['name' => 'Gedung Kargo', 'icon' => 'bi-box-seam', 'details' => ['Luas: 1.148 m²', 'Lokasi: Lini 1']],
+                ['name' => 'Gedung Terminal', 'details' => ['Luas: 12.700 m²', 'Kapasitas: 793.750 Penumpang/Tahun'], 'image' => asset('assets_landing/img/fasilitas/terminal.jpg')],
+                ['name' => 'Gedung Kargo', 'details' => ['Luas: 1.148 m²', 'Lokasi: Lini 1'], 'image' => asset('assets_landing/img/fasilitas/kargo.jpg')],
             ],
             'umum' => [
-                ['name' => 'Area Merokok', 'icon' => 'bi-wind', 'details' => ['Tersedia di area khusus yang nyaman dan terbuka.']],
-                ['name' => 'ATM Center', 'icon' => 'bi-credit-card-2-front-fill', 'details' => ['Layanan perbankan dari berbagai bank terkemuka.']],
-                ['name' => 'Kantin & Cafe', 'icon' => 'bi-cup-hot-fill', 'details' => ['Menyajikan beragam pilihan makanan dan minuman.']],
-                ['name' => 'Mushola', 'icon' => 'bi-moon-stars-fill', 'details' => ['Ruang ibadah yang bersih dan nyaman bagi umat Muslim.']],
+                ['name' => 'Area Merokok', 'details' => ['Tersedia di area khusus yang nyaman dan terbuka.'], 'image' => asset('assets_landing/img/fasilitas/smoking-area.jpg')],
+                ['name' => 'ATM Center', 'details' => ['Layanan perbankan dari berbagai bank terkemuka.'], 'image' => asset('assets_landing/img/fasilitas/atm.jpg')],
+                ['name' => 'Kantin & Cafe', 'details' => ['Menyajikan beragam pilihan makanan dan minuman.'], 'image' => asset('assets_landing/img/fasilitas/cafe.jpg')],
+                ['name' => 'Mushola', 'details' => ['Ruang ibadah yang bersih dan nyaman bagi umat Muslim.'], 'image' => asset('assets_landing/img/fasilitas/mushola.jpg')],
             ]
         ];
 

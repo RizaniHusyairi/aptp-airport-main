@@ -30,15 +30,17 @@
     display: inline-block;
 }
 
+/* Desain Kartu Baru dengan Gambar */
 .facility-card {
     background-color: #ffffff;
     border-radius: 16px;
-    padding: 30px;
-    text-align: center;
     height: 100%;
     box-shadow: 0 8px 25px rgba(0,0,0,0.07);
     border: 1px solid #e9ecef;
     transition: all 0.3s ease-in-out;
+    overflow: hidden; /* Penting untuk border-radius pada gambar */
+    display: flex;
+    flex-direction: column;
 }
 
 .facility-card:hover {
@@ -47,18 +49,39 @@
     border-color: var(--secondary-color);
 }
 
-.facility-icon {
-    font-size: 48px;
-    color: var(--secondary-color);
-    margin-bottom: 20px;
-    line-height: 1;
+.facility-card-image {
+    height: 180px;
+    overflow: hidden;
 }
+
+.facility-card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.facility-card:hover .facility-card-image img {
+    transform: scale(1.1);
+}
+
+.facility-card-content {
+    padding: 25px;
+    text-align: center;
+    flex-grow: 1; /* Membuat konten mengisi sisa ruang */
+    display: flex;
+    flex-direction: column;
+}
+
+/* ### GAYA IKON DIHAPUS ### */
 
 .facility-name {
     font-size: 20px;
     font-weight: 600;
     color: var(--primary-color);
     margin-bottom: 15px;
+    /* ### PERBAIKAN: Menambahkan margin atas untuk menggantikan ruang ikon ### */
+    margin-top: 10px; 
 }
 
 .facility-details {
@@ -68,4 +91,5 @@
     font-size: 15px;
     color: var(--text-muted-light);
     line-height: 1.7;
+    margin-top: auto; /* Mendorong detail ke bawah jika ada ruang */
 }

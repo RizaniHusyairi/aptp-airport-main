@@ -72,7 +72,7 @@
 <!-- ============================================ -->
 <!--     KOMPOSISI ANGGARAN (BAGIAN BAWAH)        -->
 <!-- ============================================ -->
-<section id="composition-report" class="section-modern financial-report light-background">
+<section id="composition-report" class="section-modern financial-report">
     <div class="container">
         <div class="section-title-modern text-center" data-aos="fade-up">
             <h2>Komposisi Alokasi Anggaran</h2>
