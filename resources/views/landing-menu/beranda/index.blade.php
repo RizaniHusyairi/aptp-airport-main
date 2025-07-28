@@ -18,6 +18,9 @@
     
     {{-- File JS kustom untuk halaman ini --}}
     <script src="{{ asset('assets_landing/js/beranda-modern.js') }}"></script>
+
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
 @endpush
 
 
@@ -220,32 +223,6 @@
     </div>
 </section>
 
-<!-- Trip Planner Modal -->
-<div class="modal fade" id="trip-planner-modal" tabindex="-1" aria-labelledby="tripPlannerModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="tripPlannerModalLabel">✨ Rencana Petualangan Anda</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <div id="planner-loading" class="text-center p-5 d-none">
-            <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
-                <span class="visually-hidden">Loading...</span>
-            </div>
-            <p class="mt-3">AI sedang meracik rencana perjalanan terbaik untuk Anda...</p>
-        </div>
-        <div id="planner-result"></div>
-        <div id="planner-error" class="alert alert-danger d-none" role="alert">
-            Maaf, terjadi kesalahan saat membuat rencana. Silakan coba lagi.
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-      </div>
-    </div>
-  </div>
-</div>
 
 
 <!-- ============================================ -->
@@ -408,5 +385,57 @@
         </div>
     </div>
 </section>
+
+
+<!-- ============================================ -->
+<!--    FLOATING ACTION BUTTON (FAB) KONTAK BARU  -->
+<!-- ============================================ -->
+<div id="contact-fab-container">
+    <!-- Formulir Kontak yang Tersembunyi -->
+    <div id="contact-form-wrapper">
+        <div class="contact-form-header">
+            <h5>Hubungi Kami</h5>
+            <button type="button" id="close-contact-form" class="btn-close btn-close-white"></button>
+        </div>
+        <div class="contact-form-body">
+            <form id="contact-fab-form" action="{{ route('contact.submit') }}" method="POST">
+                @csrf
+                <div class="mb-2">
+                    <input type="text" name="name" class="form-control" placeholder="Nama Anda" required>
+                </div>
+                <div class="mb-2">
+                    <input type="email" name="email" class="form-control" placeholder="Email Anda" required>
+                </div>
+                 <div class="mb-2">
+                    <input type="text" name="phone_number" class="form-control" placeholder="Nomor Telepon" required>
+                </div>
+                <div class="mb-2">
+                    <select name="subject" class="form-select" required>
+                        <option value="">Pilih Kategori...</option>
+                        <option value="Informasi">Informasi</option>
+                        <option value="Keluhan">Keluhan</option>
+                        <option value="Saran">Saran</option>
+                        <option value="Apresiasi">Apresiasi</option>
+                    </select>
+                </div>
+                <div class="mb-2">
+                    <textarea name="message" class="form-control" rows="3" placeholder="Pesan Anda..." required></textarea>
+                </div>
+                <div class="mb-2">
+                    <div class="g-recaptcha" data-sitekey="{{ config('services.recaptcha.site_key') }}"></div>
+                </div>
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-primary">Kirim Pesan</button>
+                </div>
+            </form>
+            <div id="fab-form-response" class="mt-3"></div>
+        </div>
+    </div>
+
+    <!-- Tombol FAB Utama -->
+    <button id="contact-fab-toggle" class="btn">
+        <i class="bi bi-chat-dots-fill"></i>
+    </button>
+</div>
 
 @endsection

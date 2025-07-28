@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\{
     HomeController,
     CustomerController,
-
+    FacilityController,
     ProfileController,
     RoleController,
 };
@@ -31,7 +31,7 @@ use App\Http\Controllers\{
     LandingPageController,
     SandboxController,
     SlotController,
-
+    TourismController,
 };
 
 Auth::routes();
@@ -220,6 +220,8 @@ Route::group(["prefix" => 'dashboard'], function () {
 
             //roles
             Route::resource('roles', RoleController::class);
+            Route::resource('facilities', FacilityController::class)->names('admin.facilities');
+            Route::resource('tourism', TourismController::class)->names('admin.tourism');
         });
     });
     Route::middleware(['auth'])->group(function () {

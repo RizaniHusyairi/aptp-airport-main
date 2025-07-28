@@ -544,4 +544,72 @@ if (mapContainer) {
         });
     }
 
+    /**
+     * LOGIKA BARU UNTUK FLOATING ACTION BUTTON (FAB) KONTAK
+     */
+    const fabContainer = document.getElementById('contact-fab-container');
+    if (fabContainer) {
+        const toggleButton = document.getElementById('contact-fab-toggle');
+        const closeButton = document.getElementById('close-contact-form');
+        const contactForm = document.getElementById('contact-fab-form');
+        const responseDiv = document.getElementById('fab-form-response');
+
+        // Fungsi untuk membuka/menutup form
+        const toggleForm = () => {
+            fabContainer.classList.toggle('fab-open');
+        };
+
+        toggleButton.addEventListener('click', toggleForm);
+        closeButton.addEventListener('click', toggleForm);
+
+        // Logika submit form dengan AJAX
+        contactForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const submitButton = this.querySelector('button[type="submit"]');
+            const originalButtonText = submitButton.innerHTML;
+            submitButton.disabled = true;
+            submitButton.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Mengirim...`;
+            responseDiv.innerHTML = '';
+
+            try {
+                const formData = new FormData(this);
+                const response = await fetch(this.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'Accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest',
+                    }
+                });
+
+                const result = await response.json();
+
+                if (!response.ok) {
+                    // Handle validation errors (422)
+                    if (response.status === 422 && result.errors) {
+                        const errorMessages = Object.values(result.errors).flat().join('<br>');
+                        throw new Error(errorMessages);
+                    }
+                    throw new Error(result.message || 'Terjadi kesalahan server.');
+                }
+                
+                // Handle success
+                responseDiv.innerHTML = `<div class="text-success">${result.message}</div>`;
+                this.reset();
+                if (typeof grecaptcha !== 'undefined') {
+                    grecaptcha.reset();
+                }
+                // Tutup form setelah 3 detik
+                setTimeout(toggleForm, 3000);
+
+            } catch (error) {
+                responseDiv.innerHTML = `<div class="text-danger">${error.message}</div>`;
+            } finally {
+                submitButton.disabled = false;
+                submitButton.innerHTML = originalButtonText;
+            }
+        });
+    }
+
 });

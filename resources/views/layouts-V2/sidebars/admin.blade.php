@@ -40,6 +40,18 @@
                     <span>Roles</span>
                 </a>
             </li>
+            <li class="sidebar-item {{ Route::is('admin.tourism.index') ? 'active' : '' }}">
+                <a href="{{ route('admin.tourism.index') }}" class='sidebar-link'>
+                    <i class="bi bi-compass-fill"></i>
+                    <span>Pariwisata</span>
+                </a>
+            </li>
+            <li class="sidebar-item {{ Route::is('admin.facilities.index') ? 'active' : '' }}">
+                <a href="{{ route('admin.facilities.index') }}" class='sidebar-link'>
+                    <i class="bi bi-gem"></i>
+                    <span>Fasilitas</span>
+                </a>
+            </li>
         </ul>
     </div>
 </div>
