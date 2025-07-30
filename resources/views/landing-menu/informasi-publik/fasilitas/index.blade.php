@@ -21,27 +21,14 @@
         {{-- Seksi Fasilitas Udara --}}
         <div class="facility-category" data-aos="fade-up" data-aos-delay="100">
             <h3 class="category-title">Fasilitas Sisi Udara</h3>
-            <div class="row g-4">
-                @foreach($facilities['udara'] as $facility)
-                <div class="col-lg-3 col-md-6">
-                    <div class="facility-card">
-                        <div class="facility-card-image">
-                            <img src="{{ $facility['image'] }}" alt="Foto {{ $facility['name'] }}" onerror="this.onerror=null;this.src='https://placehold.co/600x400/0d2c4a/ffffff?text=Fasilitas';">
-                        </div>
-                        <div class="facility-card-content">
-                            {{-- Elemen Ikon Dihapus dari Sini --}}
-                            <h4 class="facility-name">{{ $facility['name'] }}</h4>
-                            <ul class="facility-details">
-                                @foreach($facility['details'] as $detail)
-                                <li>{{ $detail }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                @endforeach
+            
+            {{-- ### PERBAIKAN: Menampilkan gambar diagram, bukan kartu-kartu ### --}}
+            <div class="airside-image-container">
+                <img src="{{ asset('assets_landing/img/fasilitas/fasilitasUdara.png') }}" class="img-fluid rounded-3 shadow-sm" alt="Diagram Fasilitas Sisi Udara Bandara APT Pranoto">
             </div>
         </div>
+        {{-- Seksi Fasilitas Udara --}}
+        
 
         {{-- Seksi Fasilitas Darat --}}
         <div class="facility-category" data-aos="fade-up" data-aos-delay="200">

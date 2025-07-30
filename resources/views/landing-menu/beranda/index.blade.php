@@ -186,46 +186,6 @@
 </section>
 
 <!-- ============================================ -->
-<!--         ✨ AI TRIP PLANNER (GEMINI API)        -->
-<!-- ============================================ -->
-<section id="trip-planner" class="section-modern trip-planner">
-    <div class="container" data-aos="fade-up">
-        <div class="section-title-modern text-center">
-            <h2>✨ Rencanakan Petualangan Anda dengan AI</h2>
-            <p>Masukkan tujuan dan lama perjalanan. Biarkan asisten AI kami menyusun itinerary tak terlupakan untuk Anda.</p>
-        </div>
-        <div class="row justify-content-center">
-            <div class="col-lg-8">
-                <form id="trip-planner-form" class="p-4 rounded-3">
-                    <div class="row g-3 align-items-center">
-                        <div class="col-md-5">
-                            <label for="tujuan" class="form-label">Saya ingin terbang ke:</label>
-                            <input type="text" class="form-control form-control-lg" id="tujuan" placeholder="Contoh: Surabaya, Bali" required>
-                        </div>
-                        <div class="col-md-4">
-                            <label for="durasi" class="form-label">Selama:</label>
-                             <div class="input-group">
-                                <input type="number" class="form-control form-control-lg" id="durasi" placeholder="Contoh: 3" min="1" max="10" required>
-                                <span class="input-group-text">hari</span>
-                            </div>
-                        </div>
-                        <div class="col-md-3 d-grid">
-                             <label for="durasi" class="form-label d-none d-md-block">&nbsp;</label>
-                            <button type="submit" class="btn-gemini-planner">
-                                <span class="btn-text">Rancang Sekarang!</span>
-                                <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
-                            </button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</section>
-
-
-
-<!-- ============================================ -->
 <!--   PETA SVG ANIMASI (MENGGANTIKAN CARDS)      -->
 <!-- ============================================ -->
 <section id="route-map" class="section-modern route-map">
@@ -276,31 +236,31 @@
             <!-- Konten Fasilitas -->
             <div class="tab-pane fade show active" id="facilities-content" role="tabpanel" aria-labelledby="facilities-tab">
                 <div class="row g-4">
-                    {{-- ### PERBAIKAN: Setiap kartu dibungkus dengan tag <a> ### --}}
+                    {{-- ### KONTEN KARTU DIPERBARUI ### --}}
                     <div class="col-lg-4 col-md-6">
-                        <a href="#" class="explore-card">
-                            <div class="explore-card-image" style="background-image: url('https://images.unsplash.com/photo-1554118811-1e0d58224f24?q=80&w=2047&auto=format&fit=crop');"></div>
+                        <a href="{{ route('fasilitas') }}" class="explore-card">
+                            <div class="explore-card-image" style="background-image: url('https://images.unsplash.com/photo-1569154941061-e231b4725ef1?q=80&w=2070&auto=format&fit=crop');"></div>
                             <div class="explore-card-content">
-                                <h3>Ruang Tunggu Premium</h3>
-                                <p>Nikmati kenyamanan eksklusif dengan fasilitas lengkap selagi menunggu penerbangan Anda.</p>
+                                <h3>Fasilitas Sisi Udara</h3>
+                                <p>Infrastruktur vital kami, mulai dari landasan pacu hingga apron yang modern dan efisien.</p>
                             </div>
                         </a>
                     </div>
                     <div class="col-lg-4 col-md-6">
-                         <a href="#" class="explore-card">
-                            <div class="explore-card-image" style="background-image: url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=2070&auto=format&fit=crop');"></div>
+                         <a href="{{ route('fasilitas') }}" class="explore-card">
+                            <div class="explore-card-image" style="background-image: url('https://images.unsplash.com/photo-1519666223968-d17b8b22f5c1?q=80&w=2070&auto=format&fit=crop');"></div>
                             <div class="explore-card-content">
-                                <h3>Kuliner & Restoran</h3>
-                                <p>Cicipi beragam hidangan lezat, dari cita rasa lokal hingga internasional, di area food court kami.</p>
+                                <h3>Fasilitas Sisi Darat</h3>
+                                <p>Temukan kemegahan arsitektur terminal penumpang, gedung kargo, dan area parkir yang luas.</p>
                             </div>
                         </a>
                     </div>
                     <div class="col-lg-4 col-md-6">
-                         <a href="#" class="explore-card">
-                            <div class="explore-card-image" style="background-image: url('https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?q=80&w=2070&auto=format&fit=crop');"></div>
+                         <a href="{{ route('fasilitas') }}" class="explore-card">
+                            <div class="explore-card-image" style="background-image: url('https://images.unsplash.com/photo-1542337535-9017a5a3a163?q=80&w=1974&auto=format&fit=crop');"></div>
                             <div class="explore-card-content">
-                                <h3>Area Belanja & Retail</h3>
-                                <p>Temukan berbagai kebutuhan perjalanan, suvenir, dan produk gaya hidup dari brand terkemuka.</p>
+                                <h3>Fasilitas Umum</h3>
+                                <p>Nikmati berbagai layanan mulai dari check-in counter, kuliner, hingga ruang ibadah yang nyaman.</p>
                             </div>
                         </a>
                     </div>

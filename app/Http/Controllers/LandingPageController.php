@@ -909,8 +909,11 @@ class LandingPageController extends Controller
         //     ]
         // ];
         // Mengambil semua data fasilitas dari database dan mengelompokkannya berdasarkan kategori
-        $facilities = Facility::all()->groupBy('category');
-
+     
+        // ### PERBAIKAN: Hanya mengambil fasilitas darat dan umum dari database ###
+        $facilities = Facility::whereIn('category', ['darat', 'umum'])
+                                ->get()
+                                ->groupBy('category');
 
         return view('landing-menu.informasi-publik.fasilitas.index', compact('facilities'));
     }
