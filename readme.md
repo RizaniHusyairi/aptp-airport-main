@@ -1,16 +1,61 @@
-Cara menjalankan project mode development:
-1. npm run dev
-2. php artisan migrate (jika belum)
-3. php artisan db:seed untuk Sampling data (jika belum)
-4. matikan semua komentar bagian dev di .env
-5. jadikan komentar semua bagian prod di .env
-6. php artisan serve
+# Sistem Informasi dan Layanan Bandara APT Pranoto
 
-Cara menjalankan project mode production:
-1. npm run prod
-2. php artisan migrate (jika belum)
-3. php artisan db:seed untuk Sampling data (jika belum)
-4. jadikan komentar bagian dev di .env
-5. matikan semua komentar bagian prod di .env
-6. pada bagian APP_URL disesuaikan dengan domain yang akan digunakan
-6. php artisan serve
+## Persyaratan Server
+- PHP 8.1 atau lebih tinggi
+- Composer 2.x
+- Node.js & NPM
+- Database (MySQL)
+- Ekstensi PHP: BCMath, Ctype, cURL, DOM, Fileinfo, JSON, Mbstring, OpenSSL, PCRE, PDO, Tokenizer, XML
+
+## Panduan Instalasi
+
+1.  **Clone Repositori**
+    ```
+    git clone [https://github.com/NAMA_USER_ANDA/NAMA_REPO_ANDA.git](https://github.com/NAMA_USER_ANDA/NAMA_REPO_ANDA.git)
+    cd NAMA_REPO_ANDA
+    ```
+
+2.  **Konfigurasi Environment**
+    - Salin file `.env.example` menjadi `.env`:
+      ```
+      cp .env.example .env
+      ```
+    - Buka file `.env` dan isi semua variabel yang kosong (seperti `DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD`, `GEMINI_API_KEY`, dll) sesuai dengan konfigurasi server.
+
+3.  **Instalasi Dependensi**
+    ```
+    composer install --no-dev
+    npm install
+    npm run build
+    ```
+
+4.  **Setup Aplikasi Laravel**
+    - Generate kunci aplikasi:
+      ```
+      php artisan key:generate
+      ```
+    - Jalankan migrasi database (ini akan membuat semua tabel):
+      ```
+      php artisan migrate --seed
+      ```
+    - Buat symlink untuk storage:
+      ```
+      php artisan storage:link
+      ```
+
+5.  **Optimasi untuk Produksi**
+    ```
+    php artisan config:cache
+    php artisan route:cache
+    php artisan view:cache
+    ```
+
+6.  **Setup Queue Worker**
+    - Pastikan Supervisor (atau manajer proses lainnya) dikonfigurasi untuk menjalankan perintah berikut:
+      ```
+      php artisan queue:work --sleep=3 --tries=3
+      ```
+
+7.  **Jalankan Aplikasi**
+    ```
+    php artisan serve
