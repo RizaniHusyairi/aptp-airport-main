@@ -248,7 +248,7 @@
                     </div>
                     <div class="col-lg-4 col-md-6">
                          <a href="{{ route('fasilitas') }}" class="explore-card">
-                            <div class="explore-card-image" style="background-image: url('https://images.unsplash.com/photo-1519666223968-d17b8b22f5c1?q=80&w=2070&auto=format&fit=crop');"></div>
+                            <div class="explore-card-image" style="background-image: url({{ asset('assets_landing/img/fasilitas/darat/temindung-penumpang.jpg') }});"></div>
                             <div class="explore-card-content">
                                 <h3>Fasilitas Sisi Darat</h3>
                                 <p>Temukan kemegahan arsitektur terminal penumpang, gedung kargo, dan area parkir yang luas.</p>
@@ -257,7 +257,7 @@
                     </div>
                     <div class="col-lg-4 col-md-6">
                          <a href="{{ route('fasilitas') }}" class="explore-card">
-                            <div class="explore-card-image" style="background-image: url('https://images.unsplash.com/photo-1542337535-9017a5a3a163?q=80&w=1974&auto=format&fit=crop');"></div>
+                            <div class="explore-card-image" style="background-image: url('https://images.unsplash.com/photo-1555396273-367ea4eb4db5?q=80&w=1974&auto=format&fit=crop');"></div>
                             <div class="explore-card-content">
                                 <h3>Fasilitas Umum</h3>
                                 <p>Nikmati berbagai layanan mulai dari check-in counter, kuliner, hingga ruang ibadah yang nyaman.</p>
