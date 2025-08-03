@@ -33,7 +33,7 @@
           <h4 class="card-title">Daftar Role</h4>
           <a href='{{ route("roles.create") }}' class="btn btn-success btn-sm">+ Tambah Role</a>
         </div>
-        <div class="card-body">
+      <div class="card-body">
           <table id="roles-table" class="table table-bordered table-hover">
             <thead>
               <tr>

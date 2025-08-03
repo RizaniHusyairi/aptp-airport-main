@@ -7,8 +7,12 @@ use App\Models\News;
 use App\Models\Letter;
 use App\Models\Slider;
 use App\Models\Finance;
+use App\Models\Service;
+use App\Models\Tourism;
 use App\Models\Visitor;
+use App\Models\Facility;
 use App\Models\Complaint;
+use App\Jobs\LogVisitorJob;
 use Illuminate\Http\Request;
 use App\Models\BudgetExpense;
 use App\Models\AirFreightTraffic;
@@ -18,7 +22,9 @@ use App\Services\AirportApiService;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Validator;
+
 
 
 class LandingPageController extends Controller
@@ -86,25 +92,44 @@ class LandingPageController extends Controller
     
     public function home(Request $request)
     {
+        // BARU: Cache query untuk destinasi wisata selama 1 jam
+        $destinations = Cache::remember('home_destinations', now()->addHour(), function() {
+            return Tourism::where('status', 'published')->latest()->take(3)->get();
+        });
+
+        // BARU: Cache query untuk sliders selama 1 jam
+        $sliders = Cache::remember('home_sliders', now()->addHour(), function() {
+            return Slider::where('is_visible_home', 1)->take(3)->get();
+        });
+
+        // BARU: Cache query untuk total angkutan udara selama 3 jam
+        $totalAngkutanUdara = Cache::remember('total_air_freight_monthly', now()->addHours(3), function() {
+            return AirFreightTraffic::whereYear('date', now()->year)
+                                      ->whereMonth('date', now()->month)
+                                      ->sum(DB::raw('arrival + departure'));
+        });
+
+        // BARU: Cache query untuk berita utama selama 15 menit
+        $headlines = Cache::remember('home_headlines', now()->addMinutes(15), function() {
+            return News::where('is_published', true)
+                       ->where('is_headline', true)
+                       ->orderBy('created_at', 'desc')
+                       ->take(3)
+                       ->get();
+        });
+
         $ip = $request->ip(); // IP Address pengunjung
         $userAgent = $request->header('User-Agent'); // Informasi browser/device
-        $sliders = Slider::where('is_visible_home', 1)
-                        ->take(3)
-                        ->get();
+    
 
-        Visitor::create([
-            'ip_address' => $request->ip(),
-            'user_agent' => $request->header('User-Agent'),
-        ]);
+        
+        // SESUDAH:
+        LogVisitorJob::dispatch($request->ip(), $request->header('User-Agent'));
+        // =========================
         // Panggil API
         $flightStats = $this->airportApi->getFlightStats();
-        $totalAngkutanUdara = AirFreightTraffic::sum(DB::raw('arrival + departure'));
         $weather = $this->airportApi->getCurrentWeather();
-        $headlines = News::where('is_published', true)
-                        ->where('is_headline', true)
-                        ->orderBy('created_at', 'desc')
-                        ->take(3)
-                        ->get();
+        
         
         $meta = [
             'title' => 'APT Pranoto - Bandara Samarinda',
@@ -117,14 +142,235 @@ class LandingPageController extends Controller
             'flightStats', 
             'totalAngkutanUdara',
             'headlines',
+            'destinations',
             'weather',
             'meta'
         ));
     }
 
+    // app/Http/Controllers/LandingPageController.php
+
+    // METHOD BARU UNTUK MENYEDIAKAN DATA RUTE DOMESTIK
+    public function getDomesticRoutesData()
+    {
+        $routesData = [
+            [
+                'kota' => 'Jakarta (CGK)',
+                'provinsi' => 'Banten',
+                'coords' => ['cx' => 320, 'cy' => 375], // Menggunakan format coords {cx, cy}
+                'maskapai' => [
+                    ['nama' => 'Batik Air', 'logo' => asset('assets_landing/img/mitra/logo-batik.png')],
+                    ['nama' => 'Citilink', 'logo' => asset('assets_landing/img/mitra/logo-citilink.png')],
+                ]
+            ],
+            [
+                'kota' => 'Surabaya (SUB)',
+                'provinsi' => 'Jawa Timur',
+                'coords' => ['cx' => 500, 'cy' => 412 ],
+                'maskapai' => [
+                    ['nama' => 'Super Air Jet', 'logo' => asset('assets_landing/img/mitra/logo-SAJ.png')],
+                    ['nama' => 'Citilink', 'logo' => asset('assets_landing/img/mitra/logo-citilink.png')],
+                ]
+            ],
+             [
+                'kota' => 'Yogyakarta (YIA)',
+                'provinsi' => 'DI Yogyakarta',
+                'coords' => ['cx' => 430, 'cy' => 423],
+                'maskapai' => [
+                    ['nama' => 'Super Air Jet', 'logo' => asset('assets_landing/img/mitra/logo-SAJ.png')],
+                ]
+            ],
+             [
+                'kota' => 'Berau (BEJ)',
+                'provinsi' => 'Kalimantan Timur',
+                'coords' => ['cx' => 630, 'cy' => 130],
+                'maskapai' => [
+                    ['nama' => 'Wings Air', 'logo' => asset('assets_landing/img/mitra/logo-wings.png')],
+                ]
+            ],
+             [
+                'kota' => 'Maratua (RTU)',
+                'provinsi' => 'Kalimantan Timur',
+                'coords' => ['cx' => 678, 'cy' => 123],
+                'maskapai' => [
+                    ['nama' => 'Smart Aviation', 'logo' => asset('assets_landing/img/mitra/logo-smart.jpg')],
+                ]
+            ],
+            [
+                'kota' => 'Long Apung (LPU)',
+                'provinsi' => 'Kalimantan Utara',
+                'coords' => ['cx' => 570, 'cy' => 148],
+                'maskapai' => [
+                    ['nama' => 'Smart Aviation', 'logo' => asset('assets_landing/img/mitra/logo-smart.jpg')],
+                ]
+            ],
+            [
+                'kota' => 'Datah Dawai (DTD)',
+                'provinsi' => 'Kalimantan Timur',
+                'coords' => ['cx' => 557, 'cy' => 165],
+                'maskapai' => [
+                    ['nama' => 'Smart Aviation', 'logo' => asset('assets_landing/img/mitra/logo-smart.jpg')],
+                ]
+            ],
+             [
+                'kota' => 'Muara Wahau (MWV)',
+                'provinsi' => 'Kalimantan Timur',
+                'coords' => ['cx' => 615, 'cy' => 150],
+                'maskapai' => [
+                    ['nama' => 'Smart Aviation', 'logo' => asset('assets_landing/img/mitra/logo-smart.jpg')],
+                ]
+            ],
+        ];
+
+        return response()->json(['success' => true, 'data' => $routesData]);
+    }
+    
+
+    // METHOD BARU UNTUK MENGHUBUNGI GEMINI API
+    public function generateTripPlan(Request $request)
+    {
+        // 1. Validasi input dari frontend
+        $validator = Validator::make($request->all(), [
+            'tujuan' => 'required|string|max:100',
+            'durasi' => 'required|integer|min:1|max:10',
+        ]);
+        // dd($request);
+        if ($validator->fails()) {
+            return response()->json(['success' => false, 'error' => 'Input tidak valid.'], 422);
+        }
+
+        $tujuan = $request->input('tujuan');
+        $durasi = $request->input('durasi');
+        
+        // 2. Ambil API Key dari config (yang membaca .env)
+        $apiKey = config('services.gemini.api_key');
+
+        if (!$apiKey) {
+            return response()->json(['success' => false, 'error' => 'Kunci API Gemini tidak dikonfigurasi.'], 500);
+        }
+
+        // 3. Buat prompt untuk Gemini
+        $prompt = "Anda adalah asisten perjalanan yang ramah dan antusias. Buatkan contoh rencana perjalanan (itinerary) yang menarik dan detail untuk liburan ke kota \"{$tujuan}\" selama {$durasi} hari. Berikan jawaban dalam format Markdown. Untuk setiap hari, buat judul (misal: \"**Hari 1: Petualangan Kuliner dan Sejarah**\") diikuti dengan daftar kegiatan dalam bentuk unordered list (menggunakan tanda -). Sertakan juga beberapa rekomendasi tempat makan khas di setiap harinya.";
+
+        // 4. Kirim permintaan ke Google menggunakan Laravel HTTP Client
+        $response = Http::timeout(60)->post("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={$apiKey}", [
+            'contents' => [
+                [
+                    'role' => 'user',
+                    'parts' => [
+                        ['text' => $prompt]
+                    ]
+                ]
+            ]
+        ]);
+
+        // 5. Periksa dan teruskan jawaban kembali ke frontend
+        if ($response->successful() && isset($response->json()['candidates'][0]['content']['parts'][0]['text'])) {
+            $generatedText = $response->json()['candidates'][0]['content']['parts'][0]['text'];
+            return response()->json(['success' => true, 'plan' => $generatedText]);
+        }
+        
+        // Tangani jika ada error dari API Google
+        Log::error('Gemini API Error:', ['response' => $response->body()]);
+        return response()->json(['success' => false, 'error' => 'Gagal mendapatkan jawaban dari AI.'], 500);
+    }
+
+    public function getMonthlyTrafficStats()
+    {
+        try {
+            // Cache hasil ini untuk mengurangi beban database
+            $stats = Cache::remember('monthly_traffic_stats_full', now()->addHours(3), function () {
+                $now = \Carbon\Carbon::now();
+                $query = \App\Models\AirFreightTraffic::whereYear('date', $now->year)
+                                                    ->whereMonth('date', $now->month);
+
+                // Ambil semua data dalam satu query untuk efisiensi
+                $monthlyData = (clone $query)
+                    ->groupBy('type')
+                    ->select('type', DB::raw('SUM(arrival + departure) as total'))
+                    ->pluck('total', 'type');
+
+                // Siapkan data dengan nilai default 0
+                $data = [
+                    'aircraft'   => (int) ($monthlyData['Pesawat'] ?? 0),
+                    'passengers' => (int) ($monthlyData['Penumpang'] ?? 0),
+                    'transit'    => (int) ($monthlyData['Penumpang Transit'] ?? 0),
+                    'baggage'    => (int) ($monthlyData['Bagasi'] ?? 0),
+                    'cargo'      => (int) ($monthlyData['Kargo'] ?? 0),
+                    'mail'       => (int) ($monthlyData['Pos'] ?? 0),
+                ];
+                
+                // Hitung total semua aktivitas
+                $data['total'] = array_sum($data);
+
+                return $data;
+            });
+
+            return response()->json([
+                'success' => true,
+                'data'    => $stats,
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Error fetching monthly traffic stats: ' . $e->getMessage());
+            return response()->json(['success' => false, 'message' => 'Gagal mengambil data statistik.'], 500);
+        }
+    }
+
+    public function pariwisata(Request $request){
+        $query = Tourism::where('status', 'published');
+
+        if ($request->filled('category')) {
+            $query->where('category', $request->category);
+        }
+
+        if ($request->filled('search')) {
+            $query->where('name', 'like', '%' . $request->search . '%');
+        }
+
+        $destinations = $query->latest()->paginate(9);
+
+        // INI BAGIAN KUNCI-NYA
+        if ($request->ajax()) {
+            // Jika ini adalah request AJAX, kembalikan hanya partial view
+            return view('landing-menu.pariwisata.partials.destination_list', compact('destinations'))->render();
+        }
+
+    // Jika ini adalah request halaman penuh (load pertama kali)
+        return view('landing-menu.pariwisata.index', compact('destinations'));
+    }
+
+    public function detailPariwisata($slug){
+        // CONTOH DATA: Logika untuk menemukan data berdasarkan slug
+        
+        // Cari destinasi berdasarkan slug yang unik, jika tidak ada akan menampilkan error 404
+        $destination = Tourism::where('slug', $slug)
+                              ->where('status', 'published')
+                              ->firstOrFail();
+        
+        return view('landing-menu.pariwisata.detail', compact('destination'));
+
+        return view('landing-menu.pariwisata.detail', compact('destination'));
+
+    }
+
+    public function getFeaturedTourism(){
+        try {
+            $destinations = Cache::remember('featured_tourism', now()->addHour(), function () {
+                return Tourism::where('status', 'published')->latest()->take(3)->get();
+            });
+            return response()->json(['success' => true, 'data' => $destinations]);
+        } catch (\Exception $e) {
+            Log::error('Error fetching featured tourism: ' . $e->getMessage());
+            return response()->json(['success' => false, 'message' => 'Gagal mengambil data.'], 500);
+        }
+    }
+
+
     //berita
     public function berita()
     {
+        
         // Ambil 3 berita headline pertama untuk newsFirstSwiper
         $topHeadlines = News::where('is_headline', true)
                            ->where('is_published', true)
@@ -150,63 +396,30 @@ class LandingPageController extends Controller
         compact('topHeadlines', 'nextHeadlines', 'otherNews'));    
     }
 
-    // public function berita()
-    // {
-    //     $headlines = News::where('is_published', true)
-    //                     ->where('is_headline', true)
-    //                     ->latest()
-    //                     ->first();
-
-    //     if ($headlines) {
-    //         $headline       = News::where('is_published', true)
-    //                             ->where('is_headline', true)
-    //                             ->latest()
-    //                             ->first();
-    //         $subHeadlines   = News::where('is_published', true)
-    //                             ->where('is_headline', true)
-    //                             ->latest()
-    //                             ->skip(1)
-    //                             ->take(3)
-    //                             ->get();
-    //     } else {
-    //         $headline       = News::where('is_published', true)
-    //                             ->inRandomOrder()
-    //                             ->latest()
-    //                             ->first();
-    //         $subHeadlines   = News::where('is_published', true)
-    //                             ->inRandomOrder()
-    //                             ->take(3)
-    //                             ->get();
-    //     }
-
-    //     $latestArticles = News::where('is_published', true)->orderBy('created_at', 'desc')->take(6)->get();
-    //     $otherArticles = News::where('is_published', true)
-    //                     ->orderBy('created_at', 'desc')
-    //                     ->skip(6)
-    //                     ->take(30)
-    //                     ->get();
-
-    //     return view('navigation.informasi.berita.index', compact('headline','subHeadlines','latestArticles', 'otherArticles'));
-    // }
 
     public function showNews($slug)
     {
+        // Ambil berita utama yang sedang dibuka
         $news = News::where('slug', $slug)->where('is_published', true)->firstOrFail();
-        return view('landing-menu.informasi.berita.detail', compact('news'));
-        // $news = News::where('slug', $slug)->where('is_published', true)->firstOrFail();
-        // $latestArticles = News::where('is_published', true)->orderBy('created_at', 'desc')->take(6)->get();
-        // return view('navigation.informasi.berita.show', compact('news', 'latestArticles'));
+
+        // Ambil 3 berita terbaru lainnya sebagai "Berita Terkait"
+        // Pastikan untuk tidak menyertakan berita yang sedang dibuka
+        $relatedNews = News::where('is_published', true)
+                            ->where('id', '!=', $news->id) // Exclude the current news
+                            ->latest() // Ambil yang paling baru
+                            ->take(3)  // Batasi hanya 3 berita
+                            ->get();
+        return view('landing-menu.informasi.berita.detail', compact('news','relatedNews'));
     
     }
 
+    public function showServicePage($slug)
+    {
+        $service = Service::where('slug', $slug)->where('is_active', true)->firstOrFail();
+        // dd($service->requairements);
+        return view('landing-menu.layanan.index', compact('service'));
+    }
 
-    public function tenant(){return view('landing-menu.layanan.index');}
-    public function sewa(){return view('landing-menu.layanan.index');}
-    public function perijinanUsaha(){return view('landing-menu.layanan.index');}
-    public function pengiklanan(){return view('landing-menu.layanan.index');}
-    public function fieldTrip(){return view('landing-menu.layanan.index');}
-    public function lelang(){return view('landing-menu.layanan.index');}
-    public function slot(){return view('landing-menu.layanan.index');}
 
     
     public function profilBandara(){return view('landing-menu.informasi-publik.profil-bandara.index');}
@@ -215,31 +428,9 @@ class LandingPageController extends Controller
     public function profilPPID(){return view('landing-menu.informasi-publik.profile-ppid.index');}
     public function sopPpid(){return view('landing-menu.informasi-publik.sop-ppid.index');}
     
-    // public function tenant(){return view('navigation.informasi.ajuan.index');}
-    // public function sewa(){return view('navigation.informasi.ajuan.index');}
-    // public function perijinanUsaha(){return view('navigation.informasi.ajuan.index');}
-    // public function pengiklanan(){return view('navigation.informasi.ajuan.index');}
-    // public function fieldTrip(){return view('navigation.informasi.ajuan.index');}
-    // public function lelang(){return view('navigation.informasi.ajuan.index');}
-
-    // public function profilBandara(){return view('navigation.informasi-publik.profil-bandara.index');}
-    // public function strukturOrganisasi(){return view('navigation.informasi-publik.struktur-organisasi.index');}
-    // public function pejabatBandara(){return view('navigation.informasi-publik.pejabat-bandara.index');}
-    // public function profilPPID(){return view('navigation.informasi-publik.profil-ppid-blu.index');}
-    // public function sopPpid(){return view('navigation.informasi-publik.sop-ppid.index');}
     public function pengajuanInformasiPublik(){return view('landing-menu.informasi-publik.pengajuan.index');}
     
-    // aktivitas bandara
-    // public function keberangkatan(){
-    //     $keberangkatan = $this->airportApi->getKeberangkatan();
-        
-    //     return view('navigation.aktivitas-bandara.keberangkatan.index', compact('keberangkatan'));
-    // }
-    // public function kedatangan(){
-    //     $kedatangan = $this->airportApi->getKedatangan();
-        
-    //     return view('navigation.aktivitas-bandara.kedatangan.index', compact('kedatangan'));
-    // }
+    
 
     public function getFinanceData(Request $request)
     {
@@ -425,75 +616,7 @@ class LandingPageController extends Controller
         return view('landing-menu.beranda.kedatangan');
     }
 
-    // public function laluLintas(Request $request)
-    // {
-    //     $filterType = $request->get('filter_type', 'year');
-    //     $year = $request->get('year', date('Y'));
-    //     $month = $request->get('month');
-
-    //     // Ambil semua data sekali saja
-    //     $data = AirFreightTraffic::all();
-
-    //     // Label & judul grafik
-    //     if ($filterType === 'year') {
-    //         $filtered = $data->filter(fn($item) => Carbon::parse($item->date)->year == $year);
-    //         $labels = range(1, 12);
-    //         $labelNames = collect($labels)->map(fn($m) => Carbon::create()->month($m)->translatedFormat('F'))->toArray();
-    //         $title = "Tahun $year";
-    //     } else {
-    //         $filtered = $data->filter(function ($item) use ($year, $month) {
-    //             $date = Carbon::parse($item->date);
-    //             return $date->year == $year && $date->month == $month;
-    //         });
-
-    //         $labels = $filtered->pluck('date')->map(fn($d) => Carbon::parse($d)->format('d'))->unique()->values()->toArray();
-    //         $labelNames = $labels;
-    //         $title = "Bulan " . Carbon::create()->month($month)->translatedFormat('F') . " $year";
-    //     }
-
-    //     // Jenis angkutan dan warna
-    //     $types = ['Pesawat', 'Penumpang', 'Penumpang Transit', 'Kargo', 'Bagasi', 'Pos'];
-    //     $colors = ['#A052AA', '#339AF0', '#666', '#FF4D6D', '#FFD43B', '#69DB7C'];
-
-    //     $datasets = [];
-
-    //     foreach ($types as $i => $type) {
-    //         $dataPoints = [];
-
-    //         foreach ($labels as $label) {
-    //             $sum = $filtered->filter(function ($item) use ($filterType, $label, $type, $month) {
-    //                 $date = Carbon::parse($item->date);
-    //                 return $item->type === $type &&
-    //                     ($filterType === 'year'
-    //                         ? $date->month == $label
-    //                         : $date->day == $label && $date->month == $month);
-    //             })->sum(fn($item) => $item->arrival + $item->departure);
-
-    //             $dataPoints[] = $sum;
-    //         }
-
-    //         $datasets[] = [
-    //             'label' => $type,
-    //             'data' => $dataPoints,
-    //             'borderColor' => $colors[$i],
-    //             'backgroundColor' => 'transparent',
-    //             'tension' => 0.3,
-    //             'fill' => false,
-    //             'pointBorderColor' => $colors[$i],
-    //             'pointBackgroundColor' => '#fff',
-    //             'pointRadius' => 5
-    //         ];
-    //     }
-
-    //     return view('navigation.aktivitas-bandara.lalu-lintas.index', [
-    //         'chartData' => [
-    //             'labels' => $labelNames,
-    //             'datasets' => $datasets,
-    //             'title' => $title,
-    //         ]
-    //     ]);
-    // }
-
+    
     public function laporanKeuangan(){
 
         $years = Finance::selectRaw('YEAR(date) as year')->distinct()->pluck('year')->toArray();
@@ -575,77 +698,7 @@ class LandingPageController extends Controller
            }
     }
 
-    // public function laporanKeuangan(Request $request)
-    // {
-    //     // Ambil semua tahun unik dari tabel finances
-    //     $years = Finance::selectRaw('YEAR(date) as year')
-    //     ->distinct()
-    //     ->orderBy('year', 'desc')
-    //     ->pluck('year')
-    //     ->toArray();
-        
-    //     $filterTahun = $request->get('tahun', date('Y'));
-    //     $filterTahunPie = $request->get('tahun_pie', date('Y'));
-    //     $jenis_filter = $request->get('jenis_filter', 'bulan');
-     
-
-    //     // 1. DATA GRAFIK BAR (PEMASUKAN)
-    //     $query = Finance::where('flow_type', 'in');
-    //     if ($jenis_filter == 'bulan') {
-    //         $query->whereYear('date', $filterTahun);
-    //         $labels = [
-    //             'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
-    //             'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
-    //         ];
-    //         $dataPemasukan = array_fill(0, 12, 0);
-    //         foreach ($query->get() as $finance) {
-    //             $bulan = (int) date('n', strtotime($finance->date)) - 1;
-    //             $dataPemasukan[$bulan] += $finance->amount;
-    //         }
-    //     } else { // jenis_filter == tahun
-    //         $labels = [];
-    //         $dataPemasukan = [];
     
-    //         $tahunRange = Finance::where('flow_type', 'in')
-    //             ->selectRaw('YEAR(date) as year')
-    //             ->distinct()
-    //             ->orderBy('year')
-    //             ->pluck('year')
-    //             ->toArray();
-    
-    //         foreach ($tahunRange as $year) {
-    //             $labels[] = $year;
-    //             $total = Finance::whereYear('date', $year)
-    //                 ->where('flow_type', 'in')
-    //                 ->sum('amount');
-    //             $dataPemasukan[] = $total;
-    //         }
-    //     }
-    
-    //     // 2. DATA GRAFIK Line (ANGGARAN VS PENGELUARAN)
-    
-    //     // Ambil total Anggaran (dari tabel finances flow_type = 'budget')
-    //     $anggaran = Finance::where('flow_type', 'budget')
-    //         ->whereYear('date', $filterTahunPie)
-    //         ->sum('amount');
-    
-    //     // Ambil total Pengeluaran (dari tabel budget_expenses join finance)
-    //     $totalPengeluaran = BudgetExpense::whereHas('finance', function($query) use ($filterTahunPie) {
-    //         $query->whereYear('date', $filterTahunPie);
-    //     })->sum('amount');
-    
-    //     $showPieChart = $anggaran > 0; // Hanya tampilkan grafik Pie jika anggaran ada
-
-    //     //3. grafil line
-        
-     
-    //     return view('navigation.informasi.laporan-keuangan.index', compact(
-    //         'years', 'filterTahun', 'filterTahunPie',
-    //         'jenis_filter', 'labels', 'dataPemasukan',
-    //         'anggaran', 'totalPengeluaran', 'showPieChart'
-    //     ));
-    // }
-
     public function storePengajuanInformasiPublik(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -726,7 +779,7 @@ class LandingPageController extends Controller
                 'tujuan_informasi' => $request->tujuan_informasi,
                 'cara_memperoleh' => $request->cara_memperoleh,
                 'cara_salinan' => $request->cara_salinan,
-                'status' => 'belum_dibalas',
+                'status' => 'Belum dibalas',
             ]);
 
             return response()->json([
@@ -803,7 +856,7 @@ class LandingPageController extends Controller
                 'phone_number' => $request->phone_number,
                 'subject' => $request->subject,
                 'message' => $request->message,
-                'status' => 'pending',
+                'status' => 'Menunggu',
             ]);
     
             if ($request->ajax()) {
@@ -825,40 +878,45 @@ class LandingPageController extends Controller
             return redirect()->back()->withErrors(['error' => 'Terjadi kesalahan di server. Silakan coba lagi nanti.'])->withInput();
         }
     }
+
+    // app/Http/Controllers/LandingPageController.php
+
+    public function fasilitas()
+    {
+        // Data diperbarui dengan menghapus 'icon'
+        // $facilities = [
+        //     'udara' => [
+        //         ['name' => 'Runway', 'details' => ['Ukuran: 2.250 m x 45 m', 'Daya Dukung: PCN 50 F/C/X/T'], 'image' => asset('assets_landing/img/fasilitas/runway.jpg')],
+        //         ['name' => 'Apron', 'details' => ['Ukuran: 300 m x 123 m', '8 Parking Stand', 'Daya Dukung: PCN 63 F/C/X/T'], 'image' => asset('assets_landing/img/fasilitas/apron.jpg')],
+        //         ['name' => 'Garbarata', 'details' => ['Tersedia: 2 Unit', 'Memudahkan akses ke pesawat.'], 'image' => asset('assets_landing/img/fasilitas/garbarata.jpg')],
+        //         ['name' => 'Navigasi (PBN)', 'details' => ['Tersedia untuk Runway 04 & 22', 'Memastikan pendaratan presisi.'], 'image' => asset('assets_landing/img/fasilitas/navigasi.jpg')],
+        //     ],
+        //     'darat' => [
+        //         ['name' => 'Terminal Penumpang', 'details' => ['Luas: 12.700 m²', 'Kapasitas: 1.5 Juta Penumpang/Tahun'], 'image' => asset('assets_landing/img/fasilitas/terminal.jpg')],
+        //         ['name' => 'Terminal Kargo', 'details' => ['Luas: 1.148 m²', 'Mendukung logistik & pengiriman barang.'], 'image' => asset('assets_landing/img/fasilitas/kargo.jpg')],
+        //         ['name' => 'Gedung VVIP', 'details' => ['Luas: 743,60 m²', 'Kenyamanan eksklusif untuk tamu penting.'], 'image' => asset('assets_landing/img/fasilitas/vvip.jpg')],
+        //         ['name' => 'Area Parkir', 'details' => ['Luas: 30.000 m²', 'Kapasitas luas untuk kendaraan.'], 'image' => asset('assets_landing/img/fasilitas/parkir.jpg')],
+        //         ['name' => 'Gedung Administrasi', 'details' => ['Luas: 1.253 m²', 'Pusat administrasi dan operasional.'], 'image' => asset('assets_landing/img/fasilitas/administrasi.jpg')],
+        //         ['name' => 'Fire Station (ARFF)', 'details' => ['Luas: 455,52 m²', 'Kategori 6 ARFF.'], 'image' => asset('assets_landing/img/fasilitas/arff.jpg')],
+        //         ['name' => 'Power Station', 'details' => ['Luas: 803 m²', 'Menjamin pasokan listrik bandara.'], 'image' => asset('assets_landing/img/fasilitas/power-station.jpg')],
+        //         ['name' => 'Kantin Bandara', 'details' => ['Luas: 372,12 m²', 'Menyediakan aneka kuliner.'], 'image' => asset('assets_landing/img/fasilitas/cafe.jpg')],
+        //     ],
+        //     'umum' => [
+        //         ['name' => 'Check-in Counter', 'details' => ['Tersedia: 16 Counter', 'Proses check-in yang cepat dan efisien.'], 'image' => asset('assets_landing/img/fasilitas/checkin.jpg')],
+        //         ['name' => 'Kantin & Cafe', 'details' => ['Luas Area: 372 m²', 'Menyajikan beragam pilihan kuliner.'], 'image' => asset('assets_landing/img/fasilitas/cafe.jpg')],
+        //         ['name' => 'Mushola', 'details' => ['Ruang ibadah yang bersih dan nyaman bagi umat Muslim.'], 'image' => asset('assets_landing/img/fasilitas/mushola.jpg')],
+        //         ['name' => 'Layanan ARFF', 'details' => ['Kategori 6', 'Keselamatan & pemadam kebakaran bandara.'], 'image' => asset('assets_landing/img/fasilitas/arff.jpg')],
+        //     ]
+        // ];
+        // Mengambil semua data fasilitas dari database dan mengelompokkannya berdasarkan kategori
+     
+        // ### PERBAIKAN: Hanya mengambil fasilitas darat dan umum dari database ###
+        $facilities = Facility::whereIn('category', ['darat', 'umum'])
+                                ->get()
+                                ->groupBy('category');
+
+        return view('landing-menu.informasi-publik.fasilitas.index', compact('facilities'));
+    }
     
-    // public function storePengaduan(Request $request)
-    // {
-    //     // Validasi form
-    //     $request->validate([
-    //         'name' => 'required|string|max:255',
-    //         'email' => 'required|email|max:255',
-    //         'phone_number' => 'required|string|max:15',
-    //         'subject' => 'required|string|max:255',
-    //         'message' => 'required|string',
-    //         'g-recaptcha-response' => 'required',
-    //     ],[
-    //         'name.required' => 'Nama lengkap wajib diisi.',
-    //         'email.required' => 'Email wajib diisi.',
-    //         'email.email' => 'Format email tidak valid.',
-    //         'phone_number.required' => 'Nomor telepon wajib diisi.',
-    //         'phone_number.max' => 'Nomor telepon maksimal 15 karakter.',
-    //         'subject.required' => 'Topik wajib diisi.',
-    //         'message.required' => 'Pesan wajib diisi.',
-    //         'g-recaptcha-response.required' => 'Silakan centang reCAPTCHA.',
-    //     ]);
-
-        
-
-    //     // Simpan pengaduan
-    //     Complaint::create([
-    //         'name' => $request->name,
-    //         'email' => $request->email,
-    //         'phone_number' => $request->phone_number,
-    //         'subject' => $request->subject,
-    //         'message' => $request->message,
-    //         'status' => 'pending',
-    //     ]);
-
-    //     return redirect()->route('kontak')->with('success', 'Pengaduan Anda telah dikirim. Kami akan segera menindaklanjuti.');
-    // }
+    
 }

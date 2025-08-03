@@ -166,7 +166,7 @@ body {
   align-items: center;
   height: 50px;
   width: 100%;
-  margin: 10px 0;
+  margin: 5px 0;
   position: relative;
 }
 
@@ -197,6 +197,11 @@ body {
   font-size: 14px;
   font-weight: 500;
   color: #333;
+}
+
+.input-boxes .invalid-feedback{
+  font-size: 10px;
+  color: red;
 }
 
 .forms .form-content .text a {
@@ -267,5 +272,16 @@ body {
 
   .container #flip:checked ~ .forms .login-form {
     display: none;
+  }
+}
+
+@media(max-width: 500px) {
+  .logo-text-left{
+    left: 70%;
+  }
+}
+@media(max-width: 380px) {
+  .logo-text-left{
+    left: 65%;
   }
 }

@@ -2,28 +2,26 @@
 
 namespace App\Http\Controllers\Staff_User;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use Auth;
 use App\Models\Slider;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
 
 class SliderController extends Controller
 {
     public function store(Request $request)
+
     {
         $request->validate([
-            'slider_name' => 'required|string|max:255',
             'documents'     => 'required|file|mimes:jpg,jpeg,png|max:2048',
         ], [
-            'slider_name.required' => 'Nama slider wajib diisi.',
-            'slider_name.string'   => 'Nama slider harus berupa teks.',
-            'slider_name.max'      => 'Nama slider maksimal 255 karakter.',
-
+            
             'documents.required'     => 'Dokumen pendukung wajib diunggah.',
             'documents.file'         => 'File dokumen tidak valid.',
             'documents.mimes'        => 'Dokumen harus berupa file dengan format: JPG/PNG',
             'documents.max'          => 'Ukuran dokumen maksimal 2MB.',
-
+            
         ]);
 
         // Simpan file
@@ -34,7 +32,7 @@ class SliderController extends Controller
 
         // Simpan data license
         $slider = Slider::create([
-            'slider_name' => $request->slider_name,
+            'slider_name' => 'Slider ' . time(),
             'documents'     => $filePath,
         ]);
 
@@ -43,7 +41,7 @@ class SliderController extends Controller
 
     public function create()
     {
-        return view('user_staff.slider.create');
+        return view('user_staff2.slider.create');
     }
 
     public function destroy($id)
@@ -55,12 +53,17 @@ class SliderController extends Controller
         if (file_exists($documentPath)) {
             unlink($documentPath);
         }
+        // Storage::disk('public')->delete($slider->documents);
+        // $slider->delete();
 
         // Hapus slider
         $slider->delete();
+        return response()->json([
+            'success' => true,
+            'message' => 'Data slide berhasil dihapus.'
+        ]);
 
-        return redirect()->route('slider.index')->with('success', 'Gambar berhasil dihapus.');    
-    }
+        }
 
     public function toggleVisibilityHome(Request $request, $id)
     {
@@ -106,6 +109,6 @@ class SliderController extends Controller
     public function index()
     {
         $sliders = Slider::latest()->get();
-        return view('user_staff.slider.index', compact('sliders'));     
+        return view('user_staff2.slider.index', compact('sliders'));     
     }
 }

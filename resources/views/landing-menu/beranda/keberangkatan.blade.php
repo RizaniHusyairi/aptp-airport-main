@@ -4,7 +4,7 @@
 
 @section('content')
 <section id="jadwal-keberangkatan" class="section pt-6">
-    <div class="container section-title" data-aos="fade-up">
+    <div class="container section-title pb-2" data-aos="fade-up">
         <h2>Jadwal<br></h2>
         <p><span>Keberangkatan Pesawat</span> <span class="description-title">Bandara A.P.T. Pranoto Samarinda</span></p>
     </div>
@@ -12,7 +12,7 @@
         <div class="row">
             <div class="col-12">
                 <!-- Indikator Loading -->
-                <div id="loadingIndicator" class="text-center py-4" style="display: none;">
+                <div id="loadingIndicator" class="text-center" style="display: none;">
                     <div class="spinner-border text-primary" role="status">
                         <span class="visually-hidden">Memuat...</span>
                     </div>

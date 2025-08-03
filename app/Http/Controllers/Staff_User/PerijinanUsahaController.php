@@ -78,7 +78,7 @@ class PerijinanUsahaController extends Controller
     public function create()
     {     
         $license_type = $this->licenseTypes;
-        return view('user_staff.perijinan.create', compact('license_type'));
+        return view('user_staff2.perijinan.create', compact('license_type'));
     }
 
     public function destroy($id)
@@ -103,7 +103,7 @@ class PerijinanUsahaController extends Controller
     {
         $user = Auth::user();
         $licenses = $user->licenses()->latest()->get();
-        return view('user_staff.perijinan.index', compact('licenses'));    
+        return view('user_staff2.perijinan.index', compact('licenses'));    
     }
 
 
@@ -111,13 +111,13 @@ class PerijinanUsahaController extends Controller
     public function index()
     {
         $licenses = License::with('users')->latest()->get();
-        return view('user_staff.perijinan.index', compact('licenses'));     
+        return view('user_staff2.perijinan.index', compact('licenses'));     
     }
 
     public function show($id)
     {
         $license = License::with('users')->findOrFail($id);
-        return view('user_staff.perijinan.show', compact('license'));
+        return view('user_staff2.perijinan.show', compact('license'));
     }
 
     public function approve($id)

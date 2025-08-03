@@ -1,4 +1,4 @@
-
+// Profil.js - Script untuk halaman profil
         document.addEventListener('DOMContentLoaded', () => {
             // Inisialisasi Swiper
             const swiper = new Swiper('.swiper-container', {

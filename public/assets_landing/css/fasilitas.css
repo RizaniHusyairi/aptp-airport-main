@@ -1,0 +1,118 @@
+/* Custom CSS untuk halaman Fasilitas */
+:root {
+    --primary-color: #0d2c4a;
+    --secondary-color: #f0a500;
+    --background-light: #f4f7f9;
+    --text-dark: #333333;
+    --text-muted-light: #6c757d;
+}
+
+.facilities-page {
+    font-family: 'Poppins', sans-serif;
+}
+
+.section-title-modern .description-title {
+    color: var(--secondary-color);
+    font-weight: 700;
+}
+
+.facility-category {
+    margin-bottom: 60px;
+}
+
+.category-title {
+    font-size: 28px;
+    font-weight: 600;
+    color: var(--primary-color);
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 3px solid var(--secondary-color);
+    display: inline-block;
+}
+
+/* Desain Kartu Baru dengan Gambar */
+.facility-card {
+    background-color: #ffffff;
+    border-radius: 16px;
+    height: 100%;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.07);
+    border: 1px solid #e9ecef;
+    transition: all 0.3s ease-in-out;
+    overflow: hidden; /* Penting untuk border-radius pada gambar */
+    display: flex;
+    flex-direction: column;
+}
+
+.facility-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 12px 35px rgba(13, 44, 74, 0.12);
+    border-color: var(--secondary-color);
+}
+
+.facility-card-image {
+    height: 180px;
+    overflow: hidden;
+}
+
+.facility-card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.facility-card:hover .facility-card-image img {
+    transform: scale(1.1);
+}
+
+.facility-card-content {
+    padding: 25px;
+    text-align: center;
+    flex-grow: 1; /* Membuat konten mengisi sisa ruang */
+    display: flex;
+    flex-direction: column;
+}
+
+/* ### GAYA IKON DIHAPUS ### */
+
+.facility-name {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--primary-color);
+    margin-bottom: 15px;
+    /* ### PERBAIKAN: Menambahkan margin atas untuk menggantikan ruang ikon ### */
+    margin-top: 10px; 
+}
+
+.facility-details {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: 15px;
+    color: var(--text-muted-light);
+    line-height: 1.7;
+    margin-top: auto; /* Mendorong detail ke bawah jika ada ruang */
+}
+
+
+/* ### GAYA BARU UNTUK KONTAINER GAMBAR SISI UDARA ### */
+.airside-image-container {
+    padding: 15px;
+    background-color: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.07);
+    border: 1px solid #e9ecef;
+}
+
+/* Desain Kartu (tidak berubah) */
+.facility-card {
+    background-color: #ffffff;
+    border-radius: 16px;
+    height: 100%;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.07);
+    border: 1px solid #e9ecef;
+    transition: all 0.3s ease-in-out;
+    overflow: hidden; /* Penting untuk border-radius pada gambar */
+    display: flex;
+    flex-direction: column;
+}

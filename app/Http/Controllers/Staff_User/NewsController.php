@@ -12,12 +12,12 @@ class NewsController extends Controller
     public function index()
     {
         $news = News::latest()->get();
-        return view('user_staff.berita.index', compact('news'));
+        return view('user_staff2.berita.index', compact('news'));
     }
     public function show($slug)
     {
         $news = News::where('slug', $slug)->firstOrFail();
-        return view('user_staff.berita.show', compact('news'));
+        return view('user_staff2.berita.show', compact('news'));
     }
     public function update(Request $request, $slug)
     {
@@ -45,7 +45,7 @@ class NewsController extends Controller
 
     public function create()
     {
-        return view('user_staff.berita.create');
+        return view('user_staff2.berita.create');
     }
 
     public function store(Request $request)

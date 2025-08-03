@@ -109,8 +109,8 @@
               <label for="documents" class="form-label">Dokumen yang Diperlukan (PDF)</label>
               <input type="file" name="documents" id="documents" class="form-control" accept=".pdf" required>
               @error('documents')
-              <div class="invalid-feedback d-block">{{ $message }}</div>
-            @enderror
+                <div class="invalid-feedback d-block">{{ $message }}</div>
+              @enderror
             </div>
 
             <div class="d-grid">

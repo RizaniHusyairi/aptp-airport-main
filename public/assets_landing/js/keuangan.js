@@ -159,3 +159,85 @@ yearFilter.addEventListener('change', () => {
 document.getElementById('monthFilter').addEventListener('change', updateCharts);
 
 updateCharts();
+
+// ==========================================================
+    // BAGIAN 2: LOGIKA UNTUK GRAFIK STATIS (BAWAH)
+    // ==========================================================
+    const staticChartOptions = {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: { display: false },
+            tooltip: {
+                callbacks: {
+                    label: function(context) {
+                        return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(context.raw);
+                    }
+                }
+            }
+        }
+    };
+
+    // Chart Jenis Program (Pie)
+    const programCtx = document.getElementById('programChart');
+    if (programCtx) {
+        new Chart(programCtx, {
+            type: 'pie',
+            data: {
+                labels: ['Infrastruktur Konektivitas', 'Dukungan Manajemen'],
+                datasets: [{ data: [55702543000, 54526033000], backgroundColor: ['#36a2eb', '#ffcd56'] }]
+            },
+            options: { ...staticChartOptions, plugins: { ...staticChartOptions.plugins, datalabels: {
+                formatter: (value, ctx) => {
+                    let sum = ctx.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+                    return (value * 100 / sum).toFixed(2) + '%';
+                },
+                color: '#fff', font: { weight: 'bold' }
+            }}}
+        });
+    }
+
+    // Chart Jenis Belanja (Bar)
+    const belanjaCtx = document.getElementById('belanjaChart');
+    if (belanjaCtx) {
+        new Chart(belanjaCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Pegawai', 'Barang', 'Modal'],
+                datasets: [{ data: [9947052000, 76804764000, 23476760000], backgroundColor: ['#36a2eb', '#ff6384', '#4bc0c0'] }]
+            },
+            options: { ...staticChartOptions, scales: { y: { ticks: { callback: value => `${value / 1e9} M` } } } }
+        });
+    }
+
+    // Chart Jenis Kegiatan (Bar Horizontal)
+    const kegiatanCtx = document.getElementById('kegiatanChart');
+    if (kegiatanCtx) {
+        new Chart(kegiatanCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Pelayanan', 'Infrastruktur', 'Keselamatan', 'Penunjang', 'Keuangan & SDM', 'Perencanaan'],
+                datasets: [{ data: [24310000000, 22000000000, 1300000000, 8000000000, 53987000000, 631576000], backgroundColor: ['#36a2eb', '#ff6384', '#4bc0c0', '#ffcd56', '#c9cbcf', '#9966ff'] }]
+            },
+            options: { ...staticChartOptions, indexAxis: 'y', scales: { x: { ticks: { callback: value => `${value / 1e9} M` } } } }
+        });
+    }
+
+    // Chart Sumber Dana (Pie)
+    const sumberDanaCtx = document.getElementById('sumberDanaChart');
+    if (sumberDanaCtx) {
+        new Chart(sumberDanaCtx, {
+            type: 'pie',
+            data: {
+                labels: ['Rupiah Murni', 'PNBP BLU'],
+                datasets: [{ data: [69804875000, 40423701000], backgroundColor: ['#4bc0c0', '#ff9f40'] }]
+            },
+            options: { ...staticChartOptions, plugins: { ...staticChartOptions.plugins, datalabels: {
+                formatter: (value, ctx) => {
+                    let sum = ctx.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+                    return (value * 100 / sum).toFixed(2) + '%';
+                },
+                color: '#fff', font: { weight: 'bold' }
+            }}}
+        });
+    }

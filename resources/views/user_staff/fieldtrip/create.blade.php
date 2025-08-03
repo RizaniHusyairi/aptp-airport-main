@@ -6,8 +6,8 @@
 
 @section('content')
   @component('components.breadcrumb')
-    @slot('li_1') Fieldtrip @endslot
-    @slot('title') Pengajuan Fieldtrip @endslot
+    @slot('li_1') Field Trip @endslot
+    @slot('title') Pengajuan Field Trip @endslot
   @endcomponent
   @if(session('success'))
     <div class="alert alert-success">
@@ -18,7 +18,7 @@
     <div class="col-xl-12">
       <div class="card">
         <div class="card-body">
-          <h4 class="card-title mb-4">Syarat & Ketentuan Pengajuan Fieldtrip</h4>
+          <h4 class="card-title mb-4">Syarat & Ketentuan Pengajuan Field Trip</h4>
 
           <div class="accordion" id="accordionTenant">
             <div class="accordion-item">
@@ -70,13 +70,13 @@
       <div class="card">
         <div class="card-body">
 
-          <h4 class="card-title mb-4">Formulir Pengajuan Fieldtrip</h4>
+          <h4 class="card-title mb-4">Formulir Pengajuan Field Trip</h4>
 
           <form method="POST" action="{{ route('fieldtrip.store') }}" enctype="multipart/form-data" class="needs-validation" novalidate>
             @csrf
 
             <div class="mb-3">
-              <label for="fieldtrip_name" class="form-label">Nama Fieldtrip</label>
+              <label for="fieldtrip_name" class="form-label">Nama Field Trip</label>
               <input type="text" class="form-control" id="fieldtrip_name" name="fieldtrip_name" value="{{ old('fieldtrip_name') }}" required>
               @error('fieldtrip_name')
                 <div class="invalid-feedback d-block">{{ $message }}</div>
@@ -84,7 +84,7 @@
             </div>
 
             <div class="mb-3">
-              <label for="fieldtrip_type" class="form-label">Jenis Fieldtrip</label>
+              <label for="fieldtrip_type" class="form-label">Jenis Field Trip</label>
               <input type="text" class="form-control" id="fieldtrip_type" name="fieldtrip_type" value="{{ old('fieldtrip_type') }}" required>
               @error('fieldtrip_type')
                 <div class="invalid-feedback d-block">{{ $message }}</div>
@@ -92,7 +92,7 @@
             </div>
 
             <div class="mb-3">
-              <label for="description" class="form-label">Deskripsi Fieldtrip</label>
+              <label for="description" class="form-label">Deskripsi Field Trip</label>
               <textarea class="form-control" id="description" name="description" rows="4" required>{{ old('description') }}</textarea>
               @error('description')
                 <div class="invalid-feedback d-block">{{ $message }}</div>

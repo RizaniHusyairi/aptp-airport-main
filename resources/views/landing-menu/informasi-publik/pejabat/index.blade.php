@@ -26,8 +26,10 @@
                 <!-- Slide 1: I Kadek Yuli Sastrawan, S.Ikom., S.SiT. -->
                 <div class="swiper-slide">
                     <div class="row card official-card card-pejabat">
-                        <img src="{{ asset('/assets_landing/img/pejabat/kadek.jpeg') }}" class="card-img-pejabat p-0 col-lg-4" alt="Maeka Rindra Hariyanto" loading="lazy">
-                        <div class="card-body text-left col-lg-8">
+                        <div class="col-md-4 p-0">
+                            <img src="{{ asset('/assets_landing/img/pejabat/Kadek.png') }}" class="card-img-pejabat p-0 " alt="Maeka Rindra Hariyanto" loading="lazy">
+                        </div>
+                        <div class="card-body text-left col-md-8">
                             <h5 class="card-title">I Kadek Yuli Sastrawan, S.Ikom., S.SiT.</h5>
                             <p class="card-text">Kepala BLU Kantor UPBU Kelas I A.P.T. Pranoto</p>
                             <!-- <button class="btn btn-pejabat read-more" data-target="#detail-maeka">Baca Profil Selengkapnya</button> -->
@@ -40,8 +42,10 @@
                 <!-- Slide 2: Zaldi Ardian -->
                 <div class="swiper-slide">
                     <div class="card official-card row card-pejabat">
-                        <img src="{{ asset('/assets_landing/img/pejabat/zaldi.JPG') }}"  class="card-img-pejabat p-0 col-lg-4" alt="Zaldi Ardian" loading="lazy">
-                        <div class="card-body col-lg-8">
+                        <div class="col-md-4 p-0">
+                            <img src="{{ asset('/assets_landing/img/pejabat/zaldi2.png') }}"  class="card-img-pejabat" alt="Zaldi Ardian" loading="lazy">
+                        </div>
+                        <div class="card-body col-md-8">
                             <h5 class="card-title">Zaldi Ardian, A.Md</h5>
                             <p class="card-text">Kepala Subbagian Keuangan dan Tata Usaha</p>
                             <!-- <button class="btn btn-pejabat read-more" data-target="#detail-zaldi">Baca Profil Selengkapnya</button> -->
@@ -55,8 +59,10 @@
                 <!-- Slide 3: Mochamad Ikhsan Fadilah -->
                 <div class="swiper-slide">
                     <div class="card official-card row card-pejabat">
-                        <img src="{{ asset('/assets_landing/img/pejabat/Ikhsan.jpg') }}" class="card-img-pejabat p-0 col-lg-4" alt="Mochamad Ikhsan Fadilah" loading="lazy">
-                        <div class="card-body col-lg-8">
+                        <div class="col-md-4 p-0">
+                            <img src="{{ asset('/assets_landing/img/pejabat/Ikhsan.jpg') }}" class="card-img-pejabat p-0 " alt="Mochamad Ikhsan Fadilah" loading="lazy">
+                        </div>
+                        <div class="card-body col-md-8">
                             <h5 class="card-title">Mochamad Ikhsan Fadilah, SE, M.M.Tr</h5>
                             <p class="card-text">Kepala Seksi Keamanan Penerbangan dan Pelayanan Darurat</p>
                             <button class="btn btn-pejabat read-more" data-target="#profile-mochamad">Baca Profil Selengkapnya</button>
@@ -68,8 +74,10 @@
                 <!-- Slide 4: Denny Armanto -->
                 <div class="swiper-slide">
                     <div class="card official-card row card-pejabat">
-                        <img src="{{ asset('/assets_landing/img/pejabat/ruslam.png') }}" class="card-img-pejabat p-0 col-lg-4" alt="Denny Armanto" loading="lazy">
-                        <div class="card-body col-lg-8">
+                        <div class="col-md-4 p-0">
+                            <img src="{{ asset('/assets_landing/img/pejabat/ruslam.png') }}" class="card-img-pejabat p-0 " alt="Denny Armanto" loading="lazy">
+                        </div>
+                        <div class="card-body col-md-8">
                             <h5 class="card-title">Roslan, S.E.</h5>
                             <p class="card-text">Kepala Seksi Pelayanan dan Kerjasama</p>
                             <button class="btn btn-pejabat read-more" data-target="#profile-roslan">Baca Profil Selengkapnya</button>
@@ -80,8 +88,10 @@
                 <!-- Slide 5: MURDOKO, S.H. -->
                 <div class="swiper-slide">
                     <div class="card official-card row card-pejabat">
-                        <img src="{{ asset('/assets_landing/img/pejabat/murdoko5.jpg') }}" class="card-img-pejabat p-0 col-lg-4" alt="Murdoko" loading="lazy">
-                        <div class="card-body col-lg-8">
+                        <div class="col-md-4 p-0">
+                            <img src="{{ asset('/assets_landing/img/pejabat/murdoko5.png') }}" class="card-img-pejabat p-0 " alt="Murdoko" loading="lazy">
+                        </div>
+                        <div class="card-body col-md-8">
                             <h5 class="card-title">MURDOKO, S.H.</h5>
                             <p class="card-text">Kepala Seksi Teknik dan Operasi</p>
                             

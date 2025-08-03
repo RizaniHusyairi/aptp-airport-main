@@ -5,13 +5,9 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Admin\{
     HomeController,
-    AirlineController,
-    AirportController,
     CustomerController,
-    PlaneController,
-    FlightController,
+    FacilityController,
     ProfileController,
-    TicketController,
     RoleController,
 };
 use App\Http\Controllers\Staff_User\{
@@ -20,23 +16,22 @@ use App\Http\Controllers\Staff_User\{
     FieldTripController,
     LaporanKeuanganController,
     PengiklananController,
-    PergudanganController,
     PerijinanUsahaController,
-    SewaLahanController,
+    SewaController,
     SliderController,
     TenantController,
     InformasiPublikController,
     LaluLintasController,
     LelangController,
     LetterController,
+    WorkPermitController,
 };
 
 use App\Http\Controllers\{
     LandingPageController,
     SandboxController,
-    SidebarControler,
-    SlotController
-
+    SlotController,
+    TourismController,
 };
 
 Auth::routes();
@@ -44,14 +39,21 @@ Auth::routes();
 Route::group(["prefix" => 'dashboard'], function () {
     Route::group(['middleware' => 'auth'], function () {
         /* ================== USER ROUTES ================== */
-        // Tenant User Routes
+
+        Route::group(['prefix' => 'perizinan-kerja'], function () {
+            Route::get('/', [WorkPermitController::class, 'index'])->name('kerja.userindex');
+            Route::get('/create', [WorkPermitController::class, 'create'])->name('kerja.create');
+            Route::post('/', [WorkPermitController::class, 'store'])->name('kerja.store');
+            
+        });
+        //  User Routes
         Route::get('/tenant', [TenantController::class, 'indexUser'])->name('tenant.index');
         Route::get('/tenant/create', [TenantController::class, 'create'])->name('tenant.create');
         Route::post('/tenant/store', [TenantController::class, 'store'])->name('tenant.store');
         Route::delete('/tenant/{id}', [TenantController::class, 'destroy'])->name('tenant.destroy');
         Route::get('/tenant', [TenantController::class, 'indexUser'])->name('tenant.index');
         
-        Route::prefix('/sewa')->controller(SewaLahanController::class)->group(function () {
+        Route::prefix('/sewa')->controller(SewaController::class)->group(function () {
             Route::get('/', 'index')->name('sewa.index');
             Route::get('/create', 'create')->name('sewa.create');
             Route::post('/store', 'store')->name('sewa.store');
@@ -99,6 +101,10 @@ Route::group(["prefix" => 'dashboard'], function () {
             Route::patch('staff/berita/{id}/toggle-publish', [NewsController::class, 'togglePublish'])->name('berita.togglePublish');
             // Route::patch('staff/slider/{id}/toggle-visibility-footer', [NewsController::class, 'toggleVisibilityFooter'])->name('slider.toggleVisibilityFooter');
             
+            Route::get('staff/perizinan-kerja', [WorkPermitController::class, 'index'])->name('kerja.index');
+            Route::get('staff/perizinan-kerja/{workPermit}', [WorkPermitController::class, 'show'])->name('kerja.show');
+            Route::patch('staff/perizinan-kerja/{workPermit}', [WorkPermitController::class, 'updateStatus'])->name('kerja.updateStatus');
+
             // Tenant Staff Routes
             Route::get('staff/tenant', [TenantController::class, 'index'])->name('tenant.staffIndex');
             Route::get('staff/tenant/{id}', [TenantController::class, 'show'])->name('tenant.show');
@@ -107,12 +113,11 @@ Route::group(["prefix" => 'dashboard'], function () {
             
             // Lelang Staff Routes
             // Route::get('staff/letter', [LetterController::class, 'index'])->name('lelang.staffIndex');
-            Route::resource('staff/letters', LetterController::class)->names('letters.staff');
-            Route::patch('staff/tenant/{id}/approve', [TenantController::class, 'approve'])->name('tenant.approve');
-            Route::patch('staff/tenant/{id}/reject', [TenantController::class, 'reject'])->name('tenant.reject');
+            Route::resource('staff/letter', LetterController::class)->names('letters.staff');
+            
 
 
-            Route::prefix('staff/sewa')->controller(SewaLahanController::class)->group(function () {
+            Route::prefix('staff/sewa')->controller(SewaController::class)->group(function () {
                 Route::get('/', 'indexStaff')->name('staffSewa.index');
                 Route::get('/{id}', 'show')->name('staffSewa.show');
                 Route::patch('/{id}/approve', 'approve')->name('sewa.approve');
@@ -167,6 +172,9 @@ Route::group(["prefix" => 'dashboard'], function () {
             Route::get('staff/keuangan', [LaporanKeuanganController::class, 'index'])->name('keuangan.staffIndex');
             Route::get('staff/keuangan/create', [LaporanKeuanganController::class, 'create'])->name('keuangan.create');
             Route::post('staff/keuangan/store', [LaporanKeuanganController::class, 'store'])->name('keuangan.store');
+            Route::get('staff/keuangan/{id}/edit', [LaporanKeuanganController::class, 'edit'])->name('keuangan.edit');
+            Route::put('staff/keuangan/{id}', [LaporanKeuanganController::class, 'update'])->name('keuangan.update');
+            Route::delete('staff/keuangan/{id}', [LaporanKeuanganController::class, 'destroy'])->name('keuangan.destroy');
             
             // Public Information Staff Routes
             Route::get('staff/informasi-publik', [InformasiPublikController::class, 'index'])->name('informasiPublik.staffIndex');
@@ -178,6 +186,11 @@ Route::group(["prefix" => 'dashboard'], function () {
             Route::get('staff/lalu-lintas', [LaluLintasController::class, 'index'])->name('laluLintas.staffIndex');
             Route::get('staff/lalu-lintas/create', [LaluLintasController::class, 'create'])->name('laluLintas.create');
             Route::post('staff/lalu-lintas/store', [LaluLintasController::class, 'store'])->name('laluLintas.store');
+            Route::get('staff/lalu-lintas/{id}/edit', [LaluLintasController::class, 'edit'])->name('laluLintas.edit');
+            Route::put('staff/lalu-lintas/{id}', [LaluLintasController::class, 'update'])->name('laluLintas.update');
+            Route::delete('staff/lalu-lintas/{id}', [LaluLintasController::class, 'destroy'])->name('laluLintas.destroy');
+            
+        
         });
 
 
@@ -187,37 +200,12 @@ Route::group(["prefix" => 'dashboard'], function () {
         Route::post('/profile/update-password', [ProfileController::class, 'updatePassword'])->name('profile.updatePassword');
 
 
-        //tickets
-        Route::get('tickets/show-flights', [TicketController::class, 'showFlights'])->name('tickets.flights');
-        Route::get('tickets/user-tickets', [TicketController::class, 'userTickets'])->name('tickets.userTickets');
-        Route::post('tickets/book', [TicketController::class, 'book'])->name('tickets.book');
-        Route::post('tickets/cancel-flight', [TicketController::class, 'cancel'])->name('tickets.cancel');
 
 
 
         /* ================== ADMIN ROUTES ================== */
         Route::group(['middleware' => 'admin'], function () {
             Route::get('/', [HomeController::class, 'root'])->name('root');
-
-            //get count of tickets
-            Route::get('/ticket-status-count', [SidebarControler::class, 'ticketStatusCount'])->name('ticketStatusCount');
-
-            //airlines
-            Route::resource("airlines", AirlineController::class);
-
-            //planes
-            Route::resource("planes", PlaneController::class)->except('show');
-
-            //airports
-            Route::resource("airports", AirportController::class)->except('show');
-
-            //flights
-            Route::get("flights/get-planes-by-airline", [FlightController::class, 'getPlanesByAirline'])->name('flights.getPlanesByAirline');
-            Route::resource("flights", FlightController::class)->except('show');
-
-            //tickets
-            Route::get('tickets', [TicketController::class, 'index'])->name('tickets.index');
-            Route::post('tickets/change-status/{ticket}', [TicketController::class, 'changeStatus'])->name('tickets.changeStatus');
 
             //customers
             Route::get("customers", [CustomerController::class, "index"])->name('customers.index');
@@ -232,11 +220,13 @@ Route::group(["prefix" => 'dashboard'], function () {
 
             //roles
             Route::resource('roles', RoleController::class);
+            Route::resource('facilities', FacilityController::class)->names('admin.facilities');
+            Route::resource('tourism', TourismController::class)->names('admin.tourism');
         });
     });
     Route::middleware(['auth'])->group(function () {
         // Sewa Routes
-        Route::get('/sewa', [SewaLahanController::class, 'index'])->name('sewa.index');
+        Route::get('/sewa', [SewaController::class, 'index'])->name('sewa.index');
         
         // Lelang Routes
         Route::get('/lelang', [LelangController::class, 'index'])->name('lelang.index');
@@ -250,8 +240,6 @@ Route::group(["prefix" => 'dashboard'], function () {
         // Field Trip Routes
         Route::get('/fieldtrip', [FieldTripController::class, 'index'])->name('fieldtrip.index');
         
-        // Pergudangan Routes
-        Route::get('/gudang', [PergudanganController::class, 'index'])->name('gudang.index');
         
         // Laporan Keuangan Routes
         Route::get('/keuangan', [LaporanKeuanganController::class, 'index'])->name('keuangan.index');
@@ -265,6 +253,14 @@ Route::group(["prefix" => 'dashboard'], function () {
 Route::get('/', [LandingPageController::class, 'home'])->name('home');
 Route::get('/lalu-lintas-angkutan', [LandingPageController::class, 'lalulintas'])->name('lalulintas');
 Route::get('/api/air-freight-traffic', [LandingPageController::class, 'getTrafficData'])->name('api.air-freight-traffic');
+Route::get('/api/monthly-traffic-stats', [LandingPageController::class, 'getMonthlyTrafficStats']);
+
+Route::post('api/ai/generate-trip-plan', [LandingPageController::class, 'generateTripPlan']);
+
+// routes/api.php
+Route::get('/api/routes/domestic', [LandingPageController::class, 'getDomesticRoutesData']);
+
+
 
 Route::get('/keberangkatan', [LandingPageController::class, 'keberangkatan'])->name('keberangkatan');
 Route::get('/kedatangan', [LandingPageController::class, 'kedatangan'])->name('kedatangan');
@@ -279,6 +275,8 @@ Route::prefix('api')->group(function () {
     Route::get('/flight-stats', [LandingPageController::class, 'getFlightStats']);
     Route::get('/departures', [LandingPageController::class, 'getDepartures'])->name('api.departures');
     Route::get('/arrivals', [LandingPageController::class, 'getArrivals'])->name('api.arrivals');
+    // routes/api.php
+    Route::get('/pariwisata/unggulan', [LandingPageController::class, 'getFeaturedTourism']);
     
 });
 
@@ -301,6 +299,9 @@ Route::get('/informasi/field-trip', [LandingPageController::class, 'fieldTrip'])
 Route::get('/informasi/lelang', [LandingPageController::class, 'lelang'])->name('lelang');
 Route::get('/informasi/slot', [LandingPageController::class, 'slot'])->name('slot');
 
+// GANTI DENGAN SATU ROUTE INI:
+Route::get('/layanan/{service:slug}', [LandingPageController::class, 'showServicePage'])->name('layanan.show');
+
 Route::get('/informasi-publik/profil-bandara', [LandingPageController::class, 'profilBandara'])->name('profilBandara');
 Route::get('/informasi-publik/struktur-organisasi', [LandingPageController::class, 'strukturOrganisasi'])->name('strukturOrganisasi');
 Route::get('/informasi-publik/profil-ppid-blu', [LandingPageController::class, 'profilPPID'])->name('profilPPID');
@@ -309,11 +310,16 @@ Route::get('/informasi-publik/sop-ppid', [LandingPageController::class, 'sopPpid
 Route::get('/informasi-publik/pengajuan-informasi-publik', [LandingPageController::class, 'pengajuanInformasiPublik'])->name('pengajuanInformasiPublik');
 Route::post('/informasi-publik/pengajuan-informasi-publik', [LandingPageController::class, 'storePengajuanInformasiPublik'])->name('storePengajuanInformasiPublik');
 
+// routes/web.php
+Route::get('/fasilitas', [LandingPageController::class, 'fasilitas'])->name('fasilitas');
+Route::get('/pariwisata', [LandingPageController::class, 'pariwisata'])->name('pariwisata.index');
+Route::get('/pariwisata/{slug}', [LandingPageController::class, 'detailPariwisata'])->name('pariwisata.show');
+
 
 Route::prefix('regulasi')->group(function () {
     Route::get('/surat-utusan', [LandingPageController::class, 'suratUtusan'])->name('letters.utusan');
     Route::get('/surat-edaran', [LandingPageController::class, 'suratEdaran'])->name('letters.edaran');
-    Route::get('/surat-utusan/api', [LandingPageController::class, 'getLettersUtusan'])->name('letters.utusan.api');
+    Route::get('/surat-keputusan/api', [LandingPageController::class, 'getLettersUtusan'])->name('letters.utusan.api');
     Route::get('/surat-edaran/api', [LandingPageController::class, 'getLettersEdaran'])->name('letters.edaran.api');
 });
 // // Regulasi

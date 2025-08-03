@@ -8,6 +8,8 @@ $(document).ready(function() {
         info: false,
         ordering: false,
         paging: false,
+    scrollCollapse: true,
+    scrollY: '50vh',
         scrollX: true,
         columns: [
             { title: 'Kode Penerbangan' },

@@ -6,6 +6,8 @@
   <title>@yield('title', 'Bandara APT Pranoto')</title>
   <meta name="description" content="@yield('description', '')">
   <meta name="keywords" content="@yield('keywords', '')">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
+
 
   <!-- Favicons -->
   <link href="{{ asset('assets_landing/img/logo/Logo_Kementerian_Perhubungan_Indonesia_(Kemenhub).png') }}" rel="icon">

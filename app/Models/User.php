@@ -9,6 +9,7 @@ use Spatie\MediaLibrary\HasMedia;
 use Illuminate\Notifications\Notifiable;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 
@@ -66,6 +67,14 @@ class User extends Authenticatable implements HasMedia
         return $query->where('is_admin', 1);
     }
 
+    /**
+     * Cek apakah user adalah Admin.
+     */
+    // public function isAdmin(): bool
+    // {
+    //     return $this->hasRole('Admin');
+    // }
+
     // Relations
     public function hasRole($role)
     {
@@ -73,6 +82,16 @@ class User extends Authenticatable implements HasMedia
     }
 
     
+
+    /**
+     * Mendefinisikan relasi "hasMany" ke model WorkPermit.
+     * Seorang pengguna dapat memiliki banyak izin kerja.
+     */
+    public function workPermits(): HasMany
+    {
+        return $this->hasMany(WorkPermit::class);
+    }
+
 
     public function tenants()
     {
@@ -110,11 +129,19 @@ class User extends Authenticatable implements HasMedia
 
     public function getAllPermissions()
     {
-        return $this->roles()->with('permissions')->get()
+        // Cek apakah cache sudah terisi. Jika ya, langsung kembalikan.
+        if ($this->permissions_cache !== null) {
+            return $this->permissions_cache;
+        }
+
+        // Jika cache kosong, jalankan query, simpan ke cache, lalu kembalikan.
+        // Eager load 'permissions' untuk menghindari query N+1 di sini.
+        return $this->permissions_cache = $this->roles()->with('permissions')->get()
             ->flatMap(function ($role) {
                 return $role->permissions;
             })
             ->unique('id');
+        
     }
 
     public function hasPermission($permissionName)
