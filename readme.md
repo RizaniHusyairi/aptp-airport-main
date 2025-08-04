@@ -20,7 +20,7 @@
       ```
       cp .env.example .env
       ```
-    - Buka file `.env` dan isi semua variabel yang kosong (seperti `DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD`, `GEMINI_API_KEY`, dll) sesuai dengan konfigurasi server.
+    - Buka file `.env` dan isi semua variabel yang kosong (seperti `DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD`, dll) sesuai dengan konfigurasi server.
 
 3.  **Instalasi Dependensi**
     ```
