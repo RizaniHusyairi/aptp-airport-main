@@ -74,7 +74,7 @@
                     
                     <div class="col-12 mb-3">
                         <label for="file" class="form-label">File Surat</label>
-                        <input type="file" class="form-control" id="file" name="file" multiple accept=".pdf" required>
+                        <input type="file" class="form-control @error('file') is-invalid @enderror" id="file" name="file" multiple accept=".pdf" required>
                         @error('file')
                         <div class="invalid-feedback">
                             {{ $message }}

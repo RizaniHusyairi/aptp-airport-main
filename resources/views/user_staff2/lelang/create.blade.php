@@ -84,7 +84,7 @@
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="name" class="form-label">Nama Lelang</label>
-                        <input type="text" class="form-control" id="name" name="name" required>
+                        <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" required>
                         @error('name')
                         <div class="invalid-feedback">
                             {{ $message }}
@@ -93,7 +93,7 @@
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="lelang_type" class="form-label">Jenis Lelang</label>
-                        <input type="text" class="form-control" id="lelang_type" name="lelang_type" required>
+                        <input type="text" class="form-control @error('lelang_type') is-invalid @enderror"  id="lelang_type" name="lelang_type" required>
                     
                         @error('lelang_type')
                             <div class="invalid-feedback">
@@ -104,7 +104,7 @@
                     
                     <div class="col-md-12 mb-3">
                         <label for="description" class="form-label">Deskripsi Lelang</label>
-                        <textarea class="form-control" id="description" name="description" rows="4" required></textarea>
+                        <textarea class="form-control @error('description') is-invalid @enderror" id="description" name="description" rows="4" required></textarea>
                         @error('description')
                         <div class="invalid-feedback">
                             {{ $message }}
@@ -113,7 +113,7 @@
                     </div>
                     <div class="col-12 mb-3">
                         <label for="documents" class="form-label">dokumen yang Diperlukan</label>
-                        <input type="file" class="form-control" id="documents" name="documents" multiple accept=".pdf,.doc,.docx" required>
+                        <input type="file" class="form-control @error('documents') is-invalid @enderror" id="documents" name="documents" multiple accept=".pdf,.doc,.docx" required>
                         @error('documents')
                         <div class="invalid-feedback">
                             {{ $message }}

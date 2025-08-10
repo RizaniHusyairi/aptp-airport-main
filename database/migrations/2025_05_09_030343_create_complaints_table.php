@@ -15,7 +15,7 @@ return new class extends Migration
             $table->string('subject');
             $table->string('phone_number');
             $table->text('message');
-            $table->enum('status', ['Menunggu', 'Diproses', 'Resolved'])->default('Menunggu');
+            $table->enum('status', ['Menunggu', 'Diproses', 'Selesai'])->default('Menunggu');
             $table->timestamps();        
         });
     }

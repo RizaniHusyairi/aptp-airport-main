@@ -74,7 +74,7 @@
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="ad_name" class="form-label">Nama Pengiklanan</label>
-                        <input type="text" class="form-control" id="ad_name" name="ad_name" required>
+                        <input type="text" class="form-control @error('ad_name') is-invalid @enderror" id="ad_name" name="ad_name" required>
                         @error('ad_name')
                         <div class="invalid-feedback">
                             {{ $message }}
@@ -83,7 +83,7 @@
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="ad_type" class="form-label">Jenis Pengiklanan</label>
-                        <input type="text" class="form-control" id="ad_type" name="ad_type" required>
+                        <input type="text" class="form-control @error('ad_type') is-invalid @enderror" id="ad_type" name="ad_type" required>
                     
                         @error('ad_type')
                             <div class="invalid-feedback">
@@ -94,7 +94,7 @@
                     
                     <div class="col-md-12 mb-3">
                         <label for="description" class="form-label">Deskripsi Pengiklanan</label>
-                        <textarea class="form-control" id="description" name="description" rows="4" required></textarea>
+                        <textarea class="form-control @error('description') is-invalid @enderror" id="description" name="description" rows="4" required></textarea>
                         @error('description')
                         <div class="invalid-feedback">
                             {{ $message }}
@@ -103,7 +103,7 @@
                     </div>
                     <div class="col-12 mb-3">
                         <label for="documents" class="form-label">dokumen yang Diperlukan</label>
-                        <input type="file" class="form-control" id="documents" name="documents" multiple accept=".pdf,.doc,.docx" required>
+                        <input type="file" class="form-control @error('documents') is-invalid @enderror" id="documents" name="documents" multiple accept=".pdf,.doc,.docx" required>
                         @error('documents')
                         <div class="invalid-feedback">
                             {{ $message }}
