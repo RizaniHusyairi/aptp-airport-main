@@ -45,11 +45,16 @@
                 <table class="table" id="table-slot-charter">
                     <thead>
                         <tr>
+                            @staff
+                            <th>Pengaju</th>
+                            @endstaff
                             <th>No Regis</th>
                             <th>Tipe Pesawat</th>
                             <th>Jadwal Keberangkatan - Kedatangan</th>
                             <th>Bandara Asal-Tujuan</th>
                             <th>Jenis Penerbangan</th>
+                            <th>Status</th>
+
                             <th>Aksi</th>
                         </tr>
                     </thead>
@@ -58,7 +63,6 @@
                         <tbody>
                           @forelse ($slots as $index => $slot)
                             <tr>
-                                <td>{{ $index + 1 }}</td>
                                 <td>{{ $slot->aircraft_registration }}</td>
                                 <td>{{ $slot->aircraft_type }}</td>
                                 <td>{{ $slot->departure_schedule }} - {{ $slot->arrival_schedule}}</td>
@@ -102,7 +106,11 @@
                       <tbody>
                         @forelse ($slots as $index => $slot)
                             <tr>
-                                <td>{{ $index + 1 }}</td>
+                                @foreach ($slot->users as $user)
+                                    <td>
+                                        <span class="badge bg-secondary">{{ $user->name }}</span>
+                                    </td>
+                                @endforeach
                                 <td>{{ $slot->aircraft_registration }}</td>
                                 <td>{{ $slot->aircraft_type }}</td>
                                 <td>{{ $slot->departure_schedule }} - {{ $slot->arrival_schedule}}</td>

@@ -44,6 +44,10 @@ Route::group(["prefix" => 'dashboard'], function () {
             Route::get('/', [WorkPermitController::class, 'index'])->name('kerja.userindex');
             Route::get('/create', [WorkPermitController::class, 'create'])->name('kerja.create');
             Route::post('/', [WorkPermitController::class, 'store'])->name('kerja.store');
+            Route::delete('/{id}', [WorkPermitController::class, 'destroy'])->name('kerja.destroy');
+            Route::get('/{workPermit}', [WorkPermitController::class, 'userShow'])->name('kerja.userShow');
+
+
             
         });
         //  User Routes

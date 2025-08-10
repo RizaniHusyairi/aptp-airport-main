@@ -69,3 +69,9 @@
     font-weight: 500;
     word-break: break-all;
 }
+
+
+/* Gaya baru untuk catatan staff */
+.alert.alert-light-warning {
+    border-left: 4px solid #ffc107;
+}

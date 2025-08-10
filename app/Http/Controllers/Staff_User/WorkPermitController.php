@@ -76,7 +76,10 @@ class WorkPermitController extends Controller
      */
     public function show(WorkPermit $workPermit)
     {
-        $this->authorize('view', $workPermit); // Asumsi ada Policy
+        return view('user_staff2.perizinan_kerja.show', compact('workPermit'));
+    }
+    public function userShow(WorkPermit $workPermit)
+    {
         return view('user_staff2.perizinan_kerja.show', compact('workPermit'));
     }
 
@@ -85,7 +88,6 @@ class WorkPermitController extends Controller
      */
     public function updateStatus(Request $request, WorkPermit $workPermit)
     {
-        $this->authorize('update', $workPermit); // Asumsi ada Policy
 
         $validated = $request->validate([
             'status' => 'required|in:Disetujui,Ditolak,Revisi Diperlukan',
@@ -95,5 +97,26 @@ class WorkPermitController extends Controller
         $workPermit->update($validated);
 
         return redirect()->route('kerja.index')->with('success', 'Status pengajuan berhasil diperbarui.');
+    }
+
+    public function destroy($id)
+    {
+
+        $license = WorkPermit::findOrFail($id);
+
+        // Hapus file dokumen jika ada
+        $documentPath = public_path('uploads/' . $license->documents);
+        if (file_exists($documentPath)) {
+            unlink($documentPath);
+        }
+
+        // Hapus relasi user jika menggunakan pivot
+        $license->users()->detach();
+
+        // Hapus license
+        $license->delete();
+
+        
+        return redirect()->route('kerja.index')->with('success', 'Pengajuan izin kerja berhasil dihapus.');
     }
 }

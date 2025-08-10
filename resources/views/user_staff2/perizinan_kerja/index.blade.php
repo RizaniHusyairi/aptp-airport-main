@@ -65,7 +65,23 @@
                                 <span class="badge {{ $statusClass }}">{{ $permit->status }}</span>
                             </td>
                             <td>
-                                <a href="{{ route('kerja.show', $permit->id) }}" class="btn btn-sm btn-primary">Detail</a>
+                                @notstaff
+                                <div class="d-flex">
+                                    {{-- Tombol untuk melihat detail pengajuan (termasuk berkas) --}}
+                                    <a href="{{ route('kerja.userShow', $permit->id) }}" class="btn btn-sm btn-info text-white me-1">Lihat</a>
+                                    
+                                    {{-- Tombol Hapus hanya muncul jika statusnya belum final --}}
+                                    @if(!in_array($permit->status, ['Disetujui', 'Ditolak']))
+                                        <form action="{{ route('kerja.destroy', $permit->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus pengajuan ini?')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger btn-sm text-white">Hapus</button>
+                                        </form>
+                                    @endif
+
+                                </div>
+                                    @endnotstaff
+                                @staff <a href="{{ route('kerja.show', $permit->id) }}" class="btn btn-sm btn-primary">Detail</a> @endstaff
                             </td>
                         </tr>
                         @endforeach

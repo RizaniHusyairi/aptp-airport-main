@@ -15,7 +15,7 @@
             <div class="col-12 col-md-6 order-md-2 order-first">
                 <x-breadcrumb2 :items="[
                                 ['label' => 'Menu', 'url' => route('profile')],
-                                ['label' => 'Field Trip', 'url' => route('fieldtrip.index')],
+                                ['label' => 'Perijinan usaha', 'url' => route('perijinan.index')],
                                 ['label' => 'Pengajuan', 'active' => true],
                             ]" />        
             </div>

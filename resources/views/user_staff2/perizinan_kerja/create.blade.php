@@ -107,16 +107,6 @@
                         <label for="description" class="form-label">Deskripsi Rinci Pekerjaan <span class="text-danger">*</span></label>
                         <textarea class="form-control" id="description" name="description" rows="4" required></textarea>
                     </div>
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Daftar Pekerja (Nama per baris) <span class="text-danger">*</span></label>
-                        <textarea class="form-control" name="workers_text" rows="5" placeholder="Ahmad Budi&#10;Citra Lestari"></textarea>
-                        <input type="hidden" name="workers">
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Daftar Peralatan (Nama per baris) <span class="text-danger">*</span></label>
-                        <textarea class="form-control" name="equipment_text" rows="5" placeholder="Tangga&#10;Mesin Las&#10;Bor Listrik"></textarea>
-                        <input type="hidden" name="equipment">
-                    </div>
                     <div class="col-12 mb-4">
                         <label for="docs" class="form-label">Dokumen Pendukung <span class="text-danger">*</span></label>
                         <input class="form-control" type="file" id="docs" name="docs[]" multiple required accept=".pdf,.jpg,.png">
