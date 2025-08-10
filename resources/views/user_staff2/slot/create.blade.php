@@ -92,10 +92,11 @@
                         </div>
                         <div class="card-body">
                             <form id="form-pengajuan-slot" method="POST" action="{{ route('slot.store') }}" enctype="multipart/form-data" class="needs-validation" novalidate>
+                                @csrf
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
                                         <label for="nomorRegistrasi" class="form-label">Nomor Registrasi Pesawat</label>
-                                        <input type="text" class="form-control" id="nomorRegistrasi" name="nomorRegistrasi" placeholder="Contoh: PK-ABC" required>
+                                        <input type="text" class="form-control @error('nomorRegistrasi') is-invalid @enderror" id="nomorRegistrasi" name="nomorRegistrasi" value="{{ old('nomorRegistrasi') }}" placeholder="Contoh: PK-ABC" required>
                                         @error('nomorRegistrasi')
                                         <div class="invalid-feedback">
                                             {{ $message }}
@@ -104,64 +105,58 @@
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <label for="tipePesawat" class="form-label">Tipe Pesawat</label>
-                                        <input type="text" class="form-control" id="tipePesawat" name="tipePesawat" placeholder="Contoh: Airbus A320" required>
+                                        <input type="text" class="form-control @error('tipePesawat') is-invalid @enderror" id="tipePesawat" name="tipePesawat" value="{{ old('tipePesawat') }}" placeholder="Contoh: Airbus A320" required>
                                         @error('tipePesawat')
                                         <div class="invalid-feedback d-block">
                                             {{ $message }}
-
                                         </div>
                                         @enderror
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <label for="jadwalKeberangkatan" class="form-label">Jadwal Keberangkatan</label>
-                                        <input type="datetime-local" class="form-control" id="jadwalKeberangkatan" name="jadwalKeberangkatan" required>
+                                        <input type="datetime-local" class="form-control @error('jadwalKeberangkatan') is-invalid @enderror" id="jadwalKeberangkatan" name="jadwalKeberangkatan" value="{{ old('jadwalKeberangkatan') }}" required>
                                         @error('jadwalKeberangkatan')
                                         <div class="invalid-feedback">
                                             {{ $message }}
                                         </div>
-                                            
                                         @enderror
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <label for="jadwalKedatangan" class="form-label">Jadwal Kedatangan</label>
-                                        <input type="datetime-local" class="form-control" id="jadwalKedatangan" name="jadwalKedatangan" required>
+                                        <input type="datetime-local" class="form-control @error('jadwalKedatangan') is-invalid @enderror" id="jadwalKedatangan" name="jadwalKedatangan" value="{{ old('jadwalKedatangan') }}" required>
                                         @error('jadwalKedatangan')
                                         <div class="invalid-feedback">
                                             {{ $message }}
-
                                         </div>
-                                            
                                         @enderror
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <label for="bandaraAsal" class="form-label">Bandara Asal</label>
-                                        <input type="text" class="form-control" id="bandaraAsal" name="bandaraAsal" placeholder="Contoh: CGK" required>
+                                        <input type="text" class="form-control @error('bandaraAsal') is-invalid @enderror" id="bandaraAsal" name="bandaraAsal" value="{{ old('bandaraAsal') }}" placeholder="Contoh: CGK" required>
                                         @error('bandaraAsal')
                                         <div class="invalid-feedback">
                                             {{ $message }}
                                         </div>
-                                            
                                         @enderror
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <label for="bandaraTujuan" class="form-label">Bandara Tujuan</label>
-                                        <input type="text" class="form-control" id="bandaraTujuan" name="bandaraTujuan" placeholder="Contoh: DPS" required>
+                                        <input type="text" class="form-control @error('bandaraTujuan') is-invalid @enderror" id="bandaraTujuan" name="bandaraTujuan" value="{{ old('bandaraTujuan') }}" placeholder="Contoh: DPS" required>
                                         @error('bandaraTujuan')
                                         <div class="invalid-feedback">
                                             {{ $message }}
                                         </div>
-                                            
                                         @enderror
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <label for="jenisPenerbangan" class="form-label">Jenis Penerbangan</label>
-                                        <select class="form-select" id="jenisPenerbangan" name="jenisPenerbangan" required>
+                                        <select class="form-select @error('jenisPenerbangan') is-invalid @enderror" id="jenisPenerbangan" name="jenisPenerbangan" required>
                                             <option value="" disabled selected>Pilih jenis penerbangan</option>
-                                            <option value="penumpang">Penumpang</option>
-                                            <option value="kargo">Kargo</option>
-                                            <option value="lainnya">Lainnya</option>
+                                            <option value="penumpang" @selected(old('jenisPenerbangan') == 'penumpang')>Penumpang</option>
+                                            <option value="kargo" @selected(old('jenisPenerbangan') == 'kargo')>Kargo</option>
+                                            <option value="lainnya" @selected(old('jenisPenerbangan') == 'lainnya')>Lainnya</option>
                                         </select>
-                                        @error('jenisPenerbangan')  
+                                        @error('jenisPenerbangan')
                                         <div class="invalid-feedback">
                                             {{ $message }}
                                         </div>
@@ -169,21 +164,20 @@
                                     </div>
                                     <div class="col-md-6 mb-3" id="jenisLainnya" style="display: none;">
                                         <label for="jenislainnya" class="form-label">Jenis Penerbangan lainnya</label>
-                                        <input type="text" class="form-control" id="jenislainnya" name="jenislainnya" value="{{ old('jenislainnya') }}" placeholder="Masukkan Jenis Penerbangan Lainnya" >
+                                        <input type="text" class="form-control @error('jenislainnya') is-invalid @enderror" id="jenislainnya" name="jenislainnya" value="{{ old('jenislainnya') }}" placeholder="Masukkan Jenis Penerbangan Lainnya" >
                                         @error('jenislainnya')
                                             <div class="invalid-feedback d-block">{{ $message }}</div>
                                         @enderror
                                     </div>
                                     <div class="col-12 mb-3">
                                         <label for="dokumen" class="form-label">Dokumen Pendukung</label>
-                                        <input type="file" class="form-control" id="dokumen" name="dokumen" multiple accept=".pdf,.doc,.docx" required>
-                                        @error('dokumen')
+                                        <input type="file" class="form-control @error('documents') is-invalid @enderror" id="dokumen" name="documents" required>
+                                        @error('documents')
                                         <div class="invalid-feedback">
                                             {{ $message }}
                                         </div>
-                                            
                                         @enderror
-                                        <small class="form-text text-muted">Unggah dokumen dalam format PDF, DOC, atau DOCX. Maksimal 10 file.</small>
+                                        <small class="form-text text-muted">Unggah dokumen dalam format PDF. Maksimal 2MB.</small>
                                     </div>
                                     <div class="col-12">
                                         <button type="submit" class="btn btn-primary">Kirim Pengajuan</button>

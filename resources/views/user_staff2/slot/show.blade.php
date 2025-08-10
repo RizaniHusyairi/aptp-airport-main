@@ -39,18 +39,18 @@
                 <div class="row align-items-center">
                     <div class="col-md-3 col-12 text-center mb-3 mb-md-0">
                         <div class="avatar avatar-xl me-3">
-                            <img src="{{ asset('../assetsv2/compiled/jpg/2.jpg') }}" alt="{{  $slot->users->first()?->name ?? '-'  }}" srcset="">
+                           <img src="{{ asset('../assetsv2/compiled/jpg/2.jpg') }}" alt="{{ $slot->user?->name ?? 'Pengguna tidak ditemukan' }}" srcset="">
                         </div>
                     </div>
                     <div class="col-md-9 col-12">
                         <div class="row">
                             <div class="col-12">
                                 <h6>Nama</h6>
-                                <p>{{ $slot->users->first()?->name ?? '-' }}</p>
+                                <p>{{ $slot->user?->name ?? '-' }}</p>
                             </div>
                             <div class="col-12">
                                 <h6>Email</h6>
-                                <p>{{ $slot->users->first()?->email ?? '-' }}</p>
+                                <p>{{ $slot->user?->email ?? '-' }}</p>
                             </div>
                             <div class="col-12">
                                 <h6>Tanggal Pengajuan</h6>

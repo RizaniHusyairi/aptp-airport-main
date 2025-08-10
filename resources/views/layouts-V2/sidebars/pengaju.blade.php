@@ -26,7 +26,7 @@
             <li class="sidebar-title">Menu</li>
             @foreach ($userRoutes as $menu => $data)
                 <li class="sidebar-item {{ Route::is($data['route']) ? 'active' : '' }}">
-                <a href="{{ route($data['route']) }}" class='sidebar-link' data-bs-toggle="tooltip" data-bs-placement="right" title="Berita">
+                <a href="{{ route($data['route']) }}" class='sidebar-link' data-bs-toggle="tooltip" data-bs-placement="right" title="{{ $data['label'] }}">
                         <i class="{{ $data['icon'] }}"></i>
                         <span>{{ $data['label'] }}</span>
                     </a>

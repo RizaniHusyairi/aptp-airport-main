@@ -1,64 +1,25 @@
 $(document).ready(function() {
     // Validasi formulir menggunakan Bootstrap 5
-    $('#form-pengajuan-slot').on('submit', function(event) {
-        event.preventDefault();
-        var form = this;
+       const jenisPenerbanganSelect = document.getElementById('jenisPenerbangan');
+    const jenisLainnyaContainer = document.getElementById('jenisLainnya');
+    const jenisLainnyaInput = document.getElementById('jenislainnya');
 
-        // Cek validitas formulir
-        if (form.checkValidity() === false) {
-            event.stopPropagation();
-            $(form).addClass('was-validated');
-            return;
-        }
-
-        // Validasi khusus untuk input file
-        var dokumenInput = $('#dokumen')[0];
-        var maxFiles = 10;
-        if (dokumenInput.files.length > maxFiles) {
-            alert('Maksimal ' + maxFiles + ' file yang dapat diunggah.');
-            return;
-        }
-
-        // Validasi jadwal keberangkatan dan kedatangan
-        var jadwalKeberangkatan = new Date($('#jadwalKeberangkatan').val());
-        var jadwalKedatangan = new Date($('#jadwalKedatangan').val());
-        if (jadwalKedatangan <= jadwalKeberangkatan) {
-            alert('Jadwal kedatangan harus setelah jadwal keberangkatan.');
-            $('#jadwalKedatangan').addClass('is-invalid');
-            return;
-        }
-
-        // Simulasi pengiriman data (ganti dengan AJAX jika diperlukan)
-        alert('Pengajuan slot charter berhasil dikirim!');
-        form.reset();
-        $(form).removeClass('was-validated');
-    });
-
-    // Validasi file saat input berubah
-    $('#dokumen').on('change', function() {
-        var validExtensions = ['pdf', 'doc', 'docx'];
-        var files = this.files;
-        var valid = true;
-
-        for (var i = 0; i < files.length; i++) {
-            var extension = files[i].name.split('.').pop().toLowerCase();
-            if (!validExtensions.includes(extension)) {
-                valid = false;
-                break;
+    if (jenisPenerbanganSelect) {
+        // Fungsi untuk menampilkan/menyembunyikan input "Jenis Lainnya"
+        const toggleJenisLainnya = () => {
+            if (jenisPenerbanganSelect.value === 'lainnya') {
+                jenisLainnyaContainer.style.display = 'block';
+                jenisLainnyaInput.setAttribute('required', 'required');
+            } else {
+                jenisLainnyaContainer.style.display = 'none';
+                jenisLainnyaInput.removeAttribute('required');
+                jenisLainnyaInput.value = ''; // Kosongkan nilainya saat disembunyikan
             }
-        }
+        };
 
-        if (!valid) {
-            this.setCustomValidity('Hanya file PDF, DOC, atau DOCX yang diperbolehkan.');
-            $(this).addClass('is-invalid');
-        } else {
-            this.setCustomValidity('');
-            $(this).removeClass('is-invalid');
-        }
-    });
+        // Jalankan fungsi saat halaman dimuat dan saat pilihan berubah
+        toggleJenisLainnya();
+        jenisPenerbanganSelect.addEventListener('change', toggleJenisLainnya);
+    }
 
-    // Hapus kelas is-invalid saat input jadwal diubah
-    $('#jadwalKedatangan, #jadwalKeberangkatan').on('change', function() {
-        $(this).removeClass('is-invalid');
-    });
 });

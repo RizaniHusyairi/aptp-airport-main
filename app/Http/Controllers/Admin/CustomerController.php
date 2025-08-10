@@ -142,4 +142,12 @@ class CustomerController extends Controller
 
         return redirect()->route('customers.show', $user)->with('success', 'Role berhasil diperbarui.');
     }
+
+    public function destroy(User $user)
+    {
+        // Hapus user
+        $user->delete();
+
+        return redirect()->route('customers.index')->with('success', 'User berhasil dihapus.');
+    }
 }

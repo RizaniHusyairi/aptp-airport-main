@@ -12,6 +12,7 @@
             </button>
             <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
                 @include('components.userDropdowns')
+                
             </div>
         </div>
     </nav>

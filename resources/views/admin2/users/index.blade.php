@@ -58,8 +58,16 @@
                                     </span>
                                 </td>
                                 <td>
-                                <a href="{{ route('customers.show', $user->id) }}"
-                                        class="btn btn-primary btn-sm">Lihat</a>
+                                    <div class="d-flex">
+                                        <a href="{{ route('customers.show', $user->id) }}" class="btn btn-primary btn-sm">Lihat</a>
+                                        <form action="{{ route('customers.destroy', $user->id) }}"
+                                            method="POST" class="d-inline ms-1"
+                                            onsubmit="return confirm('Apakah Anda yakin ingin menghapus pengguna ini?');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
+                                        </form>
+                                            </div>
                                 </td>
                             </tr>
                         @endforeach

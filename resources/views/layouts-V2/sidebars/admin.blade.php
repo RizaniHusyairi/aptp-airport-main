@@ -52,6 +52,12 @@
                     <span>Fasilitas</span>
                 </a>
             </li>
+            <li class="sidebar-item {{ Route::is('slider.staffIndex') ? 'active' : '' }}">
+                <a href="{{ route('slider.staffIndex') }}" class='sidebar-link'>
+                    <i class="bi bi-image"></i>
+                    <span>Slider</span>
+                </a>
+            </li>
         </ul>
     </div>
 </div>

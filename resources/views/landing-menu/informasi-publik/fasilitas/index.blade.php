@@ -38,7 +38,7 @@
                 <div class="col-lg-3 col-md-6">
                     <div class="facility-card">
                          <div class="facility-card-image">
-                            <img src="{{asset('uploads/' . $facility['image'])}}" alt="Foto {{ $facility['name'] }}" onerror="this.onerror=null;this.src='https://placehold.co/600x400/0d2c4a/ffffff?text=Fasilitas';">
+                            <img src="{{asset('uploads/' . $facility->image_path)}}" alt="Foto {{ $facility->name }}" onerror="this.onerror=null;this.src='https://placehold.co/600x400/0d2c4a/ffffff?text=Fasilitas';">
                         </div>
                         <div class="facility-card-content">
                             <h4 class="facility-name">{{ $facility['name'] }}</h4>
@@ -62,7 +62,7 @@
                 <div class="col-lg-3 col-md-6">
                     <div class="facility-card">
                          <div class="facility-card-image">
-                            <img src="{{ $facility['image'] }}" alt="Foto {{ $facility['name'] }}" onerror="this.onerror=null;this.src='https://placehold.co/600x400/0d2c4a/ffffff?text=Fasilitas';">
+                            <img src="{{asset('uploads/' . $facility->image_path)}}" alt="Foto {{ $facility['name'] }}" onerror="this.onerror=null;this.src='https://placehold.co/600x400/0d2c4a/ffffff?text=Fasilitas';">
                         </div>
                         <div class="facility-card-content">
                             <h4 class="facility-name">{{ $facility['name'] }}</h4>
