@@ -82,47 +82,54 @@
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="work_type" class="form-label">Jenis Pekerjaan <span class="text-danger">*</span></label>
-                        <select class="form-select" id="work_type" name="work_type" required>
+                        <select class="form-select @error('work_type') is-invalid @enderror" id="work_type" name="work_type" required>
                             <option value="" selected disabled>Pilih Jenis Pekerjaan...</option>
-                            <option value="Pekerjaan Panas (Hot Work)">Pekerjaan Panas (Hot Work)</option>
-                            <option value="Pekerjaan di Ketinggian">Pekerjaan di Ketinggian</option>
-                            <option value="Pekerjaan Listrik">Pekerjaan Listrik</option>
-                            <option value="Pekerjaan Galian">Pekerjaan Galian</option>
-                            <option value="Pekerjaan Umum">Pekerjaan Umum</option>
+                            <option value="Pekerjaan Panas (Hot Work)" @selected(old('work_type') == 'Pekerjaan Panas (Hot Work)')>Pekerjaan Panas (Hot Work)</option>
+                            <option value="Pekerjaan di Ketinggian" @selected(old('work_type') == 'Pekerjaan di Ketinggian')>Pekerjaan di Ketinggian</option>
+                            <option value="Pekerjaan Listrik" @selected(old('work_type') == 'Pekerjaan Listrik')>Pekerjaan Listrik</option>
+                            <option value="Pekerjaan Galian" @selected(old('work_type') == 'Pekerjaan Galian')>Pekerjaan Galian</option>
+                            <option value="Pekerjaan Umum" @selected(old('work_type') == 'Pekerjaan Umum')>Pekerjaan Umum</option>
                         </select>
+                        @error('work_type')<div class="invalid-feedback">{{ $message }}</div>@enderror
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="location" class="form-label">Lokasi Spesifik <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="location" name="location" placeholder="Contoh: Area Apron Stand 3" required>
+                        <input type="text" class="form-control @error('location') is-invalid @enderror" id="location" name="location" value="{{ old('location') }}" placeholder="Contoh: Area Apron Stand 3" required>
+                        @error('location')<div class="invalid-feedback">{{ $message }}</div>@enderror
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="start_date" class="form-label">Jadwal Mulai <span class="text-danger">*</span></label>
-                        <input type="datetime-local" class="form-control" id="start_date" name="start_date" required>
+                        <input type="datetime-local" class="form-control @error('start_date') is-invalid @enderror" id="start_date" name="start_date" value="{{ old('start_date') }}" required>
+                        @error('start_date')<div class="invalid-feedback">{{ $message }}</div>@enderror
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="end_date" class="form-label">Jadwal Selesai <span class="text-danger">*</span></label>
-                        <input type="datetime-local" class="form-control" id="end_date" name="end_date" required>
+                        <input type="datetime-local" class="form-control @error('end_date') is-invalid @enderror" id="end_date" name="end_date" value="{{ old('end_date') }}" required>
+                        @error('end_date')<div class="invalid-feedback">{{ $message }}</div>@enderror
                     </div>
                     <div class="col-12 mb-3">
                         <label for="description" class="form-label">Deskripsi Rinci Pekerjaan <span class="text-danger">*</span></label>
-                        <textarea class="form-control" id="description" name="description" rows="4" required></textarea>
+                        <textarea class="form-control @error('description') is-invalid @enderror" id="description" name="description" rows="4" required>{{ old('description') }}</textarea>
+                        @error('description')<div class="invalid-feedback">{{ $message }}</div>@enderror
                     </div>
                     <div class="col-md-6 mb-3">
                         <label class="form-label">Daftar Pekerja (Nama per baris) <span class="text-danger">*</span></label>
-                        <textarea class="form-control" name="workers_text" rows="5" placeholder="Ahmad Budi&#10;Citra Lestari"></textarea>
+                        <textarea class="form-control @error('workers') is-invalid @enderror" name="workers_text" rows="5" placeholder="Ahmad Budi&#10;Citra Lestari">{{ old('workers_text') }}</textarea>
                         <input type="hidden" name="workers">
+                        @error('workers')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
                     </div>
                     <div class="col-md-6 mb-3">
                         <label class="form-label">Daftar Peralatan (Nama per baris) <span class="text-danger">*</span></label>
-                        <textarea class="form-control" name="equipment_text" rows="5" placeholder="Tangga&#10;Mesin Las&#10;Bor Listrik"></textarea>
+                        <textarea class="form-control @error('equipment') is-invalid @enderror" name="equipment_text" rows="5" placeholder="Tangga&#10;Mesin Las&#10;Bor Listrik">{{ old('equipment_text') }}</textarea>
                         <input type="hidden" name="equipment">
+                        @error('equipment')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
                     </div>
                     <div class="col-12 mb-4">
                         <label for="docs" class="form-label">Dokumen Pendukung <span class="text-danger">*</span></label>
-                        <input class="form-control" type="file" id="docs" name="docs[]" multiple required accept=".pdf,.jpg,.png">
+                        <input class="form-control @error('docs.*') is-invalid @enderror" type="file" id="docs" name="docs[]" multiple required accept=".pdf,.jpg,.png">
+                        @error('docs.*')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
                         <small class="form-text text-muted">Unggah JSA, Surat Tugas, atau dokumen relevan lainnya (PDF/JPG/PNG, maks 2MB per file).</small>
                     </div>
-                </div>
                 <div class="d-flex justify-content-end">
                     <a href="{{ route('kerja.index') }}" class="btn btn-light-secondary me-2">Batal</a>
                     <button type="submit" class="btn btn-primary">Kirim Pengajuan</button>

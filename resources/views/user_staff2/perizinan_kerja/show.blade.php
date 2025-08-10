@@ -11,12 +11,12 @@
         <div class="row">
             <div class="col-12 col-md-6 order-md-1 order-last">
                 <h3>Detail Pengajuan Izin Kerja</h3>
-                <p class="text-subtitle text-muted">Review dan tindak lanjuti pengajuan izin kerja.</p>
+                <p class="text-subtitle text-muted">Lihat detail pengajuan izin kerja Anda.</p>
             </div>
             <div class="col-12 col-md-6 order-md-2 order-first">
                 <x-breadcrumb2 :items="[
                     ['label' => 'Menu', 'url' => route('profile')],
-                    ['label' => 'Izin Kerja', 'url' => route('perizinan-kerja.index')],
+                    ['label' => 'Izin Kerja', 'url' => auth()->user()->is_staff ? route('kerja.index') : route('kerja.userindex')],
                     ['label' => 'Detail Pengajuan', 'active' => true]
                 ]" />
             </div>
@@ -59,32 +59,7 @@
                     </div>
 
                     <!-- Daftar Pekerja & Peralatan -->
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="detail-section">
-                                <h6>Daftar Pekerja:</h6>
-                                <ul class="detail-list-boxed">
-                                    @forelse($workPermit->workers as $worker)
-                                        <li>{{ $worker }}</li>
-                                    @empty
-                                        <li>Tidak ada data pekerja.</li>
-                                    @endforelse
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                             <div class="detail-section">
-                                <h6>Daftar Peralatan:</h6>
-                                <ul class="detail-list-boxed">
-                                    @forelse($workPermit->equipment as $item)
-                                        <li>{{ $item }}</li>
-                                    @empty
-                                        <li>Tidak ada data peralatan.</li>
-                                    @endforelse
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
+                    
                 </div>
             </div>
         </div>
@@ -109,23 +84,36 @@
                         @endforelse
                     </div>
 
-                    <!-- Form Tindakan Staff -->
+                    {{-- Tampilkan catatan staff jika ada (untuk Pengaju) --}}
+                    @notstaff
+                        @if($workPermit->staff_notes)
+                        <div class="detail-section">
+                            <h6>Catatan dari Staff:</h6>
+                            <div class="alert alert-light-warning">
+                                <p class="mb-0">{{ $workPermit->staff_notes }}</p>
+                            </div>
+                        </div>
+                        @endif
+                    @endnotstaff
+
+                    {{-- Form Tindakan hanya untuk Staff --}}
+                    @staff
                     <div class="detail-section">
                         <h6>Tindakan</h6>
-                        <form action="{{ route('perizinan-kerja.updateStatus', $workPermit->id) }}" method="POST">
+                        <form action="{{ route('kerja.updateStatus', $workPermit->id) }}" method="POST">
                             @csrf
                             @method('PATCH')
                             <div class="form-group">
                                 <label for="status" class="form-label">Ubah Status</label>
                                 <select name="status" id="status" class="form-select">
-                                    <option value="Diajukan" {{ $workPermit->status == 'Diajukan' ? 'selected' : '' }}>Diajukan</option>
-                                    <option value="Disetujui" {{ $workPermit->status == 'Disetujui' ? 'selected' : '' }}>Setujui</option>
-                                    <option value="Ditolak" {{ $workPermit->status == 'Ditolak' ? 'selected' : '' }}>Tolak</option>
-                                    <option value="Revisi Diperlukan" {{ $workPermit->status == 'Revisi Diperlukan' ? 'selected' : '' }}>Minta Revisi</option>
+                                    <option value="Diajukan" @selected($workPermit->status == 'Diajukan')>Diajukan</option>
+                                    <option value="Disetujui" @selected($workPermit->status == 'Disetujui')>Setujui</option>
+                                    <option value="Ditolak" @selected($workPermit->status == 'Ditolak')>Tolak</option>
+                                    <option value="Revisi Diperlukan" @selected($workPermit->status == 'Revisi Diperlukan')>Minta Revisi</option>
                                 </select>
                             </div>
-                            <div class="form-group">
-                                <label for="staff_notes" class="form-label">Catatan (Opsional)</label>
+                            <div class="form-group" id="staff-notes-container" style="display: none;">
+                                <label for="staff_notes" class="form-label">Catatan Revisi / Alasan Penolakan</label>
                                 <textarea name="staff_notes" id="staff_notes" class="form-control" rows="4" placeholder="Berikan catatan jika pengajuan ditolak atau memerlukan revisi...">{{ $workPermit->staff_notes }}</textarea>
                             </div>
                             <div class="d-grid">
@@ -133,9 +121,35 @@
                             </div>
                         </form>
                     </div>
+                    @endstaff
                 </div>
             </div>
         </div>
     </div>
 </section>
+@endsection
+@section('scripts_admin')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const statusSelect = document.getElementById('status');
+        const notesContainer = document.getElementById('staff-notes-container');
+
+        // Fungsi untuk menampilkan atau menyembunyikan kolom catatan
+        const toggleNotesVisibility = () => {
+            const selectedValue = statusSelect.value;
+            // Tampilkan jika statusnya 'Ditolak' atau 'Revisi Diperlukan'
+            if (selectedValue === 'Ditolak' || selectedValue === 'Revisi Diperlukan') {
+                notesContainer.style.display = 'block';
+            } else {
+                notesContainer.style.display = 'none';
+            }
+        };
+
+        // Jalankan fungsi saat halaman pertama kali dimuat
+        toggleNotesVisibility();
+
+        // Tambahkan event listener untuk memantau perubahan pada dropdown
+        statusSelect.addEventListener('change', toggleNotesVisibility);
+    });
+</script>
 @endsection

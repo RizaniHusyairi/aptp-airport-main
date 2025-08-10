@@ -15,7 +15,7 @@
             <div class="col-12 col-md-6 order-md-2 order-first">
                 <x-breadcrumb2 :items="[
                                 ['label' => 'Menu', 'url' => route('profile')],
-                                ['label' => 'Field Trip', 'url' => route('fieldtrip.index')],
+                                ['label' => 'Perijinan usaha', 'url' => route('perijinan.index')],
                                 ['label' => 'Pengajuan', 'active' => true],
                             ]" />        
             </div>
@@ -83,7 +83,7 @@
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="license_name" class="form-label">Nama Perijinan usaha</label>
-                        <input type="text" class="form-control" id="license_name" name="license_name" required>
+                        <input type="text" class="form-control @error('license_name') is-invalid @enderror" id="license_name" name="license_name" required>
                         @error('license_name')
                         <div class="invalid-feedback">
                             {{ $message }}
@@ -93,7 +93,7 @@
                     
                     <div class="col-md-6 mb-3">
                         <label for="license_type" class="form-label">Jenis Perijinan Usaha</label>
-                        <select class="form-select" id="license_type" name="license_type" required>
+                        <select class="form-select  @error('license_type') is-invalid @enderror" id="license_type" name="license_type" required>
                             <option value="" selected disabled>Pilih Jenis Perijinan Usaha</option>
                             @foreach ($license_type as $type)
 
@@ -110,7 +110,7 @@
                     </div>
                     <div class="col-md-6 mb-3" style="display: none;">
                         <label for="license_more" class="form-label" >Jenis perijinan lainnya</label>
-                        <input type="text" class="form-control" id="license_more" name="license_more">
+                        <input type="text" class="form-control @error('license_more') is-invalid @enderror" id="license_more" name="license_more">
                         @error('license_more')
                         <div class="invalid-feedback">
                             {{ $message }}
@@ -120,7 +120,7 @@
                     
                     <div class="col-md-12 mb-3">
                         <label for="description" class="form-label">Deskripsi Usaha</label>
-                        <textarea class="form-control" id="description" name="description" rows="4" required></textarea>
+                        <textarea class="form-control @error('description') is-invalid @enderror"  id="description" name="description" rows="4" required></textarea>
                         @error('description')
                         <div class="invalid-feedback">
                             {{ $message }}
@@ -129,7 +129,7 @@
                     </div>
                     <div class="col-12 mb-3">
                         <label for="documents" class="form-label">dokumen yang Diperlukan</label>
-                        <input type="file" class="form-control" id="documents" name="documents" multiple accept=".pdf,.doc,.docx" required>
+                        <input type="file" class="form-control @error('documents') is-invalid @enderror" id="documents" name="documents" multiple accept=".pdf,.doc,.docx" required>
                         @error('documents')
                         <div class="invalid-feedback">
                             {{ $message }}

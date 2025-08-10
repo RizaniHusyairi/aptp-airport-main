@@ -8,13 +8,12 @@ return new class extends Migration
 {
     public function up()
     {
-        Schema::create('planes', function (Blueprint $table) {
+        Schema::create('slot_user', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('airline_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
-            $table->string('name');
-            $table->string('code');
-            $table->integer('capacity');
+            $table->foreignId('slot_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }
+
 };

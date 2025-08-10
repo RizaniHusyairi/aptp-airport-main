@@ -72,12 +72,12 @@
                                                         </td>                          
                                                         <td>
                                                             @if ($lelang->documents)
-                                                            <div class="row">
-                                                                <form class="col">
-                                                                    <a href="{{ asset('uploads/documents/lelang/' . basename($lelang->documents)) }}" class="btn btn-sm btn-info text-white btn-tooltip" data-bs-toggle="tooltip" title="Lihat Detail" target="_blank"><i class="bi bi-eye"></i></a>
-                                                                </form>
+                                                            <div class="d-flex">
+                                                                
+                                                                    <a href="{{ asset('uploads/documents/lelang/' . basename($lelang->documents)) }}" class="btn btn-sm btn-info text-white btn-tooltip me-1" data-bs-toggle="tooltip" title="Lihat Detail" target="_blank"><i class="bi bi-eye"></i></a>
+                                                                
                                                                 @if ($lelang->submission_status == 'diajukan')
-                                                                <form class="col" action="{{ route('lelang.destroy', $lelang->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus pengajuan ini?')">
+                                                                <form action="{{ route('lelang.destroy', $lelang->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus pengajuan ini?')">
                                                                     @csrf
                                                                     @method('DELETE')
                                                                     <button type="submit" class="btn btn-danger btn-sm text-white btn-tooltip" data-bs-toggle="tooltip" title="Hapus Pengajuan"><i class="bi bi-trash"></i></button>

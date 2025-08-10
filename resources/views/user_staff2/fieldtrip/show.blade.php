@@ -16,7 +16,7 @@
             <div class="col-12 col-md-6 order-md-2 order-first">
                 <x-breadcrumb2 :items="[
                     ['label' => 'Menu', 'url' => route('profile')],
-                    ['label' => 'Field Trip', 'url' => route('fieldtrip.staffindex')],
+                    ['label' => 'Field Trip', 'url' => route('fieldtrip.staffIndex')],
                     ['label' => 'Detail', 'active' => true]
                 ]" />
             </div>
@@ -106,7 +106,7 @@
             </div>
         </div>
         <div class="d-flex justify-content-end gap-2">
-            <a href="{{ route('staffField Trip.index') }}" class="btn btn-secondary">Kembali</a>
+            <a href="{{ route('fieldtrip.staffIndex') }}" class="btn btn-secondary">Kembali</a>
             @if ($fieldtrip->submission_status === 'diajukan')
                 <div class="">
                   <form action="{{ route('fieldtrip.approve', $fieldtrip->id) }}" method="POST">

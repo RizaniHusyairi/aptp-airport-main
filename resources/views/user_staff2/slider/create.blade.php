@@ -39,7 +39,7 @@
                     @csrf
                     <div class="mb-3">
                         <label for="documents" class="form-label">Gambar Slider</label>
-                        <input type="file" id="documents" name="documents" class="form-control" required>
+                        <input type="file" id="documents" name="documents" class="form-control @error('documents') is-invalid @enderror" required>
                         @error('documents')
                             
                             <div id="error-gambar" class="invalid-feedback text-sm text-muted mt-1">{{ $message }}</div>

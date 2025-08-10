@@ -84,7 +84,7 @@
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="rental_name" class="form-label">Nama Sewa</label>
-                        <input type="text" class="form-control" id="rental_name" name="rental_name" required>
+                        <input type="text" class="form-control @error('rental_name') is-invalid @enderror" id="rental_name" name="rental_name" required>
                         @error('rental_name')
                         <div class="invalid-feedback">
                             {{ $message }}
@@ -93,7 +93,7 @@
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="rental_type" class="form-label">Jenis sewa</label>
-                        <select class="form-select" id="rental_type" name="rental_type" required>
+                        <select class="form-select @error('rental_type') is-invalid @enderror" id="rental_type" name="rental_type" required>
                             <option value="" selected disabled>Pilih Jenis Tenant</option>
                             @foreach ($rentalTypes as $type => $config)
 
@@ -110,7 +110,7 @@
                     </div>
                     <div class="col-md-6 mb-3" style="display: none;">
                         <label for="rental_more" class="form-label" >Jenis sewa lainnya</label>
-                        <input type="text" class="form-control" id="rental_more" name="rental_more">
+                        <input type="text" class="form-control @error('rental_more') is-invalid @enderror" id="rental_more" name="rental_more">
                         @error('rental_more')
                         <div class="invalid-feedback">
                             {{ $message }}
@@ -119,7 +119,7 @@
                     </div>
                     <div class="col-md-12 mb-3">
                         <label for="description" class="form-label">Deskripsi Sewa</label>
-                        <textarea class="form-control" id="description" name="description" rows="4" required></textarea>
+                        <textarea class="form-control @error('description') is-invalid @enderror" id="description" name="description" rows="4" required></textarea>
                         @error('description')
                         <div class="invalid-feedback">
                             {{ $message }}
@@ -128,7 +128,7 @@
                     </div>
                     <div class="col-12 mb-3">
                         <label for="documents" class="form-label">dokumen yang Diperlukan</label>
-                        <input type="file" class="form-control" id="documents" name="documents" multiple accept=".pdf,.doc,.docx" required>
+                        <input type="file" class="form-control @error('documents') is-invalid @enderror" id="documents" name="documents" multiple accept=".pdf,.doc,.docx" required>
                         @error('documents')
                         <div class="invalid-feedback">
                             {{ $message }}

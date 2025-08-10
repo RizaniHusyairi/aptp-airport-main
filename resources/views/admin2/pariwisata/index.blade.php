@@ -51,7 +51,7 @@
                         @forelse ($tourisms as $tourism)
                         <tr>
                             <td>
-                                <img src="{{ Storage::url($tourism->cover_image) }}" alt="{{ $tourism->name }}" width="100" class="rounded">
+                                <img src="{{asset('uploads/' . $tourism->cover_image)}}" alt="{{ $tourism->name }}" width="100" class="rounded">
                             </td>
                             <td>{{ $tourism->name }}</td>
                             <td>{{ $tourism->category }}</td>

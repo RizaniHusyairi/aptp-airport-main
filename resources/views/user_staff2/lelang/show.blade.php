@@ -1,5 +1,5 @@
 @extends('layouts-V2.master-layouts-v2')
-@section('title', 'Detail Field Trip')
+@section('title', 'Detail Lelang/Beauty Contest')
 @section('styles_admin')
     
 @endsection
@@ -9,14 +9,14 @@
     <div class="page-title">
         <div class="row">
             <div class="col-12 col-md-6 order-md-1 order-last">
-                <h3>Detail Field Trip</h3>
+                <h3>Detail Lelang/Beauty Contest</h3>
                     <p class="text-subtitle text-muted">Detail informasi pengajuan Field Trip.</p>
             </div>
 
             <div class="col-12 col-md-6 order-md-2 order-first">
                 <x-breadcrumb2 :items="[
                     ['label' => 'Menu', 'url' => route('profile')],
-                    ['label' => 'Field Trip', 'url' => route('fieldtrip.staffindex')],
+                    ['label' => 'Lelang/Beauty Contest', 'url' => route('lelang.staffIndex')],
                     ['label' => 'Detail', 'active' => true]
                 ]" />
             </div>
@@ -39,22 +39,22 @@
                 <div class="row align-items-center">
                     <div class="col-md-3 col-12 text-center mb-3 mb-md-0">
                         <div class="avatar avatar-xl me-3">
-                            <img src="{{ asset('../assetsv2/compiled/jpg/2.jpg') }}" alt="{{  $fieldtrip->users->first()?->name ?? '-'  }}" srcset="">
+                            <img src="{{ asset('../assetsv2/compiled/jpg/2.jpg') }}" alt="{{  $lelang->users->first()?->name ?? '-'  }}" srcset="">
                         </div>
                     </div>
                     <div class="col-md-9 col-12">
                         <div class="row">
                             <div class="col-12">
                                 <h6>Nama</h6>
-                                <p>{{ $fieldtrip->users->first()?->name ?? '-' }}</p>
+                                <p>{{ $lelang->users->first()?->name ?? '-' }}</p>
                             </div>
                             <div class="col-12">
                                 <h6>Email</h6>
-                                <p>{{ $fieldtrip->users->first()?->email ?? '-' }}</p>
+                                <p>{{ $lelang->users->first()?->email ?? '-' }}</p>
                             </div>
                             <div class="col-12">
                                 <h6>Tanggal Pengajuan</h6>
-                                <p>{{ $fieldtrip->created_at->format('d M Y - H:i') }}</p>
+                                <p>{{ $lelang->created_at->format('d M Y - H:i') }}</p>
                             </div>
                         </div>
                     </div>
@@ -69,21 +69,21 @@
                 <div class="row">
                     <div class="col-md-6 ">
                         <h6>Nama Field Trip</h6>
-                        <p>{{ $fieldtrip->fieldtrip_name }}</p>
+                        <p>{{ $lelang->lelang_name }}</p>
                     </div>
                     <div class="col-md-6 ">
                         <h6>Jenis Field Trip</h6>
-                        <p>{{ $fieldtrip->fieldtrip_type }}</p>
+                        <p>{{ $lelang->lelang_type }}</p>
                     </div>
                     
                     <div class="col-12 mt-3">
                         <h6>Deskripsi Field Trip</h6>
-                        <p>{{ $fieldtrip->description }}</p>
+                        <p>{{ $lelang->description }}</p>
                     </div>
-                    @if ($fieldtrip->documents)
+                    @if ($lelang->documents)
                         <div class="col-md-6">
                             <h6>Dokumen Terlampir</h6>
-                            <a href="{{ asset('uploads/documents/fieldtrip/' . basename($fieldtrip->documents)) }}" class="btn btn-sm btn-primary" id="lihat-dokumen" data-bs-toggle="tooltip" title="Lihat Dokumen"><i class="bi bi-file-earmark-pdf"></i> {{ basename($fieldtrip->documents) }}</a>
+                            <a href="{{ asset('uploads/documents/lelang/' . basename($lelang->documents)) }}" class="btn btn-sm btn-primary" id="lihat-dokumen" data-bs-toggle="tooltip" title="Lihat Dokumen"><i class="bi bi-file-earmark-pdf"></i> {{ basename($lelang->documents) }}</a>
                         </div>
                     @else
                         <div class="col-md-6">
@@ -93,7 +93,7 @@
                     <div class="col-md-6">
                         <h6>Status Pengajuan</h6>
                         @php
-                        $status = $fieldtrip->submission_status;
+                        $status = $lelang->submission_status;
                         $badgeClass = match($status) {
                             'disetujui' => 'bg-success',
                             'ditolak' => 'bg-danger',
@@ -106,17 +106,17 @@
             </div>
         </div>
         <div class="d-flex justify-content-end gap-2">
-            <a href="{{ route('staffField Trip.index') }}" class="btn btn-secondary">Kembali</a>
-            @if ($fieldtrip->submission_status === 'diajukan')
+            <a href="{{ route('lelang.staffIndex') }}" class="btn btn-secondary">Kembali</a>
+            @if ($lelang->submission_status === 'diajukan')
                 <div class="">
-                  <form action="{{ route('fieldtrip.approve', $fieldtrip->id) }}" method="POST">
+                  <form action="{{ route('lelang.approve', $lelang->id) }}" method="POST">
                     @csrf
                     @method('PATCH')
                     <button type="submit" class="btn btn-success" id="setujui-pengajuan">Setujui Pengajuan</button>
                   </form>
                 </div>
                 <div class="">
-                  <form action="{{ route('fieldtrip.reject', $fieldtrip->id) }}" method="POST">
+                  <form action="{{ route('lelang.reject', $lelang->id) }}" method="POST">
                     @csrf
                     @method('PATCH')
                     <button type="submit" class="btn btn-danger" id="tolak-pengajuan">Tolak Pengajuan</button>

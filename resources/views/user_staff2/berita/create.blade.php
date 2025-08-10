@@ -38,7 +38,7 @@
                                         <div class="col-md-6 col-12">
                                             <div class="mb-3">
                                                 <label for="image" class="form-label">Gambar Berita</label>
-                                                <input type="file" class="form-control" id="image" name="image"
+                                                <input type="file" class="form-control @error('image') is-invalid @enderror" id="image" name="image"
                                                     accept="image/jpeg,image/png" data-parsley-required="true"
                                                     data-parsley-fileextension="jpg,png"
                                                     data-parsley-maxfilesize="2">
@@ -53,7 +53,7 @@
                                         <div class="col-md-6 col-12">
                                             <div class="mb-3">
                                                 <label for="title" class="form-label">Judul Berita</label>
-                                                <input type="text" class="form-control" id="title" name="title"
+                                                <input type="text" class="form-control @error('title') is-invalid @enderror" id="title" name="title"
                                                     placeholder="Masukkan judul berita" data-parsley-required="true"
                                                     data-parsley-maxlength="255">
                                                 @error('title')

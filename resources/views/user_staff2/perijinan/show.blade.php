@@ -16,7 +16,7 @@
             <div class="col-12 col-md-6 order-md-2 order-first">
                 <x-breadcrumb2 :items="[
                     ['label' => 'Menu', 'url' => route('profile')],
-                    ['label' => 'Perijinan Usaha', 'url' => route('perijinan.staffindex')],
+                    ['label' => 'Perijinan Usaha', 'url' => route('perijinan.staffIndex')],
                     ['label' => 'Detail', 'active' => true]
                 ]" />
             </div>
@@ -106,17 +106,17 @@
             </div>
         </div>
         <div class="d-flex justify-content-end gap-2">
-            <a href="{{ route('staffPerijinan Usaha.index') }}" class="btn btn-secondary">Kembali</a>
+            <a href="{{ route('perijinan.staffIndex') }}" class="btn btn-secondary">Kembali</a>
             @if ($license->submission_status === 'diajukan')
                 <div class="">
-                  <form action="{{ route('license.approve', $license->id) }}" method="POST">
+                  <form action="{{ route('perijinan.approve', $license->id) }}" method="POST">
                     @csrf
                     @method('PATCH')
                     <button type="submit" class="btn btn-success" id="setujui-pengajuan">Setujui Pengajuan</button>
                   </form>
                 </div>
                 <div class="">
-                  <form action="{{ route('license.reject', $license->id) }}" method="POST">
+                  <form action="{{ route('perijinan.reject', $license->id) }}" method="POST">
                     @csrf
                     @method('PATCH')
                     <button type="submit" class="btn btn-danger" id="tolak-pengajuan">Tolak Pengajuan</button>

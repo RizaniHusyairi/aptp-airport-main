@@ -44,6 +44,10 @@ Route::group(["prefix" => 'dashboard'], function () {
             Route::get('/', [WorkPermitController::class, 'index'])->name('kerja.userindex');
             Route::get('/create', [WorkPermitController::class, 'create'])->name('kerja.create');
             Route::post('/', [WorkPermitController::class, 'store'])->name('kerja.store');
+            Route::delete('/{id}', [WorkPermitController::class, 'destroy'])->name('kerja.destroy');
+            Route::get('/{workPermit}', [WorkPermitController::class, 'userShow'])->name('kerja.userShow');
+
+
             
         });
         //  User Routes
@@ -160,13 +164,7 @@ Route::group(["prefix" => 'dashboard'], function () {
             Route::patch('staff/pengaduan/{complaint}', [ComplaintController::class, 'updateStatus'])->name('pengaduan.staffUpdate');
             Route::delete('staff/pengaduan/{complaint}', [ComplaintController::class, 'destroy'])->name('pengaduan.Staffdestroy');
             
-            // Slider Staff Routes
-            Route::get('staff/slider', [SliderController::class, 'index'])->name('slider.staffIndex');
-            Route::get('staff/slider/create', [SliderController::class, 'create'])->name('slider.create');
-            Route::post('staff/slider/store', [SliderController::class, 'store'])->name('slider.store');
-            Route::delete('staff/slider/{id}/destroy', [SliderController::class, 'destroy'])->name('slider.destroy');
-            Route::patch('staff/slider/{id}/toggle-visibility-home', [SliderController::class, 'toggleVisibilityHome'])->name('slider.toggleVisibilityHome');
-            Route::patch('staff/slider/{id}/toggle-visibility-footer', [SliderController::class, 'toggleVisibilityFooter'])->name('slider.toggleVisibilityFooter');
+           
             
             // Finance Report Staff Routes
             Route::get('staff/keuangan', [LaporanKeuanganController::class, 'index'])->name('keuangan.staffIndex');
@@ -210,6 +208,8 @@ Route::group(["prefix" => 'dashboard'], function () {
             //customers
             Route::get("customers", [CustomerController::class, "index"])->name('customers.index');
             Route::get("customers/{user}", [CustomerController::class, "show"])->name('customers.show');
+            Route::delete('/customers/{user}', [CustomerController::class, 'destroy'])->name('customers.destroy');
+
             Route::post('customers/{user}', [CustomerController::class, 'toggleRole'])->name('customers.toggle-role');
             Route::post('customers/{user}/verify', [CustomerController::class, 'verify'])->name('customers.verify');
             Route::post('customers/{user}/unverify', [CustomerController::class, 'unverify'])->name('customers.unverify');
@@ -222,6 +222,14 @@ Route::group(["prefix" => 'dashboard'], function () {
             Route::resource('roles', RoleController::class);
             Route::resource('facilities', FacilityController::class)->names('admin.facilities');
             Route::resource('tourism', TourismController::class)->names('admin.tourism');
+
+             // Slider Staff Routes
+            Route::get('staff/slider', [SliderController::class, 'index'])->name('slider.staffIndex');
+            Route::get('staff/slider/create', [SliderController::class, 'create'])->name('slider.create');
+            Route::post('staff/slider/store', [SliderController::class, 'store'])->name('slider.store');
+            Route::delete('staff/slider/{id}/destroy', [SliderController::class, 'destroy'])->name('slider.destroy');
+            Route::patch('staff/slider/{id}/toggle-visibility-home', [SliderController::class, 'toggleVisibilityHome'])->name('slider.toggleVisibilityHome');
+            Route::patch('staff/slider/{id}/toggle-visibility-footer', [SliderController::class, 'toggleVisibilityFooter'])->name('slider.toggleVisibilityFooter');
         });
     });
     Route::middleware(['auth'])->group(function () {

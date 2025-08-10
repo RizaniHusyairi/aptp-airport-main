@@ -83,6 +83,8 @@ class SlotController extends Controller
             'documents.max'          => 'Ukuran dokumen maksimal 2MB.',
         ]);
 
+        
+
         // Cek apakah jenis penerbangan adalah "lainnya"
         if ($request->jenisPenerbangan === 'lainnya') {
             // Tambahkan validasi khusus untuk jenis penerbangan lainnya
@@ -124,7 +126,12 @@ class SlotController extends Controller
             'status' => 'diajukan',
         ]);
 
-        
+        // Simpan ke pivot tenant_user
+        $tenant->users()->attach(auth()->id(), [
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
 
         return redirect()->route('slot.index')->with('success', 'Pengajuan slot charter berhasil dikirim. Menunggu verifikasi admin.');
     }
@@ -138,18 +145,17 @@ class SlotController extends Controller
         $slot = slot::findOrFail($id);
 
         // Hapus file dokumen jika ada
-        $documentPath = public_path('uploads/' . $slot->documents);
-        if (file_exists($documentPath)) {
-            unlink($documentPath);
+        if ($slot->documents && Storage::disk('public')->exists($slot->documents)) {
+            Storage::disk('public')->delete($slot->documents);
         }
-    
-        // Hapus relasi user jika menggunakan pivot
-        $slot->users()->detach();
-    
-        // Hapus slot
+    // Hapus relasi user jika menggunakan pivot
+        $tenant->users()->detach();
+        
         $slot->delete();
     
-        return redirect()->route('slot.index')->with('success', 'Pengajuan berhasil dihapus.');    }
+        return redirect()->route('slot.index')->with('success', 'Pengajuan berhasil dihapus.');
+    }
+     
     
         public function indexUser()
     {

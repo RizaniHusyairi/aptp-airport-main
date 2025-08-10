@@ -98,9 +98,8 @@ class LandingPageController extends Controller
         });
 
         // BARU: Cache query untuk sliders selama 1 jam
-        $sliders = Cache::remember('home_sliders', now()->addHour(), function() {
-            return Slider::where('is_visible_home', 1)->take(3)->get();
-        });
+        $sliders = Slider::where('is_visible_home', 1)->take(3)->get();
+        
 
         // BARU: Cache query untuk total angkutan udara selama 3 jam
         $totalAngkutanUdara = Cache::remember('total_air_freight_monthly', now()->addHours(3), function() {
@@ -917,6 +916,5 @@ class LandingPageController extends Controller
 
         return view('landing-menu.informasi-publik.fasilitas.index', compact('facilities'));
     }
-    
     
 }

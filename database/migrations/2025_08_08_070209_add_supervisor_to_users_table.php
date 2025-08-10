@@ -8,11 +8,9 @@ return new class extends Migration
 {
     public function up()
     {
-        Schema::create('countries', function (Blueprint $table) {
-            $table->id();
-            $table->string("name");
-            $table->timestamps();
-            $table->softDeletes();
+        Schema::table('users', function (Blueprint $table) {
+            $table->foreignId('supervisor_id')->nullable()->after('id')
+                ->constrained('users')->onDelete('set null');
         });
     }
 };
