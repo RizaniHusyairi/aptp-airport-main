@@ -18,7 +18,6 @@ class PermissionSeeder extends Seeder
             'Manajemen Pengiklanan',
             'Manajemen Field Trip',
             'Manajemen Laporan Keuangan',
-            'Manajemen Slider',
             'Manajemen Ajuan Informasi Publik',
             'Manajemen Lalu Lintas Angkutan Udara',
             'Manajemen Regulasi',
