@@ -231,55 +231,8 @@ class HomeController extends Controller
                 : 0;
         }
 
-        // 4. DATA SUMMARY
-        $totalAirline = Airline::count();
-        $totalCustomer = User::whereIsAdmin(0)->count();
-        $totalPlane = Plane::count();
-        $totalAirport = Airport::count();
-        $totalFlight = Flight::count();
-        $totalTicket = Ticket::count();
+        
 
-        $lastFlights = Flight::orderBy('id', 'desc')->take(10)->get();
-
-        $activeAirlines = Airline::query()
-            ->withCount('flights')
-            ->withCount('planes')
-            ->orderBy('flights_count', 'desc')
-            ->take(6)
-            ->get();
-
-        // 5. CHART STATUS FLIGHTS
-        $flightStatusChart = DB::table('flights')
-            ->select('status', DB::raw('count(*) as total'))
-            ->groupBy('status')
-            ->orderBy('status', 'desc')
-            ->get()
-            ->map(function ($item) {
-                switch (trim($item->status)) {
-                    case 0:
-                        $item->label = "Land";
-                        $item->color = "#ea868f";
-                        break;
-                    case 1:
-                        $item->label = "Take Off";
-                        $item->color = "#20c997";
-                        break;
-                }
-                return (array) $item;
-            })->toArray();
-
-        // 6. COMPACT DATA KE VIEW
-        $data = [
-            'totalAirline'      => $totalAirline,
-            'totalPlane'        => $totalPlane,
-            'totalAirport'      => $totalAirport,
-            'totalFlight'       => $totalFlight,
-            'totalTicket'       => $totalTicket,
-            'totalCustomer'     => $totalCustomer,
-            'lastFlights'       => $lastFlights,
-            "activeAirlines"    => $activeAirlines,
-            "flightStatusChart" => $flightStatusChart,
-        ];
 
         // return view('admin.index', compact(
         //     'data', 'dates', 'totals', 'years', 'filterTahun', 'filterTahunPie',
