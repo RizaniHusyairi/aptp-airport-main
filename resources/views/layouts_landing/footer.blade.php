@@ -36,7 +36,7 @@
           </div>
           <div class="logo-f">
             <div class="col-lg-3 logo-footer d-flex">
-                <img src="{{ asset('assets_landing/img/logo/logo-BLU-Speed.png') }}" class="img-fluid me-3" alt="Logo-BLU">
+                <img src="{{ asset('assets_landing/img/logo/Logo-BLU-Speed.png') }}" class="img-fluid me-3" alt="Logo-BLU">
                 <img src="{{ asset('assets_landing/img/logo/Logo_Kementerian_Perhubungan_Indonesia_(Kemenhub).png') }}" class="img-fluid" alt="Logo-BLU">
             </div>
           </div>

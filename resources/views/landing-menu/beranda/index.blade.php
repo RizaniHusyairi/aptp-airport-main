@@ -251,7 +251,7 @@
                     <div class="col-lg-4 col-md-6">
                          <a href="{{ route('fasilitas') }}" class="explore-card">
                             
-                            <div class="explore-card-image" style="background-image: url({{ asset('assets_landing/img/fasilitas/darat/temindung-penumpang.jpg') }});"></div>
+                            <div class="explore-card-image" style="background-image: url({{ asset('assets_landing/img/fasilitas/darat/temindung-penumpang.JPG') }});"></div>
                             <div class="explore-card-content">
                                 <h3>Fasilitas Sisi Darat</h3>
                                 <p>Temukan kemegahan arsitektur terminal penumpang, gedung kargo, dan area parkir yang luas.</p>
