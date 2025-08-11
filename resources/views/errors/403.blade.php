@@ -1,35 +1,35 @@
-@extends('layouts.master-without-nav')
-
-@section('title')
-  @lang('translation.Error_403')
-@endsection
-
-@section('body')
-
-  <body>
-  @endsection
-
-  @section('content')
-    <div class="account-pages my-5 pt-5">
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-12">
-            <div class="mb-5 text-center">
-              <h1 class="display-2 fw-medium">4<i class="bx bx-buoy bx-spin text-primary display-3"></i>3</h1>
-              <h4 class="text-uppercase">Sorry, you are not suppose to be in this page</h4>
-              <div class="mt-5 text-center">
-                <a class="btn btn-primary waves-effect waves-light" href="{{ auth()->user()->is_admin ? route('root') : route('profile') }}">Back to {{ auth()->user()->is_admin ? 'Dashbaord' : 'Profile' }}</a>
-              </div>
-            </div>
-          </div>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>403 - Akses Ditolak</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('assets_landing/vendor/bootstrap-icons/bootstrap-icons.css') }}">
+    <link href="{{ asset('assets_landing/css/errors.css') }}" rel="stylesheet">
+</head>
+<body>
+    <div class="error-container">
+        <div class="error-shield">
+            <i class="bi bi-shield-lock-fill"></i>
         </div>
-        <div class="row justify-content-center">
-          <div class="col-md-8 col-xl-6">
-            <div>
-              <img src="{{ URL::asset('/assets/images/error-img.png') }}" alt="" class="img-fluid">
+        <div class="error-content">
+            <h1 class="error-code">403</h1>
+            <h2 class="error-title">Akses Ditolak</h2>
+            <p class="error-message">
+                Maaf, Anda tidak memiliki izin untuk mengakses halaman ini. Area ini hanya untuk personel yang berwenang.
+            </p>
+            <div class="error-actions">
+                <a href="{{ route('home') }}" class="btn-error-primary">
+                    <i class="bi bi-house-door-fill me-2"></i> Kembali ke Beranda
+                </a>
+                <a href="javascript:history.back()" class="btn-error-secondary">
+                    Kembali ke Halaman Sebelumnya
+                </a>
             </div>
-          </div>
         </div>
-      </div>
     </div>
-  @endsection
+</body>
+</html>

@@ -98,7 +98,7 @@ class LandingPageController extends Controller
         });
 
         // BARU: Cache query untuk sliders selama 1 jam
-        $sliders = Slider::where('is_visible_home', 1)->take(3)->get();
+        $sliders = Slider::where('is_visible_home', 1)->get();
         
 
         // BARU: Cache query untuk total angkutan udara selama 3 jam

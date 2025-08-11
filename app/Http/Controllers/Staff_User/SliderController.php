@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Staff_User;
 
 use Auth;
 use App\Models\Slider;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
@@ -24,9 +25,14 @@ class SliderController extends Controller
             
         ]);
 
-        // Simpan file
+
         $file = $request->file('documents');
-        $filename = time() . '_' . $file->getClientOriginalName();
+
+        // Simpan file
+        $originalName = $file->getClientOriginalName();
+        $safeName = Str::slug(pathinfo($originalName, PATHINFO_FILENAME), '-');
+        $extension = $file->getClientOriginalExtension();
+        $filename = time() . '_' . $safeName . '.' . $extension;
         $filePath = $file->storeAs('documents/slider', $filename, 'public');
 
 
@@ -71,14 +77,13 @@ class SliderController extends Controller
 
         // Hitung jumlah slider yang sudah aktif di footer
         $activeHomeCount = Slider::where('is_visible_home', 1)->count();
+        
+        // Ambil nilai dari request, jika tidak ada, gunakan 0 sebagai default
+        $isVisible = $request->input('is_visible_home', 0);
 
-        // Cek apakah ada lebih dari 3 slider yang aktif
-        if ($activeHomeCount >= 3 && !$slider->is_visible_home) {
-            return back()->with('error', 'Hanya 3 slider yang dapat ditampilkan di beranda.');
-        }
-
-        // Update status is_visible_footer
-        $slider->is_visible_home = $request->input('is_visible_home');
+        // ### PERBAIKAN DI SINI ###
+        // Gunakan nilai $isVisible yang sudah memiliki default 0
+        $slider->is_visible_home = $isVisible;
         $slider->save();
 
         return back()->with('success', 'Status visibilitas home diperbarui.');

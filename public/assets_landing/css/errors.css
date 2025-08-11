@@ -1,0 +1,121 @@
+/* public/assets_landing/css/errors.css */
+
+:root {
+    --primary-color: #0d2c4a;
+    --secondary-color: #f0a500;
+    --background-light: #f4f7f9;
+    --text-dark: #333333;
+    --text-muted-light: #6c757d;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--background-light);
+    color: var(--text-dark);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+.error-container {
+    text-align: center;
+    padding: 20px;
+    max-width: 600px;
+}
+
+.error-plane i, .error-shield i {
+    font-size: 8rem;
+    color: var(--primary-color);
+    opacity: 0.1;
+    margin-bottom: -40px;
+}
+
+.error-plane i {
+    animation: fly 8s ease-in-out infinite alternate;
+}
+
+@keyframes fly {
+    from { transform: translateX(-50px) rotate(-5deg); }
+    to { transform: translateX(50px) rotate(5deg); }
+}
+
+.error-shield i {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+.error-content {
+    position: relative;
+    background: #ffffff;
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+}
+
+.error-code {
+    font-size: 6rem;
+    font-weight: 700;
+    color: var(--secondary-color);
+    margin: 0;
+    line-height: 1;
+}
+
+.error-title {
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    margin-top: 10px;
+    margin-bottom: 15px;
+}
+
+.error-message {
+    font-size: 1rem;
+    color: var(--text-muted-light);
+    line-height: 1.7;
+    margin-bottom: 30px;
+}
+
+.error-actions {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.btn-error-primary, .btn-error-secondary {
+    display: inline-flex;
+    align-items: center;
+    padding: 12px 25px;
+    border-radius: 50px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.btn-error-primary {
+    background-color: var(--primary-color);
+    color: #ffffff;
+}
+
+.btn-error-primary:hover {
+    background-color: var(--secondary-color);
+    color: var(--primary-color);
+}
+
+.btn-error-secondary {
+    color: var(--primary-color);
+    border-color: #dee2e6;
+}
+
+.btn-error-secondary:hover {
+    background-color: #e9ecef;
+    border-color: #e9ecef;
+}

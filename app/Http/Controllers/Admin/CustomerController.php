@@ -145,7 +145,7 @@ class CustomerController extends Controller
 
     public function destroy(User $user)
     {
-        // Hapus user
+        // Hapus user   
         $user->delete();
 
         return redirect()->route('customers.index')->with('success', 'User berhasil dihapus.');

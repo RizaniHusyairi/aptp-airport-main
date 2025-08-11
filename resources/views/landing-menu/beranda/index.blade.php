@@ -37,6 +37,8 @@
             @foreach ($sliders as $index => $slider)
 
                 <div class="swiper-slide">
+                    {{-- <div class="hero-background-image" style="background-image: url({{ Storage::url($slider->documents) }})"></div> --}}
+
                     <div class="hero-background-image" style="background-image: url({{asset('uploads/' . $slider->documents)}})"></div>
                 </div>
                 
