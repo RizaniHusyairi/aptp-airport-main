@@ -13,7 +13,7 @@ class AirFreightTrafficSeeder extends Seeder
         $years = [2023, 2024, 2025];
 
         foreach ($years as $year) {
-            for ($month = 1; $month <= 4; $month++) {
+            for ($month = 1; $month <= 2; $month++) {
                 foreach ($types as $type) {
                     AirFreightTraffic::create([
                         'date' => \Carbon\Carbon::create($year, rand(1,12), 1),

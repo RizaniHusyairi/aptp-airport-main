@@ -302,7 +302,7 @@
                 <a href="https://www.airnavindonesia.co.id/" target="_blank" class="partner-logo"><img src="{{ asset('assets_landing/img/mitra/logo-airnav.png') }}" alt="Logo AirNav"></a>
                 <a href="https://www.batikair.com/id/" target="_blank" class="partner-logo"><img src="{{ asset('assets_landing/img/mitra/logo-batik.png') }}" alt="Logo Batik Air"></a>
                 <a href="https://www.bmkg.go.id/" target="_blank" class="partner-logo"><img src="{{ asset('assets_landing/img/mitra/logo-BMKG.png') }}" alt="Logo BMKG"></a>
-                <a href="https://www.lionair.co.id/" target="_blank" class="partner-logo"><img src="{{ asset('assets_landing/img/mitra/logo-lion.png') }}" alt="Logo Lion Air"></a>
+                <a href="https://www.garuda-indonesia.com/id/id/" target="_blank" class="partner-logo"><img src="{{ asset('assets_landing/img/mitra/logo-garuda.png') }}" alt="Logo Garuda Indonesia"></a>
                 <a href="https://kaltimprov.go.id/" target="_blank" class="partner-logo"><img src="{{ asset('assets_landing/img/mitra/Logo-Pemprov.png') }}" alt="Logo Pemprov Kaltim"></a>
                 <a href="https://pertamina.com/" target="_blank" class="partner-logo"><img src="{{ asset('assets_landing/img/mitra/logo-pertamina.png') }}" alt="Logo Pertamina"></a>
                 <a href="https://www.superairjet.com/id/" target="_blank" class="partner-logo"><img src="{{ asset('assets_landing/img/mitra/logo-SAJ.png') }}" alt="Logo Super Air Jet"></a>

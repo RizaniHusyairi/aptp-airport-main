@@ -30,7 +30,6 @@ class ProfileController extends Controller
                     'Manajemen Berita' => 'danger',
                     'Manajemen Laporan Keuangan' => 'dark',
                     'Manajemen Perijinan Kerja' => 'light',
-                    'Manajemen Slider' => 'light',
                     'Manajemen Ajuan Informasi Publik' => 'primary',
                     'Manajemen Lalu Lintas Angkutan Udara' => 'danger',
                     'Manajemen Regulasi' => 'success',

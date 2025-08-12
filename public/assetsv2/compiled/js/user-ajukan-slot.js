@@ -1,8 +1,11 @@
+const { autoload } = require("laravel-mix");
+
 $(document).ready(function() {
     // Inisialisasi DataTable untuk pengajuan slot charter
     $('#table-slot-charter').DataTable({
         responsive: true, // Aktifkan responsivitas
-scrollX:true,        
+        autowidth: false, // Nonaktifkan lebar otomatis untuk responsivitas
+                
         language: {
             // Sesuaikan bahasa untuk pengalaman pengguna dalam bahasa Indonesia
             "decimal": "",

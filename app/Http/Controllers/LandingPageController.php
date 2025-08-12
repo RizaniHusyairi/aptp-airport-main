@@ -160,6 +160,7 @@ class LandingPageController extends Controller
                 'maskapai' => [
                     ['nama' => 'Batik Air', 'logo' => asset('assets_landing/img/mitra/logo-batik.png')],
                     ['nama' => 'Citilink', 'logo' => asset('assets_landing/img/mitra/logo-citilink.png')],
+                    ['nama' => 'Garuda Indonesia', 'logo' => asset('assets_landing/img/mitra/logo-garuda.png')],
                 ]
             ],
             [
@@ -177,6 +178,7 @@ class LandingPageController extends Controller
                 'coords' => ['cx' => 430, 'cy' => 423],
                 'maskapai' => [
                     ['nama' => 'Super Air Jet', 'logo' => asset('assets_landing/img/mitra/logo-SAJ.png')],
+                    ['nama' => 'Batik Air', 'logo' => asset('assets_landing/img/mitra/logo-batik.png')],
                 ]
             ],
              [
@@ -212,7 +214,7 @@ class LandingPageController extends Controller
                 ]
             ],
              [
-                'kota' => 'Muara Wahau (MWV)',
+                'kota' => 'Muara Wahau (MHU)',
                 'provinsi' => 'Kalimantan Timur',
                 'coords' => ['cx' => 615, 'cy' => 150],
                 'maskapai' => [
@@ -910,7 +912,7 @@ class LandingPageController extends Controller
         // Mengambil semua data fasilitas dari database dan mengelompokkannya berdasarkan kategori
      
         // ### PERBAIKAN: Hanya mengambil fasilitas darat dan umum dari database ###
-        $facilities = Facility::whereIn('category', ['darat', 'umum'])
+        $facilities = Facility::whereIn('category', ['udara','darat', 'umum'])
                                 ->get()
                                 ->groupBy('category');
 

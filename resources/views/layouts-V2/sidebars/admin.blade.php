@@ -2,7 +2,7 @@
     <div class="sidebar-header position-relative">
         <div class="d-flex justify-content-between align-items-center">
             <div class="logo">
-                <a class="logo-apt" href="{{ route('home') }}"><img src="{{ asset('assetsv2/image/logo/logo-apt.svg') }}" alt="Logo"></a>
+                <a class="logo-apt" href="{{ route('home') }}"><img src="{{ asset('assets_login/images/logo-apt.svg') }}" alt="Logo"></a>
                 <a class="logo-mini-apt" href="{{ route('home') }}"><img src="{{ asset('assetsv2/image/logo/logo-mini-apt.svg') }}" alt="Logo-mini"></a>
             </div>
             <div class="theme-toggle d-flex gap-2 align-items-center mt-2">

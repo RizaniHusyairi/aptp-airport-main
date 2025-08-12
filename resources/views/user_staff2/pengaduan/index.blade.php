@@ -40,7 +40,7 @@
                                                 <th>Pesan</th>
                                             </tr>
                                         </thead>
-                                        @staff()
+                                        @staff
                                         <tbody>
                                             @forelse ($complaints as $index => $complaint)
                                                 <tr data-id="{{ $complaint->id }}" data-telepon="{{ $complaint->phone_number }}" data-url="{{ route('pengaduan.staffUpdate', $complaint->id) }}">

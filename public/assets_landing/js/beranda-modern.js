@@ -374,8 +374,8 @@ if (mapContainer) {
 
                 tooltip.classList.add('show');
 
-                tooltip.style.left = `${x-10}px`; // Posisi horizontal
-                tooltip.style.top = `${y-45}px`; // Posisi vertikal
+                tooltip.style.left = `${x-20}px`; // Posisi horizontal
+                tooltip.style.top = `${y-75}px`; // Posisi vertikal
                 tooltip.style.opacity = '1'; // Pastikan terlihat
 
                 if (targetPath) {
@@ -396,91 +396,7 @@ if (mapContainer) {
     }
 }
 
-    /**
-     * 5. LOGIKA UNTUK AI TRIP PLANNER (GEMINI API)
-     */
-    const plannerForm = document.getElementById('trip-planner-form');
-    if(plannerForm) {
-        const plannerModal = new bootstrap.Modal(document.getElementById('trip-planner-modal'));
-        const plannerLoading = document.getElementById('planner-loading');
-        const plannerResult = document.getElementById('planner-result');
-        const plannerError = document.getElementById('planner-error');
-        const submitButton = plannerForm.querySelector('button[type="submit"]');
-        const btnText = submitButton.querySelector('.btn-text');
-        const btnSpinner = submitButton.querySelector('.spinner-border');
-        
-        const converter = new showdown.Converter({
-            simplifiedAutoLink: true,
-            strikethrough: true,
-            tables: true
-        });
-
-        plannerForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const tujuan = document.getElementById('tujuan').value.trim();
-            const durasi = document.getElementById('durasi').value.trim();
-
-            if (!tujuan || !durasi) {
-                alert('Harap isi tujuan dan durasi perjalanan.');
-                return;
-            }
-
-            btnText.classList.add('d-none');
-            btnSpinner.classList.remove('d-none');
-            submitButton.disabled = true;
-            
-            plannerLoading.classList.remove('d-none');
-            plannerResult.classList.add('d-none');
-            plannerError.classList.add('d-none');
-            plannerModal.show();
-            
-            try {
-                const response = await fetch('/api/ai/generate-trip-plan', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content')
-                    },
-                    body: JSON.stringify({ tujuan, durasi })
-                });
-                
-                if (!response.ok) throw new Error(`Server error with status ${response.status}`);
-                
-                const result = await response.json();
-
-                if (result.success) {
-                    const html = converter.makeHtml(result.plan);
-                    plannerResult.innerHTML = html;
-                    plannerResult.classList.remove('d-none');
-                } else {
-                    throw new Error(result.error || 'Invalid response from server.');
-                }
-
-            } catch (error) {
-                console.error("Error during trip planning:", error);
-                plannerError.classList.remove('d-none');
-            } finally {
-                plannerLoading.classList.add('d-none');
-                btnText.classList.remove('d-none');
-                btnSpinner.classList.add('d-none');
-                submitButton.disabled = false;
-            }
-        });
-
-        /**
-     * LOGIKA BARU UNTUK INFINITE PARTNERS CAROUSEL
-     */
-    const partnersTrack = document.querySelector('.partners-track');
-    if (partnersTrack) {
-        // Gandakan semua logo untuk menciptakan efek loop yang mulus
-        const logos = partnersTrack.querySelectorAll('.partner-logo');
-        logos.forEach(logo => {
-            const clone = logo.cloneNode(true);
-            partnersTrack.appendChild(clone);
-        });
-    }
-    }
+    
 
     /**
      * LOGIKA BARU UNTUK SEKSI JELAJAHI (TAB FASILITAS & WISATA)

@@ -27,10 +27,11 @@
           <div class="mb-4">
             <h4>Ikuti Kami</h4>
             <div class="social-links d-flex">
-              <a href="#" class="twitter"><i class="bi bi-twitter-x"></i></a>
-              <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
-              <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
-              <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
+              <a href="https://x.com/aptp_airport" target="_blank" class="twitter"><i class="bi bi-twitter-x"></i></a>
+              <a href="https://www.youtube.com/@aptpranotoairport" target="_blank" class="youtube"><i class="bi bi-youtube"></i></a>
+              <a href="https://www.facebook.com/share/1EyVSyu6Un/" target="_blank" class="facebook"><i class="bi bi-facebook"></i></a>
+              <a href="https://www.instagram.com/aptpranotoairport" target="_blank" class="instagram"><i class="bi bi-instagram"></i></a>
+              <a href="https://www.tiktok.com/@aptpranotoairport" target="_blank" class="tiktok"><i class="bi bi-tiktok"></i></a>
             </div>
 
           </div>
