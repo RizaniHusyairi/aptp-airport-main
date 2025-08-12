@@ -32,7 +32,7 @@ class UserSeeder extends Seeder
         );
 
         //generate customer users
-        foreach (range(1, 10) as $key => $value) {
+        foreach (range(1, 2) as $key => $value) {
             User::firstOrCreate(
                 [
                     "email" => $faker->email(),

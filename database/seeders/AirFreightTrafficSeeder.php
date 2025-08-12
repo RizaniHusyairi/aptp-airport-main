@@ -10,7 +10,7 @@ class AirFreightTrafficSeeder extends Seeder
     public function run()
     {
         $types = ['Pesawat', 'Penumpang', 'Penumpang Transit', 'Kargo', 'Bagasi', 'Pos'];
-        $years = [2023, 2024, 2025];
+        $years = [ 2025];
 
         foreach ($years as $year) {
             for ($month = 1; $month <= 2; $month++) {

@@ -64,6 +64,8 @@ class User extends Authenticatable implements HasMedia
         });
     }
 
+    
+
 
     public function rentals()
     {
