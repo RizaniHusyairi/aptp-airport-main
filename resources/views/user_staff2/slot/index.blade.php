@@ -36,13 +36,13 @@
             <h5 class="card-title">Daftar Pengajuan Slot Charter</h5>
             @notadmin
             @notstaff
-            <a href="{{ route('slot.create') }}" class="btn btn-success"><i class="bi bi-plus"></i> Tambah Pengajuan</a>
+            <a href="{{ route('slot.create') }}" class="btn btn-primary"><i class="bi bi-plus"></i> Tambah Pengajuan</a>
             @endnotstaff
             @endnotadmin
         </div>
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table" id="table-slot-charter">
+                <table class="table table-striped" id="table-slot-charter">
                     <thead>
                         <tr>
                             @staff
@@ -62,7 +62,7 @@
                       @notstaff
                         <tbody>
                           @forelse ($slots as $index => $slot)
-                            <tr>
+                            <tr data-id="{{ $index + 1 }}">
                                 <td>{{ $slot->aircraft_registration }}</td>
                                 <td>{{ $slot->aircraft_type }}</td>
                                 <td>{{ $slot->departure_schedule }} - {{ $slot->arrival_schedule}}</td>
@@ -149,5 +149,5 @@
 @section('scripts_admin')
     <script src="{{ asset('assetsv2/extensions/datatables.net/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('assetsv2/extensions/datatables.net-bs5/js/dataTables.bootstrap5.min.js') }}"></script>    
-    <script src="{{ asset('assetsv2/compiled/js/staff-ajukan-slot.js') }}"></script>
+    <script src="{{ asset('assetsv2/compiled/js/user-ajukan-slot.js') }}"></script>
 @endsection

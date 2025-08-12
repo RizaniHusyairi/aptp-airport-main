@@ -24,7 +24,7 @@
         <div class="col-lg-8">
             <div class="card">
                 <div class="card-content text-center pt-4 pb-0">
-                    <img src="{{ asset('../assetsv2/compiled/jpg/1.jpg') }}" class="img-profil" alt="Profile photo of John Ducky">
+                    <img src="{{ Auth::user()->avatar_url }}" class="img-profil" alt="Foto Profil {{ Auth::user()->name }}">
                     <div class="card-body pb-1">
                         <div class="title-content">
                             <h5 class="card-title">{{ Auth::user()->name }}</h5>
@@ -81,42 +81,59 @@
     aria-labelledby="editProfileModalLabel" aria-hidden="true">
     <form id="editProfileForm" action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data">
         @csrf
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header bg-primary">
-                <h5 class="modal-title white" id="editProfileModalLabel">Edit Profil</h5>
-                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                    <i data-feather="x"></i>
-                </button>
-            </div>
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-primary">
+                    <h5 class="modal-title white" id="editProfileModalLabel">Edit Profil</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><i data-feather="x"></i></button>
+                </div>
                 <div class="modal-body">
+                    <div class="form-group mb-3 text-center">
+                        <div style="display: inline-grid;">
+                            <img src="{{ Auth::user()->avatar_url }}" class="img-profil-modal mb-2" alt="Pratinjau Foto Profil">
+                            <label for="avatar" class="form-label">Ubah Foto Profil</label>
+
+                        </div>
+                        <input type="file" id="avatar" name="avatar" class="form-control" accept="image/jpeg,image/png,image/webp,image/jpg">
+                        {{-- Div untuk menampilkan pesan galat avatar --}}
+                        <div class="invalid-feedback d-block" data-field="avatar"></div>
+                        <small class="form-text text-muted">Kosongkan jika tidak ingin mengubah foto. Maks 2MB.</small>
+                    </div>
+                    
                     <div class="form-group mb-3">
                         <label for="name" class="form-label">Nama</label>
                         <input type="text" id="name" name="name" class="form-control" value="{{ old('name', auth()->user()->name) }}" required>
+                        {{-- Div untuk menampilkan pesan galat nama --}}
+                        <div class="invalid-feedback" data-field="name"></div>
                     </div>
+                    
                     <div class="form-group mb-3">
                         <label for="email" class="form-label">Email</label>
                         <input type="email" id="email" name="email" class="form-control" value="{{ old('email', auth()->user()->email) }}" required>
+                         {{-- Div untuk menampilkan pesan galat email --}}
+                        <div class="invalid-feedback" data-field="email"></div>
                     </div>
+                    
                     <div class="form-group mb-3">
                         <label for="phone" class="form-label">Nomor Telepon</label>
                         <input type="tel" id="phone" name="phone" class="form-control" value="{{ old('phone', auth()->user()->phone) }}" placeholder="Format: 123-456-7890" required>
+                         {{-- Div untuk menampilkan pesan galat telepon --}}
+                        <div class="invalid-feedback" data-field="phone"></div>
                     </div>
+
                     <div class="form-group mb-3">
                         <label for="address" class="form-label">Alamat</label>
-                        <textarea id="address" name="address" class="form-control" rows="4" required>{{ old('address', auth()->user()->address) }}</textarea>
+                        <textarea id="address" name="address" class="form-control" rows="4">{{ old('address', auth()->user()->address) }}</textarea>
+                         {{-- Div untuk menampilkan pesan galat alamat --}}
+                        <div class="invalid-feedback" data-field="address"></div>
                     </div>
-                    
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
-                        <i class="bx bx-x d-block d-sm-none"></i>
                         <span class="d-none d-sm-block">Batal</span>
                     </button>
-                    
                     <button type="submit" class="btn btn-primary ms-1" id="saveProfile">
                         <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
-                        <i class="bx bx-check d-block d-sm-none"></i>
                         <span class="d-none d-sm-block">Simpan</span>
                     </button>
                 </div>

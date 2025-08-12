@@ -45,70 +45,78 @@ class ProfileController extends Controller
 
     public function updateProfile(Request $request)
     {
-        //validation
+       $user = auth()->user();
+
         $validator = Validator::make($request->all(), [
-            "name" => ['sometimes', 'required'],
-            "email" => ['sometimes', 'required', 'email', 'unique:users,email,' . auth()->id()],
-            "address" => ['sometimes',],
-            "phone" => ['sometimes', 'unique:users,phone,' . auth()->id()],
+            "name" => ['required', 'string', 'max:255'],
+            "email" => ['required', 'email', 'unique:users,email,' . $user->id],
+            "address" => ['nullable', 'string'],
+            "phone" => ['required', 'string', 'unique:users,phone,' . $user->id],
+            "avatar" => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:2048'], // Validasi untuk avatar
         ]);
 
-        
         if ($validator->fails()) {
-            return $this->josnResponse(false, __('api.invalid_inputs'), Response::HTTP_UNPROCESSABLE_ENTITY, null, $validator->errors()->all());
+            return response()->json(['errors' => $validator->errors()], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
         
         try {
-            // Retirve the validated input data 
+            // Update data teks terlebih dahulu
+            $user->update($validator->safe()->except('avatar'));
             $validated = $validator->validated();
+            
+            if ($request->hasFile('avatar')) {
+                // Hapus avatar lama (jika ada) dan tambahkan yang baru
+                $user->clearMediaCollection('avatars');
+                $user->addMediaFromRequest('avatar')->toMediaCollection('avatars');
+            }
+            $user->refresh();
 
-            $user = auth()->user();
-
-            // Update the user
             $user->update($validated);
 
-            
-
-            $data  = [
-                'id' => $user->id,
+            $data = [
                 'name' => $user->name,
                 'email' => $user->email,
                 'address' => $user->address,
-                'phone' => $user->phone
+                'phone' => $user->phone,
+                'avatar_url' => $user->avatar_url, // Gunakan accessor baru
             ];
 
-            return $this->josnResponse(true, __('messages.success'), Response::HTTP_OK, $data);
+            return response()->json([
+                'success' => true, 
+                'message' => 'Profil berhasil diperbarui.', 
+                'data' => $data
+            ], Response::HTTP_OK);
+
         } catch (\Throwable $th) {
-            return $this->josnResponse(true, __('api.internal_server_error'), Response::HTTP_INTERNAL_SERVER_ERROR, null, showErrorMessage($th));
+            Log::error($th);
+            return response()->json([
+                'success' => false, 
+                'message' => 'Terjadi kesalahan internal server.'
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
     public function updatePassword(Request $request)
     {
-        //validation
         $validator = Validator::make($request->all(), [
-            "current_password" => ['required', 'string', 'min:8'],
+            "current_password" => ['required', 'string'],
             "new_password" => ['required', 'string', 'min:8', 'confirmed'],
         ]);
 
         if ($validator->fails()) {
-            return $this->josnResponse(false, __('api.invalid_inputs'), Response::HTTP_UNPROCESSABLE_ENTITY, null, $validator->errors());
+            return response()->json(['errors' => $validator->errors()], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
-        try {
-            //compare the current password with the password in the database
-            if (!Hash::check($request->current_password, auth()->user()->password)) {
-                return $this->josnResponse(false, __('api.password_not_match'), Response::HTTP_UNAUTHORIZED);
-            }
-
-            // Update the user pasword
-            auth()->user()->update([
-                "password" => Hash::make($request->new_password)
-            ]);
-
-            return $this->josnResponse(true, __('messages.success'), Response::HTTP_OK, auth()->user());
-        } catch (\Throwable $th) {
-            return $this->josnResponse(true, __('api.internal_server_error'), Response::HTTP_INTERNAL_SERVER_ERROR, null, showErrorMessage($e));
+        if (!Hash::check($request->current_password, auth()->user()->password)) {
+            return response()->json([
+                'errors' => ['current_password' => ['Kata sandi saat ini tidak cocok.']]
+            ], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
+
+        auth()->user()->update([
+            "password" => Hash::make($request->new_password)
+        ]);
+
+        return response()->json(['success' => true, 'message' => 'Kata sandi berhasil diperbarui.'], Response::HTTP_OK);
     }
 }

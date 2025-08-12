@@ -1,4 +1,3 @@
-const { autoload } = require("laravel-mix");
 
 $(document).ready(function() {
     // Inisialisasi DataTable untuk pengajuan slot charter
