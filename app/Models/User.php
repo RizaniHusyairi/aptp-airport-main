@@ -46,6 +46,25 @@ class User extends Authenticatable implements HasMedia
         'updated_at' => 'datetime',
     
     ];
+
+    protected static function booted()
+    {
+        static::deleting(function ($user) {
+            // Hapus semua data yang memiliki relasi one-to-many
+            $user->workPermits()->delete();
+            // Anda bisa tambahkan relasi hasMany lainnya di sini
+
+            // Lepaskan semua data dari relasi many-to-many
+            $user->rentals()->detach();
+            $user->tenants()->detach();
+            $user->licenses()->detach();
+            $user->ads()->detach();
+            $user->submissionDocuments()->detach();
+            $user->roles()->detach();
+        });
+    }
+
+
     public function rentals()
     {
         return $this->belongsToMany(Rental::class, 'rental_user', 'user_id', 'rental_id');
