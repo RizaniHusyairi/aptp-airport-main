@@ -1,15 +1,41 @@
 $(document).ready(function () {
+    // Logika untuk pratinjau gambar di modal
+    $('#avatar').on('change', function(event) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            $('.img-profil-modal').attr('src', e.target.result);
+        }
+        reader.readAsDataURL(event.target.files[0]);
+    });
+
+    // Fungsi untuk membersihkan galat sebelumnya
+    function clearFormErrors(form) {
+        form.find('.is-invalid').removeClass('is-invalid');
+        form.find('.invalid-feedback').text('');
+    }
+
+    // Fungsi untuk menampilkan galat
+    function displayFormErrors(form, errors) {
+        for (const field in errors) {
+            const input = form.find(`[name="${field}"]`);
+            const errorContainer = form.find(`.invalid-feedback[data-field="${field}"]`);
+            
+            input.addClass('is-invalid');
+            if (errorContainer.length) {
+                errorContainer.text(errors[field][0]);
+            }
+        }
+    }
+
     // Handle Edit Profile Form Submission
     $('#editProfileForm').on('submit', function (e) {
         e.preventDefault();
         var form = $(this);
         var submitButton = $('#saveProfile');
-        var errorContainer = $('#profileErrors');
 
-        // Show loading spinner and disable button
+        clearFormErrors(form);
         submitButton.find('.spinner-border').removeClass('d-none');
         submitButton.prop('disabled', true);
-        errorContainer.addClass('d-none').empty();
 
         $.ajax({
             url: form.attr('action'),
@@ -19,41 +45,23 @@ $(document).ready(function () {
             contentType: false,
             success: function (response) {
                 if (response.success) {
-                    // Update UI with new data
+                    $('.img-profil').attr('src', response.data.avatar_url);
+                    $('.img-profil-modal').attr('src', response.data.avatar_url);
                     $('.card-title').text(response.data.name);
                     $('.card-subtite').text(response.data.email + ' | ' + (response.data.phone || '---'));
                     $('.card-text p').text(response.data.address || '---');
-                    // Close modal
+                    
                     $('#editProfileModal').modal('hide');
-                    // Show success message with SweetAlert2
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Berhasil!',
-                        text: 'Profil berhasil diperbarui.',
-                        confirmButtonText: 'OK'
-                    });
-                } else {
-                    // Show error message with SweetAlert2
-                    let errorMessage = response.message || 'Terjadi kesalahan.';
-                    if (response.errors) {
-                        errorMessage += '<ul>' + response.errors.map(err => '<li>' + err + '</li>').join('') + '</ul>';
-                    }
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Gagal!',
-                        html: errorMessage,
-                        confirmButtonText: 'OK'
-                    });
-                    errorContainer.removeClass('d-none').html(errorMessage);
+                    
+                    Swal.fire({ icon: 'success', title: 'Berhasil!', text: response.message });
                 }
             },
             error: function (xhr) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error!',
-                    text: 'Terjadi kesalahan saat memperbarui profil.',
-                    confirmButtonText: 'OK'
-                });
+                if (xhr.status === 422) {
+                    displayFormErrors(form, xhr.responseJSON.errors);
+                } else {
+                    Swal.fire({ icon: 'error', title: 'Error!', text: 'Terjadi kesalahan saat memperbarui profil.' });
+                }
             },
             complete: function () {
                 submitButton.find('.spinner-border').addClass('d-none');
@@ -67,12 +75,10 @@ $(document).ready(function () {
         e.preventDefault();
         var form = $(this);
         var submitButton = $('#savePassword');
-        var errorContainer = $('#passwordErrors');
 
-        // Show loading spinner and disable button
+        clearFormErrors(form);
         submitButton.find('.spinner-border').removeClass('d-none');
         submitButton.prop('disabled', true);
-        errorContainer.addClass('d-none').empty();
 
         $.ajax({
             url: form.attr('action'),
@@ -80,39 +86,17 @@ $(document).ready(function () {
             data: form.serialize(),
             success: function (response) {
                 if (response.success) {
-                    // Close modal
                     $('#changePasswordModal').modal('hide');
-                    // Show success message with SweetAlert2
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Berhasil!',
-                        text: 'Kata sandi berhasil diperbarui.',
-                        confirmButtonText: 'OK'
-                    });
-                    // Reset form
                     form[0].reset();
-                } else {
-                    // Show error message with SweetAlert2
-                    let errorMessage = response.message || 'Terjadi kesalahan.';
-                    if (response.errors) {
-                        errorMessage += '<ul>' + response.errors.map(err => '<li>' + err + '</li>').join('') + '</ul>';
-                    }
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Gagal!',
-                        html: errorMessage,
-                        confirmButtonText: 'OK'
-                    });
-                    errorContainer.removeClass('d-none').html(errorMessage);
+                    Swal.fire({ icon: 'success', title: 'Berhasil!', text: response.message });
                 }
             },
             error: function (xhr) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error!',
-                    text: 'Terjadi kesalahan saat memperbarui kata sandi.',
-                    confirmButtonText: 'OK'
-                });
+                if (xhr.status === 422) {
+                    displayFormErrors(form, xhr.responseJSON.errors);
+                } else {
+                    Swal.fire({ icon: 'error', title: 'Error!', text: 'Terjadi kesalahan saat memperbarui kata sandi.' });
+                }
             },
             complete: function () {
                 submitButton.find('.spinner-border').addClass('d-none');

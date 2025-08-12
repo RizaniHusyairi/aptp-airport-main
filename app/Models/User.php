@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Support\Facades\Storage;
 use App\Models\Rental;
 use App\Models\Tenant;
 use App\Models\Ticket;
@@ -64,7 +65,18 @@ class User extends Authenticatable implements HasMedia
         });
     }
 
-    
+        public function getAvatarUrlAttribute()
+    {
+        // Ambil media pertama dari koleksi 'avatars'
+        $avatar = $this->getFirstMedia('avatars');
+        if ($avatar) {
+            // Jika user punya avatar, kembalikan URL-nya dari storage
+            return $avatar->getUrl();
+        }
+        // Jika tidak, kembalikan URL ke gambar default
+        return asset('assetsv2/compiled/jpg/1.jpg');
+    }
+
 
 
     public function rentals()
