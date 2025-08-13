@@ -20,7 +20,7 @@ class UserSeeder extends Seeder
         //admin 
         User::firstOrCreate(
             [
-                "email" => "admin@airline.com",
+                "email" => "admin@aptpranoto.id",
                 "name" => "admin",
                 "phone" => '0123456789',
             ],

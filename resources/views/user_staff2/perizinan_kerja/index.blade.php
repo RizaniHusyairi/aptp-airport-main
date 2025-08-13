@@ -25,6 +25,12 @@
 </div>
 <section class="section">
     <div class="card">
+        @if(session('success'))
+        <div class="alert alert-primary alert-dismissible fade show" role="alert">
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        @endif
         <div class="card-header d-flex justify-content-between align-items-center">
             <h5 class="card-title mb-0">Daftar Pengajuan</h5>
             @notstaff

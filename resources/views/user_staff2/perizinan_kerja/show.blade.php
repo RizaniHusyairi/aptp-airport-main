@@ -38,7 +38,8 @@
                         <h6>Diajukan oleh:</h6>
                         <div class="d-flex align-items-center">
                             <div class="avatar avatar-md me-3">
-                                <img src="{{ asset('../assetsv2/compiled/jpg/2.jpg') }}" alt="Avatar">
+                                <img src="{{ $workPermit->user->avatar_url }}" alt="Foto Profil {{ $workPermit->user->name }}">
+                                
                             </div>
                             <div>
                                 <p class="mb-0 fw-bold">{{ $workPermit->user->name }}</p>
@@ -86,10 +87,22 @@
 
                     {{-- Tampilkan catatan staff jika ada (untuk Pengaju) --}}
                     @notstaff
-                        @if($workPermit->staff_notes)
+                        {{-- Tampilkan Surat Balasan jika Disetujui --}}
+                        @if($workPermit->status == 'Disetujui' && $workPermit->reply_document_path)
+                        <div class="detail-section">
+                            <h6>Surat Balasan:</h6>
+                            <a href="{{ $workPermit->reply_document_path }}" target="_blank" class="document-link success">
+                                <i class="bi bi-file-earmark-check-fill"></i>
+                                <span>Unduh Surat Persetujuan</span>
+                            </a>
+                        </div>
+                        @endif
+
+                        {{-- Tampilkan Catatan Staff jika Ditolak/Revisi --}}
+                        @if(in_array($workPermit->status, ['Ditolak', 'Revisi Diperlukan']) && $workPermit->staff_notes)
                         <div class="detail-section">
                             <h6>Catatan dari Staff:</h6>
-                            <div class="alert alert-light-warning">
+                            <div class="alert alert-light-{{ $workPermit->status == 'Ditolak' ? 'danger' : 'warning' }} mb-0">
                                 <p class="mb-0">{{ $workPermit->staff_notes }}</p>
                             </div>
                         </div>
@@ -100,7 +113,7 @@
                     @staff
                     <div class="detail-section">
                         <h6>Tindakan</h6>
-                        <form action="{{ route('kerja.updateStatus', $workPermit->id) }}" method="POST">
+                        <form action="{{ route('kerja.updateStatus', $workPermit->id) }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             @method('PATCH')
                             <div class="form-group">
@@ -112,10 +125,21 @@
                                     <option value="Revisi Diperlukan" @selected($workPermit->status == 'Revisi Diperlukan')>Minta Revisi</option>
                                 </select>
                             </div>
+
+                            {{-- Input Catatan (muncul saat Ditolak/Revisi) --}}
                             <div class="form-group" id="staff-notes-container" style="display: none;">
-                                <label for="staff_notes" class="form-label">Catatan Revisi / Alasan Penolakan</label>
-                                <textarea name="staff_notes" id="staff_notes" class="form-control" rows="4" placeholder="Berikan catatan jika pengajuan ditolak atau memerlukan revisi...">{{ $workPermit->staff_notes }}</textarea>
+                                <label for="staff_notes" class="form-label">Catatan Revisi / Alasan Penolakan <span class="text-danger">*</span></label>
+                                <textarea name="staff_notes" id="staff_notes" class="form-control" rows="4" placeholder="Berikan catatan...">{{ $workPermit->staff_notes }}</textarea>
+                                @error('staff_notes')<div class="invalid-feedback d-block">{{$message}}</div>@enderror
                             </div>
+
+                            {{-- Input Surat Balasan (muncul saat Disetujui) --}}
+                            <div class="form-group" id="reply-document-container" style="display: none;">
+                                <label for="reply_document_path" class="form-label">Tautan Surat Balasan (Google Drive) <span class="text-danger">*</span></label>
+                                <input type="url" name="reply_document_path" id="reply_document_path" class="form-control @error('reply_document_path') is-invalid @enderror" placeholder="https://..." value="{{ old('reply_document_path', $workPermit->reply_document_path) }}">
+                                @error('reply_document_path')<div class="invalid-feedback d-block">{{$message}}</div>@enderror
+                            </div>
+
                             <div class="d-grid">
                                 <button type="submit" class="btn btn-primary">Simpan Status</button>
                             </div>
@@ -133,23 +157,22 @@
     document.addEventListener('DOMContentLoaded', function() {
         const statusSelect = document.getElementById('status');
         const notesContainer = document.getElementById('staff-notes-container');
+        const replyContainer = document.getElementById('reply-document-container');
 
-        // Fungsi untuk menampilkan atau menyembunyikan kolom catatan
-        const toggleNotesVisibility = () => {
-            const selectedValue = statusSelect.value;
-            // Tampilkan jika statusnya 'Ditolak' atau 'Revisi Diperlukan'
-            if (selectedValue === 'Ditolak' || selectedValue === 'Revisi Diperlukan') {
-                notesContainer.style.display = 'block';
-            } else {
-                notesContainer.style.display = 'none';
-            }
-        };
+        if (statusSelect) {
+            const toggleInputsVisibility = () => {
+                const selectedValue = statusSelect.value;
+                
+                // Tampilkan catatan jika Ditolak atau Minta Revisi
+                notesContainer.style.display = (selectedValue === 'Ditolak' || selectedValue === 'Revisi Diperlukan') ? 'block' : 'none';
+                
+                // Tampilkan input file jika Disetujui
+                replyContainer.style.display = (selectedValue === 'Disetujui') ? 'block' : 'none';
+            };
 
-        // Jalankan fungsi saat halaman pertama kali dimuat
-        toggleNotesVisibility();
-
-        // Tambahkan event listener untuk memantau perubahan pada dropdown
-        statusSelect.addEventListener('change', toggleNotesVisibility);
+            toggleInputsVisibility();
+            statusSelect.addEventListener('change', toggleInputsVisibility);
+        }
     });
 </script>
 @endsection

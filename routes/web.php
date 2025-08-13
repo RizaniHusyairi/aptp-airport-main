@@ -55,7 +55,7 @@ Route::group(["prefix" => 'dashboard'], function () {
         Route::get('/tenant/create', [TenantController::class, 'create'])->name('tenant.create');
         Route::post('/tenant/store', [TenantController::class, 'store'])->name('tenant.store');
         Route::delete('/tenant/{id}', [TenantController::class, 'destroy'])->name('tenant.destroy');
-        Route::get('/tenant', [TenantController::class, 'indexUser'])->name('tenant.index');
+        Route::get('/{id}', [TenantController::class, 'show'])->name('tenant.userShow');
         
         Route::prefix('/sewa')->controller(SewaController::class)->group(function () {
             Route::get('/', 'index')->name('sewa.index');

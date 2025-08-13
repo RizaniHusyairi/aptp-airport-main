@@ -16,7 +16,7 @@
             <div class="col-12 col-md-6 order-md-2 order-first">
                 <x-breadcrumb2 :items="[
                     ['label' => 'Menu', 'url' => route('profile')],
-                    ['label' => 'Tenant', 'url' => route('tenant.staffIndex')],
+                    ['label' => 'Tenant', 'url' => auth()->user()->is_staff ? route('tenant.staffIndex') : route('tenant.index')],
                     ['label' => 'Detail', 'active' => true]
                 ]" />
             </div>
@@ -38,7 +38,7 @@
                 <div class="row align-items-center">
                     <div class="col-md-3 col-12 text-center mb-3 mb-md-0">
                         <div class="avatar avatar-xl me-3">
-                            <img src="{{ asset('../assetsv2/compiled/jpg/2.jpg') }}" alt="" srcset="">
+                            <img src="{{ $tenant->users->first()?->avatar_url }}" alt="Foto Profil {{ $tenant->users->first()?->name }}">
                         </div>
                     </div>
                     <div class="col-md-9 col-12">
@@ -76,7 +76,7 @@
                     </div>
                     <div class="col-md-6 col-12">
                         <h6>Jenis Tenant</h6>
-                        <p>{{ $tenant->rental_type == 'Lainnya' ? $tenant->rental_more : $rental_type }}</p>
+                        <p>{{ $tenant->rental_type == 'Lainnya' ? $tenant->rental_more : $tenant->rental_type }}</p>
                     </div>
                     <div class="col-md-6 col-12">
                         <h6>Status Pengajuan</h6>
@@ -109,28 +109,97 @@
                 </div>
             </div>
         </div>
+        @notstaff
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6 col-12">
+                        {{-- Tampilkan Surat Balasan jika Disetujui --}}
+                        @if($tenant->status == 'Disetujui' && $tenant->reply_document_path)
+                        <div class="detail-section">
+                            <h6>Surat Balasan:</h6>
+                            <a href="{{ $tenant->reply_document_path }}" target="_blank" class="document-link success">
+                                <i class="bi bi-file-earmark-check-fill"></i>
+                                <span>Unduh Surat Persetujuan</span>
+                            </a>
+                        </div>
+                        @endif
+
+                        {{-- Tampilkan Catatan Staff jika Ditolak/Revisi --}}
+                        @if(in_array($tenant->status, ['Ditolak', 'Revisi Diperlukan']) && $tenant->staff_notes)
+                        <div class="detail-section">
+                            <h6>Catatan dari Staff:</h6>
+                            <div class="alert alert-light-{{ $tenant->status == 'Ditolak' ? 'danger' : 'warning' }} mb-0">
+                                <p class="mb-0">{{ $tenant->staff_notes }}</p>
+                            </div>
+                        </div>
+                        @endif
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        @endnotstaff
+        @staff
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6 col-12">
+                        {{-- Tampilkan Surat Balasan jika Disetujui --}}
+                        @if($tenant->status == 'Disetujui' && $tenant->reply_document_path)
+                        <div class="detail-section">
+                            <h6>Surat Balasan:</h6>
+                            <a href="{{ $tenant->reply_document_path }}" target="_blank" class="document-link success">
+                                <i class="bi bi-file-earmark-check-fill"></i>
+                                <span>Unduh Surat Persetujuan</span>
+                            </a>
+                        </div>
+                        @endif
+
+                        {{-- Tampilkan Catatan Staff jika Ditolak/Revisi --}}
+                        @if(in_array($tenant->status, ['Ditolak', 'Revisi Diperlukan']) && $tenant->staff_notes)
+                        <div class="detail-section">
+                            <h6>Catatan dari Staff:</h6>
+                            <div class="alert alert-light-{{ $tenant->status == 'Ditolak' ? 'danger' : 'warning' }} mb-0">
+                                <p class="mb-0">{{ $tenant->staff_notes }}</p>
+                            </div>
+                        </div>
+                        @endif
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        @endstaff
         <div class="d-flex justify-content-end gap-2">
-            <a href="{{ route('tenant.staffIndex') }}" class="btn btn-secondary">Kembali</a>
-            @if ($tenant->submission_status === 'diajukan')
-                <div class="">
-                  <form action="{{ route('tenant.approve', $tenant->id) }}" method="POST">
-                    @csrf
-                    @method('PATCH')
-                    <button type="submit" class="btn btn-success" id="setujui-pengajuan">Setujui Pengajuan</button>
-                  </form>
-                </div>
-                <div class="">
-                  <form action="{{ route('tenant.reject', $tenant->id) }}" method="POST">
-                    @csrf
-                    @method('PATCH')
-                    <button type="submit" class="btn btn-danger" id="tolak-pengajuan">Tolak Pengajuan</button>
-                  </form>
-                </div>
-              @endif
+            <a href="{{ auth()->user()->is_staff ? route('tenant.staffIndex') : route('tenant.index') }}" class="btn btn-secondary">Kembali</a>
+            
         </div>
     </section>
 </div>
 @endsection
 @section('scripts_admin')
     <script src="{{ asset('../assetsv2/compiled/js/staff-tenant-detail.js') }}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const statusSelect = document.getElementById('status');
+            const notesContainer = document.getElementById('staff-notes-container');
+            const replyContainer = document.getElementById('reply-document-container');
+    
+            if (statusSelect) {
+                const toggleInputsVisibility = () => {
+                    const selectedValue = statusSelect.value;
+                    
+                    // Tampilkan catatan jika Ditolak atau Minta Revisi
+                    notesContainer.style.display = (selectedValue === 'Ditolak' || selectedValue === 'Revisi Diperlukan') ? 'block' : 'none';
+                    
+                    // Tampilkan input file jika Disetujui
+                    replyContainer.style.display = (selectedValue === 'Disetujui') ? 'block' : 'none';
+                };
+    
+                toggleInputsVisibility();
+                statusSelect.addEventListener('change', toggleInputsVisibility);
+            }
+        });
+    </script>
 @endsection
