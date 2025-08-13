@@ -57,7 +57,6 @@ class LelangController extends Controller
             'lelang_type' => $validated['lelang_type'],
             'description' => $validated['description'],
             'documents' => $filePath,
-            'submission_status' => 'diajukan',
         ];
 
 
@@ -107,22 +106,31 @@ class LelangController extends Controller
         $lelang = Lelang::with('users')->findOrFail($id);
         return view('user_staff2.lelang.show', compact('lelang'));
     }
-
-    public function approve($id)
+    public function updateStatus(Request $request, Lelang $lelang)
     {
-        $lelang = Lelang::findOrFail($id);
-        $lelang->submission_status = 'disetujui';
+        $validated = $request->validate([
+            'submission_status' => 'required|in:Disetujui,Ditolak,Revisi Diperlukan',
+            'staff_notes' => 'required_if:status,Ditolak,Revisi Diperlukan|nullable|string',
+            'reply_document_path' => 'required_if:status,Disetujui|nullable|url',
+        ], [
+            'staff_notes.required_if' => 'Catatan wajib diisi jika status Ditolak atau Minta Revisi.',
+            'reply_document_path.required_if' => 'Tautan surat balasan wajib diisi jika status Disetujui.',
+            'reply_document_path.url' => 'Input harus berupa tautan (URL) yang valid.',
+        ]);
+
+        $lelang->submission_status = $validated['submission_status'];
+        $lelang->staff_notes = $validated['staff_notes'];
+
+        if ($validated['submission_status'] === 'Disetujui') {
+            $lelang->reply_document_path = $validated['reply_document_path'];
+        } else {
+            $lelang->reply_document_path = null;
+        }
+
         $lelang->save();
 
-        return redirect()->back()->with('success', 'Pengajuan berhasil disetujui.');
+        return redirect()->route('lelang.staffIndex')->with('success', 'Status pengajuan lelang berhasil diperbarui.');
     }
 
-    public function reject($id)
-    {
-        $lelang = Lelang::findOrFail($id);
-        $lelang->submission_status = 'ditolak';
-        $lelang->save();
 
-        return redirect()->back()->with('success', 'Pengajuan berhasil ditolak.');
-    }
 }

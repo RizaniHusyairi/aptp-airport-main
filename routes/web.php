@@ -55,13 +55,16 @@ Route::group(["prefix" => 'dashboard'], function () {
         Route::get('/tenant/create', [TenantController::class, 'create'])->name('tenant.create');
         Route::post('/tenant/store', [TenantController::class, 'store'])->name('tenant.store');
         Route::delete('/tenant/{id}', [TenantController::class, 'destroy'])->name('tenant.destroy');
-        Route::get('/{id}', [TenantController::class, 'show'])->name('tenant.userShow');
+        Route::get('/tenant/{id}', [TenantController::class, 'show'])->name('tenant.userShow');
+
         
         Route::prefix('/sewa')->controller(SewaController::class)->group(function () {
             Route::get('/', 'index')->name('sewa.index');
             Route::get('/create', 'create')->name('sewa.create');
             Route::post('/store', 'store')->name('sewa.store');
             Route::delete('/{id}', 'destroy')->name('sewa.destroy');
+            Route::get('/{id}', 'show')->name('sewa.show');
+
         });
         
         // Perijinan User Routes
@@ -69,29 +72,34 @@ Route::group(["prefix" => 'dashboard'], function () {
         Route::get('/perijinan/create', [PerijinanUsahaController::class, 'create'])->name('perijinan.create');
         Route::post('/perijinan/store', [PerijinanUsahaController::class, 'store'])->name('perijinan.store');
         Route::delete('/perijinan/{id}', [PerijinanUsahaController::class, 'destroy'])->name('perijinan.destroy');
+        Route::get('/perijinan/{id}', [PerijinanUsahaController::class, 'show'])->name('perijinan.userShow');
         
         // Lelang User Routes
         Route::get('/lelang', [LelangController::class, 'indexUser'])->name('lelang.index');
         Route::get('/lelang/create', [LelangController::class, 'create'])->name('lelang.create');
         Route::post('/lelang/store', [LelangController::class, 'store'])->name('lelang.store');
         Route::delete('/lelang/{id}', [LelangController::class, 'destroy'])->name('lelang.destroy');
+        Route::get('/lelang/{id}', [LelangController::class, 'show'])->name('lelang.userShow');
         
         Route::get('/slot', [SlotController::class, 'indexUser'])->name('slot.index');
         Route::get('/slot/create', [SlotController::class, 'create'])->name('slot.create');
         Route::post('/slot/store', [SlotController::class, 'store'])->name('slot.store');
         Route::delete('/slot/{id}', [SlotController::class, 'destroy'])->name('slot.destroy');
+        Route::get('/slot/{id}', [SlotController::class, 'show'])->name('slot.userShow');
         
         // Pengiklanan User Routes
         Route::get('/pengiklanan', [PengiklananController::class, 'indexUser'])->name('pengiklanan.index');
         Route::get('/pengiklanan/create', [PengiklananController::class, 'create'])->name('pengiklanan.create');
         Route::post('/pengiklanan/store', [PengiklananController::class, 'store'])->name('pengiklanan.store');
         Route::delete('/pengiklanan/{id}', [PengiklananController::class, 'destroy'])->name('pengiklanan.destroy');
+        Route::get('/pengiklanan/{id}', [PengiklananController::class, 'show'])->name('pengiklanan.userShow');
         
         // Pengiklanan User Routes
         Route::get('/fieldtrip', [FieldTripController::class, 'indexUser'])->name('fieldtrip.index');
         Route::get('/fieldtrip/create', [FieldTripController::class, 'create'])->name('fieldtrip.create');
         Route::post('/fieldtrip/store', [FieldTripController::class, 'store'])->name('fieldtrip.store');
         Route::delete('/fieldtrip/{id}', [FieldTripController::class, 'destroy'])->name('fieldtrip.destroy');
+        Route::get('/fieldtrip/{id}', [FieldTripController::class, 'show'])->name('fieldtrip.userShow');
 
         Route::middleware(['auth', 'staff'])->group(function () {
             // News Staff Routes
@@ -108,12 +116,11 @@ Route::group(["prefix" => 'dashboard'], function () {
             Route::get('staff/perizinan-kerja', [WorkPermitController::class, 'index'])->name('kerja.index');
             Route::get('staff/perizinan-kerja/{workPermit}', [WorkPermitController::class, 'show'])->name('kerja.show');
             Route::patch('staff/perizinan-kerja/{workPermit}', [WorkPermitController::class, 'updateStatus'])->name('kerja.updateStatus');
-
+            
             // Tenant Staff Routes
             Route::get('staff/tenant', [TenantController::class, 'index'])->name('tenant.staffIndex');
             Route::get('staff/tenant/{id}', [TenantController::class, 'show'])->name('tenant.show');
-            Route::patch('staff/tenant/{id}/approve', [TenantController::class, 'approve'])->name('tenant.approve');
-            Route::patch('staff/tenant/{id}/reject', [TenantController::class, 'reject'])->name('tenant.reject');
+            Route::patch('staff/tenant/{tenant}', [TenantController::class, 'updateStatus'])->name('tenant.updateStatus');
             
             // Lelang Staff Routes
             // Route::get('staff/letter', [LetterController::class, 'index'])->name('lelang.staffIndex');
@@ -124,40 +131,36 @@ Route::group(["prefix" => 'dashboard'], function () {
             Route::prefix('staff/sewa')->controller(SewaController::class)->group(function () {
                 Route::get('/', 'indexStaff')->name('staffSewa.index');
                 Route::get('/{id}', 'show')->name('staffSewa.show');
-                Route::patch('/{id}/approve', 'approve')->name('sewa.approve');
-                Route::patch('/{id}/reject', 'reject')->name('sewa.reject');
+                Route::patch('/{sewa}', 'updateStatus')->name('staffSewa.updateStatus');
+
             });
             
             
             // Perijinan Staff Routes
             Route::get('staff/perijinan', [PerijinanUsahaController::class, 'index'])->name('perijinan.staffIndex');
             Route::get('staff/perijinan/{id}', [PerijinanUsahaController::class, 'show'])->name('perijinan.show');
-            Route::patch('staff/perijinan/{id}/approve', [PerijinanUsahaController::class, 'approve'])->name('perijinan.approve');
-            Route::patch('staff/perijinan/{id}/reject', [PerijinanUsahaController::class, 'reject'])->name('perijinan.reject');
-            
+            Route::patch('satff/perijinan/{license}', [PerijinanUsahaController::class, 'updateStatus'])->name('perijinan.updateStatus');
+
             // Lelang Staff Routes
             Route::get('staff/lelang', [LelangController::class, 'index'])->name('lelang.staffIndex');
             Route::get('staff/lelang/{id}', [LelangController::class, 'show'])->name('lelang.show');
-            Route::patch('staff/lelang/{id}/approve', [LelangController::class, 'approve'])->name('lelang.approve');
-            Route::patch('staff/lelang/{id}/reject', [LelangController::class, 'reject'])->name('lelang.reject');
+            Route::patch('staff/lelang/{lelang}', [LelangController::class, 'updateStatus'])->name('lelang.updateStatus');
             
             // Slot Staff Routes
             Route::get('staff/slot', [SlotController::class, 'index'])->name('slot.staffIndex');
             Route::get('staff/slot/{id}', [SlotController::class, 'show'])->name('slot.show');
-            Route::patch('staff/slot/{id}/approve', [SlotController::class, 'approve'])->name('slot.approve');
-            Route::patch('staff/slot/{id}/reject', [SlotController::class, 'reject'])->name('slot.reject');
+            Route::patch('staff/slot/{slot}', [SlotController::class, 'updateStatus'])->name('slot.updateStatus');
+
             
             // Pengiklanan Staff Routes
             Route::get('staff/pengiklanan', [PengiklananController::class, 'index'])->name('pengiklanan.staffIndex');
             Route::get('staff/pengiklanan/{id}', [PengiklananController::class, 'show'])->name('pengiklanan.show');
-            Route::patch('staff/pengiklanan/{id}/approve', [PengiklananController::class, 'approve'])->name('pengiklanan.approve');
-            Route::patch('staff/pengiklanan/{id}/reject', [PengiklananController::class, 'reject'])->name('pengiklanan.reject');
+            Route::patch('staff/pengiklanan/{ad}', [PengiklananController::class, 'updateStatus'])->name('pengiklanan.updateStatus');
             
             // Fieldtrip Staff Routes
             Route::get('staff/fieldtrip', [FieldTripController::class, 'index'])->name('fieldtrip.staffIndex');
             Route::get('staff/fieldtrip/{id}', [FieldTripController::class, 'show'])->name('fieldtrip.show');
-            Route::patch('staff/fieldtrip/{id}/approve', [FieldTripController::class, 'approve'])->name('fieldtrip.approve');
-            Route::patch('staff/fieldtrip/{id}/reject', [FieldTripController::class, 'reject'])->name('fieldtrip.reject');
+            Route::patch('staff/fieldtrip/{fieldtrip}', [FieldTripController::class, 'updateStatus'])->name('fieldtrip.updateStatus');
             
             // Pengaduan Staff Routes
             Route::get('staff/pengaduan', [ComplaintController::class, 'index'])->name('pengaduan.staffIndex');
@@ -216,7 +219,6 @@ Route::group(["prefix" => 'dashboard'], function () {
             Route::post('customers/{user}/toggle-staff', [CustomerController::class, 'toggleStaff'])->name('customers.toggleStaff');
             Route::put('customers/{user}/update-role', [CustomerController::class, 'updateRole'])->name('customers.updateRole');
             Route::get('customers/{user}/edit-role', [CustomerController::class, 'editRole'])->name('customers.editRole');
-            Route::resource('customers', CustomerController::class);
 
             //roles
             Route::resource('roles', RoleController::class);
@@ -252,8 +254,6 @@ Route::group(["prefix" => 'dashboard'], function () {
         // Laporan Keuangan Routes
         Route::get('/keuangan', [LaporanKeuanganController::class, 'index'])->name('keuangan.index');
         
-        // Slider Routes
-        Route::get('/slider', [SliderController::class, 'index'])->name('slider.index');
     });
 });
 
@@ -347,5 +347,4 @@ Route::post('/delete-temp-file', [HomeController::class, 'deleteTempFile'])->nam
 
 Route::get('/get-random-customer', [SandboxController::class, 'randomCustomer'])->name('randomCustomer');
 
-//render files inside views/template folder
-Route::get('{any}', [HomeController::class, 'index'])->name('index');
+

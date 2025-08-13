@@ -63,8 +63,9 @@
                                                             @php
                                                             $status = $license->submission_status;
                                                             $badgeClass = match($status) {
-                                                                'disetujui' => 'bg-success',
-                                                                'ditolak' => 'bg-danger',
+                                                                 'Disetujui' => 'bg-success',
+                                                                'Ditolak' => 'bg-danger',
+                                                                'Revisi Diperlukan' => 'bg-warning',
                                                                 default => 'bg-info',
                                                             };
                                                             @endphp
@@ -73,10 +74,9 @@
                                                         <td>
                                                             @if ($license->documents)
                                                             <div class="d-flex">
-                                                                
-                                                                <a href="{{ asset('uploads/documents/license/' . basename($license->documents)) }}" class="btn btn-sm btn-info text-white btn-tooltip me-1" data-bs-toggle="tooltip" title="Lihat Detail" target="_blank"><i class="bi bi-eye"></i></a>
-                                                                
-                                                                @if ($license->submission_status == 'diajukan')
+                                                                <a href="{{ route('perijinan.userShow', $license->id) }}" class="me-1 btn btn-sm btn-info text-white btn-tooltip" data-bs-toggle="tooltip" title="Lihat Detail"><i class="bi bi-eye"></i></a>
+                                                                                                                                
+                                                                @if ($license->submission_status == 'Diajukan')
                                                                 <form action="{{ route('perijinan.destroy', $license->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus pengajuan ini?')">
                                                                     @csrf
                                                                     @method('DELETE')
@@ -84,8 +84,6 @@
                                                                 </form>
                                                                 @endif
                                                             </div>
-                                                            @else
-                                                            <span class="text-muted">Tidak ada berkas</span>
                                                             @endif
                                                         </td>
                                                     </tr>
@@ -105,8 +103,9 @@
                                                         @php
                                                             $status = $license->submission_status;
                                                             $badgeClass = match($status) {
-                                                                'disetujui' => 'bg-success',
-                                                                'ditolak' => 'bg-danger',
+                                                                 'Disetujui' => 'bg-success',
+                                                                'Ditolak' => 'bg-danger',
+                                                                'Revisi Diperlukan' => 'bg-warning',
                                                                 default => 'bg-info',
                                                             };
                                                         @endphp

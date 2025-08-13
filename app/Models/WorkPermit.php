@@ -15,17 +15,8 @@ class WorkPermit extends Model
      *
      * @var array<int, string>
      */
-    protected $fillable = [
-        'user_id',
-        'work_type',
-        'location',
-        'description',
-        'start_date',
-        'end_date',
-        'documents',
-        'status',
-        'staff_notes',
-    ];
+        protected $guarded = [];
+
 
     /**
      * The attributes that should be cast.

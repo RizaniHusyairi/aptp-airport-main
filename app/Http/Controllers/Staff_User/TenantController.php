@@ -118,7 +118,7 @@ class TenantController extends Controller
     public function updateStatus(Request $request, Tenant $tenant)
     {
         $validated = $request->validate([
-            'status' => 'required|in:Disetujui,Ditolak,Revisi Diperlukan',
+            'submission_status' => 'required|in:Disetujui,Ditolak,Revisi Diperlukan',
             'staff_notes' => 'required_if:status,Ditolak,Revisi Diperlukan|nullable|string',
             'reply_document_path' => 'required_if:status,Disetujui|nullable|url',
         ], [
@@ -127,10 +127,10 @@ class TenantController extends Controller
             'reply_document_path.url' => 'Input harus berupa tautan (URL) yang valid.',
         ]);
 
-        $tenant->status = $validated['status'];
+        $tenant->submission_status = $validated['submission_status'];
         $tenant->staff_notes = $validated['staff_notes'];
 
-        if ($validated['status'] === 'Disetujui') {
+        if ($validated['submission_status'] === 'Disetujui') {
             $tenant->reply_document_path = $validated['reply_document_path'];
         } else {
             $tenant->reply_document_path = null;
@@ -138,25 +138,9 @@ class TenantController extends Controller
 
         $tenant->save();
 
-        return redirect()->route('tenant.index')->with('success', 'Status pengajuan tenant berhasil diperbarui.');
+        return redirect()->route('tenant.staffIndex')->with('success', 'Status pengajuan tenant berhasil diperbarui.');
     }
-    public function approve($id)
-    {
-        $tenant = Tenant::findOrFail($id);
-        $tenant->submission_status = 'disetujui';
-        $tenant->save();
-
-        return redirect()->back()->with('success', 'Pengajuan berhasil disetujui.');
-    }
-
-    public function reject($id)
-    {
-        $tenant = Tenant::findOrFail($id);
-        $tenant->submission_status = 'ditolak';
-        $tenant->save();
-
-        return redirect()->back()->with('success', 'Pengajuan berhasil ditolak.');
-    }
+    
 
 
 

@@ -8,14 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Lelang extends Model
 {
     protected $guarded = [];
-    protected $fillable = [
-        'name',
-        'lelang_type',
-        'description',
-        'documents',
-        'additional_documents',
-        'submission_status',
-    ];
+   
 
     public function users()
     {

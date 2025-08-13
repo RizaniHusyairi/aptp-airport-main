@@ -14,7 +14,9 @@ return new class extends Migration
             $table->text('description');
             $table->string('fieldtrip_type');
             $table->string('documents'); 
-            $table->enum('submission_status', ['diajukan', 'disetujui', 'ditolak'])->default('diajukan');
+            $table->enum('submission_status', ['Diajukan', 'Disetujui', 'Ditolak', 'Revisi Diperlukan'])->default('Diajukan');
+            $table->text('staff_notes')->nullable();
+            $table->string('reply_document_path')->nullable(); // Untuk link Google Drive
             $table->timestamps();
         });
     }

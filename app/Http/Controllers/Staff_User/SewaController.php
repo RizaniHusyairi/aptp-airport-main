@@ -93,7 +93,7 @@ class SewaController extends Controller
 
         
 
-        $validated = $request->validate($rules, [
+        $request->validate($rules, [
             'rental_type.required' => 'Jenis sewa wajib dipilih.',
             'rental_type.in' => 'Jenis sewa tidak valid.',
             'rental_name.required' => 'Nama sewa wajib diisi.',
@@ -106,8 +106,7 @@ class SewaController extends Controller
             'documents.mimes' => 'Dokumen harus berupa file dengan format: PDF',
             'documents.max' => 'Ukuran dokumen maksimal 2MB.',
         ]);
-
-        if($validated['rental_type'] === 'Lainnya') {
+        if($request->rental_type === 'Lainnya') {
             // Tambahkan validasi khusus untuk sewa lainnya
             $request->validate([
                 'rental_more' => 'required|string|max:150',
@@ -116,21 +115,22 @@ class SewaController extends Controller
                 'rental_more.max' => 'Jenis sewa maksimal 150 karakter.',
             ]);
         }
-
+        
         // Simpan file dokumen
         $file = $request->file('documents');
         $filename = time() . '_' . $file->getClientOriginalName();
         $filePath = $file->storeAs('documents/rental', $filename, 'public');
-
-
+        
         // Siapkan data untuk pembuatan Rental
         $rentalData = [
-            'rental_name' => $validated['rental_name'],
-            'description' => $validated['description'],
-            'rental_type' => $validated['rental_type'],
-            'rental_more' => $validated['rental_more'] ?? null,
+            
+            'rental_name' => $request->rental_name,
+            'description' => $request->description,
+            'rental_type' => $request->rental_type,
+            'rental_more' => $request->input('rental_more'),
             'documents' => $filePath,
         ];
+        
 
         // Simpan Rental
         $rental = Rental::create($rentalData);
@@ -183,30 +183,32 @@ class SewaController extends Controller
         return view('user_staff2.sewa.show', compact('rental'));
     }
 
-    public function approve($id)
+    public function updateStatus(Request $request, Rental $sewa)
     {
-        $rental = Rental::findOrFail($id);
-        $rental->submission_status = 'disetujui';
-        $rental->save();
+        $validated = $request->validate([
+            'submission_status' => 'required|in:Disetujui,Ditolak,Revisi Diperlukan',
+            'staff_notes' => 'required_if:status,Ditolak,Revisi Diperlukan|nullable|string',
+            'reply_document_path' => 'required_if:status,Disetujui|nullable|url',
+        ], [
+            'staff_notes.required_if' => 'Catatan wajib diisi jika status Ditolak atau Minta Revisi.',
+            'reply_document_path.required_if' => 'Tautan surat balasan wajib diisi jika status Disetujui.',
+            'reply_document_path.url' => 'Input harus berupa tautan (URL) yang valid.',
+        ]);
 
-        // // Catat pemasukan ke tabel finances
-        // \App\Models\Finance::create([
-        //     'date' => now(),
-        //     'flow_type' => 'in',
-        //     'amount' => 10000000, // Sesuaikan nilai
-        //     'note' => "Pemasukan dari sewa {$rental->rental_type} #{$rental->id}",
-        // ]);
+        $sewa->submission_status = $validated['submission_status'];
+        $sewa->staff_notes = $validated['staff_notes'];
 
-        return redirect()->back()->with('success', 'Pengajuan berhasil disetujui.');
+        if ($validated['submission_status'] === 'Disetujui') {
+            $sewa->reply_document_path = $validated['reply_document_path'];
+        } else {
+            $sewa->reply_document_path = null;
+        }
+
+        $sewa->save();
+
+        return redirect()->route('staffSewa.index')->with('success', 'Status pengajuan sewa berhasil diperbarui.');
     }
+    
 
-    public function reject($id)
-    {
-        $rental = Rental::findOrFail($id);
-        $rental->submission_status = 'ditolak';
-        $rental->save();
-
-        return redirect()->back()->with('success', 'Pengajuan berhasil ditolak.');
-    }
     
 }

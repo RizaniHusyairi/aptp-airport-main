@@ -8,10 +8,7 @@ class Rental extends Model
 {
     protected $guarded = [];
 
-    protected $fillable = [
-        'rental_name', 'description', 'rental_type', 'documents',
-        'submission_status', 'area', 'location', 'quantity', 'design_file'
-    ];
+    
 
     
     public function users()

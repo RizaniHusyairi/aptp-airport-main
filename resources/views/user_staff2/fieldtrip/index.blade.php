@@ -63,8 +63,9 @@
                                                             @php
                                                             $status = $fieldtrip->submission_status;
                                                             $badgeClass = match($status) {
-                                                                'disetujui' => 'bg-success',
-                                                                'ditolak' => 'bg-danger',
+                                                                'Disetujui' => 'bg-success',
+                                                                'Ditolak' => 'bg-danger',
+                                                                'Revisi Diperlukan' => 'bg-warning',
                                                                 default => 'bg-info',
                                                             };
                                                             @endphp
@@ -73,10 +74,10 @@
                                                         <td>
                                                             <div class="d-flex">
                                                                 @if ($fieldtrip->documents)
+                                                                <a href="{{ route('fieldtrip.userShow', $fieldtrip->id) }}" class="me-1 btn btn-sm btn-info text-white btn-tooltip" data-bs-toggle="tooltip" title="Lihat Detail"><i class="bi bi-eye"></i></a>
                                                                     
-                                                                    <a href="{{ asset('uploads/documents/fieldtrip/' . basename($fieldtrip->documents)) }}" class="btn btn-sm btn-info text-white btn-tooltip me-1" data-bs-toggle="tooltip" title="Lihat Detail" target="_blank"><i class="bi bi-eye"></i></a>
                                                                     
-                                                                    @if ($fieldtrip->submission_status == 'diajukan')
+                                                                    @if ($fieldtrip->submission_status == 'Diajukan')
                                                                     <form action="{{ route('fieldtrip.destroy', $fieldtrip->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus pengajuan ini?')">
                                                                         @csrf
                                                                         @method('DELETE')
@@ -106,8 +107,9 @@
                                                         @php
                                                             $status = $fieldtrip->submission_status;
                                                             $badgeClass = match($status) {
-                                                                'disetujui' => 'bg-success',
-                                                                'ditolak' => 'bg-danger',
+                                                                'Disetujui' => 'bg-success',
+                                                                'Ditolak' => 'bg-danger',
+                                                                'Revisi Diperlukan' => 'bg-warning',
                                                                 default => 'bg-info',
                                                             };
                                                         @endphp

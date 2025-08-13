@@ -63,8 +63,9 @@
                                                             @php
                                                             $status = $tenant->submission_status;
                                                             $badgeClass = match($status) {
-                                                                'disetujui' => 'bg-success',
-                                                                'ditolak' => 'bg-danger',
+                                                                'Disetujui' => 'bg-success',
+                                                                'Ditolak' => 'bg-danger',
+                                                                'Revisi Diperlukan' => 'bg-warning',
                                                                 default => 'bg-info',
                                                             };
                                                             @endphp
@@ -74,7 +75,7 @@
                                                             @if ($tenant->documents)
                                                             <div class="d-flex">
                                                                 
-                                                                <a href="{{ route('tenant.userShow', $tenant->id) }}" class="me-1 btn btn-sm btn-info text-white btn-tooltip" data-bs-toggle="tooltip" title="Lihat Detail" target="_blank"><i class="bi bi-eye"></i></a>
+                                                                <a href="{{ route('tenant.userShow', $tenant->id) }}" class="me-1 btn btn-sm btn-info text-white btn-tooltip" data-bs-toggle="tooltip" title="Lihat Detail"><i class="bi bi-eye"></i></a>
                                                                 
                                                                 @if ($tenant->submission_status == 'Diajukan')
                                                                 <form action="{{ route('tenant.destroy', $tenant->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus pengajuan ini?')">
@@ -105,8 +106,9 @@
                                                         @php
                                                             $status = $tenant->submission_status;
                                                             $badgeClass = match($status) {
-                                                                'disetujui' => 'bg-success',
-                                                                'ditolak' => 'bg-danger',
+                                                                'Disetujui' => 'bg-success',
+                                                                'Ditolak' => 'bg-danger',
+                                                                'Revisi Diperlukan' => 'bg-warning',
                                                                 default => 'bg-info',
                                                             };
                                                         @endphp
