@@ -47,6 +47,7 @@ $(document).ready(function () {
                 if (response.success) {
                     $('.img-profil').attr('src', response.data.avatar_url);
                     $('.img-profil-modal').attr('src', response.data.avatar_url);
+                    $('.header-avatar').attr('src', response.data.avatar_url);
                     $('.card-title').text(response.data.name);
                     $('.card-subtite').text(response.data.email + ' | ' + (response.data.phone || '---'));
                     $('.card-text p').text(response.data.address || '---');

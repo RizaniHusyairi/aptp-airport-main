@@ -100,21 +100,30 @@ class FieldTripController extends Controller
         return view('user_staff2.fieldtrip.show', compact('fieldtrip'));
     }
 
-    public function approve($id)
+    public function updateStatus(Request $request, Fieldtrip $fieldtrip)
     {
-        $fieldtrip = FieldTrip::findOrFail($id);
-        $fieldtrip->submission_status = 'disetujui';
+        $validated = $request->validate([
+            'submission_status' => 'required|in:Disetujui,Ditolak,Revisi Diperlukan',
+            'staff_notes' => 'required_if:status,Ditolak,Revisi Diperlukan|nullable|string',
+            'reply_document_path' => 'required_if:status,Disetujui|nullable|url',
+        ], [
+            'staff_notes.required_if' => 'Catatan wajib diisi jika status Ditolak atau Minta Revisi.',
+            'reply_document_path.required_if' => 'Tautan surat balasan wajib diisi jika status Disetujui.',
+            'reply_document_path.url' => 'Input harus berupa tautan (URL) yang valid.',
+        ]);
+
+        $fieldtrip->submission_status = $validated['submission_status'];
+        $fieldtrip->staff_notes = $validated['staff_notes'];
+
+        if ($validated['submission_status'] === 'Disetujui') {
+            $fieldtrip->reply_document_path = $validated['reply_document_path'];
+        } else {
+            $fieldtrip->reply_document_path = null;
+        }
+
         $fieldtrip->save();
 
-        return redirect()->back()->with('success', 'Pengajuan berhasil disetujui.');
+        return redirect()->route('fieldtrip.staffIndex')->with('success', 'Status pengajuan fieldtrip berhasil diperbarui.');
     }
 
-    public function reject($id)
-    {
-        $fieldtrip = Fieldtrip::findOrFail($id);
-        $fieldtrip->submission_status = 'ditolak';
-        $fieldtrip->save();
-
-        return redirect()->back()->with('success', 'Pengajuan berhasil ditolak.');
-    }
 }

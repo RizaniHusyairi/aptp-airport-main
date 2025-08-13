@@ -15,7 +15,9 @@ return new class extends Migration
             $table->text('description');
             $table->string('documents');
             $table->string('additional_documents')->nullable();
-            $table->string('submission_status')->default('diajukan');
+            $table->enum('submission_status', ['Diajukan', 'Disetujui', 'Ditolak', 'Revisi Diperlukan'])->default('Diajukan');
+            $table->text('staff_notes')->nullable();
+            $table->string('reply_document_path')->nullable(); // Untuk link Google Drive
             $table->timestamps();
         });
 

@@ -96,6 +96,32 @@ class PengiklananController extends Controller
         return view('user_staff2.pengiklanan.show', compact('ad'));
     }
 
+    public function updateStatus(Request $request, Ad $ad)
+    {
+        $validated = $request->validate([
+            'submission_status' => 'required|in:Disetujui,Ditolak,Revisi Diperlukan',
+            'staff_notes' => 'required_if:status,Ditolak,Revisi Diperlukan|nullable|string',
+            'reply_document_path' => 'required_if:status,Disetujui|nullable|url',
+        ], [
+            'staff_notes.required_if' => 'Catatan wajib diisi jika status Ditolak atau Minta Revisi.',
+            'reply_document_path.required_if' => 'Tautan surat balasan wajib diisi jika status Disetujui.',
+            'reply_document_path.url' => 'Input harus berupa tautan (URL) yang valid.',
+        ]);
+
+        $ad->submission_status = $validated['submission_status'];
+        $ad->staff_notes = $validated['staff_notes'];
+
+        if ($validated['submission_status'] === 'Disetujui') {
+            $ad->reply_document_path = $validated['reply_document_path'];
+        } else {
+            $ad->reply_document_path = null;
+        }
+
+        $ad->save();
+
+        return redirect()->route('perijinan.staffIndex')->with('success', 'Status pengajuan iklan berhasil diperbarui.');
+    }
+
     public function approve($id)
     {
         $ad = Ad::findOrFail($id);

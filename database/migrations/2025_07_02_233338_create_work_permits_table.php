@@ -16,10 +16,8 @@ return new class extends Migration
             $table->text('description');
             $table->dateTime('start_date');
             $table->dateTime('end_date');
-            $table->json('workers'); // Menyimpan daftar nama pekerja
-            $table->json('equipment'); // Menyimpan daftar peralatan
             $table->json('documents'); // Menyimpan path file-file
-            $table->enum('status', ['Diajukan', 'Disetujui', 'Ditolak', 'Revisi Diperlukan'])->default('Diajukan');
+            $table->enum('submission_status', ['Diajukan', 'Disetujui', 'Ditolak', 'Revisi Diperlukan'])->default('Diajukan');
             $table->text('staff_notes')->nullable();
             $table->timestamps();
         });

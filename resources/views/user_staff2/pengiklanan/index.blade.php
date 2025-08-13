@@ -63,8 +63,9 @@
                                                             @php
                                                             $status = $ad->submission_status;
                                                             $badgeClass = match($status) {
-                                                                'disetujui' => 'bg-success',
-                                                                'ditolak' => 'bg-danger',
+                                                                'Disetujui' => 'bg-success',
+                                                                'Ditolak' => 'bg-danger',
+                                                                'Revisi Diperlukan' => 'bg-warning',
                                                                 default => 'bg-info',
                                                             };
                                                             @endphp
@@ -73,10 +74,10 @@
                                                         <td>
                                                             @if ($ad->documents)
                                                             <div class="d-flex">
+                                                                <a href="{{ route('pengiklanan.userShow', $ad->id) }}" class="me-1 btn btn-sm btn-info text-white btn-tooltip" data-bs-toggle="tooltip" title="Lihat Detail"><i class="bi bi-eye"></i></a>
                                                                 
-                                                                <a href="{{ asset('uploads/documents/ads/' . basename($ad->documents)) }}" class="btn btn-sm btn-info text-white btn-tooltip me-1" data-bs-toggle="tooltip" title="Lihat Detail" target="_blank"><i class="bi bi-eye"></i></a>
                                                                 
-                                                                @if ($ad->submission_status == 'diajukan')
+                                                                @if ($ad->submission_status == 'Diajukan')
                                                                 <form action="{{ route('pengiklanan.destroy', $ad->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus pengajuan ini?')">
                                                                     @csrf
                                                                     @method('DELETE')
@@ -105,8 +106,9 @@
                                                         @php
                                                             $status = $ad->submission_status;
                                                             $badgeClass = match($status) {
-                                                                'disetujui' => 'bg-success',
-                                                                'ditolak' => 'bg-danger',
+                                                                 'Disetujui' => 'bg-success',
+                                                                'Ditolak' => 'bg-danger',
+                                                                'Revisi Diperlukan' => 'bg-warning',
                                                                 default => 'bg-info',
                                                             };
                                                         @endphp

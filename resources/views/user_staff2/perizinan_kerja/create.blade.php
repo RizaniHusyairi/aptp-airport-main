@@ -112,23 +112,11 @@
                         <textarea class="form-control @error('description') is-invalid @enderror" id="description" name="description" rows="4" required>{{ old('description') }}</textarea>
                         @error('description')<div class="invalid-feedback">{{ $message }}</div>@enderror
                     </div>
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Daftar Pekerja (Nama per baris) <span class="text-danger">*</span></label>
-                        <textarea class="form-control @error('workers') is-invalid @enderror" name="workers_text" rows="5" placeholder="Ahmad Budi&#10;Citra Lestari">{{ old('workers_text') }}</textarea>
-                        <input type="hidden" name="workers">
-                        @error('workers')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Daftar Peralatan (Nama per baris) <span class="text-danger">*</span></label>
-                        <textarea class="form-control @error('equipment') is-invalid @enderror" name="equipment_text" rows="5" placeholder="Tangga&#10;Mesin Las&#10;Bor Listrik">{{ old('equipment_text') }}</textarea>
-                        <input type="hidden" name="equipment">
-                        @error('equipment')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
-                    </div>
                     <div class="col-12 mb-4">
                         <label for="docs" class="form-label">Dokumen Pendukung <span class="text-danger">*</span></label>
                         <input class="form-control @error('docs.*') is-invalid @enderror" type="file" id="docs" name="docs[]" multiple required accept=".pdf,.jpg,.png">
                         @error('docs.*')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
-                        <small class="form-text text-muted">Unggah JSA, Surat Tugas, atau dokumen relevan lainnya (PDF/JPG/PNG, maks 2MB per file).</small>
+                        <small class="form-text text-muted">Unggah JSA, Surat Tugas, atau dokumen relevan lainnya (PDF, maks 2MB).</small>
                     </div>
                 <div class="d-flex justify-content-end">
                     <a href="{{ route('kerja.index') }}" class="btn btn-light-secondary me-2">Batal</a>

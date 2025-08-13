@@ -68,7 +68,7 @@ class WorkPermitController extends Controller
             'status' => 'Diajukan',
         ]);
 
-        return redirect()->route('kerja.index')->with('success', 'Pengajuan Izin Kerja berhasil dikirim.');
+        return redirect()->route('kerja.userindex')->with('success', 'Pengajuan Izin Kerja berhasil dikirim.');
     }
 
     /**
@@ -91,32 +91,50 @@ class WorkPermitController extends Controller
 
         $validated = $request->validate([
             'status' => 'required|in:Disetujui,Ditolak,Revisi Diperlukan',
-            'staff_notes' => 'nullable|string',
+            'staff_notes' => 'required_if:status,Ditolak,Revisi Diperlukan|nullable|string',
+            'reply_document_path' => 'required_if:status,Disetujui|nullable|url',
+        ], [
+            'staff_notes.required_if' => 'Catatan wajib diisi jika status Ditolak atau Minta Revisi.',
+            'reply_document_path.required_if' => 'Tautan surat balasan wajib diisi jika status Disetujui.',
+            'reply_document_path.url' => 'Input harus berupa tautan (URL) yang valid.',
         ]);
+        
+        $workPermit->status = $validated['status'];
+        $workPermit->staff_notes = $validated['staff_notes'];
+        
+        
+        if ($validated['status'] === 'Disetujui') {
+            $workPermit->reply_document_path = $validated['reply_document_path'];
+        } else {
+            // Kosongkan link jika statusnya bukan disetujui
+            $workPermit->reply_document_path = null; 
+        }
+        $workPermit->save();
 
-        $workPermit->update($validated);
 
         return redirect()->route('kerja.index')->with('success', 'Status pengajuan berhasil diperbarui.');
     }
 
     public function destroy($id)
     {
-
-        $license = WorkPermit::findOrFail($id);
+        $work = WorkPermit::findOrFail($id);
 
         // Hapus file dokumen jika ada
-        $documentPath = public_path('uploads/' . $license->documents);
-        if (file_exists($documentPath)) {
-            unlink($documentPath);
+        // Lakukan perulangan pada array dokumen dan hapus satu per satu.
+        if ($work->documents) {
+            foreach ($work->documents as $docPath) {
+                if (Storage::disk('public')->exists($docPath)) {
+                    Storage::disk('public')->delete($docPath);
+                }
+            }
         }
 
-        // Hapus relasi user jika menggunakan pivot
-        $license->users()->detach();
-
-        // Hapus license
-        $license->delete();
-
+        // Hapus record dari database
+        $work->delete();
         
-        return redirect()->route('kerja.index')->with('success', 'Pengajuan izin kerja berhasil dihapus.');
+
+        // Hapus relasi user jika menggunakan pivot
+        
+        return redirect()->route('kerja.userindex')->with('success', 'Pengajuan izin kerja berhasil dihapus.');
     }
 }

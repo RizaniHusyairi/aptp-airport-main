@@ -69,17 +69,26 @@
                                 <td>{{ $slot->origin_airport }} - {{ $slot->destination_airport}}</td>
                                 <td>{{ $slot->flight_type }}</td>
                                 <td>
-                                    <span class="badge {{ $slot->status == 'disetujui' ? 'bg-success' : ($slot->status == 'ditolak' ? 'bg-danger' : 'bg-info') }}">
-                                        {{ ucfirst($slot->status) }}
+                                    @php
+                                    $statusClass = match($slot->submission_status) {
+                                        'Disetujui' => 'bg-success',
+                                        'Ditolak' => 'bg-danger',
+                                        'Revisi Diperlukan' => 'bg-warning',
+                                        default => 'bg-info',
+                                    };
+                                    @endphp
+                                    <span class="badge {{ $statusClass }}">
+                                        {{ ucfirst($slot->submission_status) }}
                                     </span>
                                 </td>
                                 <td>
                                   <div class="row g-1">
                                     <div class="col-6">
-                                      <a href="{{ asset('uploads/documents/slot/' . basename($slot->documents)) }}" class="btn btn-sm btn-primary w-100" target="_blank">Lihat Berkas</a>
+                                        <a href="{{ route('slot.userShow', $slot->id) }}" class="me-1 btn btn-sm btn-info text-white btn-tooltip" data-bs-toggle="tooltip" title="Lihat Detail"><i class="bi bi-eye"></i></a>
+
 
                                     </div>
-                                        @if($slot->status == 'diajukan')
+                                        @if($slot->submission_status == 'Diajukan')
                                             
                                             <div class="col-6">
                                                 <form action="{{ route('slot.destroy', $slot->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus pengajuan ini?')">
@@ -117,8 +126,17 @@
                                 <td>{{ $slot->origin_airport }} - {{ $slot->destination_airport}}</td>
                                 <td>{{ $slot->flight_type }}</td>
                                 <td>
-                                    <span class="badge {{ $slot->status == 'disetujui' ? 'bg-success' : ($slot->status == 'ditolak' ? 'bg-danger' : 'bg-info') }}">
-                                        {{ ucfirst($slot->status) }}
+                                    
+                                    @php
+                                    $statusClass = match($slot->submission_status) {
+                                        'Disetujui' => 'bg-success',
+                                        'Ditolak' => 'bg-danger',
+                                        'Revisi Diperlukan' => 'bg-warning',
+                                        default => 'bg-info',
+                                    };
+                                    @endphp
+                                    <span class="badge {{ $statusClass }}">
+                                        {{ ucfirst($slot->submission_status) }}
                                     </span>
                                 </td>
                                 <td>

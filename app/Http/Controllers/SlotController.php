@@ -25,23 +25,33 @@ class SlotController extends Controller
         $slot = slot::with('user')->findOrFail($id);
         return view('user_staff2.slot.show', compact('slot'));
     }
-    public function approve($id)
+
+      public function updateStatus(Request $request, Slot $slot)
     {
-        $slot = slot::findOrFail($id);
-        $slot->status = 'disetujui';
+        $validated = $request->validate([
+            'submission_status' => 'required|in:Disetujui,Ditolak,Revisi Diperlukan',
+            'staff_notes' => 'required_if:status,Ditolak,Revisi Diperlukan|nullable|string',
+            'reply_document_path' => 'required_if:status,Disetujui|nullable|url',
+        ], [
+            'staff_notes.required_if' => 'Catatan wajib diisi jika status Ditolak atau Minta Revisi.',
+            'reply_document_path.required_if' => 'Tautan surat balasan wajib diisi jika status Disetujui.',
+            'reply_document_path.url' => 'Input harus berupa tautan (URL) yang valid.',
+        ]);
+
+        $slot->submission_status = $validated['submission_status'];
+        $slot->staff_notes = $validated['staff_notes'];
+
+        if ($validated['submission_status'] === 'Disetujui') {
+            $slot->reply_document_path = $validated['reply_document_path'];
+        } else {
+            $slot->reply_document_path = null;
+        }
+
         $slot->save();
 
-        return redirect()->back()->with('success', 'Pengajuan berhasil disetujui.');
+        return redirect()->route('slot.staffIndex')->with('success', 'Status pengajuan slot berhasil diperbarui.');
     }
-
-    public function reject($id)
-    {
-        $slot = slot::findOrFail($id);
-        $slot->status = 'ditolak';
-        $slot->save();
-
-        return redirect()->back()->with('success', 'Pengajuan berhasil ditolak.');
-    }
+    
 
 
     /* ================== USER ROUTES ================== */
@@ -123,11 +133,10 @@ class SlotController extends Controller
             'flight_type' => $request->jenisPenerbangan,
             'flight_more' => $request->jenislainnya ?? null,
             'documents' => $filePath,
-            'status' => 'diajukan',
         ]);
 
         // Simpan ke pivot tenant_user
-        $tenant->users()->attach(auth()->id(), [
+        $slotCharter->users()->attach(auth()->id(), [
             'created_at' => now(),
             'updated_at' => now(),
         ]);

@@ -63,8 +63,9 @@
                                                             @php
                                                             $status = $rental->submission_status;
                                                             $badgeClass = match($status) {
-                                                                'disetujui' => 'bg-success',
-                                                                'ditolak' => 'bg-danger',
+                                                                'Disetujui' => 'bg-success',
+                                                                'Ditolak' => 'bg-danger',
+                                                                'Revisi Diperlukan' => 'bg-warning',
                                                                 default => 'bg-info',
                                                             };
                                                             @endphp
@@ -73,10 +74,10 @@
                                                         <td>
                                                             @if ($rental->documents)
                                                             <div class="d-flex">
+                                                                <a href="{{ route('sewa.show', $Prental->id) }}" class="me-1 btn btn-sm btn-info text-white btn-tooltip" data-bs-toggle="tooltip" title="Lihat Detail"><i class="bi bi-eye"></i></a>
                                                                 
-                                                                    <a href="{{ asset('uploads/documents/rental/' . basename($rental->documents)) }}" class="me-1 btn btn-sm btn-info text-white btn-tooltip" data-bs-toggle="tooltip" title="Lihat Detail" target="_blank"><i class="bi bi-eye"></i></a>
                                                                 
-                                                                @if ($rental->submission_status == 'diajukan')
+                                                                @if ($rental->submission_status == 'Diajukan')
                                                                 <form action="{{ route('sewa.destroy', $rental->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus pengajuan ini?')">
                                                                     @csrf
                                                                     @method('DELETE')
@@ -84,8 +85,7 @@
                                                                 </form>
                                                                 @endif
                                                             </div>
-                                                            @else
-                                                            <span class="text-muted">Tidak ada berkas</span>
+
                                                             @endif
                                                         </td>
                                                     </tr>
@@ -105,8 +105,9 @@
                                                         @php
                                                             $status = $rental->submission_status;
                                                             $badgeClass = match($status) {
-                                                                'disetujui' => 'bg-success',
-                                                                'ditolak' => 'bg-danger',
+                                                                'Disetujui' => 'bg-success',
+                                                                'Ditolak' => 'bg-danger',
+                                                                'Revisi Diperlukan' => 'bg-warning',
                                                                 default => 'bg-info',
                                                             };
                                                         @endphp

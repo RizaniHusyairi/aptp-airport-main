@@ -19,7 +19,9 @@ return new class extends Migration
             $table->string('destination_airport', 4); // Contoh: DPS
             $table->enum('flight_type', ['penumpang', 'kargo', 'lainnya']);
             $table->string('flight_more')->nullable(); // Informasi tambahan tentang jenis penerbangan
-            $table->enum('status', ['diajukan', 'disetujui', 'ditolak'])->default('diajukan'); // Status pengajuan slot: diajukan, disetujui, ditolak
+            $table->enum('submission_status', ['Diajukan', 'Disetujui', 'Ditolak', 'Revisi Diperlukan'])->default('Diajukan');
+            $table->text('staff_notes')->nullable();
+            $table->string('reply_document_path')->nullable(); // Untuk link Google Drive
             $table->string('documents'); 
             $table->text('admin_comments')->nullable(); // Catatan dari admin (misalnya, alasan penolakan)
             $table->timestamps();
