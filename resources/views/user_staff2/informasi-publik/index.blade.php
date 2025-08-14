@@ -31,46 +31,56 @@
                             @endif
                             <div class="card-header d-flex justify-content-between align-items-center">
                                 <h5 class="card-title">Daftar pengajuan Informasi Publik</h5>
+                                @notstaff
+                                    <a href="{{ route('informasiPublik.create') }}" class="btn btn-primary"><i class="bi bi-plus"></i> Buat Pengajuan Baru</a>
+                                @endnotstaff
                                 
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <table class="table table-striped" id="table-license">
+                                    <table class="table table-striped" id="table-publik">
                                         <thead>
                                             <tr>
                                                 <th>#</th>
-                                                <th>Nama</th>
-                                                <th>Pekerjaan</th>
-                                                <th>Email</th>
+                                                @staff<th>Nama</th>@endstaff
+                                                <th>Rincian Permintaan</th>
                                                 <th>Status</th>
-                                                <th>Link Balasan</th>
-                                                <th>Dibuat</th>
+                                                <th>Tanggal Dibuat</th>
                                                 <th>Aksi</th>
                                             </tr>
                                         </thead>
-                                            @staff
+                                            
                                         <tbody>
+
                                             @forelse ($publicInformation as $index => $item)
                                             <tr>
                                                 <td>{{ $index + 1 }}</td>
-                                                <td>{{ $item->nama }}</td>
-                                                <td>{{ $item->pekerjaan }}</td>
-                                                <td>{{ $item->email }}</td>
+                                                @staff<td>{{ $item->user->name ?? '-' }}</td>@endstaff
+                                                <td>{{ Str::limit($item->rincian_informasi, 40) }}</td>
+
                                                 <td>
                                                 <span class="badge {{ $item->status == 'Sudah dibalas' ? 'bg-success' : 'bg-warning' }}">
                                                     {{ $item->status }}
                                                 </span>
                                                 </td>
+                                                 <td>{{ \Carbon\Carbon::parse($item->created_at)->format('d M Y - H:i') }}</td>
                                                 <td>
-                                                @if($item->link_balasan)
-                                                    <a href="{{ $item->link_balasan }}" target="_blank" class="btn btn-outline-info btn-sm">Lihat</a>
-                                                @else
-                                                    -
-                                                @endif
-                                                </td>
-                                                <td>{{ \Carbon\Carbon::parse($item->created_at)->format('d M Y - H:i') }}</td>
-                                                <td>
-                                                <a href="{{ route('informasiPublik.show', $item->id) }}" class="btn btn-primary btn-sm">Lihat Berkas</a>
+                                                    <div class="d-flex gap-1">
+                                                        @staff  
+                                                        <a href="{{ route('informasiPublik.show', $item->id) }}" class="btn btn-primary btn-sm">Lihat Detail</a>
+                                                        @endstaff
+                                                        {{-- Tombol Hapus hanya untuk Pengaju & jika status belum final --}}
+                                                        @notstaff
+                                                        <a href="{{ route('informasiPublik.userShow', $item->id) }}" class="btn btn-primary btn-sm">Lihat Detail</a>
+                                                            @if($item->status == 'Belum dibalas')
+                                                                <form action="{{ route('informasiPublik.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus pengajuan ini?')">
+                                                                    @csrf
+                                                                    @method('DELETE')
+                                                                    <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
+                                                                </form>
+                                                            @endif
+                                                        @endnotstaff
+                                                    </div>
                                                 </td>
                                             </tr>
                                             @empty
@@ -79,8 +89,7 @@
                                             @endforelse
                                         
                                         </tbody>
-                                        @endstaff
-                                            
+                                                                                    
                                     </table>
                                 </div>
                             </div>
@@ -92,5 +101,5 @@
 @section('scripts_admin')
     <script src="{{ asset('assetsv2/extensions/datatables.net/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('assetsv2/extensions/datatables.net-bs5/js/dataTables.bootstrap5.min.js') }}"></script>    
-    <script src="{{ asset('assetsv2/compiled/js/staff-license.js') }}"></script>
+    <script src="{{ asset('assetsv2/compiled/js/staff-informasi-publik.js') }}"></script>
 @endsection

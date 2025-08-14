@@ -141,6 +141,21 @@ class ServiceSeeder extends Seeder
             ],
             'submission_url' => 'dashboard/slot',
         ]);
+        Service::create([
+            'name' => 'Pengajuan Informasi Publik',
+            'slug' => 'informasi-publik',
+            'title' => 'Syarat & Ketentuan Pengajuan Informasi Publik',
+            'requirements' => [
+                "Kartu Tanda Penduduk (KTP)", "Surat Permintaan Informasi", "Rincian Informasi yang Diminta",
+                "Tujuan Penggunaan Informasi", "Cara Memperoleh Informasi", "Cara Mendapatkan Salinan Informasi"
+            ],
+            'steps' => [
+                "Mengajukan surat permohonan kepada Kasi Pelayanan dan Kerjasama",
+                "Verifikasi dokumen dan persyaratan oleh petugas pengembangan usaha",
+                "Melengkapi administrasi dan kontrak jika disetujui"
+            ],
+            'submission_url' => 'dashboard/informasi-publik',
+        ]);
 
         
     }

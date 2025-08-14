@@ -57,7 +57,7 @@ class LelangController extends Controller
             'lelang_type' => $validated['lelang_type'],
             'description' => $validated['description'],
             'documents' => $filePath,
-        ];
+      ];
 
 
         $lelang = Lelang::create($data);

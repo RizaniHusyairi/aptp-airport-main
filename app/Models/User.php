@@ -125,6 +125,11 @@ class User extends Authenticatable implements HasMedia
         return $this->hasMany(WorkPermit::class);
     }
 
+    public function publicInformations(): HasMany
+    {
+        return $this->hasMany(PublicInformation::class);
+    }
+
 
     public function tenants()
     {

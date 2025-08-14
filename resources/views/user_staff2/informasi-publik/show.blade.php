@@ -16,7 +16,7 @@
             <div class="col-12 col-md-6 order-md-2 order-first">
                 <x-breadcrumb2 :items="[
                     ['label' => 'Menu', 'url' => route('profile')],
-                    ['label' => 'Informasi Publik', 'url' => route('informasiPublik.staffIndex')],
+                    ['label' => 'Informasi Publik', 'url' => auth()->user()->is_staff ? route('informasiPublik.staffIndex') : route('informasiPublik.index')],
                     ['label' => 'Detail', 'active' => true]
                 ]" />
             </div>
@@ -39,22 +39,23 @@
                 <div class="row align-items-center">
                     <div class="col-md-3 col-12 text-center mb-3 mb-md-0">
                         <div class="avatar avatar-xl me-3">
-                            <img src="{{ asset('../assetsv2/compiled/jpg/2.jpg') }}" alt="-" srcset="">
+                            <img src="{{ $publicInformation->user->avatar_url }}" alt="Foto Profil {{ $publicInformation->user->name }}">
+
                         </div>
                     </div>
                     <div class="col-md-9 col-12">
                         <div class="row">
                             <div class="col-md-6">
                                 <h6>Nama</h6>
-                                <p>{{ $publicInformation->nama }}</p>
+                                <p>{{ $publicInformation->user->name }}</p>
                             </div>
                             <div class="col-md-6">
                                 <h6>Email</h6>
-                                <p>{{ $publicInformation->email }}</p>
+                                <p>{{ $publicInformation->user->name }}</p>
                             </div>
                             <div class="col-md-6">
                                 <h6>No. hp</h6>
-                                <p>{{ $publicInformation->no_hp }}</p>
+                                <p>{{ $publicInformation->user->phone }}</p>
                             </div>
                             <div class="col-md-6">
                                 <h6>Pekerjaan</h6>
@@ -70,7 +71,7 @@
                             </div>
                             <div class="col-md-12">
                                 <h6>Alamat</h6>
-                                <p>{{ $publicInformation->alamat }}</p>
+                                <p>{{ $publicInformation->user->alamat }}</p>
                             </div>
                         </div>
                     </div>
@@ -149,14 +150,14 @@
                 </div>
             </div>
         </div>
-        
+        @staff
         <div class="card">
             <div class="card-header">
                 <h5 class="card-title">Balasan Pengajuan</h5>
             </div>
             <div class="card-body">
                 @if($publicInformation->status == 'Belum dibalas')
-                    <form action="{{ route('informasiPublik.reply', $publicInformation->id) }}" method="POST">
+                <form action="{{ route('informasiPublik.reply', $publicInformation->id) }}" method="POST">
                     @csrf
                     @method('PATCH')
                     <div class="row">
@@ -179,24 +180,48 @@
 
                     </div>
                     <button type="submit" class="btn btn-primary mb-2">Simpan Balasan</button>
-                    </form>
+                </form>
                 @else
                 <div class="mb-3">
                     <h6>Link Balasan</h6>
                     <a href="{{ $publicInformation->link_balasan }}" target="_blank" class="btn btn-outline-info btn-sm">Lihat Balasan</a>
-
+                    
                 </div>
-
+                
                 <div class="mb-3">
                     <h6>Tanggal Balasan</h6>
                     <p>{{ $publicInformation->replied_at ? \Carbon\Carbon::parse($publicInformation->replied_at)->format('d M Y') : 'Belum dibalas' }}</p>
                 </div>
                 @endif
+                
                 <a href="{{ route('informasiPublik.staffIndex') }}" class="btn btn-secondary">Kembali</a>
-
             </div>
         </div>
-        
+        @endstaff
+        @notstaff
+        @if($publicInformation->status == 'Sudah dibalas')
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title">Balasan Pengajuan</h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                        <h6>Link Balasan</h6>
+                        <a href="{{ $publicInformation->link_balasan }}" target="_blank" class="btn btn-outline-info btn-sm">Lihat Balasan</a>
+                        
+                    </div>
+                    
+                    <div class="mb-3">
+                        <h6>Tanggal Balasan</h6>
+                        <p>{{ $publicInformation->replied_at ? \Carbon\Carbon::parse($publicInformation->replied_at)->format('d M Y') : 'Belum dibalas' }}</p>
+                    </div>
+                </div>
+                <a href="{{ route('informasiPublik.index') }}" class="btn btn-secondary">Kembali</a>
+
+
+            </div>
+        @endif
+        @endnotstaff
     </section>
 </div>
 @endsection

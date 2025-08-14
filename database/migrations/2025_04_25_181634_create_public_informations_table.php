@@ -10,19 +10,15 @@ return new class extends Migration
     {
         Schema::create('public_informations', function (Blueprint $table) {
             $table->id();
-
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             // File Upload
             $table->string('ktp');
             $table->string('surat_pertanggungjawaban');
             $table->text('surat_permintaan');
 
             // Data Pribadi
-            $table->string('nama');
-            $table->text('alamat');
             $table->string('pekerjaan');
             $table->string('npwp');
-            $table->string('no_hp');
-            $table->string('email');
 
             // Permintaan Informasi
             $table->text('rincian_informasi');

@@ -101,6 +101,14 @@ Route::group(["prefix" => 'dashboard'], function () {
         Route::delete('/fieldtrip/{id}', [FieldTripController::class, 'destroy'])->name('fieldtrip.destroy');
         Route::get('/fieldtrip/{id}', [FieldTripController::class, 'show'])->name('fieldtrip.userShow');
 
+
+        Route::get('/informasi-publik', [InformasiPublikController::class, 'index'])->name('informasiPublik.index');
+        Route::get('/informasi-publik/create', [InformasiPublikController::class, 'create'])->name('informasiPublik.create');
+        Route::get('/informasi-publik/{id}', [InformasiPublikController::class, 'show'])->name('informasiPublik.userShow');
+        Route::post('/informasi-publik/store', [InformasiPublikController::class, 'store'])->name('informasiPublik.store');
+        Route::delete('/informasi-publik/{id}', [InformasiPublikController::class, 'destroy'])->name('informasiPublik.destroy');
+
+
         Route::middleware(['auth', 'staff'])->group(function () {
             // News Staff Routes
             Route::get('staff/berita', [NewsController::class, 'index'])->name('berita.staffIndex');
@@ -315,8 +323,6 @@ Route::get('/informasi-publik/struktur-organisasi', [LandingPageController::clas
 Route::get('/informasi-publik/profil-ppid-blu', [LandingPageController::class, 'profilPPID'])->name('profilPPID');
 Route::get('/informasi-publik/pejabat-bandara', [LandingPageController::class, 'pejabatBandara'])->name('pejabatBandara');
 Route::get('/informasi-publik/sop-ppid', [LandingPageController::class, 'sopPpid'])->name('sopPpid');
-Route::get('/informasi-publik/pengajuan-informasi-publik', [LandingPageController::class, 'pengajuanInformasiPublik'])->name('pengajuanInformasiPublik');
-Route::post('/informasi-publik/pengajuan-informasi-publik', [LandingPageController::class, 'storePengajuanInformasiPublik'])->name('storePengajuanInformasiPublik');
 
 // routes/web.php
 Route::get('/fasilitas', [LandingPageController::class, 'fasilitas'])->name('fasilitas');

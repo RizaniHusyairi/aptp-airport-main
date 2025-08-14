@@ -68,10 +68,6 @@ class ViewServiceProvider extends ServiceProvider
                                     'route' => route('sopPpid'),
                                 ],
                                 
-                                [
-                                    'name' => 'Pengajuan Informasi Publik', 
-                                    'route' => route('pengajuanInformasiPublik')
-                                ],
                             ],
                         ]
                         ],
@@ -106,6 +102,7 @@ class ViewServiceProvider extends ServiceProvider
                 'Ajukan Lelang' => ['route' => 'lelang.index', 'icon' => 'bi bi-hammer', 'label' => 'Ajukan Lelang/Beauty Contest'],
                 'Ajukan Slot Charter' => ['route' => 'slot.index', 'icon' => 'bi bi-clock', 'label' => 'Ajukan Slot Charter'],
                 'Ajukan Perijinan Kerja' => ['route' => 'kerja.userindex', 'icon' => 'bi bi-person-workspace', 'label' => 'Ajukan Perizinan Kerja'],
+                'Ajukan Informasi Publik' => ['route' => 'informasiPublik.index', 'icon' => 'bi bi-info-circle', 'label' => 'Ajukan Informasi Publik']
             ];
             $view->with('userRoutes', $userRoutes);
         });
