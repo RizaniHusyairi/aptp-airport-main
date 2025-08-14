@@ -35,7 +35,7 @@ class RegisterController extends Controller
         $this->create($request->all());
 
         // Redirect ke halaman login dengan pesan
-        return redirect()->back()->with('unverified', 'Pendaftaran berhasil. Silakan hubungi admin untuk memverifikasi akun anda.');
+        return redirect()->back()->with('unverified', 'Pendaftaran berhasil.');
     }
 
     /**
@@ -82,7 +82,7 @@ class RegisterController extends Controller
             'phone' => $data['phone'],
             'address' => $data['address'],
             'password' => Hash::make($data['password_new']),
-            'is_accepted' => false,
+            'is_accepted' => true,
         ]);
     }
 }
