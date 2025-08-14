@@ -32,7 +32,7 @@
                         </div>
                         <div class="card-text row mt-4">
                             <div class="col-lg-12 justify-content-center d-flex">
-                                <span class="fa-fw select-all fas me-2"></span>
+                                <span class="bi bi-geo-alt-fill me-2"></span>
                                 <p>{{ Auth::user()->address ?? '---' }}</p>
                             </div>
                         </div>
