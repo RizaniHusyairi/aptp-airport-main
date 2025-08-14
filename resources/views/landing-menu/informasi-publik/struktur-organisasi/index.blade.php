@@ -21,9 +21,12 @@
             <div class="col-12 col-md-10">
                 <div class="text-center mb-4" data-aos="fade-up">
                     <img src="{{ asset('assets_landing/img/profil/struktur-organisasi.jpg') }}" alt="Struktur Organisasi Bandara A.P.T. Pranoto" class="img-fluid rounded shadow-lg struktur-img" id="struktur-image">
-                    <a href="{{ asset('assets_landing/img/profil/struktur-organisasi.jpg') }}" class="btn btn-struktur mt-3 glightbox" data-title="Struktur Organisasi Bandara A.P.T. Pranoto" data-desc="Detail struktur organisasi Bandara A.P.T. Pranoto Samarinda">Lihat Detail</a>
+                  </div>
                 </div>
-                <p class="text-center text-white">Klik tombol di atas untuk melihat struktur organisasi secara lebih jelas.</p>
+                <div class="col-12 col-md-10 text-center">
+                  <a href="{{ asset('assets_landing/img/profil/struktur-organisasi.jpg') }}" class="btn btn-struktur mt-3 glightbox" data-title="Struktur Organisasi Bandara A.P.T. Pranoto" data-desc="Detail struktur organisasi Bandara A.P.T. Pranoto Samarinda">Lihat Detail</a>
+                  <p class="text-center text-white">Klik tombol di atas untuk melihat struktur organisasi secara lebih jelas.</p>
+
             </div>
         </div>
     </div>
