@@ -42,7 +42,7 @@ class SliderController extends Controller
             'documents'     => $filePath,
         ]);
 
-        return redirect()->route('slider.index')->with('success', 'Pengajuan slider berhasil dikirim!');
+        return redirect()->route('slider.staffIndex')->with('success', 'Pengajuan slider berhasil dikirim!');
     }
 
     public function create()

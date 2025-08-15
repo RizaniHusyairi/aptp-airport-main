@@ -272,7 +272,6 @@ Route::get('/api/air-freight-traffic', [LandingPageController::class, 'getTraffi
 Route::get('/api/monthly-traffic-stats', [LandingPageController::class, 'getMonthlyTrafficStats']);
 
 Route::post('api/ai/generate-trip-plan', [LandingPageController::class, 'generateTripPlan']);
-
 // routes/api.php
 Route::get('/api/routes/domestic', [LandingPageController::class, 'getDomesticRoutesData']);
 
@@ -288,6 +287,7 @@ Route::post('/contact', [LandingPageController::class, 'submitContact'])->name('
 
 // API Routes
 Route::prefix('api')->group(function () {
+    Route::get('/image-proxy/{filename}', [LandingPageController::class, 'imageProxy'])->name('image.proxy');
     Route::get('/flight-stats', [LandingPageController::class, 'getFlightStats']);
     Route::get('/departures', [LandingPageController::class, 'getDepartures'])->name('api.departures');
     Route::get('/arrivals', [LandingPageController::class, 'getArrivals'])->name('api.arrivals');

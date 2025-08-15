@@ -41,7 +41,7 @@ class PersuratanController extends Controller
         return view('admin2.persuratan.show', compact('surat'));
     }
 
-    public function approve(Request $request, surat $surat)
+    public function approve(Request $request, persuratan $surat)
     {
         // Logika persetujuan berjenjang
         $user = Auth::user();

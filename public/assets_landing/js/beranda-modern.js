@@ -88,10 +88,11 @@ document.addEventListener('DOMContentLoaded', function() {
         const airline = flight.maskapai?.nama || 'N/A';
         const logoFileName = flight.maskapai?.logo || '';
         // Asumsi base URL untuk logo, ganti jika perlu.
-        const logoUrl = logoFileName ? `http://103.210.122.2/storage/logo/${logoFileName}` : 'https://placehold.co/100x100/png?text=LOGO';
+        const logoUrl = logoFileName ? `/api/image-proxy/${logoFileName}` : 'https://placehold.co/100x100/png?text=LOGO';
+        // const logoUrl = logoFileName ? `http://103.210.122.2/storage/logo/${logoFileName}` : 'https://placehold.co/100x100/png?text=LOGO';
         const kota = destinationData?.nama || 'N/A';
         const nomor_penerbangan = flight.pesawat?.kode_penerbangan || 'N/A';
-        const jadwal = flight.jam || '--:--';
+        const jadwal = flight.jam || '--:--';   
         const statusText = flight.remark?.status || 'SCHEDULED';
 
         const gate = isDeparture ? (flight.gate?.nama || '-') : '-';

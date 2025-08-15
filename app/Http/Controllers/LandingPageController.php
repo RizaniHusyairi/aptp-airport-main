@@ -918,5 +918,37 @@ class LandingPageController extends Controller
 
         return view('landing-menu.informasi-publik.fasilitas.index', compact('facilities'));
     }
+
+    /**
+     * Bertindak sebagai perantara untuk mengambil gambar dari API HTTP
+     * dan menyajikannya melalui koneksi HTTPS yang aman.
+     */
+    public function imageProxy($filename)
+    {
+        // Bangun URL lengkap ke API gambar yang tidak aman
+        $imageUrl = "http://103.210.122.2/storage/logo/" . $filename;
+
+        try {
+            // Ambil gambar dari URL menggunakan Laravel HTTP Client
+            $response = Http::timeout(10)->get($imageUrl);
+
+            // Jika gagal mengambil gambar, kembalikan respons 404
+            if ($response->failed()) {
+                Log::error('Image proxy failed to fetch image: ' . $imageUrl);
+                abort(404, 'Image not found.');
+            }
+
+            // Dapatkan tipe konten (misalnya, 'image/png') dari respons API
+            $contentType = $response->header('Content-Type');
+
+            // Kembalikan konten gambar mentah dengan tipe konten yang benar
+            return response($response->body())
+                ->header('Content-Type', $contentType);
+
+        } catch (\Exception $e) {
+            Log::error('Image proxy exception: ' . $e->getMessage());
+            abort(500, 'Could not retrieve image.');
+        }
+    }
     
 }

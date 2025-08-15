@@ -14,7 +14,7 @@
             <div class="col-12 col-md-6 order-md-2 order-first">
                 <x-breadcrumb2 :items="[
                     ['label' => 'Menu', 'url' => route('profile')],
-                    ['label' => 'Slider', 'url' => route('slider.index')],
+                    ['label' => 'Slider', 'url' => route('slider.staffIndex')],
                     ['label' => 'Tambah Slider', 'active' => true],
                 ]" />
                 
@@ -52,7 +52,7 @@
                     </div>
                     <div class="form-group">
                         <button type="submit" class="btn btn-sm btn-primary" aria-label="Simpan slider">Simpan</button>
-                        <a href="{{ route('slider.index') }}" class="btn btn-sm btn" aria-secondary-label="Batalkan penambahan slider">Batal</a>
+                        <a href="{{ route('slider.staffIndex') }}" class="btn btn-sm btn" aria-secondary-label="Batalkan penambahan slider">Batal</a>
                     </div>
                 </form>
             </div>
