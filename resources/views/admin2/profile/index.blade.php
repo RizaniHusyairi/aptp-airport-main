@@ -130,11 +130,11 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
-                        <span class="d-none d-sm-block">Batal</span>
+                        <span class="d-sm-block">Batal</span>
                     </button>
                     <button type="submit" class="btn btn-primary ms-1" id="saveProfile">
                         <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
-                        <span class="d-none d-sm-block">Simpan</span>
+                        <span class="d-sm-block">Simpan</span>
                     </button>
                 </div>
             </div>
