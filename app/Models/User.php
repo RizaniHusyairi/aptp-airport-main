@@ -114,6 +114,24 @@ class User extends Authenticatable implements HasMedia
         return $this->roles()->where('name', $role)->exists();
     }
 
+    /**
+     * Mendefinisikan relasi ke atasan pengguna (supervisor).
+     * Setiap pengguna memiliki satu atasan.
+     */
+    public function supervisor(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'supervisor_id');
+    }
+
+    /**
+     * Mendefinisikan relasi ke bawahan pengguna (subordinates).
+     * Seorang atasan bisa memiliki banyak bawahan.
+     */
+    public function subordinates(): HasMany
+    {
+        return $this->hasMany(User::class, 'supervisor_id');
+    }
+
     
 
     /**

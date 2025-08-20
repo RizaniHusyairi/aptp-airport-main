@@ -10,24 +10,21 @@ return new class extends Migration
     {
         Schema::create('persuratans', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->comment('User pembuat surat');
-            $table->unsignedBigInteger('assigned_to_user_id')->nullable()->comment('User penanggung jawab saat ini');
+            $table->foreignId('user_id');
+            $table->unsignedBigInteger('assigned_to_user_id')->nullable();
             
-            $table->string('letter_number')->unique()->nullable();
-            $table->string('title');
-            $table->text('content_preview')->nullable();
-            $table->string('file_path');
             
-            $table->enum('status', [
-                'Draft', 
-                'Menunggu Persetujuan Kasi', 
-                'Menunggu Persetujuan Kasubbag', 
-                'Menunggu Persetujuan Kabandara', 
-                'Revisi Diperlukan', 
-                'Disetujui',
-                'Ditolak'
-            ])->default('Draft');
-
+            // Tambahkan kolom baru sesuai formulir
+            $table->string('letter_type');
+            $table->date('letter_date');
+            $table->text('recipient_address'); // Tujuan Alamat Surat
+            $table->string('subject'); // Perihal
+            
+            $table->foreignId('final_approver_id')->constrained('users'); // Pejabat Final
+            
+            $table->json('verifiers'); // Pejabat Verifikasi (menyimpan array user_id)
+            $table->json('collaborators'); // Dikerjakan bersama (menyimpan array user_id)
+            $table->json('attachments'); // Dokumen Konsep Surat (menyimpan array path file)
             $table->timestamps();
         });
 
