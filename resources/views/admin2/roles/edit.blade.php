@@ -43,6 +43,25 @@
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
+                        
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="parent_role_id" class="form-label">Atasan Jabatan (Parent Role)</label>
+                        <select name="parent_role_id" id="parent_role_id" class="form-select @error('parent_role_id') is-invalid @enderror">
+                            <option value="">-- Tidak Ada Atasan (Jabatan Tertinggi) --</option>
+                            @foreach ($roles as $parentRole)
+                                {{-- Pastikan role tidak bisa menjadi atasan untuk dirinya sendiri --}}
+                                @if($parentRole->id !== $role->id)
+                                    <option value="{{ $parentRole->id }}" @selected(old('parent_role_id', $role->parent_role_id) == $parentRole->id)>
+                                        {{ $parentRole->name }}
+                                    </option>
+                                @endif
+                            @endforeach
+                        </select>
+                        @error('parent_role_id')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                    </div>
+                    <div class="col-12">
+
                         <div class="form-group mt-4">
                             <label>Permissions</label>
                             @error('permissions')

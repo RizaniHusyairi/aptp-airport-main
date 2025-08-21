@@ -55,14 +55,16 @@ class RoleController extends Controller
     {
         $role = Role::with('permissions')->findOrFail($id); // Menyertakan permissions yang dimiliki role
         $permissions = Permission::all(); // Mengambil semua permissions
-        return view('admin2.roles.edit', compact('role', 'permissions'));
+        $roles = Role::orderBy('name')->get();
+        return view('admin2.roles.edit', compact('role', 'permissions','roles'));
     }
 
     public function update(Request $request, Role $role)
     {
-        $request->validate([
+        $validated = $request->validate([
             'name' => 'required|string|max:255',
             'permissions' => 'array|exists:permissions,id',
+            'parent_role_id' => 'nullable|exists:roles,id'
         ]);
 
         $role->name = $request->name;
@@ -72,6 +74,11 @@ class RoleController extends Controller
         } else {
             $role->touch(); // tetap update updated_at walaupun nama tidak berubah
         }
+
+        $role->update([
+            'name' => $validated['name'],
+            'parent_role_id' => $validated['parent_role_id'] ?? null, // Simpan parent role
+        ]);
 
         // Sink permission many-to-many
         $role->permissions()->sync($request->permissions);

@@ -2,43 +2,105 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\persuratan;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
 class PersuratanController extends Controller
 {
     public function index()
     {
-        // Tampilkan surat yang relevan: dibuat oleh user atau menunggu persetujuan user
         $user = Auth::user();
+        // Tampilkan surat yang dibuat oleh user, atau di mana user adalah verifikator, atau ditugaskan ke user
         $letters = persuratan::where('user_id', $user->id)
             ->orWhere('assigned_to_user_id', $user->id)
+            ->orWhereHas('verifications', function ($query) use ($user) {
+                $query->where('user_id', $user->id);
+            })
+            ->with(['user', 'assignee'])
             ->latest()
             ->get();
             
-        return view('admin2.persuratan.index', compact('letters'));
+        return view('user_staff2.persuratan.index', compact('letters'));
     }
 
     public function create()
     {
-        return view('admin2.persuratan.create');
+        // Ambil semua staff untuk pilihan di form
+        $staffs = User::where('is_staff', true)->orderBy('name')->get();
+        return view('user_staff2.persuratan.create', compact('staffs'));
     }
 
     public function store(Request $request)
     {
-        // Logika untuk menyimpan surat baru sebagai 'Draft'
-        // ... (validasi, file upload, dll.)
-        
-        // Setelah disimpan, arahkan ke halaman detail untuk diajukan
-        return redirect()->route('admin.persuratan.index')->with('success', 'Draf surat berhasil disimpan.');
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'letter_type' => 'required|string',
+            'letter_date' => 'required|date',
+            'recipient_address' => 'required|string',
+            'subject' => 'required|string',
+            'final_approver_id' => 'required|exists:users,id',
+            'verifiers' => 'nullable|array',
+            'verifiers.*' => 'exists:users,id',
+            'attachments' => 'required|array|min:1',
+            'attachments.*' => 'file|mimes:pdf|max:2048',
+        ]);
+
+        DB::beginTransaction();
+        try {
+            $attachmentPaths = [];
+            if ($request->hasFile('attachments')) {
+                foreach ($request->file('attachments') as $file) {
+                    $attachmentPaths[] = $file->store('letters', 'public');
+                }
+            }
+
+            $letter = persuratan::create([
+                'user_id' => Auth::id(),
+                'title' => $validated['title'],
+                'letter_type' => $validated['letter_type'],
+                'letter_date' => $validated['letter_date'],
+                'recipient_address' => $validated['recipient_address'],
+                'subject' => $validated['subject'],
+                'final_approver_id' => $validated['final_approver_id'],
+                'attachments' => $attachmentPaths,
+                'status' => 'Verifikasi Tambahan', // Status awal
+            ]);
+
+            // Tambahkan verifikator manual jika ada
+            if (!empty($validated['verifiers'])) {
+                foreach ($validated['verifiers'] as $order => $userId) {
+                    $letter->verifications()->create([
+                        'user_id' => $userId,
+                        'order' => $order + 1,
+                    ]);
+                }
+                // Tugaskan ke verifikator pertama
+                $letter->assigned_to_user_id = $validated['verifiers'][0];
+            } else {
+                // Jika tidak ada verifikator, langsung ke atasan
+                $letter->status = 'Menunggu Persetujuan Atasan';
+                $letter->assigned_to_user_id = Auth::user()->supervisor_id;
+            }
+            
+            $letter->save();
+            DB::commit();
+
+            return redirect()->route('persuratan.index')->with('success', 'Surat berhasil dibuat dan dikirim untuk verifikasi.');
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage())->withInput();
+        }
     }
 
     public function show(persuratan $surat)
     {
         // Tampilkan detail surat, termasuk riwayat revisi
-        $surat->load('revisions.user');
-        return view('admin2.persuratan.show', compact('surat'));
+        $surat->load(['user', 'assignee', 'finalApprover', 'verifications.user']);
+        return view('user_staff2.persuratan.show', compact('letter'));
     }
 
     public function approve(Request $request, persuratan $surat)

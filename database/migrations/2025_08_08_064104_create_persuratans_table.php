@@ -13,7 +13,6 @@ return new class extends Migration
             $table->foreignId('user_id');
             $table->unsignedBigInteger('assigned_to_user_id')->nullable();
             
-            
             // Tambahkan kolom baru sesuai formulir
             $table->string('letter_type');
             $table->date('letter_date');
@@ -25,6 +24,16 @@ return new class extends Migration
             $table->json('verifiers'); // Pejabat Verifikasi (menyimpan array user_id)
             $table->json('collaborators'); // Dikerjakan bersama (menyimpan array user_id)
             $table->json('attachments'); // Dokumen Konsep Surat (menyimpan array path file)
+
+            $table->enum('status', [
+                'Draft', 
+                'Menunggu Persetujuan Kasi', 
+                'Menunggu Persetujuan Kasubbag', 
+                'Menunggu Persetujuan Kabandara', 
+                'Revisi Diperlukan', 
+                'Disetujui',
+                'Ditolak'
+            ])->default('Draft')->change();
             $table->timestamps();
         });
 

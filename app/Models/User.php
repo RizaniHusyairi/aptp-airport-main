@@ -2,15 +2,16 @@
 
 namespace App\Models;
 
-use Illuminate\Support\Facades\Storage;
 use App\Models\Rental;
 use App\Models\Tenant;
 use App\Models\Ticket;
 use Spatie\MediaLibrary\HasMedia;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Notifications\Notifiable;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 

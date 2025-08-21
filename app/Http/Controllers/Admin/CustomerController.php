@@ -81,15 +81,14 @@ class CustomerController extends Controller
         $roles = Role::with('permissions')->get(); 
         $userRoles = $user->roles->pluck('id')->toArray();
 
-        $supervisors = User::where('is_staff', true)->where('id', '!=', $user->id)->orderBy('name')->get();
         
-        return view('admin2.users.show', compact('user', 'roles', 'userRoles',"supervisors"));
+        return view('admin2.users.show', compact('user', 'roles', 'userRoles'));
     }
     
     public function updateRole(Request $request, User $user)
     {
         // Ambil semua ID role yang dipilih (bernilai on)
-        $selectedRoles = array_keys($request->roles ?? []);
+        $selectedRoles = $request->input('roles', []);
         $user->roles()->sync($selectedRoles);
 
         
@@ -100,23 +99,7 @@ class CustomerController extends Controller
     /**
      * ### METHOD BARU: Untuk memperbarui atasan seorang staff ###
      */
-    public function updateSupervisor(Request $request, User $user)
-    {
-        $request->validate([
-            'supervisor_id' => 'nullable|exists:users,id',
-        ]);
-
-        // Pastikan hanya staff yang bisa diberi atasan
-        if (!$user->is_staff) {
-            return back()->with('error', 'Hanya staff yang dapat memiliki atasan.');
-        }
-
-        $user->supervisor_id = $request->input('supervisor_id');
-        $user->save();
-
-        return back()->with('success', 'Atasan berhasil diperbarui.');
-    }
-
+    
 
     public function destroy(User $user)
     {

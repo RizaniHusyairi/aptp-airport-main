@@ -29,6 +29,7 @@ use App\Http\Controllers\Staff_User\{
 
 use App\Http\Controllers\{
     LandingPageController,
+    PersuratanController,
     SandboxController,
     SlotController,
     TourismController,
@@ -199,6 +200,10 @@ Route::group(["prefix" => 'dashboard'], function () {
             Route::put('staff/lalu-lintas/{id}', [LaluLintasController::class, 'update'])->name('laluLintas.update');
             Route::delete('staff/lalu-lintas/{id}', [LaluLintasController::class, 'destroy'])->name('laluLintas.destroy');
             
+            Route::get('staff/persuratan',[PersuratanController::class, 'index'])->name('persuratan.staffIndex');
+            Route::get('staff/persuratan/create',[PersuratanController::class, 'create'])->name('persuratan.create');
+            Route::get('staff/persuratan/store',[PersuratanController::class, 'store'])->name('persuratan.store');
+            Route::get('staff/persuratan/{surat}',[PersuratanController::class, 'show'])->name('persuratan.show');
         
         });
 
@@ -227,6 +232,7 @@ Route::group(["prefix" => 'dashboard'], function () {
             Route::post('customers/{user}/toggle-staff', [CustomerController::class, 'toggleStaff'])->name('customers.toggleStaff');
             Route::put('customers/{user}/update-role', [CustomerController::class, 'updateRole'])->name('customers.updateRole');
             Route::get('customers/{user}/edit-role', [CustomerController::class, 'editRole'])->name('customers.editRole');
+            Route::put('customers/{user}/update-supervisor', [CustomerController::class, 'updateSupervisor'])->name('customers.updateSupervisor');
 
             //roles
             Route::resource('roles', RoleController::class);
