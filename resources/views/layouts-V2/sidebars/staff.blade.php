@@ -27,8 +27,8 @@
         <ul class="menu">
             <li class="sidebar-title">Menu</li>
             <li class="sidebar-item {{ Route::is('persuratan.staffIndex') ? 'active' : '' }}">
-                <a href="{{ route(persuratan.staffIndex) }}" class='sidebar-link' data-bs-toggle="tooltip" data-bs-placement="right" title="Persuratan">
-                    <i class="{{ $data['icon'] }}"></i>
+                <a href="{{ route('persuratan.staffIndex') }}" class='sidebar-link' data-bs-toggle="tooltip" data-bs-placement="right" title="Persuratan">
+                    <i class="bi bi-book"></i>
                     <span>Persuratan</span>
                 </a>
             </li>

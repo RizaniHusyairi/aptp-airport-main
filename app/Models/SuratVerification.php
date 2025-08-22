@@ -3,8 +3,11 @@
 namespace App\Models;
 
 
+use App\Models\persuratan;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
 
 class SuratVerification extends Model
 {
@@ -22,7 +25,7 @@ class SuratVerification extends Model
      */
     public function letter(): BelongsTo
     {
-        return $this->belongsTo(Letter::class);
+        return $this->belongsTo(persuratan::class);
     }
 
     /**

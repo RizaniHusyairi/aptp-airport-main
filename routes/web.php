@@ -202,7 +202,7 @@ Route::group(["prefix" => 'dashboard'], function () {
             
             Route::get('staff/persuratan',[PersuratanController::class, 'index'])->name('persuratan.staffIndex');
             Route::get('staff/persuratan/create',[PersuratanController::class, 'create'])->name('persuratan.create');
-            Route::get('staff/persuratan/store',[PersuratanController::class, 'store'])->name('persuratan.store');
+            Route::post('staff/persuratan/store',[PersuratanController::class, 'store'])->name('persuratan.store');
             Route::get('staff/persuratan/{surat}',[PersuratanController::class, 'show'])->name('persuratan.show');
         
         });

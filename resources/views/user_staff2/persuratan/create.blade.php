@@ -17,7 +17,7 @@
             <div class="col-12 col-md-6 order-md-2 order-first">
                 <x-breadcrumb2 :items="[
                     ['label' => 'Dashboard', 'url' => route('root')],
-                    ['label' => 'Persuratan', 'url' => route('persuratan.index')],
+                    ['label' => 'Persuratan', 'url' => route('persuratan.staffIndex')],
                     ['label' => 'Buat Baru', 'active' => true]
                 ]" />
             </div>
@@ -75,7 +75,7 @@
                     </div>
 
                     <div class="col-12 mb-3">
-                        <label for="verifiers" class="form-label">Pejabat yang Melakukan Verifikasi (Opsional)</label>
+                        <label for="verifiers" class="form-label">Pejabat yang Melakukan Verifikasi Surat (Opsional)</label>
                         <p class="text-muted text-sm">Pilih satu atau lebih pejabat untuk proses verifikasi tambahan sebelum surat diteruskan ke atasan Anda.</p>
                         <select class="choices form-select multiple-remove @error('verifiers') is-invalid @enderror" multiple="multiple" id="verifiers" name="verifiers[]">
                             @foreach ($staffs as $staff)
@@ -83,6 +83,16 @@
                             @endforeach
                         </select>
                         @error('verifiers')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
+                    </div>
+
+                    <div class="col-12 mb-3">
+                        <label for="collaborators" class="form-label">Konsep surat ini saya kerjakan bersama (Opsional)</label>
+                        <select class="choices form-select multiple-remove @error('collaborators') is-invalid @enderror" multiple="multiple" id="collaborators" name="collaborators[]">
+                            @foreach ($staffs as $staff)
+                                <option value="{{ $staff->id }}">{{ $staff->name }}</option>
+                            @endforeach
+                        </select>
+                        @error('collaborators')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
                     </div>
                     
                     <div class="col-12 mb-3">
@@ -93,7 +103,7 @@
                     </div>
                 </div>
                 <div class="d-flex justify-content-end mt-4">
-                    <a href="{{ route('persuratan.index') }}" class="btn btn-light-secondary me-2">Batal dan Keluar</a>
+                    <a href="{{ route('persuratan.staffIndex') }}" class="btn btn-light-secondary me-2">Batal dan Keluar</a>
                     <button type="submit" class="btn btn-primary">Simpan Data</button>
                 </div>
             </form>
@@ -110,11 +120,21 @@
             // Inisialisasi Choices.js untuk multi-select
             const verifiersElement = document.getElementById('verifiers');
             if(verifiersElement) {
-                const choices = new Choices(verifiersElement, {
+                new Choices(verifiersElement, {
                     removeItemButton: true,
                     placeholder: true,
                     placeholderValue: 'Pilih pejabat...',
                     searchPlaceholderValue: 'Cari pejabat...',
+                });
+            }
+
+            const collaboratorsElement = document.getElementById('collaborators');
+            if(collaboratorsElement) {
+                new Choices(collaboratorsElement, {
+                    removeItemButton: true,
+                    placeholder: true,
+                    placeholderValue: 'Pilih staff...',
+                    searchPlaceholderValue: 'Cari staff...',
                 });
             }
         });
