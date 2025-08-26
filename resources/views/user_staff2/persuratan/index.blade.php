@@ -66,7 +66,6 @@
                             <td><a href="{{ route('persuratan.show', $letter->id) }}" class="btn btn-sm btn-primary">Lihat Detail</a></td>
                         </tr>
                         @empty
-                        <tr><td colspan="6" class="text-center">Tidak ada surat untuk ditampilkan.</td></tr>
                         @endforelse
                     </tbody>
                 </table>
@@ -81,11 +80,7 @@
     <script src="{{ asset('assetsv2/extensions/jquery/jquery.min.js') }}"></script>
     <script src="{{ asset('assetsv2/extensions/datatables.net/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('assetsv2/extensions/datatables.net-bs5/js/dataTables.bootstrap5.min.js') }}"></script>
-    <script>
-        $(document).ready(function() {
-            $('#table-persuratan').DataTable({
-                "language": { "url": "{{ asset('assetsv2/extensions/datatables.net-bs5/js/Indonesian.json') }}" }
-            });
-        });
-    </script>
+    <script src="{{ asset('assetsv2/compiled/js/staff-persuratan.js') }}"></script>
+
+   
 @endsection

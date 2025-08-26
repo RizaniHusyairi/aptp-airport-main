@@ -30,6 +30,20 @@
             <h5 class="card-title">Formulir Tambah Konsep Surat</h5>
         </div>
         <div class="card-body">
+            @if (session('error'))
+                <div class="alert alert-danger">{{ session('error') }}</div>
+            @endif
+
+            @if ($errors->any())
+            <div class="alert alert-danger">
+                <strong>Terjadi kesalahan pada formulir:</strong>
+                <ul class="mb-0">
+                @foreach ($errors->all() as $err)
+                    <li>{{ $err }}</li>
+                @endforeach
+                </ul>
+            </div>
+            @endif
             <form action="{{ route('persuratan.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="row">

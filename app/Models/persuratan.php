@@ -13,7 +13,6 @@ class persuratan extends Model
 protected $fillable = [
         'user_id',
         'assigned_to_user_id',
-        'title',
         'letter_type',
         'letter_date',
         'recipient_address',
@@ -25,9 +24,9 @@ protected $fillable = [
     ];
 
     protected $casts = [
-        'letter_date' => 'date',
+        'letter_date'   => 'date',
         'collaborators' => 'array',
-        'attachments' => 'array',
+        'attachments'   => 'array',
     ];
 
     /**

@@ -36,7 +36,6 @@ class PersuratanController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'title' => 'required|string|max:255',
             'letter_type' => 'required|string',
             'letter_date' => 'required|date',
             'recipient_address' => 'required|string',
@@ -44,6 +43,8 @@ class PersuratanController extends Controller
             'final_approver_id' => 'required|exists:users,id',
             'verifiers' => 'nullable|array',
             'verifiers.*' => 'exists:users,id',
+            'collaborators' => 'nullable|array',
+            'collaborators.*' => 'exists:users,id',
             'attachments' => 'required|array|min:1',
             'attachments.*' => 'file|mimes:pdf|max:2048',
         ]);
@@ -59,14 +60,14 @@ class PersuratanController extends Controller
 
             $letter = persuratan::create([
                 'user_id' => Auth::id(),
-                'title' => $validated['title'],
                 'letter_type' => $validated['letter_type'],
                 'letter_date' => $validated['letter_date'],
                 'recipient_address' => $validated['recipient_address'],
                 'subject' => $validated['subject'],
                 'final_approver_id' => $validated['final_approver_id'],
+                'verifiers'          => $request->input('verifiers', []),     // <-- isi [] kalau kosong
+                'collaborators'      => $request->input('collaborators', []), // <-- isi [] kalau kosong
                 'attachments' => $attachmentPaths,
-                'status' => 'Verifikasi Tambahan', // Status awal
             ]);
 
             // Tambahkan verifikator manual jika ada
@@ -81,14 +82,13 @@ class PersuratanController extends Controller
                 $letter->assigned_to_user_id = $validated['verifiers'][0];
             } else {
                 // Jika tidak ada verifikator, langsung ke atasan
-                $letter->status = 'Menunggu Persetujuan Atasan';
                 $letter->assigned_to_user_id = Auth::user()->supervisor_id;
             }
             
             $letter->save();
             DB::commit();
 
-            return redirect()->route('persuratan.index')->with('success', 'Surat berhasil dibuat dan dikirim untuk verifikasi.');
+            return redirect()->route('persuratan.staffIndex')->with('success', 'Surat berhasil dibuat dan dikirim untuk verifikasi.');
 
         } catch (\Exception $e) {
             DB::rollBack();
@@ -100,7 +100,7 @@ class PersuratanController extends Controller
     {
         // Tampilkan detail surat, termasuk riwayat revisi
         $surat->load(['user', 'assignee', 'finalApprover', 'verifications.user']);
-        return view('user_staff2.persuratan.show', compact('letter'));
+        return view('user_staff2.persuratan.show', compact('surat'));
     }
 
     public function approve(Request $request, persuratan $surat)
@@ -124,7 +124,7 @@ class PersuratanController extends Controller
                 break;
         }
         $surat->save();
-        return redirect()->route('admin.persuratan.index')->with('success', 'Surat berhasil disetujui dan diteruskan.');
+        return redirect()->route('admin2.persuratan.index')->with('success', 'Surat berhasil disetujui dan diteruskan.');
     }
 
     public function reject(Request $request, persuratan $surat)

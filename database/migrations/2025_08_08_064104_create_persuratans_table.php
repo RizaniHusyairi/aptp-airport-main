@@ -21,19 +21,11 @@ return new class extends Migration
             
             $table->foreignId('final_approver_id')->constrained('users'); // Pejabat Final
             
-            $table->json('verifiers'); // Pejabat Verifikasi (menyimpan array user_id)
-            $table->json('collaborators'); // Dikerjakan bersama (menyimpan array user_id)
+            $table->json('verifiers')->nullable(); // Pejabat Verifikasi (menyimpan array user_id)
+            $table->json('collaborators')->nullable(); // Dikerjakan bersama (menyimpan array user_id)
             $table->json('attachments'); // Dokumen Konsep Surat (menyimpan array path file)
-
-            $table->enum('status', [
-                'Draft', 
-                'Menunggu Persetujuan Kasi', 
-                'Menunggu Persetujuan Kasubbag', 
-                'Menunggu Persetujuan Kabandara', 
-                'Revisi Diperlukan', 
-                'Disetujui',
-                'Ditolak'
-            ])->default('Draft')->change();
+            
+           
             $table->timestamps();
         });
 
