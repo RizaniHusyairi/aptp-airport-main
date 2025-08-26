@@ -104,9 +104,9 @@
                 <h2 class="h3 mb-2 text-dark">Tugas dan Fungsi PPID</h2>
                 <hr class="my-3">
                 <ul class="list-group list-group-flush">
-                    <li class="list-group-item d-flex"><i class="bi bi-check-circle-fill text-success me-3 mt-1"></i>Melakukan pengelolaan informasi publik;</li>
-                    <li class="list-group-item d-flex"><i class="bi bi-check-circle-fill text-success me-3 mt-1"></i>Menyampaikan informasi secara baik dan efisien sehingga dapat diakses dengan mudah;</li>
-                    <li class="list-group-item d-flex"><i class="bi bi-check-circle-fill text-success me-3 mt-1"></i>Melakukan pemutakhiran dalam pengelolaan maupun pengembangan digital;</li>
+                    <li class="list-group-item d-flex"><i class="bi bi-check-circle-fill text-success me-3 mt-1"></i>Melakukan pengelolaan informasi publik.</li>
+                    <li class="list-group-item d-flex"><i class="bi bi-check-circle-fill text-success me-3 mt-1"></i>Menyampaikan informasi secara baik dan efisien sehingga dapat diakses dengan mudah.</li>
+                    <li class="list-group-item d-flex"><i class="bi bi-check-circle-fill text-success me-3 mt-1"></i>Melakukan pemutakhiran dalam pengelolaan maupun pengembangan digital.</li>
                     <li class="list-group-item d-flex"><i class="bi bi-check-circle-fill text-success me-3 mt-1"></i>Menyediakan Sarana dan Prasarana dalam pelaksanaan pelayanan informasi.</li>
                 </ul>
             </section>
