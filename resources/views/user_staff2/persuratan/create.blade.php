@@ -1,10 +1,10 @@
 @extends('layouts-V2.master-layouts-v2')
 @section('title', 'Buat Surat Baru')
 
-@push('styles_admin')
+@section('styles_admin')
     {{-- CSS untuk Choices.js (multi-select dropdown) --}}
     <link rel="stylesheet" href="{{ asset('assetsv2/extensions/choices.js/public/assets/styles/choices.css') }}">
-@endpush
+@endsection
 
 @section('content')
 <div class="page-heading">
@@ -38,9 +38,7 @@
                         <select class="form-select @error('letter_type') is-invalid @enderror" id="letter_type" name="letter_type" required>
                             <option value="" selected disabled>Pilih Tipe Surat...</option>
                             <option value="Nota Dinas" @selected(old('letter_type') == 'Nota Dinas')>Nota Dinas</option>
-                            <option value="Surat Edaran" @selected(old('letter_type') == 'Surat Edaran')>Surat Edaran</option>
-                            <option value="Surat Undangan" @selected(old('letter_type') == 'Surat Undangan')>Surat Undangan</option>
-                            <option value="Surat Keputusan" @selected(old('letter_type') == 'Surat Keputusan')>Surat Keputusan</option>
+                            <option value="Surat Dinas" @selected(old('letter_type') == 'Surat Dinas')>Surat Dinas</option>
                         </select>
                         @error('letter_type')<div class="invalid-feedback">{{ $message }}</div>@enderror
                     </div>
@@ -112,7 +110,7 @@
 </section>
 @endsection
 
-@push('scripts_admin')
+@section('scripts_admin')
     {{-- JS untuk Choices.js (multi-select dropdown) --}}
     <script src="{{ asset('assetsv2/extensions/choices.js/public/assets/scripts/choices.js') }}"></script>
     <script>
@@ -139,4 +137,4 @@
             }
         });
     </script>
-@endpush
+@endsection

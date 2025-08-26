@@ -61,7 +61,6 @@ class User extends Authenticatable implements HasMedia
             $user->tenants()->detach();
             $user->licenses()->detach();
             $user->ads()->detach();
-            $user->submissionDocuments()->detach();
             $user->roles()->detach();
         });
     }
