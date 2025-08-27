@@ -70,18 +70,28 @@ class PersuratanController extends Controller
             'collaborators.*'    => 'exists:users,id',
 
             'attachments'        => 'required|array|min:1',
-            'attachments.*'      => 'file|mimes:pdf|max:2048',
+            'attachments.*'      => ['required','url', function($attr, $value, $fail) {
+                $host = parse_url($value, PHP_URL_HOST);
+                $allowed = ['drive.google.com','docs.google.com'];
+                if (!in_array($host, $allowed, true)) {
+                    $fail('Hanya tautan drive.google.com atau docs.google.com yang diizinkan.');
+                }
+            }],
+            
         ]);
+
+        // Pecah textarea menjadi array URL (satu per baris), trim & buang baris kosong/duplikat
+    $links = collect($validated['attachments'])
+        ->map(fn($s) => trim($s))
+        ->filter()
+        ->unique()
+        ->values();
+        
 
         DB::beginTransaction();
         try {
-            // simpan lampiran
-            $paths = [];
-            if ($request->hasFile('attachments')) {
-                foreach ($request->file('attachments') as $file) {
-                    $paths[] = $file->store('letters', 'public');
-                }
-            }
+            
+            
 
             // buat surat (tanpa verifiers, tanpa title)
             $letter = persuratan::create([
@@ -92,7 +102,7 @@ class PersuratanController extends Controller
                 'subject'            => $validated['subject'],
                 'final_approver_id'  => $validated['final_approver_id'],
                 'collaborators'      => $request->input('collaborators', []),
-                'attachments'        => $paths,
+                'attachments'        => $links->all(), // <-- array URL
                 'status'             => 'Verifikasi Tambahan', // default
             ]);
 
@@ -277,37 +287,52 @@ class PersuratanController extends Controller
      */
     public function submitRevision(Request $request, persuratan $surat)
     {
+        $request->validate([
+            'attachments'   => 'required|array|min:1',
+            'attachments.*' => ['required','url', function($attr,$value,$fail){
+                $host = parse_url($value, PHP_URL_HOST);
+                $allowed = ['drive.google.com','docs.google.com'];
+                if (!in_array($host, $allowed, true)) {
+                    $fail('Hanya tautan Google Drive/Docs yang diizinkan.');
+                }
+            }],
+        ]);
+
         DB::beginTransaction();
         try {
-            // log event
-            $this->logEvent($surat, 'revision_submitted', ['by' => Auth::id()]);
+            // simpan lampiran baru
+            $surat->attachments = collect($request->attachments)
+                ->map(fn($s)=>trim($s))
+                ->filter()
+                ->unique()
+                ->values()
+                ->all();
 
-            // tentukan assignment berikutnya:
-            // jika masih ada verifier berstatus Menunggu → ke verifier pertama yang Menunggu
-            $next = $surat->verifications()->where('status', 'Menunggu')->orderBy('order')->first();
+            $surat->status = 'Verifikasi Tambahan';
+            
+            // kembalikan assignment
+            $next = $surat->verifications()->where('status','Menunggu')->orderBy('order')->first();
             if ($next) {
-                $surat->update([
-                    'status' => 'Verifikasi Tambahan',
-                    'assigned_to_user_id' => $next->user_id,
-                ]);
-                $this->logEvent($surat, 'assigned', ['to_user_id' => $next->user_id, 'reason' => 'resume_verification']);
+                $surat->assigned_to_user_id = $next->user_id;
+                $reason = 'resume_verification';
             } else {
-                // jika tidak ada verifier → ke final approver
-                $surat->update([
-                    'status' => 'Menunggu Persetujuan Atasan',
-                    'assigned_to_user_id' => $surat->final_approver_id,
-                ]);
-                $this->logEvent($surat, 'assigned', ['to_user_id' => $surat->final_approver_id, 'reason' => 'resume_final_approval']);
+                $surat->assigned_to_user_id = $surat->final_approver_id;
+                $surat->status = 'Menunggu Persetujuan Atasan';
+                $reason = 'resume_final_approval';
             }
 
+            $surat->save();
+
+            $this->logEvent($surat, 'revision_submitted', ['by'=>Auth::id()]);
+            $this->logEvent($surat, 'assigned', ['to_user_id'=>$surat->assigned_to_user_id, 'reason'=>$reason]);
+
             DB::commit();
-            return back()->with('success', 'Revisi dikirim.');
-        } catch (\Exception $e) {
+            return back()->with('success','Revisi berhasil dikirim.');
+        } catch(\Exception $e) {
             DB::rollBack();
-            return back()->with('error', 'Gagal mengirim revisi: '.$e->getMessage());
+            return back()->with('error','Gagal mengirim revisi: '.$e->getMessage());
         }
     }
-
     /**
      * Final approver menyetujui (tanda tangan akhir).
      */
@@ -328,6 +353,49 @@ class PersuratanController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             return back()->with('error', 'Gagal menyetujui final: '.$e->getMessage());
+        }
+    }
+
+    public function destroy(persuratan $surat)
+    {
+        // hanya pembuat
+        if (Auth::id() !== $surat->user_id) {
+            return back()->with('error', 'Anda tidak berhak menghapus surat ini.');
+        }
+
+        // harus ada verifikator, dan tidak ada yang sudah respon
+        $hasAnyVerifier = $surat->verifications()->exists();
+        $hasAnyResponse = $surat->verifications()
+            ->whereIn('status', ['Disetujui', 'Ditolak'])
+            ->exists();
+
+        // status global juga harus masih di tahap verifikasi
+        $isInVerificationStage = $surat->status === 'Verifikasi Tambahan';
+
+        if (! $hasAnyVerifier || $hasAnyResponse || ! $isInVerificationStage) {
+            return back()->with('error', 'Surat tidak dapat dihapus (sudah diproses atau tidak melalui verifikator).');
+        }
+
+        DB::beginTransaction();
+        try {
+            // (opsional) catat event
+            if (class_exists(\App\Models\SuratEvent::class)) {
+                \App\Models\SuratEvent::create([
+                    'persuratan_id' => $surat->id,
+                    'actor_user_id' => Auth::id(),
+                    'event_type'    => 'deleted',
+                    'meta'          => ['reason' => 'creator_cancel_before_verifier_response'],
+                ]);
+            }
+
+            // Hapus surat. Dengan FK ON DELETE CASCADE di verifications/revisions/events, child akan ikut terhapus.
+            $surat->delete();
+
+            DB::commit();
+            return redirect()->route('persuratan.staffIndex')->with('success', 'Surat berhasil dihapus.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error', 'Gagal menghapus: '.$e->getMessage());
         }
     }
 

@@ -64,7 +64,6 @@ class RoleController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'permissions' => 'array|exists:permissions,id',
-            'parent_role_id' => 'nullable|exists:roles,id'
         ]);
 
         $role->name = $request->name;
@@ -77,7 +76,6 @@ class RoleController extends Controller
 
         $role->update([
             'name' => $validated['name'],
-            'parent_role_id' => $validated['parent_role_id'] ?? null, // Simpan parent role
         ]);
 
         // Sink permission many-to-many

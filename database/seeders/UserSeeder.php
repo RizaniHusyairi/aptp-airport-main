@@ -41,7 +41,7 @@ class UserSeeder extends Seeder
 
         // 1. Kepala Bandara
         $kabandara = User::create([
-            'name' => 'I Kadek Sastrawan, S.Ikom.,S.Sit.',
+            'name' => 'I Kadek Yuli Sastrawan, S.Ikom., S.Sit.',
             'email' => 'kabandara@aptpairport.id',
             'password' => Hash::make('12345678'),
             'phone' => '081234567890',
@@ -56,7 +56,7 @@ class UserSeeder extends Seeder
         
         // 2. Kasubbag
         $kasubbag = User::create([
-            'name' => 'Zaldi Ardian, A.md',
+            'name' => 'Zaldi Ardian, A.Md',
             'email' => 'kasubbag@aptpairport.id',
             'password' => Hash::make('12345678'),
             'phone' => '081234567891',

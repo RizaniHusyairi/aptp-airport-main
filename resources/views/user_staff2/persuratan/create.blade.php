@@ -108,10 +108,45 @@
                     </div>
                     
                     <div class="col-12 mb-3">
-                        <label for="attachments" class="form-label">Dokumen Konsep Surat (PDF) <span class="text-danger">*</span></label>
-                        <input class="form-control @error('attachments.*') is-invalid @enderror" type="file" id="attachments" name="attachments[]" required accept=".pdf" multiple>
-                        @error('attachments.*')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
-                        <small class="form-text text-muted">Anda bisa mengunggah lebih dari satu lampiran.</small>
+                        <label class="form-label">Tautan Dokumen (Google Drive/Docs) <span class="text-danger">*</span></label>
+
+                        <div id="link-wrapper" class="d-flex flex-column gap-2">
+                            @php
+                                $oldLinks = old('attachments', []);
+                                if (empty($oldLinks)) { $oldLinks = ['']; } // minimal 1 baris
+                            @endphp
+
+                            @foreach ($oldLinks as $idx => $url)
+                                <div class="input-group link-row">
+                                    <span class="input-group-text"><i class="bi bi-link-45deg"></i></span>
+                                    <input type="url"
+                                        name="attachments[]"
+                                        class="form-control @error('attachments.'.$idx) is-invalid @enderror"
+                                        placeholder="https://drive.google.com/..."
+                                        value="{{ $url }}"
+                                        required>
+                                    <button type="button" class="btn btn-outline-danger btn-remove-link" title="Hapus baris">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                    @error('attachments.'.$idx)
+                                        <div class="invalid-feedback d-block">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            @endforeach
+                        </div>
+
+                        @error('attachments')
+                            <div class="invalid-feedback d-block">{{ $message }}</div>
+                        @enderror
+
+                        <div class="mt-2">
+                            <button type="button" id="btn-add-link" class="btn btn-outline-primary btn-sm">
+                                <i class="bi bi-plus"></i> Tambah baris link
+                            </button>
+                            <small class="text-muted d-block mt-1">
+                                Masukkan satu tautan per baris. Pastikan pengaturan berbagi (sharing) memungkinkan verifikator/atasan mengakses.
+                            </small>
+                        </div>
                     </div>
                 </div>
                 <div class="d-flex justify-content-end mt-4">
@@ -129,26 +164,53 @@
     <script src="{{ asset('assetsv2/extensions/choices.js/public/assets/scripts/choices.js') }}"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Inisialisasi Choices.js untuk multi-select
+            // Inisialisasi Choices.js (punya kamu) – tetap
             const verifiersElement = document.getElementById('verifiers');
-            if(verifiersElement) {
-                new Choices(verifiersElement, {
-                    removeItemButton: true,
-                    placeholder: true,
-                    placeholderValue: 'Pilih pejabat...',
-                    searchPlaceholderValue: 'Cari pejabat...',
-                });
+            if (verifiersElement) {
+                new Choices(verifiersElement, { removeItemButton: true, placeholder: true,
+                    placeholderValue: 'Pilih pejabat...', searchPlaceholderValue: 'Cari pejabat...' });
+            }
+            const collaboratorsElement = document.getElementById('collaborators');
+            if (collaboratorsElement) {
+                new Choices(collaboratorsElement, { removeItemButton: true, placeholder: true,
+                    placeholderValue: 'Pilih staff...', searchPlaceholderValue: 'Cari staff...' });
             }
 
-            const collaboratorsElement = document.getElementById('collaborators');
-            if(collaboratorsElement) {
-                new Choices(collaboratorsElement, {
-                    removeItemButton: true,
-                    placeholder: true,
-                    placeholderValue: 'Pilih staff...',
-                    searchPlaceholderValue: 'Cari staff...',
-                });
+            // ---- Dinamis link rows ----
+            const linkWrapper = document.getElementById('link-wrapper');
+            const btnAdd = document.getElementById('btn-add-link');
+
+            function makeRow(value = '') {
+                const div = document.createElement('div');
+                div.className = 'input-group link-row';
+                div.innerHTML = `
+                    <span class="input-group-text"><i class="bi bi-link-45deg"></i></span>
+                    <input type="url" name="attachments[]" class="form-control" placeholder="https://drive.google.com/..." required value="${value.replace(/"/g,'&quot;')}">
+                    <button type="button" class="btn btn-outline-danger btn-remove-link" title="Hapus baris">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                `;
+                return div;
             }
+
+            // tombol tambah
+            btnAdd?.addEventListener('click', () => {
+                linkWrapper.appendChild(makeRow());
+            });
+
+            // tombol hapus (delegation)
+            linkWrapper.addEventListener('click', (e) => {
+                if (e.target.closest('.btn-remove-link')) {
+                    const rows = linkWrapper.querySelectorAll('.link-row');
+                    if (rows.length > 1) {
+                        e.target.closest('.link-row').remove();
+                    } else {
+                        // jika tinggal 1 baris, kosongkan saja nilainya
+                        const input = linkWrapper.querySelector('input[name="attachments[]"]');
+                        if (input) input.value = '';
+                    }
+                }
+            });
         });
     </script>
 @endsection

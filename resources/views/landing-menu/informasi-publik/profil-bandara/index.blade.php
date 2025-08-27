@@ -1,6 +1,6 @@
 @extends('layouts_landing.landing_app')
 
-@section('title', 'Laporan Keuangan - Bandara APT Pranoto')
+@section('title', 'Profil Bandara - Bandara APT Pranoto')
 
 @section('content')
 <!-- About Section -->

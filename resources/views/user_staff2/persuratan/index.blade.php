@@ -40,6 +40,21 @@
 
 <section class="section">
     <div class="card">
+        @if (session('success'))
+            <div class="alert alert-success">{{ session('success') }}</div>
+        @endif
+        @if (session('error'))
+         <div class="alert alert-danger">{{ session('error') }}</div>
+        @endif
+        @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul class="mb-0">
+            @foreach ($errors->all() as $err)
+                <li>{{ $err }}</li>
+            @endforeach
+            </ul>
+        </div>
+        @endif
         <div class="card-header d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-2">
             <div>
                 <h5 class="card-title mb-1">Kotak Masuk & Surat Keluar</h5>
@@ -100,6 +115,26 @@
                             <td>{{ optional($letter->updated_at)->translatedFormat('d M Y') }}</td>
                             <td>
                                 <a href="{{ route('persuratan.show', $letter->id) }}" class="btn btn-sm btn-primary">Lihat Detail</a>
+
+                                @php
+                                    $isCreator = auth()->id() === ($letter->user_id ?? -1);
+                                    $hasAnyVerifier = $letter->verifications->count() > 0; // pastikan relasi eager-loaded jika ingin hemat query
+                                    $hasAnyResponse = $letter->verifications->firstWhere('status','Disetujui')
+                                                    || $letter->verifications->firstWhere('status','Ditolak');
+                                    $isInVerificationStage = $letter->status === 'Verifikasi Tambahan';
+                                    $canDelete = $isCreator && $hasAnyVerifier && !$hasAnyResponse && $isInVerificationStage;
+                                @endphp
+
+                                @if($canDelete)
+                                    <form action="{{ route('persuratan.destroy', $letter->id) }}" method="POST" class="d-inline"
+                                        onsubmit="return confirm('Hapus surat ini? Tindakan ini tidak dapat dibatalkan.');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">
+                                            <i class="bi bi-trash"></i> Hapus
+                                        </button>
+                                    </form>
+                                @endif
                             </td>
                         </tr>
                         @empty

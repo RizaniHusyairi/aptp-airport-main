@@ -42,6 +42,9 @@ class ViewServiceProvider extends ServiceProvider
 
             // 4. Loop hasil query dan ubah menjadi format array menu, lalu gabungkan
             foreach ($activeServices as $service) {
+                if($service->slug == "informasi-publik") {
+                    continue; // Lewati layanan tanpa slug
+                }
                 $serviceMenuItems[] = [
                     'name' => $service->name,
                     'route' => route('layanan.show', $service->slug) // Menggunakan route dinamis yang baru
@@ -66,6 +69,10 @@ class ViewServiceProvider extends ServiceProvider
                                 [
                                     'name' => 'SOP PPID',
                                     'route' => route('sopPpid'),
+                                ],
+                                [
+                                    'name' => 'Pengajuan Informasi Publik',
+                                    'route' => route('layanan.show', 'informasi-publik'),
                                 ],
                                 
                             ],

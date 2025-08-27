@@ -211,6 +211,7 @@ Route::group(["prefix" => 'dashboard'], function () {
             Route::post('staff/persuratan/{surat}/revision/request',[PersuratanController::class, 'requestRevision'])->name('persuratan.revision.request');
             Route::post('staff/persuratan/{surat}/revision/submit', [PersuratanController::class, 'submitRevision'])->name('persuratan.revision.submit');
             Route::post('staff/persuratan/{surat}/final-approve',   [PersuratanController::class, 'finalApprove'])->name('persuratan.final.approve');
+            Route::delete('staff/persuratan/{surat}',      [PersuratanController::class, 'destroy'])->name('persuratan.destroy');
                 
         });
 
@@ -353,10 +354,7 @@ Route::prefix('regulasi')->group(function () {
 // Route::get('/regulasi/surat-edaran', [LetterController::class, 'suratEdaran'])->name('suratEdaran');
 // Route::get('/regulasi/surat-utusan', [LetterController::class, 'suratUtusan'])->name('suratUtusan');
 
-//Language Translation
-Route::get('/keberangkatan', [LandingPageController::class, 'keberangkatan'])->name('keberangkatan');
-Route::get('/kedatangan', [LandingPageController::class, 'kedatangan'])->name('kedatangan');
-Route::get('/lalu-lintas-angkutan-udara', [LandingPageController::class, 'laluLintas'])->name('laluLintas');
+
 
 //Language Translation
 Route::get('/index/{locale}', [HomeController::class, 'lang']);

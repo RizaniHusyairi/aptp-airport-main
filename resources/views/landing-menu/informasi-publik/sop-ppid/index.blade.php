@@ -1,7 +1,7 @@
 
 @extends('layouts_landing.landing_app')
 
-@section('title', 'Laporan Keuangan - Bandara APT Pranoto')
+@section('title', 'SOP PPID - Bandara APT Pranoto')
 
 @section('content')
 <section id="chefs" class="chefs section pt-6">

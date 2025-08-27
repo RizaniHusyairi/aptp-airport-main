@@ -97,16 +97,34 @@
                 @endif
 
                 {{-- Aksi pembuat saat revisi --}}
-                @if($isAssignee && $letter->status === 'Revisi Diperlukan' && $isCreator)
-                    <form action="{{ route('persuratan.revision.submit', $letter) }}" method="POST" class="d-inline" enctype="multipart/form-data">
-                        @csrf
-                        {{-- jika mau minta upload revisi baru, tambah input file di sini --}}
-                        
-                        <button class="btn btn-primary btn-sm"><i class="bi bi-send"></i> Kirim Revisi</button>
-                    </form>
-                @endif
+                
+
             </div>
         </div>
+        @if($isAssignee && $letter->status === 'Revisi Diperlukan' && $isCreator)
+            <div class="card mb-3">
+                <div class="card-header"><h6 class="mb-0">Kirim Revisi</h6></div>
+                <div class="card-body">
+                    <form action="{{ route('persuratan.revision.submit', $letter) }}" method="POST">
+                    @csrf
+                    <div id="rev-link-wrapper" class="d-flex flex-column gap-2 mb-2">
+                        <div class="input-group rev-link-row">
+                            <span class="input-group-text"><i class="bi bi-link-45deg"></i></span>
+                            <input type="url" name="attachments[]" class="form-control" placeholder="https://drive.google.com/..." required>
+                            <button type="button" class="btn btn-outline-danger btn-remove-rev-link"><i class="bi bi-trash"></i></button>
+                        </div>
+                    </div>
+                    <button type="button" id="btn-add-rev-link" class="btn btn-outline-primary btn-sm mb-3">
+                        <i class="bi bi-plus"></i> Tambah baris link
+                    </button>
+
+                    <div class="d-flex justify-content-end">
+                        <button class="btn btn-primary"><i class="bi bi-send"></i> Kirim Revisi</button>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        @endif
     </div>
 
     <div class="row">
@@ -141,13 +159,18 @@
                 <div class="card-body">
                     @if(!empty($letter->attachments))
                         <ul class="list-group">
-                            @foreach($letter->attachments as $i => $path)
+                            @foreach($letter->attachments as $url)
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    <span><i class="bi bi-file-earmark-pdf me-2"></i> Lampiran {{ $i+1 }}</span>
-                                    <span>
-                                        <a class="btn btn-sm btn-outline-primary" href="{{ Storage::disk('public')->url($path) }}" target="_blank">Lihat</a>
-                                        <a class="btn btn-sm btn-outline-secondary" href="{{ Storage::disk('public')->url($path) }}" download>Unduh</a>
-                                    </span>
+                                    <div class="text-truncate" style="max-width: 75%;">
+                                        <i class="bi bi-link-45deg me-2"></i>
+                                        <a href="{{ $url }}" target="_blank" rel="noopener">
+                                            {{ parse_url($url, PHP_URL_HOST) }}{{ Str::limit(parse_url($url, PHP_URL_PATH) ?? '', 40) }}
+                                        </a>
+                                    </div>
+                                    <div class="ms-2">
+                                        <a class="btn btn-sm btn-outline-primary" href="{{ $url }}" target="_blank" rel="noopener">Buka</a>
+                                        <a class="btn btn-sm btn-outline-secondary" href="{{ $url }}" target="_blank" rel="noopener">Salin</a>
+                                    </div>
                                 </li>
                             @endforeach
                         </ul>

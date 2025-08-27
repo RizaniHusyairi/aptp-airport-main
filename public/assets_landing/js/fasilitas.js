@@ -10,7 +10,8 @@ document.addEventListener('DOMContentLoaded', function() {
             const name = button.getAttribute('data-name');
             const image = button.getAttribute('data-image');
             const detailsJson = button.getAttribute('data-details');
-            const details = JSON.parse(detailsJson);
+            // const details = JSON.parse(detailsJson);
+            const details = JSON.parse(button.getAttribute('data-details') || '[]');
 
             // Perbarui konten modal
             const modalTitle = facilityModal.querySelector('.modal-title');
