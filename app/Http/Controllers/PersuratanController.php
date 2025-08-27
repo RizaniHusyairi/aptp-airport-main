@@ -4,31 +4,51 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\persuratan;
+use App\Models\SuratVerification;
+use App\Models\SuratRevision;
+use App\Models\Surat_event; // <-- model sederhana untuk tabel surat_events
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
 class PersuratanController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $user = Auth::user();
-        // Tampilkan surat yang dibuat oleh user, atau di mana user adalah verifikator, atau ditugaskan ke user
-        $letters = persuratan::where('user_id', $user->id)
-            ->orWhere('assigned_to_user_id', $user->id)
-            ->orWhereHas('verifications', function ($query) use ($user) {
-                $query->where('user_id', $user->id);
-            })
-            ->with(['user', 'assignee'])
-            ->latest()
-            ->get();
-            
+         $user = Auth::user();
+        $view = $request->query('view', 'inbox'); // default inbox
+
+        $base = persuratan::query()->with(['user','assignee'])->latest();
+
+        switch ($view) {
+            case 'mine': // Dibuat oleh saya
+                $letters = (clone $base)->where('user_id', $user->id)->get();
+                break;
+
+            case 'verifier': // Saya sebagai verifikator (historis atau pending)
+                $letters = (clone $base)
+                    ->whereHas('verifications', fn($q) => $q->where('user_id', $user->id))
+                    ->get();
+                break;
+
+            case 'final': // Untuk persetujuan final saya
+                $letters = (clone $base)->where('final_approver_id', $user->id)->get();
+                break;
+
+            case 'all': // opsional
+                $letters = (clone $base)->get();
+                break;
+
+            case 'inbox':
+            default: // Perlu tindakan saya (yang sedang di-assign ke saya)
+                $letters = (clone $base)->where('assigned_to_user_id', $user->id)->get();
+                break;
+        }
         return view('user_staff2.persuratan.index', compact('letters'));
     }
 
     public function create()
     {
-        // Ambil semua staff untuk pilihan di form
         $staffs = User::where('is_staff', true)->orderBy('name')->get();
         return view('user_staff2.persuratan.create', compact('staffs'));
     }
@@ -36,113 +56,290 @@ class PersuratanController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'letter_type' => 'required|string',
-            'letter_date' => 'required|date',
-            'recipient_address' => 'required|string',
-            'subject' => 'required|string',
-            'final_approver_id' => 'required|exists:users,id',
-            'verifiers' => 'nullable|array',
-            'verifiers.*' => 'exists:users,id',
-            'collaborators' => 'nullable|array',
-            'collaborators.*' => 'exists:users,id',
-            'attachments' => 'required|array|min:1',
-            'attachments.*' => 'file|mimes:pdf|max:2048',
+            // kolom title sudah dihapus => tidak divalidasi lagi
+            'letter_type'        => 'required|string',
+            'letter_date'        => 'required|date',
+            'recipient_address'  => 'required|string',
+            'subject'            => 'required|string',
+            'final_approver_id'  => 'required|exists:users,id',
+
+            'verifiers'          => 'nullable|array',
+            'verifiers.*'        => 'exists:users,id',
+
+            'collaborators'      => 'nullable|array',
+            'collaborators.*'    => 'exists:users,id',
+
+            'attachments'        => 'required|array|min:1',
+            'attachments.*'      => 'file|mimes:pdf|max:2048',
         ]);
 
         DB::beginTransaction();
         try {
-            $attachmentPaths = [];
+            // simpan lampiran
+            $paths = [];
             if ($request->hasFile('attachments')) {
                 foreach ($request->file('attachments') as $file) {
-                    $attachmentPaths[] = $file->store('letters', 'public');
+                    $paths[] = $file->store('letters', 'public');
                 }
             }
 
+            // buat surat (tanpa verifiers, tanpa title)
             $letter = persuratan::create([
-                'user_id' => Auth::id(),
-                'letter_type' => $validated['letter_type'],
-                'letter_date' => $validated['letter_date'],
-                'recipient_address' => $validated['recipient_address'],
-                'subject' => $validated['subject'],
-                'final_approver_id' => $validated['final_approver_id'],
-                'collaborators'      => $request->input('collaborators', []), // <-- isi [] kalau kosong
-                'attachments' => $attachmentPaths,
+                'user_id'            => Auth::id(),
+                'letter_type'        => $validated['letter_type'],
+                'letter_date'        => $validated['letter_date'],
+                'recipient_address'  => $validated['recipient_address'],
+                'subject'            => $validated['subject'],
+                'final_approver_id'  => $validated['final_approver_id'],
+                'collaborators'      => $request->input('collaborators', []),
+                'attachments'        => $paths,
+                'status'             => 'Verifikasi Tambahan', // default
             ]);
 
-            // Tambahkan verifikator manual jika ada
-            if (!empty($validated['verifiers'])) {
-                foreach ($validated['verifiers'] as $order => $userId) {
+            // susun antrian verifikasi
+            $verifiers = $request->input('verifiers', []);
+            if (!empty($verifiers)) {
+                foreach ($verifiers as $i => $uid) {
                     $letter->verifications()->create([
-                        'user_id' => $userId,
-                        'order' => $order + 1,
+                        'user_id' => $uid,
+                        'order'   => $i + 1,
+                        // status default "Menunggu"
                     ]);
                 }
-                // Tugaskan ke verifikator pertama
-                $letter->assigned_to_user_id = $validated['verifiers'][0];
+                // assign ke verifikator pertama
+                $letter->assigned_to_user_id = $verifiers[0];
+                $letter->status = 'Verifikasi Tambahan';
+                $letter->save();
+
+                $this->logEvent($letter, 'created', ['subject' => $letter->subject]);
+                $this->logEvent($letter, 'assigned', ['to_user_id' => $verifiers[0], 'reason' => 'first_verifier']);
+                $this->logEvent($letter, 'verification_requested', ['queue_size' => count($verifiers)]);
             } else {
-                // Jika tidak ada verifikator, langsung ke atasan
-                $letter->assigned_to_user_id = Auth::user()->supervisor_id;
+                // tanpa verifikator → langsung ke atasan
+                $letter->status = 'Menunggu Persetujuan Atasan';
+                $letter->assigned_to_user_id = Auth::user()->supervisor_id ?: $validated['final_approver_id'];
+                $letter->save();
+
+                $this->logEvent($letter, 'created', ['subject' => $letter->subject]);
+                $this->logEvent($letter, 'assigned', ['to_user_id' => $letter->assigned_to_user_id, 'reason' => 'no_verifier_supervisor_or_final']);
             }
-            
-            $letter->save();
+
             DB::commit();
-
-            return redirect()->route('persuratan.staffIndex')->with('success', 'Surat berhasil dibuat dan dikirim untuk verifikasi.');
-
+            return redirect()->route('persuratan.staffIndex')
+                ->with('success', 'Surat berhasil dibuat.');
         } catch (\Exception $e) {
             DB::rollBack();
-            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage())->withInput();
+            return back()->with('error', 'Terjadi kesalahan: '.$e->getMessage())->withInput();
         }
     }
 
     public function show(persuratan $surat)
     {
-        // Tampilkan detail surat, termasuk riwayat revisi
-        $surat->load(['user', 'assignee', 'finalApprover', 'verifications.user']);
-        return view('user_staff2.persuratan.show', compact('surat'));
+    $surat->load([
+        'user',
+        'assignee',
+        'finalApprover',
+        'verifications.user',
+        'revisions.user',
+        'events', // jika pakai model SuratEvent
+    ]);
+
+    return view('user_staff2.persuratan.show', ['letter' => $surat]);
     }
 
-    public function approve(Request $request, persuratan $surat)
+    /**
+     * Verifikator menyetujui tahapnya.
+     */
+    public function approveVerification(Request $request, persuratan $surat)
     {
-        // Logika persetujuan berjenjang
-        $user = Auth::user();
-        // Anda perlu logika untuk menentukan siapa approver selanjutnya
-        // Contoh sederhana:
-        switch ($surat->status) {
-            case 'Menunggu Persetujuan Kasi':
-                $surat->status = 'Menunggu Persetujuan Kasubbag';
-                // $surat->assigned_to_user_id = ID_KASUBBAG;
-                break;
-            case 'Menunggu Persetujuan Kasubbag':
-                $surat->status = 'Menunggu Persetujuan Kabandara';
-                // $surat->assigned_to_user_id = ID_KABANDARA;
-                break;
-            case 'Menunggu Persetujuan Kabandara':
-                $surat->status = 'Disetujui';
-                $surat->assigned_to_user_id = null;
-                break;
+        DB::beginTransaction();
+        try {
+            $actorId = Auth::id();
+
+            // tandai tahap verifikasi aktor ini sebagai Disetujui
+            $current = $surat->verifications()
+                ->where('user_id', $actorId)
+                ->where('status', 'Menunggu')
+                ->orderBy('order')
+                ->first();
+
+            if (!$current) {
+                return back()->with('error', 'Tahap verifikasi tidak ditemukan atau sudah diproses.');
+            }
+
+            $current->update(['status' => 'Disetujui']);
+            $this->logEvent($surat, 'verified', ['by' => $actorId, 'order' => $current->order]);
+
+            // cari verifikator berikutnya
+            $next = $surat->verifications()
+                ->where('status', 'Menunggu')
+                ->orderBy('order')
+                ->first();
+
+            if ($next) {
+                // lanjut ke verifikator berikutnya
+                $surat->assigned_to_user_id = $next->user_id;
+                $surat->status = 'Verifikasi Tambahan';
+                $surat->save();
+
+                $this->logEvent($surat, 'assigned', ['to_user_id' => $next->user_id, 'reason' => 'next_verifier']);
+            } else {
+                // semua verifier selesai → minta persetujuan atasan/final approver
+                $surat->status = 'Menunggu Persetujuan Atasan';
+                $surat->assigned_to_user_id = $surat->final_approver_id;
+                $surat->save();
+
+                $this->logEvent($surat, 'assigned', ['to_user_id' => $surat->final_approver_id, 'reason' => 'final_approval']);
+            }
+
+            DB::commit();
+            return back()->with('success', 'Verifikasi disetujui.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error', 'Gagal menyetujui: '.$e->getMessage());
         }
-        $surat->save();
-        return redirect()->route('admin2.persuratan.index')->with('success', 'Surat berhasil disetujui dan diteruskan.');
     }
 
-    public function reject(Request $request, persuratan $surat)
+    /**
+     * Verifikator menolak surat (bisa langsung final Ditolak).
+     */
+    public function rejectVerification(Request $request, persuratan $surat)
     {
-        // Logika untuk meminta revisi
         $request->validate(['comments' => 'required|string']);
 
-        $surat->revisions()->create([
-            'user_id' => Auth::id(),
-            'comments' => $request->comments,
-            'previous_status' => $surat->status,
-        ]);
+        DB::beginTransaction();
+        try {
+            $actorId = Auth::id();
 
-        $surat->update([
-            'status' => 'Revisi Diperlukan',
-            'assigned_to_user_id' => $surat->user_id, // Kembalikan ke pembuat
-        ]);
-        
-        return redirect()->route('admin.persuratan.show', $surat)->with('success', 'Catatan revisi telah dikirim.');
+            $current = $surat->verifications()
+                ->where('user_id', $actorId)
+                ->where('status', 'Menunggu')
+                ->orderBy('order')
+                ->first();
+
+            if ($current) {
+                $current->update(['status' => 'Ditolak', 'comments' => $request->comments]);
+            }
+
+            // tandai surat ditolak & tidak ada assignee aktif
+            $surat->update([
+                'status' => 'Ditolak',
+                'assigned_to_user_id' => null,
+            ]);
+
+            $this->logEvent($surat, 'rejected', ['by' => $actorId, 'comments' => $request->comments]);
+
+            DB::commit();
+            return back()->with('success', 'Surat ditolak.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error', 'Gagal menolak: '.$e->getMessage());
+        }
     }
 
+    /**
+     * Meminta revisi (dari verifikator/atasan) → balik ke pembuat.
+     */
+    public function requestRevision(Request $request, persuratan $surat)
+    {
+        $request->validate(['comments' => 'required|string']);
+
+        DB::beginTransaction();
+        try {
+            $actorId = Auth::id();
+
+            // simpan catatan revisi
+            $surat->revisions()->create([
+                'user_id'         => $actorId,
+                'comments'        => $request->comments,
+                'previous_status' => $surat->status,
+            ]);
+
+            // update status & assignment ke pembuat
+            $surat->update([
+                'status' => 'Revisi Diperlukan',
+                'assigned_to_user_id' => $surat->user_id,
+            ]);
+
+            $this->logEvent($surat, 'revision_requested', ['by' => $actorId, 'comments' => $request->comments]);
+
+            DB::commit();
+            return back()->with('success', 'Revisi diminta ke pembuat surat.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error', 'Gagal meminta revisi: '.$e->getMessage());
+        }
+    }
+
+    /**
+     * Setelah pembuat mengunggah revisi → kembalikan ke antrian berikutnya.
+     * (opsional – panggil ketika submit revisi)
+     */
+    public function submitRevision(Request $request, persuratan $surat)
+    {
+        DB::beginTransaction();
+        try {
+            // log event
+            $this->logEvent($surat, 'revision_submitted', ['by' => Auth::id()]);
+
+            // tentukan assignment berikutnya:
+            // jika masih ada verifier berstatus Menunggu → ke verifier pertama yang Menunggu
+            $next = $surat->verifications()->where('status', 'Menunggu')->orderBy('order')->first();
+            if ($next) {
+                $surat->update([
+                    'status' => 'Verifikasi Tambahan',
+                    'assigned_to_user_id' => $next->user_id,
+                ]);
+                $this->logEvent($surat, 'assigned', ['to_user_id' => $next->user_id, 'reason' => 'resume_verification']);
+            } else {
+                // jika tidak ada verifier → ke final approver
+                $surat->update([
+                    'status' => 'Menunggu Persetujuan Atasan',
+                    'assigned_to_user_id' => $surat->final_approver_id,
+                ]);
+                $this->logEvent($surat, 'assigned', ['to_user_id' => $surat->final_approver_id, 'reason' => 'resume_final_approval']);
+            }
+
+            DB::commit();
+            return back()->with('success', 'Revisi dikirim.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error', 'Gagal mengirim revisi: '.$e->getMessage());
+        }
+    }
+
+    /**
+     * Final approver menyetujui (tanda tangan akhir).
+     */
+    public function finalApprove(Request $request, persuratan $surat)
+    {
+        DB::beginTransaction();
+        try {
+            // set Disetujui dan kosongkan assignee
+            $surat->update([
+                'status' => 'Disetujui',
+                'assigned_to_user_id' => null,
+            ]);
+
+            $this->logEvent($surat, 'final_approved', ['by' => Auth::id()]);
+
+            DB::commit();
+            return back()->with('success', 'Surat disetujui final.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error', 'Gagal menyetujui final: '.$e->getMessage());
+        }
+    }
+
+    /* ===================== helpers ===================== */
+
+    private function logEvent(persuratan $letter, string $type, array $meta = []): void
+    {
+        Surat_event::create([
+            'persuratan_id' => $letter->id,
+            'actor_user_id' => Auth::id(),
+            'event_type'    => $type,
+            'meta'          => $meta,
+        ]);
+    }
 }

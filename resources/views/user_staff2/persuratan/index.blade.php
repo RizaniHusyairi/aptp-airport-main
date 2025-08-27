@@ -8,6 +8,19 @@
 @endsection
 
 @section('content')
+@php
+    // view aktif dari query string (?view=inbox|mine|verifier|final)
+    $activeView = $view ?? request('view', 'inbox');
+
+    $tabs = [
+        'inbox'    => 'Perlu Tindakan Saya',
+        'mine'     => 'Dibuat oleh Saya',
+        'verifier' => 'Saya sebagai Verifikator',
+        'final'    => 'Persetujuan Final Saya',
+        // 'all'    => 'Semua', // buka jika ingin
+    ];
+@endphp
+
 <div class="page-heading">
     <div class="page-title">
         <div class="row">
@@ -24,12 +37,31 @@
         </div>
     </div>
 </div>
+
 <section class="section">
     <div class="card">
-        <div class="card-header d-flex justify-content-between align-items-center">
-            <h5 class="card-title mb-0">Kotak Masuk & Surat Keluar</h5>
-            <a href="{{ route('persuratan.create') }}" class="btn btn-primary"><i class="bi bi-plus"></i> Buat Surat Baru</a>
+        <div class="card-header d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-2">
+            <div>
+                <h5 class="card-title mb-1">Kotak Masuk & Surat Keluar</h5>
+                {{-- Tabs --}}
+                <ul class="nav nav-tabs mt-2" role="tablist">
+                    @foreach ($tabs as $key => $label)
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link {{ $activeView === $key ? 'active' : '' }}"
+                               href="{{ route('persuratan.staffIndex', ['view' => $key]) }}"
+                               role="tab" aria-selected="{{ $activeView === $key ? 'true' : 'false' }}">
+                                {{ $label }}
+                            </a>
+                        </li>
+                    @endforeach
+                </ul>
+            </div>
+
+            <a href="{{ route('persuratan.create') }}" class="btn btn-primary">
+                <i class="bi bi-plus"></i> Buat Surat Baru
+            </a>
         </div>
+
         <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-striped" id="table-persuratan">
@@ -46,7 +78,8 @@
                     <tbody>
                         @forelse ($letters as $letter)
                         <tr>
-                            <td>{{ $letter->title }}</td>
+                            {{-- Kolom title diganti subject --}}
+                            <td>{{ $letter->subject }}</td>
                             <td>{{ $letter->user->name ?? 'N/A' }}</td>
                             <td>
                                 @php
@@ -59,13 +92,18 @@
                                         default => 'bg-secondary',
                                     };
                                 @endphp
-                                <span class="badge {{ $statusClass }} text-capitalize">{{ str_replace('_', ' ', $letter->status) }}</span>
+                                <span class="badge {{ $statusClass }} text-capitalize">
+                                    {{ str_replace('_', ' ', $letter->status) }}
+                                </span>
                             </td>
                             <td>{{ $letter->assignee->name ?? '-' }}</td>
-                            <td>{{ $letter->updated_at->translatedFormat('d M Y') }}</td>
-                            <td><a href="{{ route('persuratan.show', $letter->id) }}" class="btn btn-sm btn-primary">Lihat Detail</a></td>
+                            <td>{{ optional($letter->updated_at)->translatedFormat('d M Y') }}</td>
+                            <td>
+                                <a href="{{ route('persuratan.show', $letter->id) }}" class="btn btn-sm btn-primary">Lihat Detail</a>
+                            </td>
                         </tr>
                         @empty
+                    
                         @endforelse
                     </tbody>
                 </table>
@@ -81,6 +119,5 @@
     <script src="{{ asset('assetsv2/extensions/datatables.net/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('assetsv2/extensions/datatables.net-bs5/js/dataTables.bootstrap5.min.js') }}"></script>
     <script src="{{ asset('assetsv2/compiled/js/staff-persuratan.js') }}"></script>
-
-   
+    
 @endsection

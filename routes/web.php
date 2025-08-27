@@ -204,7 +204,14 @@ Route::group(["prefix" => 'dashboard'], function () {
             Route::get('staff/persuratan/create',[PersuratanController::class, 'create'])->name('persuratan.create');
             Route::post('staff/persuratan/store',[PersuratanController::class, 'store'])->name('persuratan.store');
             Route::get('staff/persuratan/{surat}',[PersuratanController::class, 'show'])->name('persuratan.show');
-        
+
+            // aksi workflow:
+            Route::post('staff/persuratan/{surat}/verify/approve', [PersuratanController::class, 'approveVerification'])->name('persuratan.verify.approve');
+            Route::post('staff/persuratan/{surat}/verify/reject',  [PersuratanController::class, 'rejectVerification'])->name('persuratan.verify.reject');
+            Route::post('staff/persuratan/{surat}/revision/request',[PersuratanController::class, 'requestRevision'])->name('persuratan.revision.request');
+            Route::post('staff/persuratan/{surat}/revision/submit', [PersuratanController::class, 'submitRevision'])->name('persuratan.revision.submit');
+            Route::post('staff/persuratan/{surat}/final-approve',   [PersuratanController::class, 'finalApprove'])->name('persuratan.final.approve');
+                
         });
 
 
