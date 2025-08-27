@@ -170,12 +170,12 @@ class User extends Authenticatable implements HasMedia
                     ->withTimestamps();
     }
     
-    public function submissionDocuments()
-    {
-        return $this->belongsToMany(SubmissionDocument::class)
-                    ->withPivot('tenant_id', 'file_path')
-                    ->withTimestamps();
-    }
+    // public function submissionDocuments()
+    // {
+    //     return $this->belongsToMany(SubmissionDocument::class)
+    //                 ->withPivot('tenant_id', 'file_path')
+    //                 ->withTimestamps();
+    // }
 
     // Roles and Permissions
     public function roles()

@@ -65,7 +65,6 @@ class PersuratanController extends Controller
                 'recipient_address' => $validated['recipient_address'],
                 'subject' => $validated['subject'],
                 'final_approver_id' => $validated['final_approver_id'],
-                'verifiers'          => $request->input('verifiers', []),     // <-- isi [] kalau kosong
                 'collaborators'      => $request->input('collaborators', []), // <-- isi [] kalau kosong
                 'attachments' => $attachmentPaths,
             ]);

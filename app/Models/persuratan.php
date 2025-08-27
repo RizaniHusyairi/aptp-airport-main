@@ -20,7 +20,6 @@ protected $fillable = [
         'final_approver_id',
         'collaborators',
         'attachments',
-        'status',
     ];
 
     protected $casts = [
