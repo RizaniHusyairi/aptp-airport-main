@@ -27,9 +27,9 @@
         <ul class="menu">
             <li class="sidebar-title">Menu</li>
             <li class="sidebar-item {{ Route::is('persuratan.staffIndex') ? 'active' : '' }}">
-                <a href="{{ route('persuratan.staffIndex') }}" class='sidebar-link' data-bs-toggle="tooltip" data-bs-placement="right" title="Persuratan">
+                <a href="{{ route('persuratan.staffIndex') }}" class='sidebar-link' data-bs-toggle="tooltip" data-bs-placement="right" title="Surat">
                     <i class="bi bi-book"></i>
-                    <span>Persuratan</span>
+                    <span>Surat</span>
                 </a>
             </li>
             @foreach ($permissionRoutes as $permissionName => $data)

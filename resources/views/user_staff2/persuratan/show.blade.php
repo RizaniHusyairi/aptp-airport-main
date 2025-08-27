@@ -4,11 +4,11 @@
 @section('styles_admin')
     <link rel="stylesheet" href="{{ asset('assetsv2/extensions/datatables.net-bs5/css/dataTables.bootstrap5.min.css') }}">
     <style>
-        .chip{display:inline-block;padding:.25rem .5rem;border-radius:999px;background:#f1f3f5;font-size:.85rem;margin:.125rem .25rem}
+        .chip{display:inline-block;padding:.25rem .5rem;border-radius:999px;background:#424253;font-size:.85rem;margin:.125rem .25rem}
         .timeline{position:relative;margin-left:1rem;padding-left:1.25rem}
         .timeline::before{content:'';position:absolute;left:6px;top:0;bottom:0;width:2px;background:#e9ecef}
         .timeline-item{position:relative;margin-bottom:1rem}
-        .timeline-item::before{content:'';position:absolute;left:-.4rem;top:.25rem;width:.75rem;height:.75rem;border-radius:50%;background:#0d6efd}
+        .timeline-item::before{content:'';position:absolute;left:-1.2rem;top:.25rem;width:.75rem;height:.75rem;border-radius:50%;background:#0d6efd}
         .kv{display:grid;grid-template-columns:180px 1fr;gap:.5rem .75rem}
         @media (max-width:768px){.kv{grid-template-columns:1fr}}
     </style>
@@ -101,6 +101,7 @@
                     <form action="{{ route('persuratan.revision.submit', $letter) }}" method="POST" class="d-inline" enctype="multipart/form-data">
                         @csrf
                         {{-- jika mau minta upload revisi baru, tambah input file di sini --}}
+                        
                         <button class="btn btn-primary btn-sm"><i class="bi bi-send"></i> Kirim Revisi</button>
                     </form>
                 @endif
