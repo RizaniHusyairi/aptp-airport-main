@@ -1,0 +1,56 @@
+/* public/assets_landing/css/profil-ppid.css */
+
+/* Gaya untuk seksi baru */
+.ppid-duties-section {
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+}
+
+/* Gaya untuk Navigasi Tab */
+.ppid-duties-section .nav-tabs {
+    border-bottom: 2px solid #dee2e6;
+}
+
+.ppid-duties-section .nav-tabs .nav-link {
+    border: none;
+    border-bottom: 2px solid transparent;
+    color: var(--text-muted-light);
+    font-weight: 600;
+    padding: 15px 20px;
+    margin-bottom: -2px;
+    transition: all 0.3s ease;
+}
+
+.ppid-duties-section .nav-tabs .nav-link.active,
+.ppid-duties-section .nav-tabs .nav-link:hover {
+    color: var(--primary-color);
+    border-bottom-color: var(--secondary-color);
+}
+
+/* Gaya untuk Konten Tab */
+.ppid-duties-section .tab-content {
+    padding-top: 30px;
+}
+
+.info-list {
+    list-style: none;
+    padding-left: 0;
+}
+
+.info-list li {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 20px;
+    font-size: 1rem;
+    color: var(--text-muted-light);
+    line-height: 1.7;
+}
+
+.info-list .icon {
+    font-size: 20px;
+    color: var(--secondary-color);
+    margin-right: 15px;
+    margin-top: 5px;
+}
