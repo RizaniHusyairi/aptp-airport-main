@@ -115,11 +115,33 @@
             
 
             <section class="bg-white p-4 rounded shadow mb-5" data-aos="fade-up" data-aos-delay="500">
-                <h2 class="h3 mb-2 text-dark">Struktur Organisasi PPID</h2>
-                <hr class="my-3">
-                <a href="{{ asset('assets_landing/img/profil/struktur_ppid.jpg') }}" class="glightbox">
-                    <img src="{{ asset('assets_landing/img/profil/struktur_ppid.jpg') }}" alt="struktur PPID" class="img-fluid rounded shadow-lg" id="struktur-image">
-                </a>
+                <div class="row g-4 justify-content-center">
+                    <!-- Struktur Organisasi PPID -->
+                    <div class="col-lg-4 col-md-6">
+                        <h5 class="text-center mb-3 fw-bold">Struktur Organisasi PPID</h5>
+                        <a href="{{ asset('assets_landing/img/profil/struktur_ppid.jpg') }}" class="glightbox">
+                            <img src="{{ asset('assets_landing/img/profil/struktur_ppid.jpg') }}" alt="Struktur Organisasi PPID" class="img-fluid rounded shadow-sm">
+                        </a>
+                    </div>
+
+                    <!-- Maklumat Pelayanan -->
+                    <div class="col-lg-4 col-md-6">
+                        <h5 class="text-center mb-3 fw-bold">Maklumat Pelayanan</h5>
+                        {{-- Ganti path gambar ini dengan path yang benar --}}
+                        <a href="{{ asset('assets_landing/img/profil/MP.png') }}" class="glightbox">
+                            <img src="{{ asset('assets_landing/img/profil/MP.png') }}" alt="Maklumat Pelayanan" class="img-fluid rounded shadow-sm">
+                        </a>
+                    </div>
+
+                    <!-- Standar Biaya Layanan -->
+                    <div class="col-lg-4 col-md-6">
+                        <h5 class="text-center mb-3 fw-bold">Standar Biaya Layanan</h5>
+                        {{-- Ganti path gambar ini dengan path yang benar --}}
+                        <a href="{{ asset('assets_landing/img/profil/SBL.png') }}" class="glightbox">
+                            <img src="{{ asset('assets_landing/img/profil/SBL.png') }}" alt="Standar Biaya Layanan" class="img-fluid rounded shadow-sm">
+                        </a>
+                    </div>
+                </div>
             </section>
         </div>
     </div>
