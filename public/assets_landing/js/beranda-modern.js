@@ -43,33 +43,64 @@ document.addEventListener('DOMContentLoaded', function() {
     /**
      * LOGIKA BARU UNTUK QUICK NAV DI HERO SECTION
      */
-    const heroNavLinks = document.querySelectorAll('.hero-nav-link');
-    heroNavLinks.forEach(link => {
+
+    /**
+     * LOGIKA UNTUK KARTU AKSES CEPAT
+     */
+    const accessCards = document.querySelectorAll('.access-card');
+    accessCards.forEach(link => {
         link.addEventListener('click', function(e) {
-            e.preventDefault();
-            
             const targetSectionId = this.getAttribute('href');
-            const targetSection = document.querySelector(targetSectionId);
+            
+            // Hanya jalankan scroll jika href adalah anchor
+            if (targetSectionId.startsWith('#')) {
+                e.preventDefault();
+                const targetSection = document.querySelector(targetSectionId);
 
-            if (targetSection) {
-                // Scroll ke seksi yang dituju
-                targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                if (targetSection) {
+                    targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
-                // Cek apakah link ini punya target tab
-                const tabTargetId = this.dataset.tabTarget;
-                if (tabTargetId) {
-                    const tabButton = document.querySelector(tabTargetId);
-                    if (tabButton) {
-                        // Tunggu sejenak agar scroll selesai sebelum mengaktifkan tab
-                        setTimeout(() => {
-                            const tab = new bootstrap.Tab(tabButton);
-                            tab.show();
-                        }, 500); // Jeda 500ms
+                    const tabTargetId = this.dataset.tabTarget;
+                    if (tabTargetId) {
+                        const tabButton = document.querySelector(tabTargetId);
+                        if (tabButton) {
+                            setTimeout(() => {
+                                const tab = new bootstrap.Tab(tabButton);
+                                tab.show();
+                            }, 500); // Jeda agar scroll selesai
+                        }
                     }
                 }
             }
         });
     });
+    // const heroNavLinks = document.querySelectorAll('.hero-nav-link');
+    // heroNavLinks.forEach(link => {
+    //     link.addEventListener('click', function(e) {
+    //         e.preventDefault();
+            
+    //         const targetSectionId = this.getAttribute('href');
+    //         const targetSection = document.querySelector(targetSectionId);
+
+    //         if (targetSection) {
+    //             // Scroll ke seksi yang dituju
+    //             targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    //             // Cek apakah link ini punya target tab
+    //             const tabTargetId = this.dataset.tabTarget;
+    //             if (tabTargetId) {
+    //                 const tabButton = document.querySelector(tabTargetId);
+    //                 if (tabButton) {
+    //                     // Tunggu sejenak agar scroll selesai sebelum mengaktifkan tab
+    //                     setTimeout(() => {
+    //                         const tab = new bootstrap.Tab(tabButton);
+    //                         tab.show();
+    //                     }, 500); // Jeda 500ms
+    //                 }
+    //             }
+    //         }
+    //     });
+    // });
 
 
     /**

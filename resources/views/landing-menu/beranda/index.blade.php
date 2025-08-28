@@ -28,62 +28,60 @@
 @section('content')
 
 <!-- ============================================ -->
-<!--            HERO SECTION (REVISED)            -->
+<!--           HERO SECTION (DIROMBAK)            -->
 <!-- ============================================ -->
 <section id="hero-modern" class="hero-modern">
     <div class="swiper hero-slider">
         <div class="swiper-wrapper">
-            <!-- Slide 1 -->
-            @foreach ($sliders as $index => $slider)
-
+            @forelse ($sliders as $slider)
                 <div class="swiper-slide">
-                    {{-- <div class="hero-background-image" style="background-image: url({{ Storage::url($slider->documents) }})"></div> --}}
-
-                    <div class="hero-background-image" style="background-image: url({{asset('uploads/' . $slider->documents)}})"></div>
+                    <div class="hero-background-image" style="background-image: url('{{ asset('uploads/' . $slider->documents) }}')"></div>
                 </div>
-                
-            @endforeach
-            
+            @empty
+                <div class="swiper-slide">
+                    <div class="hero-background-image" style="background-image: url('{{asset('assets_landing/img/bg-1.png')}}')"></div>
+                </div>
+            @endforelse
         </div>
-        <!-- Navigasi Paginasi Slider -->
+        <!-- Navigasi Slider -->
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
         <div class="swiper-pagination"></div>
     </div>
-    
-    {{-- <div class="hero-background-image" style="background-image: url({{asset('assets_landing/img/bg-1.png')  }})"></div> --}}
-    <div class="hero-background-overlay"></div>
+</section>
 
-    <div class="container hero-container d-flex flex-column justify-content-center align-items-center">
-        <h1 class="text-white" data-aos="fade-down">Bandara APT Pranoto</h1>
-        <p class="text-white lead" data-aos="fade-up" data-aos-delay="200">
-            Gerbang Udara Anda Menuju <span id="typed-destination"></span>
-        </p>
-        
-        @if ($weather)
-        <a href="https://www.bmkg.go.id/cuaca/prakiraan-cuaca/64.72.05.1004" target="_blank">
-            <div class="weather-widget-modern" data-aos="fade-up" data-aos-delay="400">
-                <img src="{{ $weather['weather_icon'] }}" alt="Ikon Cuaca">
-                <span>{{ $weather['temperature'] }}°C, {{ $weather['weather_desc'] }} di Samarinda</span>
+<!-- ============================================ -->
+<!--           SEKSI AKSES CEPAT (BARU)           -->
+<!-- ============================================ -->
+<section id="quick-access" class="section-modern quick-access">
+    <div class="container">
+        <div class="row justify-content-center g-4">
+            <div class="col-lg-3 col-md-6">
+                <a href="#flight-info" class="access-card">
+                    <div class="icon-wrapper">
+                        <i class="bi bi-airplane-engines-fill"></i>
+                    </div>
+                    <span>Jadwal Penerbangan</span>
+                </a>
             </div>
-        </a>
-        @endif
-    </div>
-    <div class="hero-quick-nav-wrapper">
-        <div class="hero-quick-nav" data-aos="fade-up" data-aos-delay="600">
-            <a href="#flight-info" class="hero-nav-link">
-                <i class="bi bi-airplane-engines-fill"></i>
-                <span>Jadwal Penerbangan</span>
-            </a>
-            <a href="#explore-section" class="hero-nav-link" data-tab-target="#facilities-tab">
-                <i class="bi bi-gem"></i>
-                <span>Fasilitas</span>
-            </a>
-            <a href="#explore-section" class="hero-nav-link" data-tab-target="#tourism-tab">
-                <i class="bi bi-compass-fill"></i>
-                <span>Pariwisata</span>
-            </a>
+            <div class="col-lg-3 col-md-6">
+                <a href="#explore-section" class="access-card" data-tab-target="#facilities-tab">
+                    <div class="icon-wrapper">
+                        <i class="bi bi-gem"></i>
+                    </div>
+                    <span>Fasilitas Bandara</span>
+                </a>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <a href="#explore-section" class="access-card" data-tab-target="#tourism-tab">
+                    <div class="icon-wrapper">
+                        <i class="bi bi-compass-fill"></i>
+                    </div>
+                    <span>Wisata Terdekat</span>
+                </a>
+            </div>
         </div>
     </div>
-
 </section>
 
 <!-- ============================================ -->

@@ -338,6 +338,8 @@ Route::get('/informasi-publik/profil-ppid-blu', [LandingPageController::class, '
 Route::get('/informasi-publik/pejabat-bandara', [LandingPageController::class, 'pejabatBandara'])->name('pejabatBandara');
 Route::get('/informasi-publik/sop-ppid', [LandingPageController::class, 'sopPpid'])->name('sopPpid');
 
+Route::get('/informasi-publik/laporan-layanan', [LandingPageController::class, 'laporanLayanan'])->name('laporanLayanan');
+
 // routes/web.php
 Route::get('/fasilitas', [LandingPageController::class, 'fasilitas'])->name('fasilitas');
 Route::get('/pariwisata', [LandingPageController::class, 'pariwisata'])->name('pariwisata.index');

@@ -2,7 +2,7 @@
     <div class="container position-relative d-flex align-items-center justify-content-between">
         <a href="{{ route('home') }}" class="logo d-flex align-items-center">
             <img src="{{ asset('assets_landing/img/logo/logo-apt.svg') }}" alt="logo apt" class="logo-apt">
-            <img src="{{ asset('assets_landing/img/logo/logo-white-apt.svg') }}" alt="logo apt" class="logo-white-apt">
+            <img src="{{ asset('assets_landing/img/logo/logo-white-apt.svg') }}" alt="logo apt" class="{{ Route::is('home') ? '' : 'd-none' }} logo-white-apt">
         </a>
 
         <nav id="navmenu" class="navmenu">
