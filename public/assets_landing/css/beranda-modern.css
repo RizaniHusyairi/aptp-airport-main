@@ -48,45 +48,25 @@
 }
 
 /* =================================== */
-/* GAYA BARU UNTUK HEADER/NAVIGASI     */
-/* =================================== */
-/* Kondisi awal header di halaman beranda */
-#header.home {
-     /* Atur background-color secara eksplisit agar transisi berjalan mulus */
-        background: linear-gradient(to bottom, rgba(13, 44, 74, 0.7), transparent);
-        background-color: transparent;
-        /* Atur transisi untuk kedua properti */
-        transition: background-color 0.4s ease, background-image 0.4s ease;
-    }
-    
-    /* Kondisi header setelah di-scroll */
-    #header.header-scrolled {
-    background: linear-gradient(to bottom, rgba(255, 255, 255, 1), transparent);
-    background-color: #ffffff;
-    box-shadow: 0 2px 15px rgba(0,0,0,0.1);
-}
-
-/* =================================== */
-/* HERO SECTION (GAYA BARU)            */
+/* HERO SECTION (GAYA DIKEMBALIKAN)    */
 /* =================================== */
 .hero-modern {
     position: relative;
-    height: 90vh; /* Sedikit lebih pendek untuk memberi ruang */
+    height: 100vh;
     width: 100%;
     overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .hero-slider {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 1;
 }
-
-.hero-slider .swiper-slide {
-    overflow: hidden;
-}
+.hero-slider .swiper-slide { overflow: hidden; }
 
 .hero-background-image {
     width: 100%;
@@ -95,115 +75,195 @@
     background-position: center;
     animation: kenburns 20s ease-out infinite alternate;
 }
-
 @keyframes kenburns {
     from { transform: scale(1); }
     to { transform: scale(1.1); }
 }
 
-/* Gaya untuk Navigasi Slider (Panah & Paginasi) */
-.hero-slider .swiper-pagination-bullet {
-    background-color: rgba(255, 255, 255, 0.8);
-}
-.hero-slider .swiper-pagination-bullet-active {
-    background-color: var(--secondary-color);
-}
-.hero-slider .swiper-button-next,
-.hero-slider .swiper-button-prev {
-    color: #ffffff;
-    transition: transform 0.3s ease;
-}
-.hero-slider .swiper-button-next:hover,
-.hero-slider .swiper-button-prev:hover {
-    transform: scale(1.2);
+.hero-background-overlay {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(13, 44, 74, 0.6);
+    z-index: 2;
 }
 
-/* =================================== */
-/* SEKSI AKSES CEPAT (GAYA BARU)       */
-/* =================================== */
-.quick-access {
-    background-color: var(--background-light);
-    padding-top: 60px;
-    padding-bottom: 60px;
-    margin-top: -80px; /* Sedikit menimpa hero section */
+.hero-modern .hero-container {
     position: relative;
-    z-index: 10;
+    z-index: 3;
+    text-align: center;
 }
 
-.access-card {
-    display: flex;
-    flex-direction: column;
+.hero-container h1 { font-size: clamp(2.5rem, 5vw, 4.5rem); font-weight: 700; text-shadow: 2px 2px 10px rgba(0,0,0,0.5); }
+.hero-container .lead { font-size: clamp(1.1rem, 2vw, 1.5rem); font-weight: 300; margin-top: 10px; }
+#typed-destination { font-weight: 600; color: var(--secondary-color); }
+
+/* Gaya untuk Widget Cuaca (Dikembalikan) */
+.weather-widget-modern {
+    display: inline-flex;
     align-items: center;
-    justify-content: center;
-    background: #ffffff;
-    padding: 30px 20px;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    padding: 10px 20px;
+    border-radius: 50px;
+    margin-top: 30px;
+    color: var(--text-light);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+.weather-widget-modern img {
+    width: 40px;
+    height: 40px;
+    margin-right: 15px;
+}
+
+/* Gaya Quick Nav (Dikembalikan) */
+.hero-quick-nav-wrapper {
+    position: absolute;
+    bottom: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 3;
+}
+.hero-quick-nav {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50px;
+    padding: 10px;
+    display: flex;
+    gap: 10px;
+}
+.hero-nav-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    color: var(--text-light);
+    text-decoration: none;
+    font-weight: 500;
+    border-radius: 50px;
+    transition: background-color 0.3s ease;
+}
+.hero-nav-link:hover { background-color: rgba(255, 255, 255, 0.2); }
+
+
+/* ### PERBAIKAN: Gaya khusus untuk mobile ### */
+@media (max-width: 768px) {
+    .hero-quick-nav-wrapper {
+        bottom: 50px;
+    }
+    .hero-quick-nav {
+        padding: 8px;
+        gap: 5px;
+    }
+    .hero-nav-link {
+        padding: 8px 12px;
+    }
+    .hero-nav-link span {
+        display: none; /* Sembunyikan teks, hanya tampilkan ikon */
+    }
+    .hero-nav-link i {
+        font-size: 1.3rem; /* Perbesar ikon agar lebih mudah disentuh */
+        margin: 0; /* Hapus margin jika ada */
+    }
+}
+
+/* =================================== */
+/* GAYA BARU UNTUK SLIDER INFORMASI    */
+/* =================================== */
+.info-slider-section {
+    background-color: var(--background-light);
+}
+
+.info-slider {
+    width: 100%;
+    padding: 10px;
+}
+
+.info-slide-card {
+    display: block;
     border-radius: 16px;
-    text-align: center;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
     text-decoration: none;
     color: var(--text-dark);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    height: 100%;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-    border: 1px solid #e9ecef;
 }
 
-.access-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 15px 40px rgba(13, 44, 74, 0.12);
+.info-slide-card:hover {
+    transform: translateY(-5px);
+}
+
+.info-slide-card img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+}
+
+.info-slide-content {
+    background: #ffffff;
+    padding: 20px;
+}
+
+.info-slide-content h5 {
+    font-weight: 600;
+    margin-bottom: 10px;
     color: var(--primary-color);
 }
 
-.access-card .icon-wrapper {
-    width: 70px;
-    height: 70px;
+.info-slide-content p {
+    color: var(--text-muted-light);
+    font-size: 0.9rem;
+}
+
+/* ### PERBAIKAN: Gaya baru untuk tombol navigasi slider ### */
+.info-slider .swiper-button-next{
+        right: 30px;
+}
+.info-slider .swiper-button-prev {
+left: 30px;
+}
+    .info-slider .swiper-button-next,
+.info-slider .swiper-button-prev {
+    color: var(--primary-color);
+    width: 44px; /* Ukuran tombol diperkecil */
+    height: 44px;
+    background-color: rgba(255, 255, 255, 0.9);
     border-radius: 50%;
-    background-color: var(--primary-color);
-    color: var(--text-light);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 20px;
-    font-size: 32px;
-    transition: background-color 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    transition: transform 0.2s ease, background-color 0.2s ease;
 }
 
-.access-card:hover .icon-wrapper {
-    background-color: var(--secondary-color);
+.info-slider .swiper-button-next:hover,
+.info-slider .swiper-button-prev:hover {
+    background-color: #ffffff;
 }
 
-.access-card span {
-    font-weight: 600;
-    font-size: 1.1rem;
+/* Animasi saat tombol ditekan */
+.info-slider .swiper-button-next:active,
+.info-slider .swiper-button-prev:active {
+    transform: scale(0.9);
 }
 
-/* ### PERBAIKAN: Gaya khusus untuk mobile ### */
-@media (max-width: 767px) {
-    .hero-modern {
-        height: 60vh; /* Perkecil tinggi slider di mobile */
-    }
-
-    .quick-access {
-        margin-top: -60px; /* Sesuaikan margin agar tetap menimpa dengan baik */
-        padding-top: 40px;
-        padding-bottom: 40px;
-    }
-
-    .access-card {
-        padding: 20px 15px;
-    }
-
-    .access-card .icon-wrapper {
-        width: 60px;
-        height: 60px;
-        font-size: 28px;
-        margin-bottom: 15px;
-    }
-
-    .access-card span {
-        font-size: 1rem;
-    }
+/* Menyesuaikan ukuran ikon panah di dalam tombol */
+.info-slider .swiper-button-next::after,
+.info-slider .swiper-button-prev::after {
+    font-size: 1rem;
+    font-weight: bold;
 }
 
+@media (max-width: 768px) {
+    .info-slider .swiper-button-next,
+    .info-slider .swiper-button-prev {
+    color: var(--primary-color);
+    width: 30px; /* Ukuran tombol diperkecil */
+    height: 30px;
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 50%;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    transition: transform 0.2s ease, background-color 0.2s ease;
+    }
+}
 
 /* =================================== */
 /* GAYA BARU UNTUK SEKSI SAMBUTAN      */

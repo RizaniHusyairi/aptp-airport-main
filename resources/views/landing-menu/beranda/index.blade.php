@@ -28,7 +28,7 @@
 @section('content')
 
 <!-- ============================================ -->
-<!--           HERO SECTION (DIROMBAK)            -->
+<!--           HERO SECTION (VERSI LAMA)          -->
 <!-- ============================================ -->
 <section id="hero-modern" class="hero-modern">
     <div class="swiper hero-slider">
@@ -43,46 +43,80 @@
                 </div>
             @endforelse
         </div>
-        <!-- Navigasi Slider -->
-        <div class="swiper-button-next"></div>
-        <div class="swiper-button-prev"></div>
         <div class="swiper-pagination"></div>
+    </div>
+
+    <div class="hero-background-overlay"></div>
+
+    <div class="container hero-container d-flex flex-column justify-content-center align-items-center">
+        <h1 class="text-white" data-aos="fade-down">Bandara APT Pranoto</h1>
+        <p class="text-white lead" data-aos="fade-up" data-aos-delay="200">
+            Gerbang Udara Anda Menuju <span id="typed-destination"></span>
+        </p>
+        
+        @if ($weather)
+        <a href="https://www.bmkg.go.id/cuaca/prakiraan-cuaca/64.72.05.1004" target="_blank">
+            <div class="weather-widget-modern" data-aos="fade-up" data-aos-delay="400">
+                <img src="{{ $weather['weather_icon'] }}" alt="Ikon Cuaca">
+                <span>{{ $weather['temperature'] }}°C, {{ $weather['weather_desc'] }} di Samarinda</span>
+            </div>
+        </a>
+        @endif
+    </div>
+
+    <div class="hero-quick-nav-wrapper">
+        <div class="hero-quick-nav" data-aos="fade-up" data-aos-delay="600">
+            <a href="#flight-info" class="hero-nav-link">
+                <i class="bi bi-airplane-engines-fill"></i>
+                <span>Jadwal Penerbangan</span>
+            </a>
+            <a href="#explore-section" class="hero-nav-link" data-tab-target="#facilities-tab">
+                <i class="bi bi-gem"></i>
+                <span>Fasilitas</span>
+            </a>
+            <a href="#explore-section" class="hero-nav-link" data-tab-target="#tourism-tab">
+                <i class="bi bi-compass-fill"></i>
+                <span>Pariwisata</span>
+            </a>
+        </div>
     </div>
 </section>
 
 <!-- ============================================ -->
-<!--           SEKSI AKSES CEPAT (BARU)           -->
+<!--         SLIDE INFORMASI (SEKSI BARU)         -->
 <!-- ============================================ -->
-<section id="quick-access" class="section-modern quick-access">
-    <div class="container">
-        <div class="row justify-content-center g-4">
-            <div class="col-lg-3 col-md-6">
-                <a href="#flight-info" class="access-card">
-                    <div class="icon-wrapper">
-                        <i class="bi bi-airplane-engines-fill"></i>
+<section id="info-slider-section" class="section-modern info-slider-section">
+    <div class="container" data-aos="fade-up">
+        <div class="section-title-modern">
+            <h2>Slide Informasi</h2>
+            <p>Informasi dan pengumuman terkini dari Bandara APT Pranoto.</p>
+        </div>
+        <div class="swiper info-slider">
+            <div class="swiper-wrapper">
+                {{-- @forelse ($infoSlides as $slide) --}}
+                @forelse ($sliders as $slide)
+                <div class="swiper-slide">
+                        {{-- <a href="{{ $slide->link_url ?? '#' }}" class="info-slide-card"> --}}
+                        <a href="#" class="info-slide-card">
+                            {{-- <img src="{{ Storage::url($slide->image_path) }}" alt="{{ $slide->title }}"> --}}
+                            <img src="{{ asset('uploads/' . $slide->documents) }}" alt="t">
+                            
+                        </a>
                     </div>
-                    <span>Jadwal Penerbangan</span>
-                </a>
-            </div>
-            <div class="col-lg-3 col-md-6">
-                <a href="#explore-section" class="access-card" data-tab-target="#facilities-tab">
-                    <div class="icon-wrapper">
-                        <i class="bi bi-gem"></i>
+                @empty
+                    <div class="swiper-slide">
+                        <div class="info-slide-card-empty">
+                            <p>Tidak ada informasi untuk ditampilkan saat ini.</p>
+                        </div>
                     </div>
-                    <span>Fasilitas Bandara</span>
-                </a>
+                @endforelse
             </div>
-            <div class="col-lg-3 col-md-6">
-                <a href="#explore-section" class="access-card" data-tab-target="#tourism-tab">
-                    <div class="icon-wrapper">
-                        <i class="bi bi-compass-fill"></i>
-                    </div>
-                    <span>Wisata Terdekat</span>
-                </a>
-            </div>
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
         </div>
     </div>
 </section>
+
 
 <!-- ============================================ -->
 <!--   SEKSI SAMBUTAN KEPALA BANDARA (BARU)       -->

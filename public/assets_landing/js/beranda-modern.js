@@ -7,10 +7,9 @@
 document.addEventListener('DOMContentLoaded', function() {
 
     /**
-     * 1. EFEK MESIN KETIK PADA HERO SECTION
+     * EFEK MESIN KETIK (DIKEMBALIKAN)
      */
     if (document.getElementById('typed-destination')) {
-        // String yang lebih relevan dan menarik
         new Typed('#typed-destination', {
             strings: ['Kalimantan Timur', 'Destinasi Impian Anda', 'Peluang Bisnis Anda'],
             typeSpeed: 60,
@@ -21,58 +20,50 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     /**
-     * INISIALISASI BARU: HERO SLIDER
+     * INISIALISASI HERO SLIDER
      */
     const heroSlider = new Swiper('.hero-slider', {
-        // Opsi
         loop: true,
-        effect: 'fade', // Efek transisi fade
-        fadeEffect: {
-            crossFade: true
-        },
-        autoplay: {
-            delay: 5000, // Ganti gambar setiap 5 detik
-            disableOnInteraction: false,
-        },
-        pagination: {
-            el: '.swiper-pagination',
-            clickable: true,
-        },
+        effect: 'fade',
+        autoplay: { delay: 5000, disableOnInteraction: false },
+        pagination: { el: '.swiper-pagination', clickable: true },
     });
 
     /**
-     * LOGIKA BARU UNTUK QUICK NAV DI HERO SECTION
+     * LOGIKA QUICK NAV (DIKEMBALIKAN)
      */
-
-    /**
-     * LOGIKA UNTUK KARTU AKSES CEPAT
-     */
-    const accessCards = document.querySelectorAll('.access-card');
-    accessCards.forEach(link => {
+    const heroNavLinks = document.querySelectorAll('.hero-nav-link');
+    heroNavLinks.forEach(link => {
         link.addEventListener('click', function(e) {
             const targetSectionId = this.getAttribute('href');
-            
-            // Hanya jalankan scroll jika href adalah anchor
             if (targetSectionId.startsWith('#')) {
                 e.preventDefault();
                 const targetSection = document.querySelector(targetSectionId);
-
                 if (targetSection) {
                     targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-
                     const tabTargetId = this.dataset.tabTarget;
                     if (tabTargetId) {
                         const tabButton = document.querySelector(tabTargetId);
                         if (tabButton) {
-                            setTimeout(() => {
-                                const tab = new bootstrap.Tab(tabButton);
-                                tab.show();
-                            }, 500); // Jeda agar scroll selesai
+                            setTimeout(() => { new bootstrap.Tab(tabButton).show(); }, 500);
                         }
                     }
                 }
             }
         });
+    });
+    /**
+     * INISIALISASI INFO SLIDER (BARU)
+     */
+    const infoSlider = new Swiper('.info-slider', {
+        loop: true,
+        slidesPerView: 1,
+        spaceBetween: 30,
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+        },
+      
     });
     // const heroNavLinks = document.querySelectorAll('.hero-nav-link');
     // heroNavLinks.forEach(link => {
