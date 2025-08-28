@@ -73,7 +73,7 @@
                     <button type="button" class="facility-card" data-bs-toggle="modal" data-bs-target="#facilityDetailModal"
                             data-name="{{ $facility->name }}" 
                             data-image="{{ Storage::url($facility->image_path) }}" 
-                            data-details="{{ json_encode($facility->details) }}">
+                            data-details='@json($facility->details)'>
                          <div class="facility-card-image">
                             <img src="{{ Storage::url($facility->image_path) }}" alt="Foto {{ $facility->name }}" onerror="this.onerror=null;this.src='https://placehold.co/600x400/0d2c4a/ffffff?text=Fasilitas';">
                         </div>

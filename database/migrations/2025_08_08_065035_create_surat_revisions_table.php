@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('surat_revisions', function (Blueprint $table) {
                 $table->id();
-                $table->foreignId('letter_id')->constrained()->onDelete('cascade');
+                $table->foreignId('persuratan_id')->constrained()->onDelete('cascade');
                 $table->foreignId('user_id')->constrained()->comment('User yang meminta revisi');
                 $table->text('comments');
                 $table->string('previous_status');

@@ -9,26 +9,53 @@ return new class extends Migration
     public function up()
     {
         Schema::create('persuratans', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained()->comment('User pembuat surat');
-            $table->unsignedBigInteger('assigned_to_user_id')->nullable()->comment('User penanggung jawab saat ini');
-            
-            $table->string('letter_number')->unique()->nullable();
-            $table->string('title');
-            $table->text('content_preview')->nullable();
-            $table->string('file_path');
-            
+            $table->bigIncrements('id');
+
+            // siapa pembuat surat
+            $table->unsignedBigInteger('user_id');
+
+            // siapa yang saat ini “memegang bola” (boleh null)
+            $table->unsignedBigInteger('assigned_to_user_id')->nullable();
+
+            // metadata surat
+            $table->string('letter_type', 125);         // ex: "Nota Dinas", "Surat Dinas"
+            $table->date('letter_date');                // tanggal surat
+            $table->text('recipient_address');          // alamat tujuan
+            $table->string('subject', 125);             // perihal ringkas
+
+            // pejabat penandatangan final (wajib)
+            $table->unsignedBigInteger('final_approver_id');
+
+            // daftar kolaborator (array user_id)
+            // gunakan JSON agar mudah difilter & di-cast di Eloquent
+            $table->json('collaborators')->default(json_encode([]));
+
+            // daftar lampiran (array path di storage)
+            $table->json('attachments')->default(json_encode([]));
+
+            // status global surat untuk kebutuhan listing/dashboard cepat
+            // (gunakan enum atau string; di sini pakai enum agar konsisten)
             $table->enum('status', [
-                'Draft', 
-                'Menunggu Persetujuan Kasi', 
-                'Menunggu Persetujuan Kasubbag', 
-                'Menunggu Persetujuan Kabandara', 
-                'Revisi Diperlukan', 
+                'Verifikasi Tambahan',
+                'Menunggu Persetujuan Atasan',
                 'Disetujui',
-                'Ditolak'
-            ])->default('Draft');
+                'Ditolak',
+                'Revisi Diperlukan',
+            ])->default('Verifikasi Tambahan');
 
             $table->timestamps();
+
+            // Indexes
+            $table->index('status');
+            $table->index('letter_date');
+            $table->index(['assigned_to_user_id', 'status']);
+            $table->index('final_approver_id');
+
+            // Foreign keys (InnoDB)
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            // assigned_to_user_id bisa berubah/terhapus → SET NULL agar riwayat surat tetap ada
+            $table->foreign('assigned_to_user_id')->references('id')->on('users')->nullOnDelete();
+            $table->foreign('final_approver_id')->references('id')->on('users')->restrictOnDelete();
         });
 
 

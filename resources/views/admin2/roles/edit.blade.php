@@ -43,6 +43,10 @@
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
+                        
+                    </div>
+                    <div class="col-12">
+
                         <div class="form-group mt-4">
                             <label>Permissions</label>
                             @error('permissions')

@@ -29,6 +29,7 @@ use App\Http\Controllers\Staff_User\{
 
 use App\Http\Controllers\{
     LandingPageController,
+    PersuratanController,
     SandboxController,
     SlotController,
     TourismController,
@@ -199,7 +200,19 @@ Route::group(["prefix" => 'dashboard'], function () {
             Route::put('staff/lalu-lintas/{id}', [LaluLintasController::class, 'update'])->name('laluLintas.update');
             Route::delete('staff/lalu-lintas/{id}', [LaluLintasController::class, 'destroy'])->name('laluLintas.destroy');
             
-        
+            Route::get('staff/persuratan',[PersuratanController::class, 'index'])->name('persuratan.staffIndex');
+            Route::get('staff/persuratan/create',[PersuratanController::class, 'create'])->name('persuratan.create');
+            Route::post('staff/persuratan/store',[PersuratanController::class, 'store'])->name('persuratan.store');
+            Route::get('staff/persuratan/{surat}',[PersuratanController::class, 'show'])->name('persuratan.show');
+
+            // aksi workflow:
+            Route::post('staff/persuratan/{surat}/verify/approve', [PersuratanController::class, 'approveVerification'])->name('persuratan.verify.approve');
+            Route::post('staff/persuratan/{surat}/verify/reject',  [PersuratanController::class, 'rejectVerification'])->name('persuratan.verify.reject');
+            Route::post('staff/persuratan/{surat}/revision/request',[PersuratanController::class, 'requestRevision'])->name('persuratan.revision.request');
+            Route::post('staff/persuratan/{surat}/revision/submit', [PersuratanController::class, 'submitRevision'])->name('persuratan.revision.submit');
+            Route::post('staff/persuratan/{surat}/final-approve',   [PersuratanController::class, 'finalApprove'])->name('persuratan.final.approve');
+            Route::delete('staff/persuratan/{surat}',      [PersuratanController::class, 'destroy'])->name('persuratan.destroy');
+                
         });
 
 
@@ -227,6 +240,7 @@ Route::group(["prefix" => 'dashboard'], function () {
             Route::post('customers/{user}/toggle-staff', [CustomerController::class, 'toggleStaff'])->name('customers.toggleStaff');
             Route::put('customers/{user}/update-role', [CustomerController::class, 'updateRole'])->name('customers.updateRole');
             Route::get('customers/{user}/edit-role', [CustomerController::class, 'editRole'])->name('customers.editRole');
+            Route::put('customers/{user}/update-supervisor', [CustomerController::class, 'updateSupervisor'])->name('customers.updateSupervisor');
 
             //roles
             Route::resource('roles', RoleController::class);
@@ -340,10 +354,7 @@ Route::prefix('regulasi')->group(function () {
 // Route::get('/regulasi/surat-edaran', [LetterController::class, 'suratEdaran'])->name('suratEdaran');
 // Route::get('/regulasi/surat-utusan', [LetterController::class, 'suratUtusan'])->name('suratUtusan');
 
-//Language Translation
-Route::get('/keberangkatan', [LandingPageController::class, 'keberangkatan'])->name('keberangkatan');
-Route::get('/kedatangan', [LandingPageController::class, 'kedatangan'])->name('kedatangan');
-Route::get('/lalu-lintas-angkutan-udara', [LandingPageController::class, 'laluLintas'])->name('laluLintas');
+
 
 //Language Translation
 Route::get('/index/{locale}', [HomeController::class, 'lang']);

@@ -2,15 +2,16 @@
 
 namespace App\Models;
 
-use Illuminate\Support\Facades\Storage;
 use App\Models\Rental;
 use App\Models\Tenant;
 use App\Models\Ticket;
 use Spatie\MediaLibrary\HasMedia;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Notifications\Notifiable;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 
@@ -113,6 +114,17 @@ class User extends Authenticatable implements HasMedia
         return $this->roles()->where('name', $role)->exists();
     }
 
+
+
+    /**
+     * Mendefinisikan relasi ke bawahan pengguna (subordinates).
+     * Seorang atasan bisa memiliki banyak bawahan.
+     */
+    public function subordinates(): HasMany
+    {
+        return $this->hasMany(User::class, 'supervisor_id');
+    }
+
     
 
     /**
@@ -151,12 +163,12 @@ class User extends Authenticatable implements HasMedia
                     ->withTimestamps();
     }
     
-    public function submissionDocuments()
-    {
-        return $this->belongsToMany(SubmissionDocument::class)
-                    ->withPivot('tenant_id', 'file_path')
-                    ->withTimestamps();
-    }
+    // public function submissionDocuments()
+    // {
+    //     return $this->belongsToMany(SubmissionDocument::class)
+    //                 ->withPivot('tenant_id', 'file_path')
+    //                 ->withTimestamps();
+    // }
 
     // Roles and Permissions
     public function roles()
