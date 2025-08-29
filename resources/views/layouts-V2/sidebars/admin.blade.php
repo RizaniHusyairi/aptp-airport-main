@@ -58,6 +58,13 @@
                     <span>Slider</span>
                 </a>
             </li>
+            {{-- ... setelah menu Slider ... --}}
+            <li class="sidebar-item {{ Route::is('admin.info-slides.*') ? 'active' : '' }}">
+                <a href="{{ route('admin.info-slides.index') }}" class='sidebar-link'>
+                    <i class="bi bi-card-image"></i>
+                    <span>Slide Informasi</span>
+                </a>
+            </li>
         </ul>
     </div>
 </div>

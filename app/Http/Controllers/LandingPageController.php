@@ -12,11 +12,13 @@ use App\Models\Tourism;
 use App\Models\Visitor;
 use App\Models\Facility;
 use App\Models\Complaint;
+use App\Models\InfoSlide;
 use App\Jobs\LogVisitorJob;
 use Illuminate\Http\Request;
 use App\Models\BudgetExpense;
 use App\Models\AirFreightTraffic;
 use App\Models\PublicInformation;
+use App\Models\PeriodicDocument;
 use Illuminate\Support\Facades\DB;
 use App\Services\AirportApiService;
 use Illuminate\Support\Facades\Log;
@@ -128,7 +130,9 @@ class LandingPageController extends Controller
         // Panggil API
         $flightStats = $this->airportApi->getFlightStats();
         $weather = $this->airportApi->getCurrentWeather();
-        
+           // ### BARU: Ambil data untuk info slider ###
+        $infoSlides = InfoSlide::where('is_visible', true)->latest()->get();
+
         
         $meta = [
             'title' => 'APT Pranoto - Bandara Samarinda',
@@ -138,6 +142,7 @@ class LandingPageController extends Controller
         return view('landing-menu.beranda.index', 
         compact(
             'sliders',
+            'infoSlides',
             'flightStats', 
             'totalAngkutanUdara',
             'headlines',
@@ -949,6 +954,20 @@ class LandingPageController extends Controller
             Log::error('Image proxy exception: ' . $e->getMessage());
             abort(500, 'Could not retrieve image.');
         }
+    }
+
+    /**
+     * Menyiapkan dan menampilkan halaman Informasi Berkala.
+     */
+    public function informasiBerkala()
+    {
+        // Ambil semua dokumen, urutkan berdasarkan kategori lalu tanggal terbit terbaru
+        $documents = PeriodicDocument::orderBy('category')->orderBy('published_date', 'desc')->get();
+
+        // Kelompokkan dokumen berdasarkan kategori
+        $documentCategories = $documents->groupBy('category');
+
+        return view('landing-menu.informasi-publik.informasi-berkala.index', compact('documentCategories'));
     }
     
 }

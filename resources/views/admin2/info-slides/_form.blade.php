@@ -1,15 +1,5 @@
 <div class="row">
     <div class="col-12 mb-3">
-        <label for="title" class="form-label">Judul <span class="text-danger">*</span></label>
-        <input type="text" class="form-control @error('title') is-invalid @enderror" name="title" value="{{ old('title', $slide->title ?? '') }}" required>
-        @error('title')<div class="invalid-feedback">{{ $message }}</div>@enderror
-    </div>
-    <div class="col-12 mb-3">
-        <label for="description" class="form-label">Deskripsi Singkat <span class="text-danger">*</span></label>
-        <textarea class="form-control @error('description') is-invalid @enderror" name="description" rows="3" required>{{ old('description', $slide->description ?? '') }}</textarea>
-        @error('description')<div class="invalid-feedback">{{ $message }}</div>@enderror
-    </div>
-    <div class="col-12 mb-3">
         <label for="image" class="form-label">Gambar <span class="text-danger">*</span></label>
         <input type="file" class="form-control @error('image') is-invalid @enderror" name="image" @empty($slide) required @endempty>
         @error('image')<div class="invalid-feedback">{{ $message }}</div>@enderror

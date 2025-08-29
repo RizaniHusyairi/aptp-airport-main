@@ -9,6 +9,8 @@ use App\Http\Controllers\Admin\{
     FacilityController,
     ProfileController,
     RoleController,
+    InfoSlideController,
+    PeriodicDocumentController
 };
 use App\Http\Controllers\Staff_User\{
     ComplaintController,
@@ -229,6 +231,8 @@ Route::group(["prefix" => 'dashboard'], function () {
         Route::group(['middleware' => 'admin'], function () {
             Route::get('/', [HomeController::class, 'root'])->name('root');
 
+            Route::resource('periodic-documents', PeriodicDocumentController::class)->names('admin.periodic-documents');
+
             //customers
             Route::get("customers", [CustomerController::class, "index"])->name('customers.index');
             Route::get("customers/{user}", [CustomerController::class, "show"])->name('customers.show');
@@ -256,6 +260,8 @@ Route::group(["prefix" => 'dashboard'], function () {
             Route::patch('staff/slider/{id}/toggle-visibility-footer', [SliderController::class, 'toggleVisibilityFooter'])->name('slider.toggleVisibilityFooter');
         
             Route::resource('info-slides', InfoSlideController::class)->names('admin.info-slides');
+            Route::patch('info-slides/{infoSlide}/toggle', [InfoSlideController::class, 'toggleVisibility'])->name('admin.info-slides.toggleVisibility');
+
         });
     });
     Route::middleware(['auth'])->group(function () {
@@ -341,12 +347,14 @@ Route::get('/informasi-publik/pejabat-bandara', [LandingPageController::class, '
 Route::get('/informasi-publik/sop-ppid', [LandingPageController::class, 'sopPpid'])->name('sopPpid');
 
 Route::get('/informasi-publik/laporan-layanan', [LandingPageController::class, 'laporanLayanan'])->name('laporanLayanan');
+Route::get('/informasi-publik/informasi-berkala', [LandingPageController::class, 'informasiBerkala'])->name('informasiBerkala');
 
 // routes/web.php
 Route::get('/fasilitas', [LandingPageController::class, 'fasilitas'])->name('fasilitas');
 Route::get('/pariwisata', [LandingPageController::class, 'pariwisata'])->name('pariwisata.index');
 Route::get('/pariwisata/{slug}', [LandingPageController::class, 'detailPariwisata'])->name('pariwisata.show');
 
+// routes/web.php
 
 Route::prefix('regulasi')->group(function () {
     Route::get('/surat-utusan', [LandingPageController::class, 'suratUtusan'])->name('letters.utusan');

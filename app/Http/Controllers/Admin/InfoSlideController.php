@@ -73,4 +73,16 @@ class InfoSlideController extends Controller
         $infoSlide->delete();
         return redirect()->route('admin.info-slides.index')->with('success', 'Slide informasi berhasil dihapus.');
     }
+
+    /**
+     * ### METHOD BARU: Untuk menangani toggle visibilitas ###
+     */
+    public function toggleVisibility(Request $request, InfoSlide $infoSlide)
+    {
+        $infoSlide->update([
+            'is_visible' => $request->has('is_visible')
+        ]);
+
+        return redirect()->route('admin.info-slides.index')->with('success', 'Status visibilitas slide berhasil diubah.');
+    }
 }

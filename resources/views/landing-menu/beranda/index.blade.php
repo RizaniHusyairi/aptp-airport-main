@@ -85,6 +85,9 @@
 <!-- ============================================ -->
 <!--         SLIDE INFORMASI (SEKSI BARU)         -->
 <!-- ============================================ -->
+
+@if($infoSlides->isNotEmpty())
+
 <section id="info-slider-section" class="section-modern info-slider-section">
     <div class="container" data-aos="fade-up">
         <div class="section-title-modern">
@@ -94,12 +97,11 @@
         <div class="swiper info-slider">
             <div class="swiper-wrapper">
                 {{-- @forelse ($infoSlides as $slide) --}}
-                @forelse ($sliders as $slide)
+                @forelse ($infoSlides as $slide)
                 <div class="swiper-slide">
-                        {{-- <a href="{{ $slide->link_url ?? '#' }}" class="info-slide-card"> --}}
-                        <a href="#" class="info-slide-card">
+                        <a href="{{ $slide->link_url ?? '#' }}" target="_blank" class="info-slide-card">
                             {{-- <img src="{{ Storage::url($slide->image_path) }}" alt="{{ $slide->title }}"> --}}
-                            <img src="{{ asset('uploads/' . $slide->documents) }}" alt="t">
+                            <img src="{{ asset('uploads/' . $slide->image_path) }}" alt="t">
                             
                         </a>
                     </div>
@@ -117,7 +119,7 @@
     </div>
 </section>
 
-
+@endif
 <!-- ============================================ -->
 <!--   SEKSI SAMBUTAN KEPALA BANDARA (BARU)       -->
 <!-- ============================================ -->
