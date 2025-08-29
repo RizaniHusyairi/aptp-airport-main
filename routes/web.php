@@ -254,6 +254,8 @@ Route::group(["prefix" => 'dashboard'], function () {
             Route::delete('staff/slider/{id}/destroy', [SliderController::class, 'destroy'])->name('slider.destroy');
             Route::patch('staff/slider/{id}/toggle-visibility-home', [SliderController::class, 'toggleVisibilityHome'])->name('slider.toggleVisibilityHome');
             Route::patch('staff/slider/{id}/toggle-visibility-footer', [SliderController::class, 'toggleVisibilityFooter'])->name('slider.toggleVisibilityFooter');
+        
+            Route::resource('info-slides', InfoSlideController::class)->names('admin.info-slides');
         });
     });
     Route::middleware(['auth'])->group(function () {
