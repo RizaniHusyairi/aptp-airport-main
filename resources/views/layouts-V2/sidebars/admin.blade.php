@@ -65,6 +65,12 @@
                     <span>Slide Informasi</span>
                 </a>
             </li>
+            <li class="sidebar-item {{ Route::is('staff.periodic-documents.*') ? 'active' : '' }}">
+                <a href="{{ route('staff.periodic-documents.index') }}" class='sidebar-link'>
+                    <i class="bi bi-calendar-date"></i>
+                    <span>Informasi Berkala</span>
+                </a>
+            </li>
         </ul>
     </div>
 </div>

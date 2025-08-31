@@ -231,7 +231,7 @@ Route::group(["prefix" => 'dashboard'], function () {
         Route::group(['middleware' => 'admin'], function () {
             Route::get('/', [HomeController::class, 'root'])->name('root');
 
-            Route::resource('periodic-documents', PeriodicDocumentController::class)->names('admin.periodic-documents');
+            Route::resource('periodic-documents', PeriodicDocumentController::class)->names('staff.periodic-documents');
 
             //customers
             Route::get("customers", [CustomerController::class, "index"])->name('customers.index');

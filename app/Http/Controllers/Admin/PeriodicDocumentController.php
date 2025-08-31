@@ -15,7 +15,7 @@ class PeriodicDocumentController extends Controller
     public function index()
     {
         $documents = PeriodicDocument::latest()->get();
-        return view('admin2.informasi-berkala.index', compact('documents'));
+        return view('user_staff2.informasi-berkala.index', compact('documents'));
     }
 
     /**
@@ -25,7 +25,7 @@ class PeriodicDocumentController extends Controller
     {
         // Ambil kategori yang sudah ada untuk dijadikan saran
         $categories = PeriodicDocument::select('category')->distinct()->pluck('category');
-        return view('admin2.informasi-berkala.create', compact('categories'));
+        return view('user_staff2.informasi-berkala.create', compact('categories'));
     }
 
     /**
@@ -49,7 +49,7 @@ class PeriodicDocumentController extends Controller
             'document_path' => $path,
         ]);
 
-        return redirect()->route('admin.periodic-documents.index')->with('success', 'Dokumen berhasil ditambahkan.');
+        return redirect()->route('staff.periodic-documents.index')->with('success', 'Dokumen berhasil ditambahkan.');
     }
 
     /**
@@ -58,7 +58,7 @@ class PeriodicDocumentController extends Controller
     public function edit(PeriodicDocument $periodicDocument)
     {
         $categories = PeriodicDocument::select('category')->distinct()->pluck('category');
-        return view('admin2.informasi-berkala.edit', [
+        return view('user_staff2.informasi-berkala.edit', [
             'document' => $periodicDocument,
             'categories' => $categories
         ]);
@@ -93,7 +93,7 @@ class PeriodicDocumentController extends Controller
             'document_path' => $path,
         ]);
 
-        return redirect()->route('admin.periodic-documents.index')->with('success', 'Dokumen berhasil diperbarui.');
+        return redirect()->route('staff.periodic-documents.index')->with('success', 'Dokumen berhasil diperbarui.');
     }
 
     /**
@@ -109,6 +109,6 @@ class PeriodicDocumentController extends Controller
         // Hapus record dari database
         $periodicDocument->delete();
 
-        return redirect()->route('admin.periodic-documents.index')->with('success', 'Dokumen berhasil dihapus.');
+        return redirect()->route('staff.periodic-documents.index')->with('success', 'Dokumen berhasil dihapus.');
     }
 }
