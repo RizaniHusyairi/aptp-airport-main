@@ -88,7 +88,7 @@ class ViewServiceProvider extends ServiceProvider
                     ['name' => 'Layanan Informasi', 'dropdown' => [
                         ['name' => 'Laporan Layanan Informasi', 'route' => "#"],
                         ['name' => 'Informasi Berkala', 'route' => route('informasiBerkala')],
-                        ['name' => 'Informasi Serta Merta', 'route' => "#"],
+                        ['name' => 'Informasi Serta Merta', 'route' => route('informasi.serta-merta')],
                         ['name' => 'Informasi Setiap Saat', 'route' => "#"],
                     ]],
                     

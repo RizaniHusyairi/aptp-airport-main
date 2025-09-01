@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\{
     FacilityController,
     ProfileController,
     RoleController,
+    ImmediateInformationController,
     InfoSlideController,
     PeriodicDocumentController
 };
@@ -251,17 +252,18 @@ Route::group(["prefix" => 'dashboard'], function () {
             Route::resource('facilities', FacilityController::class)->names('admin.facilities');
             Route::resource('tourism', TourismController::class)->names('admin.tourism');
 
-             // Slider Staff Routes
+            // Slider Staff Routes
             Route::get('staff/slider', [SliderController::class, 'index'])->name('slider.staffIndex');
             Route::get('staff/slider/create', [SliderController::class, 'create'])->name('slider.create');
             Route::post('staff/slider/store', [SliderController::class, 'store'])->name('slider.store');
             Route::delete('staff/slider/{id}/destroy', [SliderController::class, 'destroy'])->name('slider.destroy');
             Route::patch('staff/slider/{id}/toggle-visibility-home', [SliderController::class, 'toggleVisibilityHome'])->name('slider.toggleVisibilityHome');
             Route::patch('staff/slider/{id}/toggle-visibility-footer', [SliderController::class, 'toggleVisibilityFooter'])->name('slider.toggleVisibilityFooter');
-        
+            
             Route::resource('info-slides', InfoSlideController::class)->names('admin.info-slides');
             Route::patch('info-slides/{infoSlide}/toggle', [InfoSlideController::class, 'toggleVisibility'])->name('admin.info-slides.toggleVisibility');
-
+            
+            Route::resource('staff/immediate-informations', ImmediateInformationController::class)->names('staff.immediate-informations');
         });
     });
     Route::middleware(['auth'])->group(function () {
@@ -348,6 +350,8 @@ Route::get('/informasi-publik/sop-ppid', [LandingPageController::class, 'sopPpid
 
 Route::get('/informasi-publik/laporan-layanan', [LandingPageController::class, 'laporanLayanan'])->name('laporanLayanan');
 Route::get('/informasi-publik/informasi-berkala', [LandingPageController::class, 'informasiBerkala'])->name('informasiBerkala');
+// routes/web.php
+Route::get('/informasi-publik/informasi-serta-merta', [LandingPageController::class, 'informasiSertaMerta'])->name('informasi.serta-merta');
 
 // routes/web.php
 Route::get('/fasilitas', [LandingPageController::class, 'fasilitas'])->name('fasilitas');

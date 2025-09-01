@@ -1,0 +1,110 @@
+/* public/assets_landing/css/informasi-serta-merta.css */
+
+.informasi-serta-merta {
+    counter-reset: info-card-counter;
+}
+
+.search-bar {
+    position: relative;
+    margin-bottom: 40px;
+}
+
+.search-bar .search-input {
+    width: 100%;
+    padding: 15px 20px 15px 50px;
+    border: 1px solid #e0e0e0;
+    border-radius: 50px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+
+.search-bar .search-input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 5px 20px rgba(13, 44, 74, 0.1);
+}
+
+.search-bar .search-icon {
+    position: absolute;
+    top: 50%;
+    left: 20px;
+    transform: translateY(-50%);
+    font-size: 18px;
+    color: #aaa;
+}
+
+.info-card {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 25px;
+    margin-bottom: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.07);
+    border-left: 5px solid var(--primary-color);
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.info-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+}
+
+.info-card::before {
+    counter-increment: info-card-counter;
+    content: counter(info-card-counter, decimal-leading-zero);
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    opacity: 0.2;
+    position: absolute;
+    top: 15px;
+    right: 25px;
+}
+
+.info-card .info-header h3.uraian-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--heading-color);
+    margin-bottom: 10px;
+}
+
+.info-card .info-body p.keterangan-text {
+    color: var(--text-muted-light);
+    line-height: 1.7;
+    margin-bottom: 20px;
+}
+
+.info-card .info-footer {
+    margin-top: auto; /* Mendorong footer ke bawah */
+    text-align: right;
+}
+
+.info-card .btn-link-detail {
+    background: var(--primary-color);
+    color: var(--text-light);
+    padding: 10px 25px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.info-card .btn-link-detail:hover {
+    background: var(--secondary-color);
+    color: var(--primary-color);
+}
+
+/* Styling untuk pesan 'tidak ditemukan' */
+#no-results-message {
+    display: none; /* Sembunyi secara default */
+    text-align: center;
+    padding: 40px;
+    font-size: 1.2rem;
+    color: #888;
+}
+
+.section-title p.text-muted {
+    font-size: ;
+}

@@ -55,11 +55,11 @@ document.addEventListener('DOMContentLoaded', function() {
     /**
      * INISIALISASI INFO SLIDER (BARU)
      */
+    // autoplay: { delay: 5000, disableOnInteraction: false },
     const infoSlider = new Swiper('.info-slider', {
         loop: true,
         slidesPerView: 1,
         spaceBetween: 30,
-        autoplay: { delay: 5000, disableOnInteraction: false },
         pagination: { el: '.swiper-pagination', clickable: true },
         navigation: {
             nextEl: '.swiper-button-next',

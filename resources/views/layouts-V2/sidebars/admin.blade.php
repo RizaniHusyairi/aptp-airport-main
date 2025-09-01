@@ -71,6 +71,12 @@
                     <span>Informasi Berkala</span>
                 </a>
             </li>
+            <li class="sidebar-item {{ Route::is('staff.immediate-informations.*') ? 'active' : '' }}">
+                <a href="{{ route('staff.immediate-informations.index') }}" class='sidebar-link'>
+                    <i class="bi bi-broadcast-pin"></i>
+                    <span>Informasi Serta Merta</span>
+                </a>
+            </li>
         </ul>
     </div>
 </div>

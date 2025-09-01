@@ -16,13 +16,14 @@ use App\Models\InfoSlide;
 use App\Jobs\LogVisitorJob;
 use Illuminate\Http\Request;
 use App\Models\BudgetExpense;
+use App\Models\PeriodicDocument;
 use App\Models\AirFreightTraffic;
 use App\Models\PublicInformation;
-use App\Models\PeriodicDocument;
 use Illuminate\Support\Facades\DB;
 use App\Services\AirportApiService;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use App\Models\ImmediateInformation;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Validator;
@@ -968,6 +969,12 @@ class LandingPageController extends Controller
         $documentCategories = $documents->groupBy('category');
 
         return view('landing-menu.informasi-publik.informasi-berkala.index', compact('documentCategories'));
+    }
+
+    public function informasiSertaMerta()
+    {
+        $informations = ImmediateInformation::latest()->get();
+        return view('landing-menu.informasi-publik.informasi-serta-merta.index', compact('informations'));
     }
     
 }
