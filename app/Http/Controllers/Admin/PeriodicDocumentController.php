@@ -34,21 +34,19 @@ class PeriodicDocumentController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'category' => 'required|string|max:255',
+            'category' => 'required|string|in:Laporan Kinerja,Survei kepuasan,LHKPN,Rencana kerja tahunan,Data statistik kepegawaian',
             'title' => 'required|string|max:255',
             'published_date' => 'required|date',
-            'document' => 'required|file|mimes:pdf|max:2048', // Nama input diubah menjadi 'document'
+            'document_path' => 'required|url',
+
+            // Validasi kondisional: pejabat_name wajib jika kategori adalah LHKPN
+            'pejabat_name' => 'nullable|string|max:255|required_if:category,LHKPN',
         ]);
 
-        $path = $request->file('document')->store('periodic_documents', 'public');
+   
+        PeriodicDocument::create($validated);
 
-        PeriodicDocument::create([
-            'category' => $validated['category'],
-            'title' => $validated['title'],
-            'published_date' => $validated['published_date'],
-            'document_path' => $path,
-        ]);
-
+        
         return redirect()->route('staff.periodic-documents.index')->with('success', 'Dokumen berhasil ditambahkan.');
     }
 
@@ -70,29 +68,22 @@ class PeriodicDocumentController extends Controller
     public function update(Request $request, PeriodicDocument $periodicDocument)
     {
         $validated = $request->validate([
-            'category' => 'required|string|max:255',
+            'category' => 'required|string|in:Laporan Kinerja,Survei kepuasan,LHKPN,Rencana kerja tahunan,Data statistik kepegawaian',
             'title' => 'required|string|max:255',
             'published_date' => 'required|date',
-            'document' => 'nullable|file|mimes:pdf|max:2048', // Dokumen opsional saat update
+            'document_path' => 'required|url',
+            'pejabat_name' => 'nullable|string|max:255|required_if:category,LHKPN',
         ]);
 
-        $path = $periodicDocument->document_path;
-        if ($request->hasFile('document')) {
-            // Hapus file lama jika ada
-            if ($path) {
-                Storage::disk('public')->delete($path);
-            }
-            // Simpan file baru
-            $path = $request->file('document')->store('periodic_documents', 'public');
+        // Atur ulang nama pejabat jika kategori bukan LHKPN
+        if ($validated['category'] !== 'LHKPN') {
+            $validated['pejabat_name'] = null;
         }
 
-        $periodicDocument->update([
-            'category' => $validated['category'],
-            'title' => $validated['title'],
-            'published_date' => $validated['published_date'],
-            'document_path' => $path,
-        ]);
+       // Tidak ada lagi logika hapus/unggah file, langsung update
+        $periodicDocument->update($validated);
 
+ 
         return redirect()->route('staff.periodic-documents.index')->with('success', 'Dokumen berhasil diperbarui.');
     }
 
@@ -101,10 +92,6 @@ class PeriodicDocumentController extends Controller
      */
     public function destroy(PeriodicDocument $periodicDocument)
     {
-        // Hapus file dari storage
-        if ($periodicDocument->document_path) {
-            Storage::disk('public')->delete($periodicDocument->document_path);
-        }
 
         // Hapus record dari database
         $periodicDocument->delete();

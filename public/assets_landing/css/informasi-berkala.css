@@ -37,7 +37,7 @@
 
 .accordion-header .accordion-button:not(.collapsed) {
     background-color: var(--primary-color);
-    color: #ffffff;
+    color: #d99e4e;
     box-shadow: none;
 }
 

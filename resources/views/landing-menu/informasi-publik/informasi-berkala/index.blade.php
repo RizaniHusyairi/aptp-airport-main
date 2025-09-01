@@ -50,18 +50,23 @@
                                             <tbody>
                                                 @forelse ($documents as $doc)
                                                 <tr>
-                                                    <td>{{ $doc->title }}</td>
+                                                    <td>
+                                                        {{ $doc->title }}
+                                                        {{-- Tampilkan nama pejabat jika ada --}}
+                                                        @if($doc->pejabat_name)
+                                                            <br><small class="text-muted">Pejabat: {{ $doc->pejabat_name }}</small>
+                                                        @endif
+                                                    </td>
                                                     <td class="text-center">{{ $doc->published_date->translatedFormat('d M Y') }}</td>
                                                     <td class="text-end">
-                                                        <a href="{{ Storage::url($doc->document_path) }}" target="_blank" class="btn btn-sm btn-primary">
+                                                        {{-- Ubah href dari Storage::url() menjadi langsung ke kolom document_path --}}
+                                                        <a href="{{ $doc->document_path }}" target="_blank" class="btn btn-sm btn-primary">
                                                             <i class="bi bi-download me-1"></i> Unduh
                                                         </a>
                                                     </td>
                                                 </tr>
                                                 @empty
-                                                <tr>
-                                                    <td colspan="3" class="text-center text-muted">Tidak ada dokumen dalam kategori ini.</td>
-                                                </tr>
+                                                {{-- ... --}}
                                                 @endforelse
                                             </tbody>
                                         </table>

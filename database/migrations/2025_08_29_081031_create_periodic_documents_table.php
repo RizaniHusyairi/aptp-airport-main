@@ -12,8 +12,9 @@ return new class extends Migration
             $table->id();
             $table->string('category'); // Kunci untuk pengelompokan, cth: "Laporan Keuangan"
             $table->string('title');
-            $table->string('document_path');
+            $table->text('document_path');
             $table->date('published_date');
+            $table->string('pejabat_name')->nullable();
             $table->timestamps();
         });
     }

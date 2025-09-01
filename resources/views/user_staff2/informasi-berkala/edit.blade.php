@@ -35,3 +35,28 @@
     </div>
 </section>
 @endsection
+
+@section('scripts_admin')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const categorySelect = document.getElementById('category');
+        const pejabatNameWrapper = document.getElementById('pejabat-name-wrapper');
+        const pejabatNameInput = document.getElementById('pejabat_name');
+
+        function togglePejabatInput() {
+            if (categorySelect.value === 'LHKPN') {
+                pejabatNameWrapper.style.display = 'block';
+            } else {
+                pejabatNameWrapper.style.display = 'none';
+                pejabatNameInput.value = ''; // Kosongkan nilainya saat disembunyikan
+            }
+        }
+
+        // Panggil fungsi saat halaman dimuat untuk memeriksa nilai awal
+        togglePejabatInput();
+
+        // Panggil fungsi setiap kali nilai dropdown berubah
+        categorySelect.addEventListener('change', togglePejabatInput);
+    });
+</script>
+@endsection

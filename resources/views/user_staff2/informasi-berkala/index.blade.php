@@ -37,12 +37,13 @@
             </div>
             @endif
             <div class="table-responsive">
-                <table class="table table-striped" id="table-documents">
+                <table class="table table-striped" id="table-documents-berkala">
                     <thead>
                         <tr>
                             <th>No.</th>
                             <th>Kategori</th>
                             <th>Nama Dokumen</th>
+                            <th>Pejabat Terkait</th> {{-- KOLOM BARU --}}
                             <th>Tanggal Terbit</th>
                             <th>Aksi</th>
                         </tr>
@@ -53,6 +54,7 @@
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $doc->category }}</td>
                             <td>{{ $doc->title }}</td>
+                            <td>{{ $doc->pejabat_name ?? '-' }}</td> {{-- DATA BARU --}}
                             <td>{{ $doc->published_date->translatedFormat('d M Y') }}</td>
                             <td>
                                 <div class="d-flex gap-2">
@@ -67,7 +69,7 @@
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="5" class="text-center">Belum ada dokumen yang ditambahkan.</td>
+                            <td colspan="6" class="text-center">Belum ada dokumen yang ditambahkan.</td>
                         </tr>
                         @endforelse
                     </tbody>
@@ -82,11 +84,7 @@
     <script src="{{ asset('assetsv2/extensions/jquery/jquery.min.js') }}"></script>
     <script src="{{ asset('assetsv2/extensions/datatables.net/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('assetsv2/extensions/datatables.net-bs5/js/dataTables.bootstrap5.min.js') }}"></script>
-    <script>
-        $(document).ready(function() {
-            $('#table-documents').DataTable({
-                "language": { "url": "{{ asset('assetsv2/extensions/datatables.net-bs5/js/Indonesian.json') }}" }
-            });
-        });
-    </script>
+    <script src="{{ asset('assetsv2/compiled/js/staff-informasi-berkala.js') }}"></script>
+
+    
 @endsection
