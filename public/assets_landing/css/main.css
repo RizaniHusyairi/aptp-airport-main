@@ -22,6 +22,18 @@
   --nav-font: "Inter",  sans-serif;
 }
 
+:root {
+    --primary-color: #0d2c4a; /* Biru Gelap Korporat */
+    --secondary-color: #f0a500; /* Emas sebagai Aksen */
+    --background-dark: #071a2e;
+    --background-light: #f4f7f9;
+    --text-light: #ffffff;
+    --text-dark: #333333;
+    --text-muted-dark: #8899a8; /* Muted untuk latar gelap */
+    --text-muted-light: #6c757d; /* Muted untuk latar terang */
+    --font-primary: 'Poppins', sans-serif;
+}
+
 /* Global Colors - The following color variables are used throughout the website. Updating them here will change the color scheme of the entire website */
 :root { 
   --background-color: #ffffff; /* Background color for the entire website, including individual sections */

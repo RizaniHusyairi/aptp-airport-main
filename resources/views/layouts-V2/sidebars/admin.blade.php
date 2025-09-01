@@ -77,6 +77,18 @@
                     <span>Informasi Serta Merta</span>
                 </a>
             </li>
+            <li class="sidebar-item {{ Route::is('staff.evergreen-informations.*') ? 'active' : '' }}">
+                <a href="{{ route('staff.evergreen-informations.index') }}" class='sidebar-link'>
+                    <i class="bi bi-archive-fill"></i>
+                    <span>Informasi Setiap Saat</span>
+                </a>
+            </li>
+            <li class="sidebar-item {{ Route::is('staff.information-service-reports.*') ? 'active' : '' }}">
+                <a href="{{ route('staff.information-service-reports.index') }}" class='sidebar-link'>
+                    <i class="bi bi-archive-fill"></i>
+                    <span>Laporan Layanan Informasi</span>
+                </a>
+            </li>
         </ul>
     </div>
 </div>

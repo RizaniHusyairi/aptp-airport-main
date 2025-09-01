@@ -1,0 +1,106 @@
+/* public/assets_landing/css/laporan-layanan-informasi.css */
+
+/* Gaya untuk Search Bar (mirip dengan halaman sebelumnya) */
+.search-bar {
+    position: relative;
+    margin-bottom: 50px;
+}
+.search-bar .search-input {
+    width: 100%;
+    padding: 15px 20px 15px 50px;
+    border: 1px solid #e9ecef;
+    border-radius: 50px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+}
+.search-bar .search-input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 5px 25px rgba(13, 44, 74, 0.15);
+}
+.search-bar .search-icon {
+    position: absolute;
+    top: 50%;
+    left: 20px;
+    transform: translateY(-50%);
+    font-size: 18px;
+    color: #aaa;
+}
+
+/* Gaya untuk setiap item laporan */
+.report-item {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    background: #ffffff;
+    padding: 20px 25px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    border: 1px solid #e9ecef;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.report-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+.report-item .report-year {
+    background-color: var(--primary-color);
+    color: #fff;
+    font-size: 1.5rem;
+    font-weight: 700;
+    padding: 15px 20px;
+    border-radius: 8px;
+    line-height: 1;
+}
+.report-item .report-title {
+    flex-grow: 1;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--heading-color);
+    margin: 0;
+}
+.report-item .report-action .btn-view-report {
+    background-color: var(--secondary-color);
+    color: var(--primary-color);
+    padding: 10px 25px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    white-space: nowrap; /* Mencegah teks tombol patah */
+}
+.report-item .report-action .btn-view-report:hover {
+    background-color: var(--primary-color);
+    color: #fff;
+}
+
+/* Pesan jika tidak ada hasil */
+#no-results-message {
+    display: none;
+    text-align: center;
+    padding: 40px;
+    font-size: 1.2rem;
+    color: #888;
+}
+
+/* Desain Responsif untuk Mobile */
+@media (max-width: 768px) {
+    .report-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+    .report-item .report-year {
+        font-size: 1.2rem;
+        padding: 10px 15px;
+    }
+    .report-item .report-title {
+        font-size: 1.1rem;
+    }
+    .report-item .report-action {
+        width: 100%;
+        text-align: right;
+        margin-top: 10px;
+    }
+}

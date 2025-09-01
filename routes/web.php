@@ -10,6 +10,8 @@ use App\Http\Controllers\Admin\{
     ProfileController,
     RoleController,
     ImmediateInformationController,
+    EvergreenInformationController,
+    InformationServiceReportController,
     InfoSlideController,
     PeriodicDocumentController
 };
@@ -232,13 +234,12 @@ Route::group(["prefix" => 'dashboard'], function () {
         Route::group(['middleware' => 'admin'], function () {
             Route::get('/', [HomeController::class, 'root'])->name('root');
 
-            Route::resource('periodic-documents', PeriodicDocumentController::class)->names('staff.periodic-documents');
-
+            
             //customers
             Route::get("customers", [CustomerController::class, "index"])->name('customers.index');
             Route::get("customers/{user}", [CustomerController::class, "show"])->name('customers.show');
             Route::delete('/customers/{user}', [CustomerController::class, 'destroy'])->name('customers.destroy');
-
+            
             Route::post('customers/{user}', [CustomerController::class, 'toggleRole'])->name('customers.toggle-role');
             Route::post('customers/{user}/verify', [CustomerController::class, 'verify'])->name('customers.verify');
             Route::post('customers/{user}/unverify', [CustomerController::class, 'unverify'])->name('customers.unverify');
@@ -246,12 +247,12 @@ Route::group(["prefix" => 'dashboard'], function () {
             Route::put('customers/{user}/update-role', [CustomerController::class, 'updateRole'])->name('customers.updateRole');
             Route::get('customers/{user}/edit-role', [CustomerController::class, 'editRole'])->name('customers.editRole');
             Route::put('customers/{user}/update-supervisor', [CustomerController::class, 'updateSupervisor'])->name('customers.updateSupervisor');
-
+            
             //roles
             Route::resource('roles', RoleController::class);
             Route::resource('facilities', FacilityController::class)->names('admin.facilities');
             Route::resource('tourism', TourismController::class)->names('admin.tourism');
-
+            
             // Slider Staff Routes
             Route::get('staff/slider', [SliderController::class, 'index'])->name('slider.staffIndex');
             Route::get('staff/slider/create', [SliderController::class, 'create'])->name('slider.create');
@@ -263,7 +264,11 @@ Route::group(["prefix" => 'dashboard'], function () {
             Route::resource('info-slides', InfoSlideController::class)->names('admin.info-slides');
             Route::patch('info-slides/{infoSlide}/toggle', [InfoSlideController::class, 'toggleVisibility'])->name('admin.info-slides.toggleVisibility');
             
+            Route::resource('staff/periodic-documents', PeriodicDocumentController::class)->names('staff.periodic-documents');
             Route::resource('staff/immediate-informations', ImmediateInformationController::class)->names('staff.immediate-informations');
+
+            Route::resource('staff/evergreen-informations', EvergreenInformationController::class)->names('staff.evergreen-informations');
+            Route::resource('staff/information-service-reports',InformationServiceReportController::class)->names('staff.information-service-reports');
         });
     });
     Route::middleware(['auth'])->group(function () {
@@ -329,6 +334,7 @@ Route::prefix('informasi')->group(function () {
     Route::get('/laporan-keuangan/api/financial-data', [LandingPageController::class, 'getFinancialData']);
 });
 
+
 Route::get('/informasi-keuangan/data', [LandingPageController::class, 'getFinanceData'])->name('informasiKeuangan.data');
 
 Route::get('/informasi/tenant', [LandingPageController::class, 'tenant'])->name('tenant');
@@ -350,8 +356,12 @@ Route::get('/informasi-publik/sop-ppid', [LandingPageController::class, 'sopPpid
 
 Route::get('/informasi-publik/laporan-layanan', [LandingPageController::class, 'laporanLayanan'])->name('laporanLayanan');
 Route::get('/informasi-publik/informasi-berkala', [LandingPageController::class, 'informasiBerkala'])->name('informasiBerkala');
+
 // routes/web.php
 Route::get('/informasi-publik/informasi-serta-merta', [LandingPageController::class, 'informasiSertaMerta'])->name('informasi.serta-merta');
+Route::get('/informasi-publik/informasi-setiap-saat', [LandingPageController::class, 'informasiSetiapSaat'])->name('informasi.setiap-saat');
+// routes/web.php
+Route::get('/informasi-publik/laporan-layanan-informasi', [LandingPageController::class, 'laporanLayananInformasi'])->name('laporan.layanan.informasi');
 
 // routes/web.php
 Route::get('/fasilitas', [LandingPageController::class, 'fasilitas'])->name('fasilitas');

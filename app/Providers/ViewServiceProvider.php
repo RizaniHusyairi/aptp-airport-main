@@ -86,10 +86,10 @@ class ViewServiceProvider extends ServiceProvider
                         ['name' => 'Laporan Keuangan', 'route' => route('laporanKeuangan')],
                     ]],
                     ['name' => 'Layanan Informasi', 'dropdown' => [
-                        ['name' => 'Laporan Layanan Informasi', 'route' => "#"],
+                        ['name' => 'Laporan Layanan Informasi', 'route' => route('laporan.layanan.informasi')],
                         ['name' => 'Informasi Berkala', 'route' => route('informasiBerkala')],
                         ['name' => 'Informasi Serta Merta', 'route' => route('informasi.serta-merta')],
-                        ['name' => 'Informasi Setiap Saat', 'route' => "#"],
+                        ['name' => 'Informasi Setiap Saat', 'route' => route('informasi.setiap-saat')],
                     ]],
                     
                     ['name' => 'Regulasi','dropdown' =>[

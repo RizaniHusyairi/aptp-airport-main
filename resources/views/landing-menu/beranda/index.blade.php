@@ -90,10 +90,10 @@
 
 <section id="info-slider-section" class="section-modern info-slider-section">
     <div class="container" data-aos="fade-up">
-        <div class="section-title-modern">
+        {{-- <div class="section-title-modern">
             <h2>Slide Informasi</h2>
             <p>Informasi dan pengumuman terkini dari Bandara APT Pranoto.</p>
-        </div>
+        </div> --}}
         <div class="swiper info-slider">
             <div class="swiper-wrapper">
                 {{-- @forelse ($infoSlides as $slide) --}}

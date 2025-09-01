@@ -17,13 +17,15 @@ use App\Jobs\LogVisitorJob;
 use Illuminate\Http\Request;
 use App\Models\BudgetExpense;
 use App\Models\PeriodicDocument;
+use App\Models\EvergreenInformation;
+use App\Models\ImmediateInformation;
+use App\Models\InformationServiceReport;
 use App\Models\AirFreightTraffic;
 use App\Models\PublicInformation;
 use Illuminate\Support\Facades\DB;
 use App\Services\AirportApiService;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
-use App\Models\ImmediateInformation;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Validator;
@@ -975,6 +977,18 @@ class LandingPageController extends Controller
     {
         $informations = ImmediateInformation::latest()->get();
         return view('landing-menu.informasi-publik.informasi-serta-merta.index', compact('informations'));
+    }
+
+    public function informasiSetiapSaat()
+    {
+        $informations = EvergreenInformation::orderBy('published_date', 'desc')->get();
+        return view('landing-menu.informasi-publik.informasi-setiap-saat.index', compact('informations'));
+    }
+
+    public function laporanLayananInformasi()
+    {
+        $reports = InformationServiceReport::orderBy('publication_year', 'desc')->get();
+        return view('landing-menu.informasi-publik.laporan-layanan-informasi.index', compact('reports'));
     }
     
 }
