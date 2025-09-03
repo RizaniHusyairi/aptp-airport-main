@@ -50,7 +50,8 @@ class ServiceSeeder extends Seeder
                 "Service Level Agreement (jika Maskapai)"
             ],
             'steps' => [
-                "Mengajukan surat permohonan kepada Kasi Pelayanan dan Kerjasama",
+                "Mengajukan surat permohonan kepada Kabandara",
+                
                 "Verifikasi dokumen dan persyaratan oleh petugas pengembangan usaha",
                 "Presentasi bisnis sesuai dengan bidang usaha yang diajukan",
                 "Melengkapi administrasi dan kontrak jika disetujui"
@@ -68,7 +69,7 @@ class ServiceSeeder extends Seeder
                 "Service Level Agreement (jika Maskapai)"
             ],
             'steps' => [
-                "Mengajukan surat permohonan kepada Kasi Pelayanan dan Kerjasama",
+                "Mengajukan surat permohonan kepada Kabandara",
                 "Verifikasi dokumen dan persyaratan oleh petugas pengembangan usaha",
                 "Presentasi bisnis sesuai dengan bidang usaha yang diajukan",
                 "Melengkapi administrasi dan kontrak jika disetujui"
@@ -83,7 +84,7 @@ class ServiceSeeder extends Seeder
                 "Surat Permohonan"
             ],
             'steps' => [
-                "Mengajukan surat permohonan kepada Kasi Pelayanan dan Kerjasama",
+                "Mengajukan surat permohonan kepada Kabandara",
                 "Verifikasi dokumen dan persyaratan oleh petugas pengembangan usaha",
                 "Presentasi bisnis sesuai dengan bidang usaha yang diajukan",
                 "Melengkapi administrasi dan kontrak jika disetujui"
@@ -98,7 +99,7 @@ class ServiceSeeder extends Seeder
                 "Surat Permohonan"
             ],
             'steps' => [
-                "Mengajukan surat permohonan kepada Kasi Pelayanan dan Kerjasama",
+                "Mengajukan surat permohonan kepada Kabandara",
                 "Verifikasi dokumen dan persyaratan oleh petugas pengembangan usaha",
                 "Presentasi bisnis sesuai dengan bidang usaha yang diajukan",
                 "Melengkapi administrasi dan kontrak jika disetujui"
@@ -116,7 +117,7 @@ class ServiceSeeder extends Seeder
                 "Service Level Agreement (jika Maskapai)"
             ],
             'steps' => [
-                "Mengajukan surat permohonan kepada Kasi Pelayanan dan Kerjasama",
+                "Mengajukan surat permohonan kepada Kabandara",
                 "Verifikasi dokumen dan persyaratan oleh petugas pengembangan usaha",
                 "Presentasi bisnis sesuai dengan bidang usaha yang diajukan",
                 "Melengkapi administrasi dan kontrak jika disetujui"
@@ -134,7 +135,7 @@ class ServiceSeeder extends Seeder
                 "Service Level Agreement (jika Maskapai)"
             ],
             'steps' => [
-                "Mengajukan surat permohonan kepada Kasi Pelayanan dan Kerjasama",
+                "Mengajukan surat permohonan kepada Kabandara",
                 "Verifikasi dokumen dan persyaratan oleh petugas pengembangan usaha",
                 "Presentasi bisnis sesuai dengan bidang usaha yang diajukan",
                 "Melengkapi administrasi dan kontrak jika disetujui"
@@ -150,7 +151,7 @@ class ServiceSeeder extends Seeder
                 "Tujuan Penggunaan Informasi", "Cara Memperoleh Informasi", "Cara Mendapatkan Salinan Informasi"
             ],
             'steps' => [
-                "Mengajukan surat permohonan kepada Kasi Pelayanan dan Kerjasama",
+                "Mengajukan surat permohonan kepada Kabandara",
                 "Verifikasi dokumen dan persyaratan oleh petugas pengembangan usaha",
                 "Melengkapi administrasi dan kontrak jika disetujui"
             ],

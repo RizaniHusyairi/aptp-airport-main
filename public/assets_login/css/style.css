@@ -13,7 +13,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: color-mix(in srgb, #d99e4e, transparent 15%);
+  background: color-mix(in srgb, #0d1018, transparent 15%)
   padding: 0;
 }
 

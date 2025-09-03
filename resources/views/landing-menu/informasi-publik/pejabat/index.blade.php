@@ -4,14 +4,14 @@
 
 @section('content')
   <!-- About Section -->
-  <section id="about" class="about section pt-6">
+  <section id="about" class="about section pt-6 light-background">
     <!-- Section Title -->
     <div class="container section-title" data-aos="fade-up">
       <h2>Informasi Publik<br></h2>
       <p><span>Pejabat</span> <span class="description-title">Bandara</span></p>
     </div><!-- End Section Title -->
 
-    <div class="container-fluid light-background">
+    <div class="container-fluid">
       <div class="container">
         <!-- Daftar Nama Pejabat -->
         <div class="nav nav-tabs justify-content-center mb-4" id="officialTabs" role="tablist">
@@ -130,33 +130,52 @@
 -	D-IV STPI Curug Jurusan Lalu Lintas Udara <br>
 -	S-1 Ilmu Komunikasi Universitas Terbuka Palu 
 </p>
-        <p><strong>Penghargaan:</strong>  <br> - Satya Lancana Karya Satya 10 Tahun (2014) <br>
--	Satya Lancana Karya Satya 20 Tahun (2018)
+        <p><strong>Penghargaan:</strong>  <br> 
+            - Satya Lancana Karya Satya 10 Tahun (2014) <br>
+            - Satya Lancana Karya Satya 20 Tahun (2018)
 .</p>
     </div>
     <div id="profile-zaldi" class="hidden-profile">
-        <p><strong>Riwayat Jabatan:</strong> Kepala Kantor UPBU Maratua (2020–2024), kini Kepala Subbagian Tata Usaha A.P.T. Pranoto.</p>
-        <p><strong>Pendidikan:</strong> D-III PTBL PLP Curug.</p>
-        <p><strong>Penghargaan:</strong> Satya Lancana Karya Satya 10 Tahun.</p>
+        <p><strong>Riwayat Jabatan:</strong> <br> 
+            - Kepala Kantor UPBU Maratua (2020–2024) <br>
+            - Kepala Subbagian Tata Usaha A.P.T. Pranoto.(2024–Sekarang) <br>
+        </p>
+        <p><strong>Pendidikan:</strong> <br> 
+            - D-III PTBL PLP Curug.</p>
+        <p><strong>Penghargaan:</strong> <br> 
+            - Satya Lancana Karya Satya 10 Tahun.</p>
     </div>
     <div id="profile-mochamad" class="hidden-profile">
-        <p><strong>Riwayat Jabatan:</strong> Kepala UPBU Yuvai Semaring (2020–2024), kini menangani Keamanan Penerbangan. </p>
-        <p><strong>Pendidikan:</strong> S2 Sekolah Tinggi Manajemen Transportasi Trisakti.</p>
-        <p><strong>Penghargaan:</strong> Satya Lancana Karya Satya 10 Tahun.</p>
+        <p><strong>Riwayat Jabatan:</strong> <br> 
+            - Kepala UPBU Yuvai Semaring (2020–2024) <br>
+            - Kepala Seksi Keamanan Penerbangan dan Pelayanan Darurat (2024–Sekarang). </p>
+        <p><strong>Pendidikan:</strong> <br> 
+            - <br>
+            - S2 Sekolah Tinggi Manajemen Transportasi Trisakti.</p>
+        <p><strong>Penghargaan:</strong> <br> 
+            - Satya Lancana Karya Satya 10 Tahun.</p>
     </div>
     <div id="profile-roslan" class="hidden-profile">
-        <p><strong>Riwayat Jabatan:</strong> <br>- Penyusun Rencana dan Program Bandara Juwata Tarakan (2015-2018) <br>
+        <p><strong>Riwayat Jabatan:</strong> <br> 
 -	Kepala Seksi Pelayanan Bandara Juwata Tarakan (2018-2025) <br>
 -	Kepala Seksi Pelayanan dan Kerjasama (2025-sekarang) <br></p>
-        <p><strong>Pendidikan:</strong> STIE Bulungan Tarakan Jurusan S-1 Managemen.</p>
-        <p><strong>Penghargaan:</strong> -	Satya Lancana Karya Satya 10 Tahun (2012) <br>
--	Satya Lancana Karya Satya 20 Tahun (2020)
+        <p><strong>Pendidikan:</strong> <br> 
+            - STIE Bulungan Tarakan Jurusan S-1 Managemen.</p>
+        <p><strong>Penghargaan:</strong> <br> 
+            -	Satya Lancana Karya Satya 10 Tahun (2012) <br>
+            -	Satya Lancana Karya Satya 20 Tahun (2020)
 </p>
     </div>
     <div id="profile-murdoko" class="hidden-profile">
-        <p><strong>Riwayat Jabatan:</strong> Kepala Seksi Teknik dan Keamanan (2019–2023), kini Kepala Seksi Teknik dan Operasi.</p>
-        <p><strong>Pendidikan:</strong> S1 Hukum Universitas Terbuka.</p>
-        <p><strong>Penghargaan:</strong> Satya Lancana Karya Satya 10 & 20 Tahun.</p>
+        <p><strong>Riwayat Jabatan:</strong> <br> 
+            - Kepala Seksi Teknik dan Keamanan (2019–2023) <br>
+            - Kepala Seksi Teknik dan Operasi.(2023–Sekarang)</p>
+        <p><strong>Pendidikan:</strong> <br>
+            - S1 Hukum Universitas Terbuka.</p>
+        <p><strong>Penghargaan:</strong> <br> 
+            - Satya Lancana Karya Satya 10 Tahun. <br>
+            - Satya Lancana Karya Satya 20 Tahun
+        </p>
     </div>
   </section>
 @endsection

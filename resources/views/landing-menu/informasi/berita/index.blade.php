@@ -9,10 +9,10 @@
       <p><span>Berita Seputar</span> <span class="description-title">Bandara A.P.T. Pranoto Samarinda</span></p>
     </div>
     
-    <div class="container light-background">
+    <div class="container ">
       <div class="row justify-content-around">
           <div class="col-lg-9 mb-3">
-            <swiper-container class="newsFirstSwiper" autoplay-delay="2500" autoplay-disable-on-interaction="false" init="false" style="height: 100%;">
+            <swiper-container class="newsFirstSwiper" style="height: 500px;" autoplay-delay="2500" autoplay-disable-on-interaction="false" init="false" style="height: 100%;">
               @forelse ($topHeadlines as $index => $headline)
               <swiper-slide>
                 {{-- <div class="card news-card shadow" style="background-image: url('{{ asset('uploads/'.$headline->image) ?? asset('/assets_landing/img/bandara/APT04947.JPG') }}');"> --}}
@@ -49,7 +49,8 @@
 
             <div class="news-aside" id="news-aside" aria-label="Daftar Berita Terbaru">
               @forelse ($nextHeadlines as $index => $news)
-                <a href="{{ route('news.show', $news->slug) }}" class="news-chip text-decoration-none" aria-label="Baca: {{ $news->title }}">
+                  
+              <a href="{{ route('news.show', $news->slug) }}" class="news-chip text-decoration-none" aria-label="Baca: {{ $news->title }}">
                   <figure class="news-chip-media">
                     <img
                       {{-- src="{{ asset('uploads/'.$news->image) ?? asset('/assets_landing/img/bandara/DJI_0038.JPG') }}" --}}

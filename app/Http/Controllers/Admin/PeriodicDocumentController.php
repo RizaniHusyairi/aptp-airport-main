@@ -34,7 +34,7 @@ class PeriodicDocumentController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'category' => 'required|string|in:Laporan Kinerja,Survei kepuasan,LHKPN,Rencana kerja tahunan,Data statistik kepegawaian',
+            'category' => 'required|string|in:Laporan Tahunan,Survei Kepuasan,LHKPN,Rencana Kerja Anggaran,Data Statistik Kepegawaian,Laporan Keuangan',
             'title' => 'required|string|max:255',
             'published_date' => 'required|date',
             'document_path' => 'required|url',
@@ -68,7 +68,7 @@ class PeriodicDocumentController extends Controller
     public function update(Request $request, PeriodicDocument $periodicDocument)
     {
         $validated = $request->validate([
-            'category' => 'required|string|in:Laporan Kinerja,Survei kepuasan,LHKPN,Rencana kerja tahunan,Data statistik kepegawaian',
+            'category' => 'required|string|in:Laporan Tahunan,Survei Kepuasan,LHKPN,Rencana Kerja Anggaran,Data Statistik Kepegawaian,Laporan Keuangan',
             'title' => 'required|string|max:255',
             'published_date' => 'required|date',
             'document_path' => 'required|url',

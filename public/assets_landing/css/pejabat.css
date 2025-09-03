@@ -1,3 +1,5 @@
+
+
 .official-card {
     border-radius: 15px;
     overflow: hidden;
@@ -22,12 +24,14 @@
 }
 
 .btn-pejabat{
-    background-color: #a58c1b;
+    background-color: #192939;
     color: #FFFFFF;
+    transition: background-color 0.3s ease;
 }
 
 .btn-pejabat:hover{
-    background-color: #867216;
+    transition: background-color 0.3s ease;
+    background-color: #14212e;
     color: #FFFFFF;
 }
 

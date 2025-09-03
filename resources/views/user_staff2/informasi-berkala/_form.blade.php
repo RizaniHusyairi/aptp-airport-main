@@ -8,6 +8,7 @@
             <option value="LHKPN" @selected(old('category', $document->category ?? '') == 'LHKPN')>LHKPN</option>
             <option value="Rencana kerja tahunan" @selected(old('category', $document->category ?? '') == 'Rencana kerja tahunan')>Rencana kerja tahunan</option>
             <option value="Data statistik kepegawaian" @selected(old('category', $document->category ?? '') == 'Data statistik kepegawaian')>Data statistik kepegawaian</option>
+            <option value="Laporan Keuangan" @selected(old('category', $document->category ?? '') == 'Laporan Keuangan')>Laporan Keuangan</option>
         </select>
         @error('category')<div class="invalid-feedback">{{ $message }}</div>@enderror
     </div>
