@@ -75,6 +75,13 @@
     // preloader.classList.add('hidden');
     setTimeout(() => {
       preloader.remove();
+      // TAMBAHKAN KODE INI: Panggil animasi hero jika ada
+      if (typeof window.startHeroAnimation === 'function') {
+          window.startHeroAnimation();
+      }
+
+
+      
       console.log('Preloader removed');
     }, 300); // Tunggu transisi opacity selesai
   };

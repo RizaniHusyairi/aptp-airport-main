@@ -29,6 +29,56 @@ document.addEventListener('DOMContentLoaded', function() {
         pagination: { el: '.swiper-pagination', clickable: true },
     });
 
+    // // --- ANIMASI BARU: MASKING REVEAL ---
+    // const titleReveal = document.querySelector('.hero-title-reveal');
+    // if(titleReveal) {
+    //     ScrollTrigger.create({
+    //         trigger: titleReveal,
+    //         start: "top 80%",
+    //         once: true, // Hanya animasi sekali
+    //         onEnter: () => {
+    //             titleReveal.classList.add('is-visible');
+    //         }
+    //     });
+    // }
+    // Daftarkan plugin di sini agar GSAP tahu cara menganimasikan clip-path
+    // gsap.registerPlugin(ClipPathPlugin);
+    // GANTI BLOK ANIMASI GSAP YANG LAMA DENGAN INI
+    window.startHeroAnimation = function() {
+        if (document.querySelector('.hero-title-reveal-v2')) {
+            const tl = gsap.timeline({
+                defaults: { ease: "power3.out" },
+                delay: 0.2
+            });
+
+            // 1. Baris 1 ("Bandara") muncul
+            tl.to('.line-1 span', { y: 0, duration: 1 });
+            tl.to('.line-2 span', { y: 0, duration: 1 });
+
+            // 2. Huruf pertama (A, P, T) muncul satu per satu
+            tl.to('.first-letter', { 
+                opacity: 1, 
+                stagger: 0.15, 
+                duration: 0.5 
+            }, "-=0.8");
+
+            // 3. Sisa teks ("ji", "angeran", "emenggung") meluncur keluar dari huruf pertama
+            tl.to('.rest-wrapper', {
+                width: 'auto', // GSAP akan otomatis menghitung lebar yang dibutuhkan
+                stagger: 0.15,
+                duration: 1
+            }, "-=0.4");
+
+            // 4. Baris 3 ("Pranoto") muncul sebagai penutup
+            tl.to('.line-3 span', { 
+                y: 0, 
+                duration: 1 
+            }, "-=1.0");
+        }
+    };
+
+    // --- AKHIR BLOK ANIMASI BARU ---
+
     /**
      * LOGIKA QUICK NAV (DIKEMBALIKAN)
      */

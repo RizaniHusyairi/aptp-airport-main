@@ -94,9 +94,87 @@
     text-align: center;
 }
 
-.hero-container h1 { font-size: clamp(2.5rem, 5vw, 4.5rem); font-weight: 700; text-shadow: 2px 2px 10px rgba(0,0,0,0.5); }
 .hero-container .lead { font-size: clamp(1.1rem, 2vw, 1.5rem); font-weight: 300; margin-top: 10px; }
 #typed-destination { font-weight: 600; color: var(--secondary-color); }
+.hero-title-reveal-v2 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.title-line-v2 {
+    overflow: hidden; /* Efek "muncul" dari kontainer */
+}
+.title-line-v2 span {
+    display: block;
+    transform: translateY(100%); /* Mulai di bawah */
+}
+
+/* Baris 1: "Bandara" */
+.line-1 span {
+    font-size: clamp(1.2rem, 3vw, 2rem);
+    font-weight: 300;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+/* Baris 2: "Aji Pangeran Temenggung" */
+.line-2 {
+    display: flex;
+    gap: 0.5em; /* Jarak antar kata */
+    overflow: visible; /* Override overflow hidden induknya */
+}
+.word-reveal {
+    display: flex;
+    align-items: baseline; /* Agar huruf besar dan kecil sejajar di bawah */
+}
+.first-letter {
+    font-size: clamp(3rem, 7vw, 5.5rem);
+    font-weight: 800;
+    color: #fff; /* Warna emas untuk huruf pertama */
+    opacity: 0; /* Awalnya transparan */
+}
+.rest-wrapper {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: baseline;
+    /* UBAH INI: Mulai dengan lebar 0 */
+    width: 0;
+}
+.rest-of-word {
+    display: block;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 700;
+    color: #fff;
+    /* UBAH INI: Pastikan teks tidak turun ke baris baru saat wadah melebar */
+    white-space: nowrap;
+    /* HAPUS INI: clip-path: inset(0 100% 0 0); */
+}
+
+/* Baris 3: "Pranoto" */
+.line-3 span {
+    font-size: clamp(3.5rem, 9vw, 6.5rem);
+    font-weight: 800;
+    color: #fff;
+    margin-top: -0.2em;
+}
+
+/* Penyesuaian Responsif untuk Mobile */
+@media (max-width: 768px) {
+    .line-2 { gap: 0.3em; }
+    .first-letter { font-size: 3rem; }
+    .rest-of-word { font-size: 2rem; }
+    .line-3 span { font-size: 4rem; }
+}
+@media (max-width: 480px) {
+    .line-2 { flex-direction: column; align-items: center; gap: 0; line-height: 1; }
+    .first-letter { font-size: 2.5rem; }
+    .rest-of-word { font-size: 1.5rem; }
+    .line-3 span { font-size: 3.2rem; }
+}
+
 
 /* Gaya untuk Widget Cuaca (Dikembalikan) */
 .weather-widget-modern {

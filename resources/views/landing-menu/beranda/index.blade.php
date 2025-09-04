@@ -14,6 +14,9 @@
     
     {{-- CDN BARU UNTUK GSAP & SCROLLTRIGGER --}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    {{-- === TAMBAHKAN SCRIPT PLUGIN DI SINI === --}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ClipPathPlugin.min.js"></script>
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
     
     {{-- File JS kustom untuk halaman ini --}}
@@ -49,10 +52,33 @@
     <div class="hero-background-overlay"></div>
 
     <div class="container hero-container d-flex flex-column justify-content-center align-items-center">
-        <h1 class="text-white" data-aos="fade-down">Bandara APT Pranoto</h1>
-        <p class="text-white lead" data-aos="fade-up" data-aos-delay="200">
+        {{-- STRUKTUR JUDUL BARU --}}
+        <div class="hero-title-reveal-v2">
+            <div class="title-line-v2 line-1">
+                <span>Bandara</span>
+            </div>
+
+            <div class="title-line-v2 line-2">
+                <div class="word-reveal">
+                    <span class="first-letter">A</span><span class="rest-wrapper"><span class="rest-of-word">ji</span></span>
+                </div>
+                <div class="word-reveal">
+                    <span class="first-letter">P</span><span class="rest-wrapper"><span class="rest-of-word">angeran</span></span>
+                </div>
+                <div class="word-reveal">
+                    <span class="first-letter">T</span><span class="rest-wrapper"><span class="rest-of-word">emenggung</span></span>
+                </div>
+            </div>
+            
+            <div class="title-line-v2 line-3">
+                <span>Pranoto</span>
+            </div>
+        </div>
+        
+        {{-- Akhir Struktur Judul Baru --}}
+        {{-- <p class="text-white lead" data-aos="fade-up" data-aos-delay="200">
             Gerbang Udara Anda Menuju <span id="typed-destination"></span>
-        </p>
+        </p> --}}
         
         @if ($weather)
         <a href="https://www.bmkg.go.id/cuaca/prakiraan-cuaca/64.72.05.1004" target="_blank">
