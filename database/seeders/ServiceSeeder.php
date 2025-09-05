@@ -24,7 +24,6 @@ class ServiceSeeder extends Seeder
             ],
             'steps' => [
                 "Mengajukan surat permohonan kepada Kabandara",
-                "Mengajukan surat permohonan kepada Kasi Pelayanan dan Kerjasama",
                 "Verifikasi dokumen dan persyaratan oleh petugas pengembangan usaha",
                 "Presentasi bisnis sesuai dengan bidang usaha yang diajukan",
                 "Melengkapi administrasi dan kontrak jika disetujui"
@@ -107,12 +106,12 @@ class ServiceSeeder extends Seeder
             'submission_url' => 'dashboard/fieldtrip',
         ]);
         Service::create([
-            'name' => 'Lelang',
-            'slug' => 'lelang',
-            'title' => 'Syarat & Ketentuan Pengajuan Lelang',
+            'name' => 'Beauty Contest',
+            'slug' => 'beauty-contest',
+            'title' => 'Syarat & Ketentuan Pengajuan Beauty Contest',
             'requirements' => [
                 "Nomor Induk Berusaha", "Kartu Tanda Penduduk (KTP)", "Akta Pendirian Perusahaan", "NPWP",
-                "Proposal Usaha", "Desain Teknis Booth/Tempat Usaha","Sertifikat Penjamah Makanan (jika F&B)", "Surat Pernyataan Mengikuti Aturan (bermaterai)",
+                "Proposal Usaha", "Desain Teknis Booth/Tempat Usaha", "Surat Pernyataan Mengikuti Aturan (bermaterai)",
                 "Laporan Keuangan", "Bukti Bayar Pajak 3 Bulan Terakhir",
                 "Service Level Agreement (jika Maskapai)"
             ],
@@ -130,7 +129,7 @@ class ServiceSeeder extends Seeder
             'title' => 'Syarat & Ketentuan Pengajuan Slot Charter',
             'requirements' => [
                 "Nomor Induk Berusaha", "Kartu Tanda Penduduk (KTP)", "Surat Permohonan Slot Charter", "Sertifikat Kelaikan Udara Pesawat",
-                "Proposal Oprasional Penerbangan", "Surat Izin Operasi Penerbangan (untuk Operator)","Sertifikat Penjamah Makanan (jika F&B)",
+                "Proposal Oprasional Penerbangan", "Surat Izin Operasi Penerbangan (untuk Operator)",
                  "Bukti Bayar Pajak 3 Bulan Terakhir",
                 "Service Level Agreement (jika Maskapai)"
             ],
