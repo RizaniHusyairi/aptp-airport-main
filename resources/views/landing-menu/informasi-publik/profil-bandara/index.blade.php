@@ -44,14 +44,22 @@
                 <hr class="my-3">
 
                 <h3 class="h4 mb-2 text-dark">Tugas:</h3>
-                <p class="text-muted mb-3">Melaksanakan pelayanan jasa kebandarudaraan dan terkait, keamanan, keselamatan, serta pengelolaan keuangan yang mandiri dan fleksibel, mendukung praktik bisnis yang sehat.</p>
+                <p class="text-muted mb-3">Melaksanakan pelayanan jasa kebandarudaraan dan jasa terkait Bandar Udara, kegiatan keamanan, keselamatan, dan ketertiban penerbangan pada Bandar Udara yang belum diusahakan secara komersial dan dikecualikan pengelolaan keuangannya.</p>
                 <h3 class="h4 mb-2 text-dark">Fungsi:</h3>
                 <ul class="list-group list-group-flush">
-                    <li class="list-group-item text-muted">Penyusunan rencana pelayanan jasa berdasarkan masterplan & rencana strategis BLU</li>
-                    <li class="list-group-item text-muted">Pengoperasian & perawatan fasilitas keselamatan, keamanan, sisi udara/darat, serta alat berat</li>
-                    <li class="list-group-item text-muted">Kerja sama & pengembangan usaha jasa kebandarudaraan secara mandiri dan bertanggung jawab</li>
-                    <li class="list-group-item text-muted">Peningkatan pelayanan pengguna jasa (excellent passenger experience)</li>
-                    <li class="list-group-item text-muted">Menjadi pusat kargo udara Kalimantan Timur & Kalimantan Utara</li>
+                    <li class="list-group-item text-muted">Pelaksanaan penyusunan rencana dan program, rencana strategi bisnis, dan rencana bisnis dan anggaran;</li>
+                    <li class="list-group-item text-muted">pelaksanaan pengoperasian fasilitas keselamatan, sisi udara, sisi darat, dan alat-alat besar Bandar Udara, serta fasilitas penunjang;</li>
+                    <li class="list-group-item text-muted">pelaksanaan perawatan dan perbaikan fasilitas keselamatan, sisi udara, sisi darat, dan alat-alat besar Bandar Udara, serta fasilitas penunjang;</li>
+                    <li class="list-group-item text-muted">pelaksanaan pelayanan pengaturan pergerakan pesawat udara serta penyusunan jadwal penerbangan;</li>
+                    <li class="list-group-item text-muted">pelaksanaan pengamanan pelayanan pengangkutan penumpang, awak pesawat udara, barang, jinjingan, pos dan kargo, serta barang berbahaya dan senjata;</li>
+                    <li class="list-group-item text-muted">pelaksanaan pengawasan, pengendalian keamanan dan ketertiban di lingkungan kerja, pelaksanaan pengoperasian, perawatan dan perbaikan fasilitas keamanan penerbangan, dan pelayanan darurat Bandar Udara;</li>
+                    <li class="list-group-item text-muted">pelaksanaan kerja sarna dan pengembangan usaha jasa kebandarudaraan dan jasa terkait Bandar Udara;</li>
+                    <li class="list-group-item text-muted">pelaksanaan koordinasi dengan instansi/lembaga terkait penyelenggaraan Bandar Udara;</li>
+                    <li class="list-group-item text-muted">pelaksanaan pengoperasian dan pelayanan fasilitas terminal penumpang, kargo dan penunjang, serta pengelolaan dan pengendalian higiene dan sanitasi;</li>
+                    <li class="list-group-item text-muted">pelaksanaan pemeriksaan intern;</li>
+                    <li class="list-group-item text-muted">pelaksanaan pengelolaan keuangan dan barang milik negara, pelaksanaan urusan kepegawaian, ketatausahaan, kerumahtanggaan, hukum dan hubungan masyarakat; dan</li>
+                    <li class="list-group-item text-muted">pelaksanaan evaluasi dan pelaporan.</li>
+                    
                 </ul>
             </section>
 
