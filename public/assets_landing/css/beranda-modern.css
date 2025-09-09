@@ -106,6 +106,7 @@
 .title-line-v2 {
     overflow: hidden; /* Efek "muncul" dari kontainer */
 }
+
 .title-line-v2 span {
     display: block;
     transform: translateY(100%); /* Mulai di bawah */
@@ -120,7 +121,7 @@
     color: rgba(255, 255, 255, 0.9);
 }
 
-/* Baris 2: "Aji Pangeran Temenggung" */
+/* Baris 2: "Aji Pangeran Tumenggung" */
 .line-2 {
     display: flex;
     gap: 0.5em; /* Jarak antar kata */
@@ -131,7 +132,7 @@
     align-items: baseline; /* Agar huruf besar dan kecil sejajar di bawah */
 }
 .first-letter {
-    font-size: clamp(3rem, 7vw, 5.5rem);
+    font-size: clamp(3rem, 7vw, 3.5rem);
     font-weight: 800;
     color: #fff; /* Warna emas untuk huruf pertama */
     opacity: 0; /* Awalnya transparan */
@@ -145,7 +146,7 @@
 }
 .rest-of-word {
     display: block;
-    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-size: clamp(2rem, 5vw, 1.5rem);
     font-weight: 700;
     color: #fff;
     /* UBAH INI: Pastikan teks tidak turun ke baris baru saat wadah melebar */
@@ -155,7 +156,7 @@
 
 /* Baris 3: "Pranoto" */
 .line-3 span {
-    font-size: clamp(3.5rem, 9vw, 6.5rem);
+    font-size: clamp(3.5rem, 9vw, 4.5rem);
     font-weight: 800;
     color: #fff;
     margin-top: -0.2em;

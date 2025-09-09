@@ -19,7 +19,7 @@
             <section class="bg-white p-4 rounded shadow mb-5" data-aos="fade-up">
                 <h2 class="h3 mb-2 text-dark">Sejarah dan Letak Geografis</h2>
                 <hr class="my-3">
-                <p class="text-muted">Bandar Udara A.P.T. Pranoto – Samarinda diresmikan oleh Presiden Republik Indonesia pada 25 Oktober 2018, dan mulai beroperasi untuk pesawat berbadan sempit (B737 Series dan A320 Series) pada 20 November 2018. Bandara ini melayani wilayah Samarinda, Tenggarong, Bontang, Kutai Timur, dan Kutai Kartanegara serta menjadi penunjang Ibu Kota Nusantara melalui konsep Multiple Airport Systems.</p>
+                <p class="text-muted">Bandar Udara Aji Pangeran Tumenggung Pranoto Samarinda beroperasi sejak tanggal 24 Mei 2018 menggantikan Bandar Udara Temindung yang resmi ditutup pada 23 Mei 2018. Bandara Aji Pangeran Tumenggung (A.P.T.) Pranoto Samarinda bermula dari kebutuhan masyarakat Samarinda dan sekitarnya akan sarana transportasi udara yang lebih memadai. Sebelumnya, Bandara Temindung yang berada di pusat kota Samarinda menjadi satu-satunya pintu gerbang udara, namun kapasitas dan panjang landas pacunya yang terbatas tidak lagi mampu menampung peningkatan jumlah penumpang serta pesawat yang lebih besar. Kondisi ini memicu pemerintah kota dan pemerintah provinsi merencanakan pembangunan bandara baru yang dapat memenuhi standar keselamatan, kapasitas, dan kenyamanan bagi penumpang.</p>
             </section>
 
             <!-- Status dan Penetapan -->

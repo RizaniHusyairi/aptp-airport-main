@@ -107,9 +107,9 @@ class ServiceSeeder extends Seeder
             'submission_url' => 'dashboard/fieldtrip',
         ]);
         Service::create([
-            'name' => 'Lelang',
-            'slug' => 'lelang',
-            'title' => 'Syarat & Ketentuan Pengajuan Lelang',
+            'name' => 'Beauty Contest',
+            'slug' => 'Beauty-Contest',
+            'title' => 'Syarat & Ketentuan Pengajuan Beauty Contest',
             'requirements' => [
                 "Nomor Induk Berusaha", "Kartu Tanda Penduduk (KTP)", "Akta Pendirian Perusahaan", "NPWP",
                 "Proposal Usaha", "Desain Teknis Booth/Tempat Usaha","Sertifikat Penjamah Makanan (jika F&B)", "Surat Pernyataan Mengikuti Aturan (bermaterai)",
@@ -122,7 +122,7 @@ class ServiceSeeder extends Seeder
                 "Presentasi bisnis sesuai dengan bidang usaha yang diajukan",
                 "Melengkapi administrasi dan kontrak jika disetujui"
             ],
-            'submission_url' => 'dashboard/lelang',
+            'submission_url' => 'dashboard/beauty-contest',
         ]);
         Service::create([
             'name' => 'Slot Charter',

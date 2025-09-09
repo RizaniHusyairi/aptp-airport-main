@@ -3,11 +3,11 @@
         <label for="category" class="form-label">Kategori Dokumen <span class="text-danger">*</span></label>
         <select class="form-select @error('category') is-invalid @enderror" id="category" name="category" required>
             <option value="" disabled @selected(!isset($document))>Pilih Kategori...</option>
-            <option value="Laporan Kinerja" @selected(old('category', $document->category ?? '') == 'Laporan Kinerja')>Laporan Kinerja</option>
-            <option value="Survei kepuasan" @selected(old('category', $document->category ?? '') == 'Survei kepuasan')>Survei kepuasan</option>
+            <option value="Laporan Tahunan" @selected(old('category', $document->category ?? '') == 'Laporan Tahunan')>Laporan Tahunan</option>
+            <option value="Survei Kepuasan" @selected(old('category', $document->category ?? '') == 'Survei Kepuasan')>Survei Kepuasan</option>
             <option value="LHKPN" @selected(old('category', $document->category ?? '') == 'LHKPN')>LHKPN</option>
-            <option value="Rencana kerja tahunan" @selected(old('category', $document->category ?? '') == 'Rencana kerja tahunan')>Rencana kerja tahunan</option>
-            <option value="Data statistik kepegawaian" @selected(old('category', $document->category ?? '') == 'Data statistik kepegawaian')>Data statistik kepegawaian</option>
+            <option value="Rencana Kinerja Anggaran" @selected(old('category', $document->category ?? '') == 'Rencana Kinerja Anggaran')>Rencana Kinerja Anggaran</option>
+            <option value="Data Statistik Kepegawaian" @selected(old('category', $document->category ?? '') == 'Data Statistik Kepegawaian')>Data statistik kepegawaian</option>
             <option value="Laporan Keuangan" @selected(old('category', $document->category ?? '') == 'Laporan Keuangan')>Laporan Keuangan</option>
         </select>
         @error('category')<div class="invalid-feedback">{{ $message }}</div>@enderror

@@ -81,11 +81,11 @@ Route::group(["prefix" => 'dashboard'], function () {
         Route::get('/perijinan/{id}', [PerijinanUsahaController::class, 'show'])->name('perijinan.userShow');
         
         // Lelang User Routes
-        Route::get('/lelang', [LelangController::class, 'indexUser'])->name('lelang.index');
-        Route::get('/lelang/create', [LelangController::class, 'create'])->name('lelang.create');
-        Route::post('/lelang/store', [LelangController::class, 'store'])->name('lelang.store');
-        Route::delete('/lelang/{id}', [LelangController::class, 'destroy'])->name('lelang.destroy');
-        Route::get('/lelang/{id}', [LelangController::class, 'show'])->name('lelang.userShow');
+        Route::get('/beauty-contest', [LelangController::class, 'indexUser'])->name('lelang.index');
+        Route::get('/beauty-contest/create', [LelangController::class, 'create'])->name('lelang.create');
+        Route::post('/beauty-contest/store', [LelangController::class, 'store'])->name('lelang.store');
+        Route::delete('/beauty-contest/{id}', [LelangController::class, 'destroy'])->name('lelang.destroy');
+        Route::get('/beauty-contest/{id}', [LelangController::class, 'show'])->name('lelang.userShow');
         
         Route::get('/slot', [SlotController::class, 'indexUser'])->name('slot.index');
         Route::get('/slot/create', [SlotController::class, 'create'])->name('slot.create');
@@ -156,9 +156,9 @@ Route::group(["prefix" => 'dashboard'], function () {
             Route::patch('satff/perijinan/{license}', [PerijinanUsahaController::class, 'updateStatus'])->name('perijinan.updateStatus');
 
             // Lelang Staff Routes
-            Route::get('staff/lelang', [LelangController::class, 'index'])->name('lelang.staffIndex');
-            Route::get('staff/lelang/{id}', [LelangController::class, 'show'])->name('lelang.show');
-            Route::patch('staff/lelang/{lelang}', [LelangController::class, 'updateStatus'])->name('lelang.updateStatus');
+            Route::get('staff/beauty-contest', [LelangController::class, 'index'])->name('lelang.staffIndex');
+            Route::get('staff/beauty-contest/{id}', [LelangController::class, 'show'])->name('lelang.show');
+            Route::patch('staff/beauty-contest/{lelang}', [LelangController::class, 'updateStatus'])->name('lelang.updateStatus');
             
             // Slot Staff Routes
             Route::get('staff/slot', [SlotController::class, 'index'])->name('slot.staffIndex');
@@ -276,7 +276,7 @@ Route::group(["prefix" => 'dashboard'], function () {
         Route::get('/sewa', [SewaController::class, 'index'])->name('sewa.index');
         
         // Lelang Routes
-        Route::get('/lelang', [LelangController::class, 'index'])->name('lelang.index');
+        Route::get('/beauty-contest', [LelangController::class, 'index'])->name('lelang.index');
         
         // Perijinan Usaha Routes
         Route::get('/izin', [PerijinanUsahaController::class, 'index'])->name('izin.index');
@@ -342,7 +342,7 @@ Route::get('/informasi/sewa', [LandingPageController::class, 'sewa'])->name('sew
 Route::get('/informasi/perijinan-usaha', [LandingPageController::class, 'perijinanUsaha'])->name('perijinanUsaha');
 Route::get('/informasi/pengiklanan', [LandingPageController::class, 'pengiklanan'])->name('pengiklanan');
 Route::get('/informasi/field-trip', [LandingPageController::class, 'fieldTrip'])->name('fieldTrip');
-Route::get('/informasi/lelang', [LandingPageController::class, 'lelang'])->name('lelang');
+Route::get('/informasi/beauty-contest', [LandingPageController::class, 'lelang'])->name('lelang');
 Route::get('/informasi/slot', [LandingPageController::class, 'slot'])->name('slot');
 
 // GANTI DENGAN SATU ROUTE INI:

@@ -59,38 +59,36 @@ class ViewServiceProvider extends ServiceProvider
                         ['name' => 'Profil Bandara', 'route' => route('profilBandara')],
                         ['name' => 'Struktur Organisasi', 'route' => route('strukturOrganisasi')],
                         ['name' => 'Pejabat Bandara', 'route' => route('pejabatBandara')],
-                        [
-                            'name' => 'PPID',
-                            'dropdown' => [
-                                [
-                                    'name' => 'Profil PPID BLU',
-                                    'route' => route('profilPPID'),
-                                ],
-                                [
-                                    'name' => 'SOP PPID',
-                                    'route' => route('sopPpid'),
-                                ],
-                                [
-                                    'name' => 'Pengajuan Informasi Publik',
-                                    'route' => route('layanan.show', 'informasi-publik'),
-                                ],
-                                
-                            ],
-                        ]
+                        
                         ],
 
                     ],
                     
+                    ['name' => 'PPID', 'dropdown' => [
+                        [
+                            'name' => 'Profil PPID BLU',
+                            'route' => route('profilPPID'),
+                        ],
+                        [
+                            'name' => 'SOP PPID',
+                            'route' => route('sopPpid'),
+                        ],
+                        [
+                            'name' => 'Pengajuan Informasi Publik',
+                            'route' => route('layanan.show', 'informasi-publik'),
+                        ],
+                        ['name' => 'Layanan Informasi', 'dropdown' => [
+                            ['name' => 'Laporan Layanan Informasi', 'route' => route('laporan.layanan.informasi')],
+                            ['name' => 'Informasi Berkala', 'route' => route('informasiBerkala')],
+                            ['name' => 'Informasi Serta Merta', 'route' => route('informasi.serta-merta')],
+                            ['name' => 'Informasi Setiap Saat', 'route' => route('informasi.setiap-saat')],
+                        ]],
+                    ]],
                     ['name' => 'Informasi', 'dropdown' => [
                         ['name' => 'Berita', 'route' => route('berita')],
                         ['name' => 'Laporan Keuangan', 'route' => route('laporanKeuangan')],
                     ]],
-                    ['name' => 'Layanan Informasi', 'dropdown' => [
-                        ['name' => 'Laporan Layanan Informasi', 'route' => route('laporan.layanan.informasi')],
-                        ['name' => 'Informasi Berkala', 'route' => route('informasiBerkala')],
-                        ['name' => 'Informasi Serta Merta', 'route' => route('informasi.serta-merta')],
-                        ['name' => 'Informasi Setiap Saat', 'route' => route('informasi.setiap-saat')],
-                    ]],
+                    
                     
                     ['name' => 'Regulasi','dropdown' =>[
                         ['name' => 'Surat Keputusan', 'route' => route('letters.utusan')],

@@ -66,7 +66,7 @@
                     <span class="first-letter">P</span><span class="rest-wrapper"><span class="rest-of-word">angeran</span></span>
                 </div>
                 <div class="word-reveal">
-                    <span class="first-letter">T</span><span class="rest-wrapper"><span class="rest-of-word">emenggung</span></span>
+                    <span class="first-letter">T</span><span class="rest-wrapper"><span class="rest-of-word">umenggung</span></span>
                 </div>
             </div>
             
