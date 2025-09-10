@@ -1,0 +1,109 @@
+/* public/assets_landing/css/regulasi-ppid.css */
+
+/* Custom Accordion Styles */
+.accordion-ppid .accordion-item {
+    background-color: #ffffff;
+    border: 0;
+    border-radius: 12px !important;
+    margin-bottom: 15px;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.07);
+    transition: all 0.3s ease;
+}
+
+.accordion-ppid .accordion-item:hover {
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.accordion-ppid .accordion-header .accordion-button {
+    background-color: #ffffff;
+    color: var(--primary-color);
+    font-weight: 600;
+    font-size: 1.1rem;
+    padding: 20px 25px;
+    border-radius: 12px !important;
+    box-shadow: none; /* Remove bootstrap default shadow */
+}
+
+.accordion-ppid .accordion-header .accordion-button:not(.collapsed) {
+    background-color: var(--primary-color);
+    color: #fff;
+    border-bottom-left-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+}
+
+/* Custom icon rotation */
+.accordion-ppid .accordion-button::after {
+    transition: transform 0.3s ease-in-out;
+}
+
+.accordion-ppid .accordion-button:not(.collapsed)::after {
+    filter: brightness(0) invert(1); /* Change icon color to white when active */
+}
+
+.accordion-ppid .accordion-body {
+    padding: 5px 25px 20px 25px;
+}
+
+/* Document List inside Accordion */
+.document-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.document-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.document-item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.document-info .doc-title {
+    font-weight: 500;
+    font-size: 1.1rem;
+    color: var(--heading-color);
+    margin: 0 0 5px 0;
+}
+
+.document-info .doc-date {
+    font-size: 0.85rem;
+    color: var(--text-muted-light);
+    margin: 0;
+}
+
+.doc-action .btn-view-doc {
+    background-color: transparent;
+    border: 2px solid var(--secondary-color);
+    color: var(--secondary-color);
+    padding: 8px 20px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.doc-action .btn-view-doc:hover {
+    background-color: var(--secondary-color);
+    color: var(--primary-color);
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .document-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .doc-action {
+        width: 100%;
+        text-align: right;
+    }
+}

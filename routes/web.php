@@ -13,7 +13,8 @@ use App\Http\Controllers\Admin\{
     EvergreenInformationController,
     InformationServiceReportController,
     InfoSlideController,
-    PeriodicDocumentController
+    PeriodicDocumentController,
+    PpidRegulationController
 };
 use App\Http\Controllers\Staff_User\{
     ComplaintController,
@@ -269,6 +270,10 @@ Route::group(["prefix" => 'dashboard'], function () {
 
             Route::resource('staff/evergreen-informations', EvergreenInformationController::class)->names('staff.evergreen-informations');
             Route::resource('staff/information-service-reports',InformationServiceReportController::class)->names('staff.information-service-reports');
+            
+            Route::resource('staff/ppid-regulations', PpidRegulationController::class)->names('staff.ppid-regulations');
+        
+        
         });
     });
     Route::middleware(['auth'])->group(function () {
@@ -360,6 +365,8 @@ Route::get('/informasi-publik/informasi-berkala', [LandingPageController::class,
 // routes/web.php
 Route::get('/informasi-publik/informasi-serta-merta', [LandingPageController::class, 'informasiSertaMerta'])->name('informasi.serta-merta');
 Route::get('/informasi-publik/informasi-setiap-saat', [LandingPageController::class, 'informasiSetiapSaat'])->name('informasi.setiap-saat');
+
+Route::get('/informasi-publik/regulasi-ppid', [LandingPageController::class, 'regulasiPpid'])->name('regulasi.ppid');
 // routes/web.php
 Route::get('/informasi-publik/laporan-layanan-informasi', [LandingPageController::class, 'laporanLayananInformasi'])->name('laporan.layanan.informasi');
 

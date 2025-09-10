@@ -77,6 +77,10 @@ class ViewServiceProvider extends ServiceProvider
                             'name' => 'Pengajuan Informasi Publik',
                             'route' => route('layanan.show', 'informasi-publik'),
                         ],
+                        [
+                            'name' => 'Regulasi PPID',
+                            'route' => route('regulasi.ppid'),
+                        ],
                         ['name' => 'Layanan Informasi', 'dropdown' => [
                             ['name' => 'Laporan Layanan Informasi', 'route' => route('laporan.layanan.informasi')],
                             ['name' => 'Informasi Berkala', 'route' => route('informasiBerkala')],

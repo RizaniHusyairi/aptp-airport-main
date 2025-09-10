@@ -89,6 +89,12 @@
                     <span>Laporan Layanan Informasi</span>
                 </a>
             </li>
+            <li class="sidebar-item {{ Route::is('staff.ppid-regulations.*') ? 'active' : '' }}">
+                <a href="{{ route('staff.ppid-regulations.index') }}" class='sidebar-link'>
+                    <i class="bi bi-file-earmark-ruled-fill"></i>
+                    <span>Regulasi PPID</span>
+                </a>
+            </li>
         </ul>
     </div>
 </div>

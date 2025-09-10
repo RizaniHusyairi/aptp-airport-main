@@ -16,18 +16,19 @@ use App\Models\InfoSlide;
 use App\Jobs\LogVisitorJob;
 use Illuminate\Http\Request;
 use App\Models\BudgetExpense;
+use App\Models\PpidRegulation;
 use App\Models\PeriodicDocument;
-use App\Models\EvergreenInformation;
-use App\Models\ImmediateInformation;
-use App\Models\InformationServiceReport;
 use App\Models\AirFreightTraffic;
 use App\Models\PublicInformation;
 use Illuminate\Support\Facades\DB;
 use App\Services\AirportApiService;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use App\Models\EvergreenInformation;
+use App\Models\ImmediateInformation;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Cache;
+use App\Models\InformationServiceReport;
 use Illuminate\Support\Facades\Validator;
 
 
@@ -989,6 +990,15 @@ class LandingPageController extends Controller
     {
         $reports = InformationServiceReport::orderBy('publication_year', 'desc')->get();
         return view('landing-menu.informasi-publik.laporan-layanan-informasi.index', compact('reports'));
+    }
+    public function regulasiPpid()
+    {
+        $regulationCategories = PpidRegulation::orderBy('category')
+                                ->orderBy('published_date', 'desc')
+                                ->get()
+                                ->groupBy('category');
+        
+        return view('landing-menu.informasi-publik.regulasi-ppid.index', compact('regulationCategories'));
     }
     
 }

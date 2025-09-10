@@ -35,7 +35,7 @@
                         <h3 class="uraian-title">{{ $info->uraian }}</h3>
                     </div>
                     <div class="info-body">
-                        <p class="keterangan-text">{{ $info->keterangan }}</p>
+                        <p class="keterangan-text">{{ Str::limit($info->keterangan, 150) }}</p>
                     </div>
                     <div class="info-footer">
                         <a href="{{ $info->link_url }}" target="_blank" class="btn-link-detail">
