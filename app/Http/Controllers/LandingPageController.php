@@ -982,8 +982,11 @@ class LandingPageController extends Controller
 
     public function informasiSetiapSaat()
     {
-        $informations = EvergreenInformation::orderBy('published_date', 'desc')->get();
-        return view('landing-menu.informasi-publik.informasi-setiap-saat.index', compact('informations'));
+        $informationGroups = EvergreenInformation::orderBy('published_date', 'desc')
+        ->get()
+        ->groupBy('category'); // Kunci utamanya di sini
+        
+        return view('landing-menu.informasi-publik.informasi-setiap-saat.index', compact('informationGroups'));
     }
 
     public function laporanLayananInformasi()

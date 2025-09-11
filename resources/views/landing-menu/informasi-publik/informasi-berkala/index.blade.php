@@ -7,12 +7,12 @@
 @endpush
 
 @section('content')
-<section id="informasi-berkala" class="section-modern informasi-berkala pt-6">
+<section id="informasi-berkala" class="section-modern informasi-berkala pt-6 light-background">
     
     <div class="container">
         
         <div class="container section-title" data-aos="fade-up">
-            <h2>Informasi Publik</h2>
+            <h2>PPID</h2>
             <p><span>Informasi Berkala</span> <span class="description-title">Bandara A.P.T. Pranoto</span></p>
         </div>
 

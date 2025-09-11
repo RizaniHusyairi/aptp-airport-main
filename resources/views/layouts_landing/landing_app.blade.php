@@ -38,6 +38,45 @@
     <div id="loader"></div>
   </div>
 
+  {{-- =============================================== --}}
+  {{-- =     KODE BARU: WIDGET AKSESIBILITAS         = --}}
+  {{-- =============================================== --}}
+  <div class="accessibility-widget">
+    <div class="accessibility-panel" id="accessibility-panel">
+        <button class="panel-option" data-action="text-to-speech">
+            <i class="bi bi-ear-fill"></i>
+            <span>Mode Suara</span>
+        </button>
+        <button class="panel-option" data-action="grayscale">
+            <i class="bi bi-palette-fill"></i>
+            <span>Kejenuhan</span>
+        </button>
+        <button class="panel-option" data-action="high-contrast">
+            <i class="bi bi-circle-half"></i>
+            <span>Kontras+</span>
+        </button>
+        <div class="panel-option text-size-controls">
+            <i class="bi bi-fonts"></i>
+            <span>Ukuran Teks</span>
+            <div class="size-buttons">
+                <button data-action="text-decrease">A-</button>
+                <button data-action="text-increase">A+</button>
+            </div>
+        </div>
+        <button class="panel-option" data-action="reset">
+            <i class="bi bi-arrow-counterclockwise"></i>
+            <span>Reset</span>
+        </button>
+    </div>
+    <button class="accessibility-toggle" id="accessibility-toggle" title="Alat Aksesibilitas">
+        <i class="bi bi-universal-access"></i>
+    </button>
+  </div>
+  {{-- =============================================== --}}
+  {{-- =          AKHIR DARI KODE BARU               = --}}
+  {{-- =============================================== --}}
+
+
   <!-- Scripts -->
   @include('partials.scripts')
   @stack('page-scripts')

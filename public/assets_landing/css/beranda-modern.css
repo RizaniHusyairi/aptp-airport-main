@@ -146,7 +146,7 @@
 }
 .rest-of-word {
     display: block;
-    font-size: clamp(2rem, 5vw, 1.5rem);
+    font-size: clamp(2rem, 5vw, 2.5rem);
     font-weight: 700;
     color: #fff;
     /* UBAH INI: Pastikan teks tidak turun ke baris baru saat wadah melebar */
@@ -156,7 +156,7 @@
 
 /* Baris 3: "Pranoto" */
 .line-3 span {
-    font-size: clamp(3.5rem, 9vw, 4.5rem);
+    font-size: clamp(3.5rem, 9vw, 4rem);
     font-weight: 800;
     color: #fff;
     margin-top: -0.2em;
@@ -958,8 +958,8 @@ left: 30px;
 /* =================================== */
 #contact-fab-container {
     position: fixed;
-    bottom: 30px;
-    right: 30px;
+    bottom: 90px;
+    right: 19px;
     z-index: 1050;
 }
 

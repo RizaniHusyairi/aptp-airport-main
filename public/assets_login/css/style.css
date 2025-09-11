@@ -13,7 +13,11 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: color-mix(in srgb, #0d1018, transparent 15%)
+  /* background: color-mix(in srgb, #0d1018, transparent 15%); */
+  background: #0f0c29;  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to left, #22222d, #121114, #0a0727);  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to left, #22222d, #121114, #0a0727); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
   padding: 0;
 }
 
@@ -102,7 +106,7 @@ body {
   height: 100%;
   width: 100%;
   opacity: 0.65;
-    background: rgb(75 55 1);
+    background: rgb(15 13 26 / 76%);
 }
 
 .cover .text .text-1,

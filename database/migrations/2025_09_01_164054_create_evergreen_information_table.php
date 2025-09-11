@@ -10,9 +10,11 @@ return new class extends Migration
     {
           Schema::create('evergreen_information', function (Blueprint $table) {
         $table->id();
+
         $table->string('title'); // Untuk Judul/Uraian
+        $table->string('category'); // Untuk Kategori)
         $table->date('published_date'); // Tanggal Publikasi
-        $table->text('document_path'); // Path ke file PDF
+        $table->text('document_link'); // Path ke file PDF
         $table->timestamps();
     });
     }

@@ -125,7 +125,8 @@
 -	Kepala Bidang Pelayanan dan Pengoperasian Bandar Udara Kantor Otoritas Bandara Wilayah IV Bali (2024-2025) <br>
 -	Kepala BLU Kantor UPBU Kelas I A.P.T. Pranoto – Samarinda (2025 – sekarang) 
 </p>
-        <p><strong>Pendidikan:</strong> <br> -	D-II PLP Curug Jurusan Lalu Lintas Udara <br>
+        <p><strong>Pendidikan:</strong> <br> 
+-	D-II PLP Curug Jurusan Lalu Lintas Udara <br>
 -	D-III ATKP Makassar Jurusan Lalu Lintas Udara <br>
 -	D-IV STPI Curug Jurusan Lalu Lintas Udara <br>
 -	S-1 Ilmu Komunikasi Universitas Terbuka Palu 
@@ -138,22 +139,25 @@
     <div id="profile-zaldi" class="hidden-profile">
         <p><strong>Riwayat Jabatan:</strong> <br> 
             - Kepala Kantor UPBU Maratua (2020–2024) <br>
-            - Kepala Subbagian Tata Usaha A.P.T. Pranoto.(2024–Sekarang) <br>
+            - Kepala Subbagian Tata Usaha (2024–Sekarang) <br>
         </p>
         <p><strong>Pendidikan:</strong> <br> 
             - D-III PTBL PLP Curug.</p>
         <p><strong>Penghargaan:</strong> <br> 
-            - Satya Lancana Karya Satya 10 Tahun.</p>
+            - Satya Lancana Karya Satya 10 Tahun .</p>
     </div>
     <div id="profile-mochamad" class="hidden-profile">
         <p><strong>Riwayat Jabatan:</strong> <br> 
-            - Kepala UPBU Yuvai Semaring (2020–2024) <br>
-            - Kepala Seksi Keamanan Penerbangan dan Pelayanan Darurat (2024–Sekarang). </p>
+            - Kepala Urusan Tata Usaha (2019–2020) <br>
+            - Kepala UPBU Kelas III Yuvai Semaring (2020–2024) <br>
+            - Kepala Seksi Teknik dan Operasi (2024–2025) <br>
+            - Kepala Seksi Keamanan Penerbangan dan Pelayanan Darurat (2025–Sekarang). </p>
         <p><strong>Pendidikan:</strong> <br> 
-            - <br>
-            - S2 Sekolah Tinggi Manajemen Transportasi Trisakti.</p>
+            - D-III Sekolah Tinggi Penerbangan Indonesia Curug<br>
+            - S-1 Ilmu Ekonomi<br>
+            - S-2 Sekolah Tinggi Manajemen Transportasi Trisakti.</p>
         <p><strong>Penghargaan:</strong> <br> 
-            - Satya Lancana Karya Satya 10 Tahun.</p>
+            - Satya Lancana Karya Satya 10 Tahun 2021.</p>
     </div>
     <div id="profile-roslan" class="hidden-profile">
         <p><strong>Riwayat Jabatan:</strong> <br> 
@@ -162,19 +166,21 @@
         <p><strong>Pendidikan:</strong> <br> 
             - STIE Bulungan Tarakan Jurusan S-1 Managemen.</p>
         <p><strong>Penghargaan:</strong> <br> 
-            -	Satya Lancana Karya Satya 10 Tahun (2012) <br>
-            -	Satya Lancana Karya Satya 20 Tahun (2020)
+            -	Satya Lancana Karya Satya 10 Tahun 2012 <br>
+            -	Satya Lancana Karya Satya 20 Tahun 2020
 </p>
     </div>
     <div id="profile-murdoko" class="hidden-profile">
         <p><strong>Riwayat Jabatan:</strong> <br> 
-            - Kepala Seksi Teknik dan Keamanan (2019–2023) <br>
-            - Kepala Seksi Teknik dan Operasi.(2023–Sekarang)</p>
+            - Kepala Seksi Teknik, Operasi, Keamanan dan Pelayanan UPBU Kelas II Iskandar Pangkalan Bun (2019–2023) <br>
+            - Kepala Seksi Keamanan Penerbangan dan Pelayann Darurat UPBU Kelas III A.P.T. Pranoto. (2023–2025)</p>
+            - Kepala Seksi Teknik dan Operasi UPBU Kelas III A.P.T. Pranoto. (2025–Sekarang)</p>
         <p><strong>Pendidikan:</strong> <br>
-            - S1 Hukum Universitas Terbuka.</p>
+            - D-III Sekolah Tinggi Penerbangan Indonesia Curug.</p>
+            - S-1 Ilmu Hukum Universitas Terbuka.</p>
         <p><strong>Penghargaan:</strong> <br> 
-            - Satya Lancana Karya Satya 10 Tahun. <br>
-            - Satya Lancana Karya Satya 20 Tahun
+            - Satya Lancana Karya Satya 10 Tahun 2012. <br>
+            - Satya Lancana Karya Satya 20 Tahun 2021
         </p>
     </div>
   </section>

@@ -12,7 +12,7 @@
     <div class="container">
 
         <div class="container section-title" data-aos="fade-up">
-            <h2>Informasi Publik</h2>
+            <h2>PPID</h2>
             <p><span>Laporan Layanan Informasi</span> <span class="description-title">Bandara A.P.T. Pranoto</span></p>
         </div>
         

@@ -34,6 +34,7 @@ class DatabaseSeeder extends Seeder
             PeriodicDocumentSeeder::class,
             PpidRegulationSeeder::class,
             InformationServiceReportSeeder::class,
+            EvergreenInformationSeeder::class
 
         ]);
     }

@@ -43,6 +43,7 @@
                     <thead>
                         <tr>
                             <th>No.</th>
+                            <th>Kategori</th> <!-- Tambahkan ini -->
                             <th>Judul/Uraian Informasi</th>
                             <th>Tanggal Publikasi</th>
                             <th>Aksi</th>
@@ -52,8 +53,9 @@
                         @forelse ($informations as $info)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
+                            <td>{{ $info->category }}</td> <!-- Tambahkan ini -->
                             <td>{{ $info->title }}</td>
-                            <td>{{ $info->published_date->translatedFormat('d F Y') }}</td>
+                            <td>{{ $info->published_date ? $info->published_date->translatedFormat('d M Y') : '-' }}</td>
                             <td>
                                 <div class="d-flex gap-2">
                                     <a href="{{ route('staff.evergreen-informations.edit', $info->id) }}" class="btn btn-warning btn-sm"><i class="bi bi-pencil-square"></i></a>

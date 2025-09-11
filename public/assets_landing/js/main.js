@@ -194,4 +194,174 @@
   window.addEventListener('load', navmenuScrollspy);
   document.addEventListener('scroll', navmenuScrollspy);
 
+    /* ====================================================== */
+  /* ==   KODE BARU: LOGIKA UNTUK WIDGET AKSESIBILITAS   == */
+  /* ====================================================== */
+  const accessibilityWidget = document.querySelector('.accessibility-widget');
+  if (accessibilityWidget) {
+    const toggleButton = document.getElementById('accessibility-toggle');
+    const panel = document.getElementById('accessibility-panel');
+    const options = panel.querySelectorAll('.panel-option, .size-buttons button');
+    const body = document.body;
+
+    // --- Inisialisasi dari Local Storage ---
+    const settings = {
+        grayscale: localStorage.getItem('accessibility-grayscale') === 'true',
+        highContrast: localStorage.getItem('accessibility-high-contrast') === 'true',
+        textSize: localStorage.getItem('accessibility-text-size') || 'normal',
+        tts: false // Mode suara tidak disimpan, selalu mati saat reload
+    };
+
+    // Terapkan pengaturan saat halaman dimuat
+    function applyInitialSettings() {
+        if (settings.grayscale) body.classList.add('accessibility-grayscale');
+        if (settings.highContrast) body.classList.add('accessibility-high-contrast');
+        if (settings.textSize !== 'normal') body.classList.add(`text-${settings.textSize}`);
+        updateActiveButtons();
+    }
+    applyInitialSettings();
+
+    // --- Fungsi Utama ---
+    toggleButton.addEventListener('click', () => {
+        accessibilityWidget.classList.toggle('open');
+    });
+    
+    // Klik di luar panel akan menutup panel
+    document.addEventListener('click', (e) => {
+        if (!accessibilityWidget.contains(e.target)) {
+            accessibilityWidget.classList.remove('open');
+        }
+    });
+
+    options.forEach(option => {
+        option.addEventListener('click', (e) => {
+            e.preventDefault();
+            const action = e.currentTarget.dataset.action;
+            handleAction(action);
+        });
+    });
+
+    function handleAction(action) {
+        switch(action) {
+            case 'grayscale':
+                settings.grayscale = !settings.grayscale;
+                body.classList.toggle('accessibility-grayscale');
+                localStorage.setItem('accessibility-grayscale', settings.grayscale);
+                break;
+            case 'high-contrast':
+                settings.highContrast = !settings.highContrast;
+                body.classList.toggle('accessibility-high-contrast');
+                localStorage.setItem('accessibility-high-contrast', settings.highContrast);
+                break;
+            case 'text-increase':
+                changeTextSize(true);
+                break;
+            case 'text-decrease':
+                changeTextSize(false);
+                break;
+            case 'text-to-speech':
+                settings.tts = !settings.tts;
+                toggleTTS();
+                break;
+            case 'reset':
+                resetAccessibility();
+                break;
+        }
+        updateActiveButtons();
+    }
+
+    // --- Fungsi Helper ---
+
+    function changeTextSize(increase) {
+        const sizes = ['xsmall', 'small', 'normal', 'large', 'xlarge'];
+        let currentIndex = sizes.indexOf(settings.textSize);
+        
+        body.classList.remove(`text-${settings.textSize}`);
+
+        if (increase) {
+            currentIndex = Math.min(currentIndex + 1, sizes.length - 1);
+        } else {
+            currentIndex = Math.max(currentIndex - 1, 0);
+        }
+        
+        settings.textSize = sizes[currentIndex];
+        if (settings.textSize !== 'normal') {
+            body.classList.add(`text-${settings.textSize}`);
+        }
+        localStorage.setItem('accessibility-text-size', settings.textSize);
+    }
+
+    function resetAccessibility() {
+        body.classList.remove('accessibility-grayscale', 'accessibility-high-contrast');
+        body.classList.remove('text-xsmall', 'text-small', 'text-large', 'text-xlarge');
+        
+        settings.grayscale = false;
+        settings.highContrast = false;
+        settings.textSize = 'normal';
+        settings.tts = false;
+
+        localStorage.removeItem('accessibility-grayscale');
+        localStorage.removeItem('accessibility-high-contrast');
+        localStorage.removeItem('accessibility-text-size');
+        
+        toggleTTS(false); // Pastikan TTS mati
+        updateActiveButtons();
+        accessibilityWidget.classList.remove('open');
+    }
+
+    function updateActiveButtons() {
+        document.querySelector('[data-action="grayscale"]').classList.toggle('active', settings.grayscale);
+        document.querySelector('[data-action="high-contrast"]').classList.toggle('active', settings.highContrast);
+        document.querySelector('[data-action="text-to-speech"]').classList.toggle('active', settings.tts);
+    }
+
+    // --- Logika Text-to-Speech (TTS) ---
+    let speech = new SpeechSynthesisUtterance();
+    let currentHighlight = null;
+    const readableElements = 'p, h1, h2, h3, h4, h5, h6, a, li, span';
+
+    function toggleTTS(forceOff = null) {
+        const ttsElements = document.querySelectorAll(readableElements);
+        if (forceOff !== null) settings.tts = !forceOff;
+
+        if (settings.tts) {
+            ttsElements.forEach(el => {
+                el.addEventListener('mouseenter', handleTTSHighlight);
+                el.addEventListener('mouseleave', clearTTSHighlight);
+            });
+        } else {
+            speechSynthesis.cancel();
+            clearTTSHighlight();
+            ttsElements.forEach(el => {
+                el.removeEventListener('mouseenter', handleTTSHighlight);
+                el.removeEventListener('mouseleave', clearTTSHighlight);
+            });
+        }
+    }
+
+    function handleTTSHighlight(e) {
+        if (!settings.tts) return;
+        const target = e.currentTarget;
+        clearTTSHighlight();
+        target.classList.add('tts-highlight');
+        currentHighlight = target;
+        
+        // Baca teks setelah jeda singkat
+        setTimeout(() => {
+            if (currentHighlight === target) { // Pastikan kursor masih di elemen yang sama
+                speech.text = target.textContent;
+                speechSynthesis.cancel(); // Hentikan pembacaan sebelumnya
+                speechSynthesis.speak(speech);
+            }
+        }, 300);
+    }
+
+    function clearTTSHighlight() {
+        if(currentHighlight) {
+            currentHighlight.classList.remove('tts-highlight');
+        }
+        currentHighlight = null;
+    }
+  }
+
 })();
