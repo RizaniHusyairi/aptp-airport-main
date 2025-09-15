@@ -2004,51 +2004,46 @@ section,
 /* --- Kelas Efek Aksesibilitas --- */
 
 /* 1. Mode Kejenuhan (Grayscale) */
-body.accessibility-grayscale {
+#page-wrapper.accessibility-grayscale { /* <<< PERUBAHAN TARGET */
     filter: grayscale(100%);
-}
-/* === PERBAIKAN DI SINI === */
-/* Atasi bug tombol menghilang saat grayscale aktif */
-body.accessibility-grayscale .accessibility-widget {
-    filter: grayscale(0);
 }
 
 /* 2. Mode Kontras Tinggi */
-body.accessibility-high-contrast {
+#page-wrapper.accessibility-high-contrast { /* <<< PERUBAHAN TARGET */
     background-color: #000 !important;
     color: #fff !important;
 }
-body.accessibility-high-contrast section,
-body.accessibility-high-contrast div,
-body.accessibility-high-contrast header,
-body.accessibility-high-contrast footer,
-body.accessibility-high-contrast .card,
-body.accessibility-high-contrast .accordion-item,
-body.accessibility-high-contrast .accordion-button {
+#page-wrapper.accessibility-high-contrast section,
+#page-wrapper.accessibility-high-contrast div,
+#page-wrapper.accessibility-high-contrast header,
+#page-wrapper.accessibility-high-contrast footer,
+#page-wrapper.accessibility-high-contrast .card,
+#page-wrapper.accessibility-high-contrast .accordion-item,
+#page-wrapper.accessibility-high-contrast .accordion-button {
     background-color: #000 !important;
     color: #fff !important;
     border-color: #fff !important;
 }
-body.accessibility-high-contrast h1,
-body.accessibility-high-contrast h2,
-body.accessibility-high-contrast h3,
-body.accessibility-high-contrast h4,
-body.accessibility-high-contrast h5,
-body.accessibility-high-contrast h6,
-body.accessibility-high-contrast p,
-body.accessibility-high-contrast span,
-body.accessibility-high-contrast li {
+#page-wrapper.accessibility-high-contrast h1,
+#page-wrapper.accessibility-high-contrast h2,
+#page-wrapper.accessibility-high-contrast h3,
+#page-wrapper.accessibility-high-contrast h4,
+#page-wrapper.accessibility-high-contrast h5,
+#page-wrapper.accessibility-high-contrast h6,
+#page-wrapper.accessibility-high-contrast p,
+#page-wrapper.accessibility-high-contrast span,
+#page-wrapper.accessibility-high-contrast li {
     color: #fff !important;
 }
-body.accessibility-high-contrast a,
-body.accessibility-high-contrast button {
+#page-wrapper.accessibility-high-contrast a,
+#page-wrapper.accessibility-high-contrast button:not(.accessibility-toggle) { /* Kecualikan tombol utama */
     color: #FFFF00 !important; /* Kuning cerah untuk link */
     background-color: transparent !important;
     border: 1px solid #FFFF00 !important;
 }
 /* Mencegah gambar/video ikut terbalik warnanya */
-body.accessibility-high-contrast img,
-body.accessibility-high-contrast video {
+#page-wrapper.accessibility-high-contrast img,
+#page-wrapper.accessibility-high-contrast video {
     filter: invert(1) hue-rotate(180deg);
 }
 
@@ -2065,4 +2060,3 @@ body.text-xsmall { font-size: 80%; }
     outline: 2px solid var(--secondary-color);
     border-radius: 4px;
 }
-

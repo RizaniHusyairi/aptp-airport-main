@@ -512,8 +512,8 @@ class LandingPageController extends Controller
     public function suratUtusan()
     {
 
-        $type = 'utusan';
-        $letters = Letter::where('type', $type)->get();
+        $type = 'keputusan';
+        $letters = Letter::where('type', $type)->orderBy('issue_date', 'desc')->get();
         return view('landing-menu.regulasi.index', compact('letters', 'type'));
     }
 
@@ -528,7 +528,7 @@ class LandingPageController extends Controller
     {
         $type = 'edaran';
 
-        $letters = Letter::where('type', $type)->get();
+        $letters = Letter::where('type', $type)->orderBy('issue_date', 'desc')->get();
         return view('landing-menu.regulasi.index', compact('letters', 'type'));
     }
 

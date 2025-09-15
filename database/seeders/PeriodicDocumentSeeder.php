@@ -65,7 +65,7 @@ class PeriodicDocumentSeeder extends Seeder
                 'category' => 'Laporan Keuangan',
                 'title' => 'Laporan Keuangan 2024',
                 'published_date' => '2025-01-02',
-                'document_path' => 'https://docs.google.com/spreadsheets/d/1lZdD8nt41YsCCKYM8gOsbwFQVFTZpreE2JgNckkE6Ck/edit?usp=sharing'
+                'document_path' => 'https://drive.google.com/file/d/1_b4ZxEqwQEOEySWdob_OPkbqMhTrjj5v/view?usp=drive_link'
             ],
             [
                 'category' => 'Data Statistik Kepegawaian',

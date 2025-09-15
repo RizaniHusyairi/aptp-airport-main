@@ -74,7 +74,7 @@ class User extends Authenticatable implements HasMedia
             return $avatar->getUrl();
         }
         // Jika tidak, kembalikan URL ke gambar default
-        return asset('assetsv2/compiled/jpg/1.jpg');
+        return asset('assetsv2/compiled/jpg/1.png');
     }
 
 

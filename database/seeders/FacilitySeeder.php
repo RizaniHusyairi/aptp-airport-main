@@ -22,10 +22,15 @@ class FacilitySeeder extends Seeder
             
             // Fasilitas Darat
             ['name' => 'Terminal Penumpang', 'category' => 'darat', 'details' => ['Luas: 12.700 m²', 'Kapasitas: 1.5 Juta Penumpang/Tahun'], 'image_path' => 'assets_landing/img/fasilitas/terminal.jpg'],
-            ['name' => 'Terminal Kargo', 'category' => 'darat', 'details' => ['Luas: 1.148 m²', 'Mendukung logistik & pengiriman barang.'], 'image_path' => 'assets_landing/img/fasilitas/kargo.jpg'],
+            ['name' => 'Terminal Kargo lini I', 'category' => 'darat', 'details' => ['Luas: 1.148 m²', 'Mendukung logistik & pengiriman barang.'], 'image_path' => 'assets_landing/img/fasilitas/kargo.jpg'],
+            ['name' => 'Terminal Kargo lini II', 'category' => 'darat', 'details' => ['Luas: 1.623,9 m²', 'Mendukung logistik & pengiriman barang.'], 'image_path' => 'assets_landing/img/fasilitas/kargo.jpg'],
+            ['name' => 'Hangar', 'category' => 'darat', 'details' => ['Luas: 3,632,40 m²'], 'image_path' => 'assets_landing/img/fasilitas/vvip.jpg'],
             ['name' => 'Gedung VVIP', 'category' => 'darat', 'details' => ['Luas: 743,60 m²', 'Kenyamanan eksklusif untuk tamu penting.'], 'image_path' => 'assets_landing/img/fasilitas/vvip.jpg'],
-            ['name' => 'Area Parkir', 'category' => 'darat', 'details' => ['Luas: 30.000 m²', 'Kapasitas luas untuk kendaraan.'], 'image_path' => 'assets_landing/img/fasilitas/parkir.jpg'],
+            ['name' => 'Parkir & Landscape', 'category' => 'darat', 'details' => ['Luas: 30.000 m²', 'Kapasitas luas untuk kendaraan.'], 'image_path' => 'assets_landing/img/fasilitas/parkir.jpg'],
+            ['name' => 'Gedung Meteorologi', 'category' => 'darat', 'details' => ['Luas: 251,14 m²'], 'image_path' => 'assets_landing/img/fasilitas/administrasi.jpg'],
             ['name' => 'Gedung Administrasi', 'category' => 'darat', 'details' => ['Luas: 1.253 m²', 'Pusat administrasi dan operasional.'], 'image_path' => 'assets_landing/img/fasilitas/administrasi.jpg'],
+            ['name' => 'Airport Maintenance', 'category' => 'darat', 'details' => ['Luas: 311,70 m²'], 'image_path' => 'assets_landing/img/fasilitas/arff.jpg'],
+            ['name' => 'ATC & Office', 'category' => 'darat', 'details' => ['Luas: 688,55 m²'], 'image_path' => 'assets_landing/img/fasilitas/arff.jpg'],
             ['name' => 'Fire Station (ARFF)', 'category' => 'darat', 'details' => ['Luas: 455,52 m²', 'Kategori 6 ARFF.'], 'image_path' => 'assets_landing/img/fasilitas/arff.jpg'],
             ['name' => 'Power Station', 'category' => 'darat', 'details' => ['Luas: 803 m²', 'Menjamin pasokan listrik bandara.'], 'image_path' => 'assets_landing/img/fasilitas/power-station.jpg'],
             ['name' => 'Kantin Bandara', 'category' => 'darat', 'details' => ['Luas: 372,12 m²', 'Menyediakan aneka kuliner.'], 'image_path' => 'assets_landing/img/fasilitas/cafe.jpg'],
@@ -33,6 +38,9 @@ class FacilitySeeder extends Seeder
             // Fasilitas Umum
             ['name' => 'Check-in Counter', 'category' => 'umum', 'details' => ['Tersedia: 16 Counter', 'Proses check-in yang cepat dan efisien.'], 'image_path' => 'assets_landing/img/fasilitas/checkin.jpg'],
             ['name' => 'Mushola', 'category' => 'umum', 'details' => ['Ruang ibadah yang bersih dan nyaman bagi umat Muslim.'], 'image_path' => 'assets_landing/img/fasilitas/mushola.jpg'],
+            ['name' => 'Smoking Area', 'category' => 'umum', 'details' => [''], 'image_path' => 'assets_landing/img/fasilitas/mushola.jpg'],
+            ['name' => 'Working Space', 'category' => 'umum', 'details' => [''], 'image_path' => 'assets_landing/img/fasilitas/mushola.jpg'],
+            ['name' => 'Game Box', 'category' => 'umum', 'details' => [''], 'image_path' => 'assets_landing/img/fasilitas/mushola.jpg'],
         ];
 
         foreach ($facilities as $facility) {

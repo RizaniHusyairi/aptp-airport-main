@@ -3,7 +3,7 @@
 @section('title', 'Berita - Bandara APT Pranoto')
 
 @section('content')
-  <section id="about" class="about section pt-6">
+  <section id="about" class="about section pt-6 light-background">
     <div class="container section-title" data-aos="fade-up">
       <h2>Informasi<br></h2>
       <p><span>Berita Seputar</span> <span class="description-title">Bandara A.P.T. Pranoto Samarinda</span></p>
@@ -49,32 +49,35 @@
 
             <div class="news-aside" id="news-aside" aria-label="Daftar Berita Terbaru">
               @forelse ($nextHeadlines as $index => $news)
-                  
-              <a href="{{ route('news.show', $news->slug) }}" class="news-chip text-decoration-none" aria-label="Baca: {{ $news->title }}">
-                  <figure class="news-chip-media">
-                    <img
-                      {{-- src="{{ asset('uploads/'.$news->image) ?? asset('/assets_landing/img/bandara/DJI_0038.JPG') }}" --}}
-                      src="{{ asset('/assets_landing/img/bandara/DJI_0038.JPG') }}"
-                      alt="Gambar {{ $news->title }}"
-                      loading="lazy"
-                      sizes="(max-width: 992px) 280px, 260px"
-                    >
-                    <figcaption class="visually-hidden">{{ $news->title }}</figcaption>
+                  <a href="{{ route('news.show', $news->slug) }}" class="news-chip text-decoration-none" aria-label="Baca: {{ $news->title }}">
+                    <figure class="news-chip-media">
+                        <img
+                            {{-- src="{{ asset('uploads/'.$news->image) ?? asset('/assets_landing/img/bandara/DJI_0038.JPG') }}" --}}
+                            src="{{ asset('/assets_landing/img/bandara/DJI_0038.JPG') }}"
+                            alt="Gambar {{ $news->title }}"
+                            loading="lazy"
+                            size="(max-width: 992px) 280px, 260px"
+                        />
+                        <figcaption class="visually-hidden">{{ $news->title }}</figcaption>
 
-                    <div class="news-chip-meta">
-                      <span class="news-chip-source">
-                        <i class="bi bi-newspaper"></i>
-                        APT Pranoto
-                      </span>
-                      <span class="news-chip-dot">·</span>
-                      <time class="news-chip-time">{{ $news->created_at->diffForHumans() }}</time>
-                    </div>
-                  </figure>
-
-                  <div class="news-chip-body">
-                    <h6 class="news-chip-title">{{ $news->title }}</h6>
-                  </div>
+                        <div class="news-chip-meta">
+                            {{-- Judul berita sekarang di sini --}}
+                            <h6 class="news-chip-title text-center">{{ $news->title }}</h6>
+                            
+                            {{-- <div class="news-chip-details">
+                                <span class="news-chip-source">
+                                    <i class="bi bi-newspaper"></i>
+                                    APT Pranoto
+                                </span>
+                                <span class="news-chip-dot">·</span>
+                                <time class="news-chip-time">{{ $news->created_at->diffForHumans() }}</time>
+                            </div>
+                        </div> --}}
+                    </figure>
+                    
+                    {{-- div.news-chip-body telah dihapus --}}
                 </a>
+              
               @empty
                 <div class="text-center text-muted py-3">Tidak ada berita headline tambahan saat ini.</div>
               @endforelse

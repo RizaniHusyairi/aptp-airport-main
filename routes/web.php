@@ -378,7 +378,7 @@ Route::get('/pariwisata/{slug}', [LandingPageController::class, 'detailPariwisat
 // routes/web.php
 
 Route::prefix('regulasi')->group(function () {
-    Route::get('/surat-utusan', [LandingPageController::class, 'suratUtusan'])->name('letters.utusan');
+    Route::get('/surat-keputusan', [LandingPageController::class, 'suratUtusan'])->name('letters.utusan');
     Route::get('/surat-edaran', [LandingPageController::class, 'suratEdaran'])->name('letters.edaran');
     Route::get('/surat-keputusan/api', [LandingPageController::class, 'getLettersUtusan'])->name('letters.utusan.api');
     Route::get('/surat-edaran/api', [LandingPageController::class, 'getLettersEdaran'])->name('letters.edaran.api');

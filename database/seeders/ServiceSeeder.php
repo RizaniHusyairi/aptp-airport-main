@@ -80,7 +80,10 @@ class ServiceSeeder extends Seeder
             'slug' => 'pengiklanan',
             'title' => 'Syarat & Ketentuan Pengajuan Pengiklanan',
             'requirements' => [
-                "Surat Permohonan"
+                "Nomor Induk Berusaha", "Kartu Tanda Penduduk (KTP)", "Akta Pendirian Perusahaan", "NPWP",
+                "Proposal Usaha", "Desain Teknis Booth/Tempat Usaha", "Surat Pernyataan Mengikuti Aturan (bermaterai)",
+                "Laporan Keuangan", "Sertifikat Penjamah Makanan (jika F&B)", "Bukti Bayar Pajak 3 Bulan Terakhir",
+                "Service Level Agreement (jika Maskapai)"
             ],
             'steps' => [
                 "Mengajukan surat permohonan kepada Kabandara",

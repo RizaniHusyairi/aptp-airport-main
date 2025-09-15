@@ -20,12 +20,12 @@ class EvergreenInformationController extends Controller
     public function index()
     {
         $informations = EvergreenInformation::orderBy('category')->latest()->get();
-        return view('user_staff2.informasi-publik.informasi-setiap-saat.index', compact('informations'));
+        return view('user_staff2.informasi-setiap-saat.index', compact('informations'));
     }
 
     public function create()
     {
-        return view('user_staff2.informasi-publik.informasi-setiap-saat.create', ['categories' => $this->categories]);
+        return view('user_staff2.informasi-setiap-saat.create', ['categories' => $this->categories]);
     }
 
     public function store(Request $request)

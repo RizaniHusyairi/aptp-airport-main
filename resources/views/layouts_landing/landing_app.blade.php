@@ -24,19 +24,22 @@
 </head>
 
 <body class="index-page">
-  @include('layouts_landing.header')
+  <div id="page-wrapper">
+    @include('layouts_landing.header')
+    <main class="main">
+      @yield('content')
+    </main>
+  
+    @include('layouts_landing.footer')
+    <div id="preloader">
+      <img src="{{ asset('assets_landing/img/logo/logo-mini-apt.svg') }}" alt="mini">
+      <div id="loader"></div>
+    </div>
 
-  <main class="main">
-    @yield('content')
-  </main>
+  </div>
 
-  @include('layouts_landing.footer')
 
   <!-- Preloader -->
-  <div id="preloader">
-    <img src="{{ asset('assets_landing/img/logo/logo-mini-apt.svg') }}" alt="mini">
-    <div id="loader"></div>
-  </div>
 
   {{-- =============================================== --}}
   {{-- =     KODE BARU: WIDGET AKSESIBILITAS         = --}}

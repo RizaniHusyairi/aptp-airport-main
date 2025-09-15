@@ -202,20 +202,23 @@
     const toggleButton = document.getElementById('accessibility-toggle');
     const panel = document.getElementById('accessibility-panel');
     const options = panel.querySelectorAll('.panel-option, .size-buttons button');
-    const body = document.body;
+    
+    // <<< PERUBAHAN TARGET DARI body KE #page-wrapper >>>
+    const pageWrapper = document.getElementById('page-wrapper'); 
+    const body = document.body; // body masih kita perlukan untuk ukuran font
 
     // --- Inisialisasi dari Local Storage ---
     const settings = {
         grayscale: localStorage.getItem('accessibility-grayscale') === 'true',
         highContrast: localStorage.getItem('accessibility-high-contrast') === 'true',
         textSize: localStorage.getItem('accessibility-text-size') || 'normal',
-        tts: false // Mode suara tidak disimpan, selalu mati saat reload
+        tts: false
     };
 
     // Terapkan pengaturan saat halaman dimuat
     function applyInitialSettings() {
-        if (settings.grayscale) body.classList.add('accessibility-grayscale');
-        if (settings.highContrast) body.classList.add('accessibility-high-contrast');
+        if (settings.grayscale) pageWrapper.classList.add('accessibility-grayscale');
+        if (settings.highContrast) pageWrapper.classList.add('accessibility-high-contrast');
         if (settings.textSize !== 'normal') body.classList.add(`text-${settings.textSize}`);
         updateActiveButtons();
     }
@@ -226,7 +229,6 @@
         accessibilityWidget.classList.toggle('open');
     });
     
-    // Klik di luar panel akan menutup panel
     document.addEventListener('click', (e) => {
         if (!accessibilityWidget.contains(e.target)) {
             accessibilityWidget.classList.remove('open');
@@ -245,12 +247,12 @@
         switch(action) {
             case 'grayscale':
                 settings.grayscale = !settings.grayscale;
-                body.classList.toggle('accessibility-grayscale');
+                pageWrapper.classList.toggle('accessibility-grayscale'); // <<< GANTI TARGET
                 localStorage.setItem('accessibility-grayscale', settings.grayscale);
                 break;
             case 'high-contrast':
                 settings.highContrast = !settings.highContrast;
-                body.classList.toggle('accessibility-high-contrast');
+                pageWrapper.classList.toggle('accessibility-high-contrast'); // <<< GANTI TARGET
                 localStorage.setItem('accessibility-high-contrast', settings.highContrast);
                 break;
             case 'text-increase':
@@ -292,7 +294,7 @@
     }
 
     function resetAccessibility() {
-        body.classList.remove('accessibility-grayscale', 'accessibility-high-contrast');
+        pageWrapper.classList.remove('accessibility-grayscale', 'accessibility-high-contrast'); // <<< GANTI TARGET
         body.classList.remove('text-xsmall', 'text-small', 'text-large', 'text-xlarge');
         
         settings.grayscale = false;
@@ -304,7 +306,7 @@
         localStorage.removeItem('accessibility-high-contrast');
         localStorage.removeItem('accessibility-text-size');
         
-        toggleTTS(false); // Pastikan TTS mati
+        toggleTTS(false);
         updateActiveButtons();
         accessibilityWidget.classList.remove('open');
     }

@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('letters', function (Blueprint $table) {
             $table->id();
-            $table->enum('type', ['edaran', 'utusan']);
+            $table->enum('type', ['edaran', 'keputusan']);
             $table->string('number')->unique();
             $table->string('title');
             $table->date('issue_date');

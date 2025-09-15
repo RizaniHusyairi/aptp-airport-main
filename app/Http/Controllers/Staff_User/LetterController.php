@@ -95,7 +95,7 @@ class LetterController extends Controller
 
     public function suratEdaran()
     {
-        $letters = Letter::where('type', 'edaran')->latest()->get();
+        $letters = Letter::where('type', 'edaran')->orderBy('issue_date', 'desc')->latest()->get();
         return view('navigation.regulasi.surat-edaran.index', compact('letters'));
     }
 

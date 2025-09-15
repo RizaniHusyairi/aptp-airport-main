@@ -395,13 +395,9 @@
 .news-chip{
   display: grid;
   grid-template-rows: auto 1fr;
-  gap: 10px;
-  background: var(--chip-bg);
+  background-color: #6c757d;
   color: var(--chip-text);
-  border: 1px solid var(--chip-border);
   border-radius: var(--chip-radius);
-  box-shadow: var(--chip-shadow);
-  padding: 10px;
   transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
 }
 .news-chip:hover{
@@ -429,15 +425,22 @@
 
 /* Meta strip di atas gambar */
 .news-chip-meta{
-  position: absolute;
-  left: 8px; right: 8px; bottom: 8px;
-  display: inline-flex; align-items: center; gap: 8px;
-  padding: 6px 10px;
-  border-radius: 10px;
-  background: linear-gradient(0deg, rgba(0,0,0,.55), rgba(0,0,0,.25));
-  color: #fff;
-  font-size: .82rem;
-  backdrop-filter: blur(2px);
+      position: absolute;
+    bottom: 0px;
+    width: -webkit-fill-available;
+    /* display: inline-flex
+; */
+    /* align-items: center; */
+    gap: 8px;
+    /* padding: 6px 10px; */
+    border-radius: 10px;
+    background: linear-gradient(0deg, rgba(0, 0, 0, .55), rgba(0, 0, 0, .25));
+    color: #fff;
+    backdrop-filter: blur(1px);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: .5rem;
 }
 .news-chip-source{
   display: inline-flex; align-items: center; gap: 6px;
@@ -455,15 +458,17 @@
 /* Body */
 .news-chip-body{ min-width: 0; }
 .news-chip-title{
-  margin: 0;
-  font-size: .98rem;
-  line-height: 1.3;
-  font-weight: 700;
-  color: var(--chip-text);
-  display: -webkit-box;
-  -webkit-line-clamp: 2;       /* dua baris seperti contoh */
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+  color: #fff; /* Pastikan warna teks putih agar terbaca */
+    font-size: .75rem;
+    font-weight: 600;
+    line-height: 1.3;
+    /* margin-bottom: 0.5rem;  */
+}
+
+.news-chip-details {
+    display: flex;
+    align-items: center;
+    gap: 5px; /* Jarak antara ikon, sumber, dan waktu */
 }
 
 /* Desktop lebar: tetap rapat */
@@ -489,7 +494,7 @@
   }
 
   .news-chip{
-    flex: 0 0 260px;           /* lebar item saat horizontal */
+    flex: 0 0 220px;           /* lebar item saat horizontal */
     scroll-snap-align: start;
   }
   .news-chip-media img{ height: 130px; }

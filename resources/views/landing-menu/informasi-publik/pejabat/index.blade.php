@@ -126,7 +126,7 @@
 -	Kepala BLU Kantor UPBU Kelas I A.P.T. Pranoto – Samarinda (2025 – sekarang) 
 </p>
         <p><strong>Pendidikan:</strong> <br> 
--	D-II PLP Curug Jurusan Lalu Lintas Udara <br>
+-	D-II Lalu Lintas Udara SLTP Curug <br>
 -	D-III ATKP Makassar Jurusan Lalu Lintas Udara <br>
 -	D-IV STPI Curug Jurusan Lalu Lintas Udara <br>
 -	S-1 Ilmu Komunikasi Universitas Terbuka Palu 
@@ -134,7 +134,7 @@
         <p><strong>Penghargaan:</strong>  <br> 
             - Satya Lancana Karya Satya 10 Tahun (2014) <br>
             - Satya Lancana Karya Satya 20 Tahun (2018)
-.</p>
+</p>
     </div>
     <div id="profile-zaldi" class="hidden-profile">
         <p><strong>Riwayat Jabatan:</strong> <br> 
@@ -144,7 +144,7 @@
         <p><strong>Pendidikan:</strong> <br> 
             - D-III PTBL PLP Curug.</p>
         <p><strong>Penghargaan:</strong> <br> 
-            - Satya Lancana Karya Satya 10 Tahun .</p>
+            - Satya Lancana Karya Satya 10.</p>
     </div>
     <div id="profile-mochamad" class="hidden-profile">
         <p><strong>Riwayat Jabatan:</strong> <br> 
@@ -154,7 +154,7 @@
             - Kepala Seksi Keamanan Penerbangan dan Pelayanan Darurat (2025–Sekarang). </p>
         <p><strong>Pendidikan:</strong> <br> 
             - D-III Sekolah Tinggi Penerbangan Indonesia Curug<br>
-            - S-1 Ilmu Ekonomi<br>
+            - S-1 Ilmu Ekonomi <br>
             - S-2 Sekolah Tinggi Manajemen Transportasi Trisakti.</p>
         <p><strong>Penghargaan:</strong> <br> 
             - Satya Lancana Karya Satya 10 Tahun 2021.</p>
@@ -177,7 +177,7 @@
             - Kepala Seksi Teknik dan Operasi UPBU Kelas III A.P.T. Pranoto. (2025–Sekarang)</p>
         <p><strong>Pendidikan:</strong> <br>
             - D-III Sekolah Tinggi Penerbangan Indonesia Curug.</p>
-            - S-1 Ilmu Hukum Universitas Terbuka.</p>
+            - S-1 Ilmu Hukum.</p>
         <p><strong>Penghargaan:</strong> <br> 
             - Satya Lancana Karya Satya 10 Tahun 2012. <br>
             - Satya Lancana Karya Satya 20 Tahun 2021

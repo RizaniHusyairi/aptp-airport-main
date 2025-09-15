@@ -56,7 +56,7 @@ class LetterSeeder extends Seeder
                 'updated_at' => '2025-05-01 12:00:00',
             ],
             [
-                'type' => 'utusan',
+                'type' => 'keputusan',
                 'number' => 'SU/001/2025',
                 'title' => 'Undangan Rapat Koordinasi Keselamatan Penerbangan',
                 'issue_date' => '2025-01-15',
@@ -65,7 +65,7 @@ class LetterSeeder extends Seeder
                 'updated_at' => '2025-01-15 08:30:00',
             ],
             [
-                'type' => 'utusan',
+                'type' => 'keputusan',
                 'number' => 'SU/002/2025',
                 'title' => 'Pemberitahuan Audit Operasional Bandara',
                 'issue_date' => '2025-02-20',
@@ -74,7 +74,7 @@ class LetterSeeder extends Seeder
                 'updated_at' => '2025-02-20 09:30:00',
             ],
             [
-                'type' => 'utusan',
+                'type' => 'keputusan',
                 'number' => 'SU/003/2025',
                 'title' => 'Surat Tugas Pelatihan Petugas Bandara',
                 'issue_date' => '2025-03-25',
@@ -83,7 +83,7 @@ class LetterSeeder extends Seeder
                 'updated_at' => '2025-03-25 10:30:00',
             ],
             [
-                'type' => 'utusan',
+                'type' => 'keputusan',
                 'number' => 'SU/004/2025',
                 'title' => 'Permintaan Data Statistik Penerbangan',
                 'issue_date' => '2025-04-10',
@@ -92,7 +92,7 @@ class LetterSeeder extends Seeder
                 'updated_at' => '2025-04-10 11:30:00',
             ],
             [
-                'type' => 'utusan',
+                'type' => 'keputusan',
                 'number' => 'SU/005/2025',
                 'title' => 'Undangan Seminar Lingkungan Bandara',
                 'issue_date' => '2025-05-05',
