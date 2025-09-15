@@ -10,12 +10,12 @@
 
 @section('content')
 
-<main class="main">
-
-  <div class="page-title" data-aos="fade">...</div>
-
-  <section id="pariwisata-list" class="pariwisata-list section">
+<section id="pariwisata-list" class="pariwisata-list section-modern pt-6 light-background" class="section-modern regulasi-page pt-6 light-background">
     <div class="container">
+        <div class="container section-title" data-aos="fade-up">
+            <h2>Informasi<br></h2>
+            <p><span> Destinasi Pariwisata Terdekat</span> <span class="description-title">Bandara A.P.T. Pranoto</span></p>
+        </div>
 
       <div class="row mb-5" data-aos="fade-up" data-aos-delay="100">
         <div class="col-lg-12">
@@ -55,7 +55,7 @@
     </div>
   </section>
 
-</main>
+
 
 @endsection
 

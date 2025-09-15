@@ -15,8 +15,8 @@
             <swiper-container class="newsFirstSwiper" style="height: 500px;" autoplay-delay="2500" autoplay-disable-on-interaction="false" init="false" style="height: 100%;">
               @forelse ($topHeadlines as $index => $headline)
               <swiper-slide>
-                <div class="card news-card shadow" style="background-image: url('{{ asset('uploads/'.$headline->image) ?? asset('/assets_landing/img/bandara/APT04947.JPG') }}');">
-                {{-- <div class="card news-card shadow" style="background-image: url('{{ asset('/assets_landing/img/bandara/APT04947.JPG') }}');"> --}}
+              
+                <div class="card news-card shadow" style="background-image: url('{{ $headline->image_url }}');">
                   <a href="{{ route('news.show', $headline->slug) }}" class="text-decoration-none text-white">
                     <div class="card-overlay">
                       <div class="card-body d-flex flex-column justify-content-between">
@@ -51,12 +51,13 @@
               @forelse ($nextHeadlines as $index => $news)
                   <a href="{{ route('news.show', $news->slug) }}" class="news-chip text-decoration-none" aria-label="Baca: {{ $news->title }}">
                     <figure class="news-chip-media">
+                        {{-- <div class="card news-card shadow" style="background-image: url('{{ $headline->image_url }}');"> --}}
+
                         <img
-                            src="{{ asset('uploads/'.$news->image) ?? asset('/assets_landing/img/bandara/DJI_0038.JPG') }}"
-                            {{-- src="{{ asset('/assets_landing/img/bandara/DJI_0038.JPG') }}" --}}
+                            src="{{ $news->image_url }}"
                             alt="Gambar {{ $news->title }}"
                             loading="lazy"
-                            size="(max-width: 992px) 280px, 260px"
+                            sizes="(max-width: 992px) 280px, 260px"
                         />
                         <figcaption class="visually-hidden">{{ $news->title }}</figcaption>
 
@@ -64,15 +65,7 @@
                             {{-- Judul berita sekarang di sini --}}
                             <h6 class="news-chip-title text-center">{{ $news->title }}</h6>
                             
-                            {{-- <div class="news-chip-details">
-                                <span class="news-chip-source">
-                                    <i class="bi bi-newspaper"></i>
-                                    APT Pranoto
-                                </span>
-                                <span class="news-chip-dot">·</span>
-                                <time class="news-chip-time">{{ $news->created_at->diffForHumans() }}</time>
-                            </div>
-                        </div> --}}
+                            
                     </figure>
                     
                     {{-- div.news-chip-body telah dihapus --}}
@@ -93,7 +86,7 @@
               <a href="{{ route('news.show', $news->slug) }}" class="news-tile" aria-label="Baca: {{ $news->title }}">
                 <figure class="news-tile-media">
                   <img
-                    src="{{ asset('uploads/'.$news->image) ?? asset('/assets_landing/img/bandara/APT_1682.JPG') }}"
+                    src="{{ $news->image_url }}"
                     {{-- src="{{ asset('/assets_landing/img/bandara/APT_1682.JPG') }}" --}}
                     alt="Gambar: {{ $news->title }}"
                     loading="lazy"

@@ -122,7 +122,7 @@ Route::group(["prefix" => 'dashboard'], function () {
             Route::get('staff/berita/create', [NewsController::class, 'create'])->name('berita.create');
             Route::get('staff/berita/{slug}', [NewsController::class, 'show'])->name('berita.show');
             Route::post('staff/berita/store', [NewsController::class, 'store'])->name('berita.store');
-            Route::delete('staff/berita/{id}/update', [NewsController::class, 'update'])->name('berita.update');
+            Route::put('staff/berita/{id}/update', [NewsController::class, 'update'])->name('berita.update');
             Route::delete('staff/berita/{id}/destroy', [NewsController::class, 'destroy'])->name('berita.destroy');
             Route::patch('staff/berita/{id}/toggle-headline', [NewsController::class, 'toggleHeadline'])->name('berita.toggleHeadline');
             Route::patch('staff/berita/{id}/toggle-publish', [NewsController::class, 'togglePublish'])->name('berita.togglePublish');

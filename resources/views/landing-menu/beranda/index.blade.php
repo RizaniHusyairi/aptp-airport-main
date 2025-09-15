@@ -298,29 +298,33 @@
             <!-- Konten Fasilitas -->
             <div class="tab-pane fade show active" id="facilities-content" role="tabpanel" aria-labelledby="facilities-tab">
                 <div class="row g-4">
-                    {{-- ### KONTEN KARTU DIPERBARUI ### --}}
+                    {{-- KARTU FASILITAS SISI UDARA --}}
                     <div class="col-lg-4 col-md-6">
                         <a href="{{ route('fasilitas') }}" class="explore-card">
-                            <div class="explore-card-image" style="background-image: url('https://images.unsplash.com/photo-1569154941061-e231b4725ef1?q=80&w=2070&auto=format&fit=crop');"></div>
+                            {{-- Memanggil accessor image_url. Jika tidak ada data fasilitas, placeholder akan tampil --}}
+                            <div class="explore-card-image" style="background-image: url('{{ optional($facilityImages['udara'])->image_url ?? 'https://placehold.co/600x400/0d2c4a/ffffff?text=Sisi+Udara' }}');"></div>
                             <div class="explore-card-content">
                                 <h3>Fasilitas Sisi Udara</h3>
                                 <p>Infrastruktur vital kami, mulai dari landasan pacu hingga apron yang modern dan efisien.</p>
                             </div>
                         </a>
                     </div>
+
+                    {{-- KARTU FASILITAS SISI DARAT --}}
                     <div class="col-lg-4 col-md-6">
                          <a href="{{ route('fasilitas') }}" class="explore-card">
-                            
-                            <div class="explore-card-image" style="background-image: url({{ asset('assets_landing/img/fasilitas/darat/temindung-penumpang.JPG') }});"></div>
+                            <div class="explore-card-image" style="background-image: url('{{ optional($facilityImages['darat'])->image_url ?? 'https://placehold.co/600x400/0d2c4a/ffffff?text=Sisi+Darat' }}');"></div>
                             <div class="explore-card-content">
                                 <h3>Fasilitas Sisi Darat</h3>
                                 <p>Temukan kemegahan arsitektur terminal penumpang, gedung kargo, dan area parkir yang luas.</p>
                             </div>
                         </a>
                     </div>
+
+                    {{-- KARTU FASILITAS UMUM --}}
                     <div class="col-lg-4 col-md-6">
                          <a href="{{ route('fasilitas') }}" class="explore-card">
-                            <div class="explore-card-image" style="background-image: url('https://images.unsplash.com/photo-1555396273-367ea4eb4db5?q=80&w=1974&auto=format&fit=crop');"></div>
+                            <div class="explore-card-image" style="background-image: url('{{ optional($facilityImages['umum'])->image_url ?? 'https://placehold.co/600x400/0d2c4a/ffffff?text=Fasilitas+Umum' }}');"></div>
                             <div class="explore-card-content">
                                 <h3>Fasilitas Umum</h3>
                                 <p>Nikmati berbagai layanan mulai dari check-in counter, kuliner, hingga ruang ibadah yang nyaman.</p>
@@ -388,7 +392,7 @@
             @forelse ($headlines as $news)
                 <div class="col-lg-4 col-md-6">
                     <a href="{{ route('news.show', $news->slug) }}" class="news-card-modern">
-                        <div class="news-image" style="background-image: url('{{ asset('uploads/' . $news->image) }}');"></div>
+                        <div class="news-image" style="background-image: url('{{ $news->image_url }}');"></div>
                         <div class="news-content">
                             <span class="news-date">{{ $news->created_at->translatedFormat('d M Y') }}</span>
                             <h3 class="news-title">{{ Str::limit($news->title, 55) }}</h3>

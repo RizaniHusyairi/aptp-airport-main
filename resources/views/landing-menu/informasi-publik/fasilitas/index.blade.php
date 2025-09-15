@@ -24,10 +24,10 @@
                 <div class="col-lg-3 col-md-4 col-6">
                     <button type="button" class="facility-card" data-bs-toggle="modal" data-bs-target="#facilityDetailModal" 
                             data-name="{{ $facility->name }}" 
-                            data-image="{{ Storage::url($facility->image_path) }}" 
+                            data-image="{{ $facility->image_url }}" 
                             data-details="{{ json_encode($facility->details) }}">
                         <div class="facility-card-image">
-                            <img src="{{ Storage::url($facility->image_path) }}" alt="Foto {{ $facility->name }}" onerror="this.onerror=null;this.src='https://placehold.co/600x400/0d2c4a/ffffff?text=Fasilitas';">
+                            <img src="{{ $facility->image_url }}" alt="Foto {{ $facility->name }}" onerror="this.onerror=null;this.src='https://placehold.co/600x400/0d2c4a/ffffff?text=Fasilitas';">
                         </div>
                         <div class="facility-card-content">
                             <h4 class="facility-name">{{ $facility->name }}</h4>
@@ -48,10 +48,10 @@
                 <div class="col-lg-3 col-md-4 col-6">
                     <button type="button" class="facility-card" data-bs-toggle="modal" data-bs-target="#facilityDetailModal" 
                             data-name="{{ $facility->name }}" 
-                            data-image="{{ Storage::url($facility->image_path) }}" 
+                            data-image="{{ $facility->image_url }}" 
                             data-details="{{ json_encode($facility->details) }}">
                         <div class="facility-card-image">
-                            <img src="{{ Storage::url($facility->image_path) }}" alt="Foto {{ $facility->name }}" onerror="this.onerror=null;this.src='https://placehold.co/600x400/0d2c4a/ffffff?text=Fasilitas';">
+                            <img src="{{ $facility->image_url }}" alt="Foto {{ $facility->name }}" onerror="this.onerror=null;this.src='https://placehold.co/600x400/0d2c4a/ffffff?text=Fasilitas';">
                         </div>
                         <div class="facility-card-content">
                             <h4 class="facility-name">{{ $facility->name }}</h4>
@@ -72,10 +72,10 @@
                 <div class="col-lg-3 col-md-4 col-6">
                     <button type="button" class="facility-card" data-bs-toggle="modal" data-bs-target="#facilityDetailModal"
                             data-name="{{ $facility->name }}" 
-                            data-image="{{ Storage::url($facility->image_path) }}" 
+                            data-image="{{ $facility->image_url }}" 
                             data-details='@json($facility->details)'>
                          <div class="facility-card-image">
-                            <img src="{{ Storage::url($facility->image_path) }}" alt="Foto {{ $facility->name }}" onerror="this.onerror=null;this.src='https://placehold.co/600x400/0d2c4a/ffffff?text=Fasilitas';">
+                            <img src="{{ $facility->image_url }}" alt="Foto {{ $facility->name }}" onerror="this.onerror=null;this.src='https://placehold.co/600x400/0d2c4a/ffffff?text=Fasilitas';">
                         </div>
                         <div class="facility-card-content">
                             <h4 class="facility-name">{{ $facility->name }}</h4>

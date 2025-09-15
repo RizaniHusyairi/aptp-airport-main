@@ -31,7 +31,7 @@
 
                         {{-- Gambar Utama --}}
                         <figure class="article-figure my-4">
-                            <img src="{{ asset('uploads/'.$news->image) }}" class="img-fluid rounded" alt="{{ $news->title }}">
+                            <img src="{{ $news->image_url }}" class="img-fluid rounded" alt="{{ $news->title }}">
                         </figure>
 
                         {{-- Isi Konten Berita --}}
@@ -74,7 +74,7 @@
                 <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="{{ $loop->iteration * 100 }}">
                     <a href="{{ route('news.show', $related->slug) }}" class="latest-news-card">
                         <div class="card-img-container">
-                            <img src="{{ asset('uploads/' . $related->image) }}" class="img-fluid" alt="{{ $related->title }}">
+                            <img src="{{ $related->image_url }}" class="img-fluid" alt="{{ $related->title }}">
                         </div>
                         <div class="card-content">
                             <span class="card-date">{{ $related->created_at->translatedFormat('d M Y') }}</span>

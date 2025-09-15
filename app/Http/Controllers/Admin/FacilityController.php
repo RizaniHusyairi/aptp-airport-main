@@ -29,7 +29,7 @@ class FacilityController extends Controller
             'image' => 'required|image|mimes:jpeg,png,jpg,webp|max:2048',
         ]);
 
-        $imagePath = $request->file('image')->store('fasilitas', 'public');
+        $imagePath = $request->file('image')->store('fasilitas', 'public_uploads');
 
         Facility::create([
             'name' => $validated['name'],
@@ -60,7 +60,7 @@ class FacilityController extends Controller
             // Hapus gambar lama
             Storage::disk('public')->delete($facility->image_path);
             // Simpan gambar baru
-            $imagePath = $request->file('image')->store('fasilitas', 'public');
+            $imagePath = $request->file('image')->store('fasilitas', 'public_uploads');
         }
 
         $facility->update([

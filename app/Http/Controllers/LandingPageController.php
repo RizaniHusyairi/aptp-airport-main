@@ -126,7 +126,11 @@ class LandingPageController extends Controller
         $ip = $request->ip(); // IP Address pengunjung
         $userAgent = $request->header('User-Agent'); // Informasi browser/device
     
-
+        $facilityImages = [
+            'udara' => Facility::where('category', 'udara')->latest()->first(),
+            'darat' => Facility::where('category', 'darat')->latest()->first(),
+            'umum'  => Facility::where('category', 'umum')->latest()->first(),
+        ];
         
         // SESUDAH:
         LogVisitorJob::dispatch($request->ip(), $request->header('User-Agent'));
@@ -152,7 +156,8 @@ class LandingPageController extends Controller
             'headlines',
             'destinations',
             'weather',
-            'meta'
+            'meta',
+            'facilityImages'
         ));
     }
 
@@ -896,34 +901,7 @@ class LandingPageController extends Controller
 
     public function fasilitas()
     {
-        // Data diperbarui dengan menghapus 'icon'
-        // $facilities = [
-        //     'udara' => [
-        //         ['name' => 'Runway', 'details' => ['Ukuran: 2.250 m x 45 m', 'Daya Dukung: PCN 50 F/C/X/T'], 'image' => asset('assets_landing/img/fasilitas/runway.jpg')],
-        //         ['name' => 'Apron', 'details' => ['Ukuran: 300 m x 123 m', '8 Parking Stand', 'Daya Dukung: PCN 63 F/C/X/T'], 'image' => asset('assets_landing/img/fasilitas/apron.jpg')],
-        //         ['name' => 'Garbarata', 'details' => ['Tersedia: 2 Unit', 'Memudahkan akses ke pesawat.'], 'image' => asset('assets_landing/img/fasilitas/garbarata.jpg')],
-        //         ['name' => 'Navigasi (PBN)', 'details' => ['Tersedia untuk Runway 04 & 22', 'Memastikan pendaratan presisi.'], 'image' => asset('assets_landing/img/fasilitas/navigasi.jpg')],
-        //     ],
-        //     'darat' => [
-        //         ['name' => 'Terminal Penumpang', 'details' => ['Luas: 12.700 m²', 'Kapasitas: 1.5 Juta Penumpang/Tahun'], 'image' => asset('assets_landing/img/fasilitas/terminal.jpg')],
-        //         ['name' => 'Terminal Kargo', 'details' => ['Luas: 1.148 m²', 'Mendukung logistik & pengiriman barang.'], 'image' => asset('assets_landing/img/fasilitas/kargo.jpg')],
-        //         ['name' => 'Gedung VVIP', 'details' => ['Luas: 743,60 m²', 'Kenyamanan eksklusif untuk tamu penting.'], 'image' => asset('assets_landing/img/fasilitas/vvip.jpg')],
-        //         ['name' => 'Area Parkir', 'details' => ['Luas: 30.000 m²', 'Kapasitas luas untuk kendaraan.'], 'image' => asset('assets_landing/img/fasilitas/parkir.jpg')],
-        //         ['name' => 'Gedung Administrasi', 'details' => ['Luas: 1.253 m²', 'Pusat administrasi dan operasional.'], 'image' => asset('assets_landing/img/fasilitas/administrasi.jpg')],
-        //         ['name' => 'Fire Station (ARFF)', 'details' => ['Luas: 455,52 m²', 'Kategori 6 ARFF.'], 'image' => asset('assets_landing/img/fasilitas/arff.jpg')],
-        //         ['name' => 'Power Station', 'details' => ['Luas: 803 m²', 'Menjamin pasokan listrik bandara.'], 'image' => asset('assets_landing/img/fasilitas/power-station.jpg')],
-        //         ['name' => 'Kantin Bandara', 'details' => ['Luas: 372,12 m²', 'Menyediakan aneka kuliner.'], 'image' => asset('assets_landing/img/fasilitas/cafe.jpg')],
-        //     ],
-        //     'umum' => [
-        //         ['name' => 'Check-in Counter', 'details' => ['Tersedia: 16 Counter', 'Proses check-in yang cepat dan efisien.'], 'image' => asset('assets_landing/img/fasilitas/checkin.jpg')],
-        //         ['name' => 'Kantin & Cafe', 'details' => ['Luas Area: 372 m²', 'Menyajikan beragam pilihan kuliner.'], 'image' => asset('assets_landing/img/fasilitas/cafe.jpg')],
-        //         ['name' => 'Mushola', 'details' => ['Ruang ibadah yang bersih dan nyaman bagi umat Muslim.'], 'image' => asset('assets_landing/img/fasilitas/mushola.jpg')],
-        //         ['name' => 'Layanan ARFF', 'details' => ['Kategori 6', 'Keselamatan & pemadam kebakaran bandara.'], 'image' => asset('assets_landing/img/fasilitas/arff.jpg')],
-        //     ]
-        // ];
-        // Mengambil semua data fasilitas dari database dan mengelompokkannya berdasarkan kategori
-     
-        // ### PERBAIKAN: Hanya mengambil fasilitas darat dan umum dari database ###
+   
         $facilities = Facility::whereIn('category', ['udara','darat', 'umum'])
                                 ->get()
                                 ->groupBy('category');

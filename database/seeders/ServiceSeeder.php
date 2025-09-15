@@ -127,14 +127,11 @@ class ServiceSeeder extends Seeder
             'submission_url' => 'dashboard/beauty-contest',
         ]);
         Service::create([
-            'name' => 'Slot Charter',
-            'slug' => 'slot-charter',
-            'title' => 'Syarat & Ketentuan Pengajuan Slot Charter',
+            'name' => 'Extand/Advand',
+            'slug' => 'extand-advand',
+            'title' => 'Syarat & Ketentuan Pengajuan Extand/Advand',
             'requirements' => [
-                "Nomor Induk Berusaha", "Kartu Tanda Penduduk (KTP)", "Surat Permohonan Slot Charter", "Sertifikat Kelaikan Udara Pesawat",
-                "Proposal Oprasional Penerbangan", "Surat Izin Operasi Penerbangan (untuk Operator)",
-                 "Bukti Bayar Pajak 3 Bulan Terakhir",
-                "Service Level Agreement (jika Maskapai)"
+                "Dokumen dari aplikasi crounus"
             ],
             'steps' => [
                 "Mengajukan surat permohonan kepada Kabandara",

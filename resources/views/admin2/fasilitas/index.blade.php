@@ -50,7 +50,7 @@
                         @forelse ($facilities as $facility)
                         <tr>
                             <td>
-                                <img src="{{asset('uploads/' . $facility->image_path)}}" alt="{{ $facility->name }}" width="100" class="rounded">
+                                <img src="{{$facility->image_url}}" alt="{{ $facility->name }}" width="100" class="rounded">
                             </td>
                             <td>{{ $facility->name }}</td>
                             <td><span class="badge bg-info text-capitalize">{{ $facility->category }}</span></td>
