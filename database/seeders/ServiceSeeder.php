@@ -81,8 +81,8 @@ class ServiceSeeder extends Seeder
             'title' => 'Syarat & Ketentuan Pengajuan Pengiklanan',
             'requirements' => [
                 "Nomor Induk Berusaha", "Kartu Tanda Penduduk (KTP)", "Akta Pendirian Perusahaan", "NPWP",
-                "Proposal Usaha", "Desain Teknis Booth/Tempat Usaha", "Surat Pernyataan Mengikuti Aturan (bermaterai)",
-                "Laporan Keuangan", "Sertifikat Penjamah Makanan (jika F&B)", "Bukti Bayar Pajak 3 Bulan Terakhir",
+                "Proposal Usaha", "Surat Pernyataan Mengikuti Aturan (bermaterai)",
+                "Laporan Keuangan", "Bukti Bayar Pajak 3 Bulan Terakhir",
                 "Service Level Agreement (jika Maskapai)"
             ],
             'steps' => [
@@ -114,7 +114,7 @@ class ServiceSeeder extends Seeder
             'title' => 'Syarat & Ketentuan Pengajuan Beauty Contest',
             'requirements' => [
                 "Nomor Induk Berusaha", "Kartu Tanda Penduduk (KTP)", "Akta Pendirian Perusahaan", "NPWP",
-                "Proposal Usaha", "Desain Teknis Booth/Tempat Usaha", "Surat Pernyataan Mengikuti Aturan (bermaterai)",
+                "Proposal Usaha", "Surat Pernyataan Mengikuti Aturan (bermaterai)",
                 "Laporan Keuangan", "Bukti Bayar Pajak 3 Bulan Terakhir",
                 "Service Level Agreement (jika Maskapai)"
             ],

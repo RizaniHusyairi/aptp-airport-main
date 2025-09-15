@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\persuratan;
 use App\Models\SuratVerification;
 use App\Models\SuratRevision;
+use App\Models\Role;
 use App\Models\Surat_event; // <-- model sederhana untuk tabel surat_events
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -50,7 +51,19 @@ class PersuratanController extends Controller
     public function create()
     {
         $staffs = User::where('is_staff', true)->orderBy('name')->get();
-        return view('user_staff2.persuratan.create', compact('staffs'));
+        
+        // Ambil HANYA role pejabat yang bisa menjadi penandatangan final
+        $approverRoles = Role::whereIn('name', [
+            'Kepala Bandara',
+            'Kepala Subbagian Keuangan dan Tata Usaha',
+            'Kepala Seksi Keamanan Penerbangan dan Pelayanan Darurat',
+            'Kepala Seksi Pelayanan dan Kerjasama',
+            'Kepala Seksi Teknik dan Operasi'
+        ])
+        ->with('users') // Eager load user yang memiliki role tersebut
+        ->get();
+
+        return view('user_staff2.persuratan.create', compact('staffs','approverRoles'));
     }
 
     public function store(Request $request)
@@ -338,18 +351,28 @@ class PersuratanController extends Controller
      */
     public function finalApprove(Request $request, persuratan $surat)
     {
+        // === PERUBAHAN DI SINI: TAMBAHKAN VALIDASI UNTUK LINK BARU ===
+        $validated = $request->validate([
+            'signed_document_link' => 'required|url',
+        ]);
+
         DB::beginTransaction();
         try {
-            // set Disetujui dan kosongkan assignee
+            // set Disetujui, kosongkan assignee, dan simpan link dokumen
             $surat->update([
                 'status' => 'Disetujui',
                 'assigned_to_user_id' => null,
+                'signed_document_link' => $validated['signed_document_link'], // <-- SIMPAN LINK DI SINI
             ]);
 
-            $this->logEvent($surat, 'final_approved', ['by' => Auth::id()]);
+            // Tambahkan link ke log agar tercatat
+            $this->logEvent($surat, 'final_approved', [
+                'by' => Auth::id(),
+                'signed_link' => $validated['signed_document_link']
+            ]);
 
             DB::commit();
-            return back()->with('success', 'Surat disetujui final.');
+            return back()->with('success', 'Surat disetujui final dan dokumen bertanda tangan telah disimpan.');
         } catch (\Exception $e) {
             DB::rollBack();
             return back()->with('error', 'Gagal menyetujui final: '.$e->getMessage());

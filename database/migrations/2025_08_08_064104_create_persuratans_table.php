@@ -42,6 +42,7 @@ return new class extends Migration
                 'Ditolak',
                 'Revisi Diperlukan',
             ])->default('Verifikasi Tambahan');
+            $table->text('signed_document_link')->nullable();
 
             $table->timestamps();
 

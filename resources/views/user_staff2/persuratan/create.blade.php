@@ -74,13 +74,23 @@
                         <input type="text" class="form-control @error('subject') is-invalid @enderror" id="subject" name="subject" value="{{ old('subject') }}" required>
                         @error('subject')<div class="invalid-feedback">{{ $message }}</div>@enderror
                     </div>
-
                     <div class="col-12 mb-3">
                         <label for="final_approver_id" class="form-label">Pejabat Final yang Menandatangani <span class="text-danger">*</span></label>
                         <select class="form-select @error('final_approver_id') is-invalid @enderror" id="final_approver_id" name="final_approver_id" required>
-                            <option value="" selected disabled>- Pilih Pejabat -</option>
-                            @foreach ($staffs as $staff)
-                                <option value="{{ $staff->id }}" @selected(old('final_approver_id') == $staff->id)>{{ $staff->name }}</option>
+                            <option value="" selected disabled>- Pilih Jabatan -</option>
+                            
+                            {{-- Loop melalui Role, bukan User --}}
+                            @foreach ($approverRoles as $role)
+                                {{-- Pastikan role tersebut memiliki user yang aktif --}}
+                                @if($role->users->isNotEmpty())
+                                    @php
+                                        // Ambil user pertama yang memiliki role tersebut
+                                        $approverUser = $role->users->first();
+                                    @endphp
+                                    <option value="{{ $approverUser->id }}" @selected(old('final_approver_id') == $approverUser->id)>
+                                        {{ $role->name }} ({{ $approverUser->name }})
+                                    </option>
+                                @endif
                             @endforeach
                         </select>
                         @error('final_approver_id')<div class="invalid-feedback">{{ $message }}</div>@enderror

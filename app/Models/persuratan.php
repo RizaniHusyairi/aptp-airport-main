@@ -21,7 +21,8 @@ protected $fillable = [
         'final_approver_id',
         'collaborators',
         'attachments',
-        'status'
+        'status',
+        'signed_document_link',
     ];
 
     protected $casts = [

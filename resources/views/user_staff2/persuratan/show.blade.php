@@ -87,15 +87,14 @@
 
                 {{-- Aksi final approver --}}
                 @if($isAssignee && $letter->status === 'Menunggu Persetujuan Atasan' && $isFinalApprover)
-                    <form action="{{ route('persuratan.final.approve', $letter) }}" method="POST" class="d-inline">
-                        @csrf
-                        <button class="btn btn-success btn-sm"><i class="bi bi-check2-circle"></i> Setujui Final</button>
-                    </form>
+                    {{-- Tombol ini sekarang membuka modal, bukan submit form langsung --}}
+                    <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modalFinalApprove">
+                        <i class="bi bi-check2-circle"></i> Setujui Final & Tanda Tangan
+                    </button>
                     <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modalRevisi">
                         <i class="bi bi-arrow-counterclockwise"></i> Minta Revisi
                     </button>
                 @endif
-
                 {{-- Aksi pembuat saat revisi --}}
                 
 
@@ -152,6 +151,21 @@
                     </div>
                 </div>
             </div>
+
+            @if($letter->status == 'Disetujui' && $letter->signed_document_link)
+            <div class="card mb-3 border-success border-2">
+                <div class="card-header bg-success text-white">
+                    <h6 class="mb-0 text-white"><i class="bi bi-patch-check-fill me-2"></i>Dokumen Final Bertanda Tangan</h6>
+                </div>
+                <div class="card-body">
+                     <p class="text-muted">Surat ini telah disetujui secara final. Dokumen yang sudah ditandatangani dapat diakses melalui tautan di bawah ini.</p>
+                     <a href="{{ $letter->signed_document_link }}" target="_blank" rel="noopener" class="btn btn-success w-100">
+                        <i class="bi bi-box-arrow-up-right me-2"></i> Buka Dokumen Final
+                    </a>
+                </div>
+            </div>
+            @endif
+
 
             {{-- Lampiran --}}
             <div class="card mb-3">
@@ -277,6 +291,35 @@
         </div>
     </div>
 </section>
+
+{{-- ================================================ --}}
+{{-- ===         MODAL BARU DITAMBAHKAN           === --}}
+{{-- ================================================ --}}
+<!-- Modal Final Approve -->
+<div class="modal fade" id="modalFinalApprove" tabindex="-1" aria-labelledby="modalFinalApproveLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <form class="modal-content" method="POST" action="{{ route('persuratan.final.approve', $letter) }}">
+        @csrf
+        <div class="modal-header">
+            <h5 class="modal-title" id="modalFinalApproveLabel">Persetujuan Final</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <p>Anda akan menyetujui surat ini secara final. Silakan unggah tautan ke dokumen yang telah ditandatangani.</p>
+            <div class="mb-3">
+                <label for="signed_document_link" class="form-label">Link Dokumen Bertanda Tangan <span class="text-danger">*</span></label>
+                <input type="url" class="form-control" name="signed_document_link" id="signed_document_link" placeholder="https://drive.google.com/..." required>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">Batal</button>
+            <button type="submit" class="btn btn-success">Setujui dan Simpan</button>
+        </div>
+    </form>
+  </div>
+</div>
+
+
 
 {{-- Modal Tolak --}}
 <div class="modal fade" id="modalTolak" tabindex="-1" aria-hidden="true">
