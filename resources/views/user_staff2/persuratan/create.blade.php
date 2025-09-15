@@ -4,6 +4,16 @@
 @section('styles_admin')
     {{-- CSS untuk Choices.js (multi-select dropdown) --}}
     <link rel="stylesheet" href="{{ asset('assetsv2/extensions/choices.js/public/assets/styles/choices.css') }}">
+    <style>
+        .choices__item[data-final-approver="true"] .choices__button {
+            display: none !important;
+        }
+        .choices__list--multiple .choices__item{
+            background-color: #02606d;
+            border: 1px solid #01535e;
+            color: #fff;
+        }
+    </style>
 @endsection
 
 @section('content')
@@ -174,19 +184,78 @@
     <script src="{{ asset('assetsv2/extensions/choices.js/public/assets/scripts/choices.js') }}"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Inisialisasi Choices.js (punya kamu) – tetap
+            // Inisialisasi Choices.js untuk verifikator dan kolaborator
             const verifiersElement = document.getElementById('verifiers');
-            if (verifiersElement) {
-                new Choices(verifiersElement, { removeItemButton: true, placeholder: true,
-                    placeholderValue: 'Pilih pejabat...', searchPlaceholderValue: 'Cari pejabat...' });
-            }
             const collaboratorsElement = document.getElementById('collaborators');
+            
+            // Definisikan verifierChoices di scope yang lebih tinggi
+            let verifierChoices = null;
+
+            if (verifiersElement) {
+                verifierChoices = new Choices(verifiersElement, { 
+                    removeItemButton: true, 
+                    placeholder: true,
+                    placeholderValue: 'Pilih pejabat verifikasi...', 
+                    searchPlaceholderValue: 'Cari pejabat...' 
+                });
+            }
             if (collaboratorsElement) {
-                new Choices(collaboratorsElement, { removeItemButton: true, placeholder: true,
-                    placeholderValue: 'Pilih staff...', searchPlaceholderValue: 'Cari staff...' });
+                new Choices(collaboratorsElement, { 
+                    removeItemButton: true, 
+                    placeholder: true,
+                    placeholderValue: 'Pilih staff...', 
+                    searchPlaceholderValue: 'Cari staff...' 
+                });
             }
 
-            // ---- Dinamis link rows ----
+            // ========================================================== //
+            // ===          LOGIKA SINKRONISASI (FIXED)               === //
+            // ========================================================== //
+            const finalApproverSelect = document.getElementById('final_approver_id');
+
+            // Pastikan kedua elemen dropdown dan instance Choices.js sudah siap
+            if (finalApproverSelect && verifierChoices) {
+                let previousFinalApproverId = finalApproverSelect.value || null;
+
+                function syncApproverToVerifier() {
+                    const newSelectedValue = finalApproverSelect.value;
+                    
+                    // 1. Hapus pejabat final sebelumnya dari daftar verifikator (jika ada)
+                    if (previousFinalApproverId && previousFinalApproverId !== newSelectedValue) {
+                        // Cek apakah item tersebut masih ada sebelum mencoba menghapusnya
+                        const existingValues = verifierChoices.getValue(true);
+                        if (existingValues.includes(previousFinalApproverId)) {
+                            verifierChoices.removeActiveItemsByValue(previousFinalApproverId);
+                        }
+                    }
+
+                    if (newSelectedValue) {
+                        // 2. Tambahkan pejabat final yang baru ke daftar verifikator
+                        verifierChoices.setChoiceByValue(newSelectedValue);
+
+                        // 3. Cari elemennya di UI dan kunci (sembunyikan tombol hapus)
+                        setTimeout(() => {
+                            const newChoiceEl = verifierChoices.containerInner.element.querySelector(`.choices__item[data-value="${newSelectedValue}"]`);
+                            if (newChoiceEl) {
+                                newChoiceEl.setAttribute('data-final-approver', 'true');
+                            }
+                        }, 50); // Jeda singkat untuk memastikan DOM update
+                    }
+
+                    // 4. Simpan ID pejabat saat ini untuk siklus berikutnya
+                    previousFinalApproverId = newSelectedValue;
+                }
+
+                // Panggil fungsi saat ada perubahan pada dropdown Pejabat Final
+                finalApproverSelect.addEventListener('change', syncApproverToVerifier);
+
+                // Panggil sekali saat halaman dimuat untuk menangani data dari old()
+                if (previousFinalApproverId) {
+                    syncApproverToVerifier();
+                }
+            }
+
+            // ---- Logika untuk Dynamic Link Rows (tidak berubah) ----
             const linkWrapper = document.getElementById('link-wrapper');
             const btnAdd = document.getElementById('btn-add-link');
 
@@ -203,19 +272,16 @@
                 return div;
             }
 
-            // tombol tambah
             btnAdd?.addEventListener('click', () => {
                 linkWrapper.appendChild(makeRow());
             });
 
-            // tombol hapus (delegation)
             linkWrapper.addEventListener('click', (e) => {
                 if (e.target.closest('.btn-remove-link')) {
                     const rows = linkWrapper.querySelectorAll('.link-row');
                     if (rows.length > 1) {
                         e.target.closest('.link-row').remove();
                     } else {
-                        // jika tinggal 1 baris, kosongkan saja nilainya
                         const input = linkWrapper.querySelector('input[name="attachments[]"]');
                         if (input) input.value = '';
                     }

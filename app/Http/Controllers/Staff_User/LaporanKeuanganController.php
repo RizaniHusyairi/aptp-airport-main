@@ -70,6 +70,7 @@ class LaporanKeuanganController extends Controller
             'finance' => 'required|array|min:1',
             'finance.*.flow_type' => 'required|in:in,budget',
             'finance.*.amount' => 'required|integer|min:1',
+            'finance.*.source' => 'nullable|string|max:255',
             'finance.*.date' => 'required|date_format:Y-m',
             'finance.*.note' => 'nullable|string',
             'budget_expenses' => 'nullable|array',
@@ -79,6 +80,8 @@ class LaporanKeuanganController extends Controller
             'finance.required' => 'Minimal satu baris data harus diisi.',
             'finance.*.flow_type.required' => 'Aliran dana wajib diisi.',
             'finance.*.amount.required' => 'Jumlah wajib diisi.',
+            'finance.*.amount.min' => 'Jumlah minimal adalah 1.',
+            'finance.*.source.max' => 'Sumber maksimal 255 karakter.',
             'finance.*.date.required' => 'Periode wajib diisi.',
             'finance.*.note.required' => 'Catatan wajib diisi.',
             'budget_expenses.*.description.required' => 'Deskripsi pengeluaran wajib diisi.',
@@ -96,6 +99,7 @@ class LaporanKeuanganController extends Controller
         $financeRecord = Finance::create([
             'flow_type' => $finance[0]['flow_type'],
             'amount' => $finance[0]['amount'],
+            'source' => $financeData['source'] ?? null, 
             'date' => $finance[0]['date'] . '-01', // Default tanggal agar valid sebagai `date`
             'note' => $finance[0]['note'] ?? null,
         ]);
@@ -133,6 +137,7 @@ class LaporanKeuanganController extends Controller
             'finance' => 'required|array|min:1',
             'finance.*.flow_type' => 'required|in:in,budget',
             'finance.*.amount' => 'required|integer|min:1',
+            'finance.*.source' => 'nullable|string|max:255',
             'finance.*.date' => 'required|date_format:Y-m',
             'finance.*.note' => 'nullable|string',
             'budget_expenses' => 'nullable|array',
@@ -155,6 +160,7 @@ class LaporanKeuanganController extends Controller
         $finance->update([
             'flow_type' => $financeData[0]['flow_type'],
             'amount' => $financeData[0]['amount'],
+            'source' => $financeData[0]['source'] ?? null, 
             'date' => $financeData[0]['date'] . '-01',
             'note' => $financeData[0]['note'] ?? null,
         ]);

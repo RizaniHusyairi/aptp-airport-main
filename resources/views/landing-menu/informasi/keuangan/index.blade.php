@@ -24,29 +24,11 @@
             <select id="yearFilter" class="form-select">
                 <option value="all">Semua Tahun</option>
               @foreach ($years as $year)
-                   <option value="{{ $year }}" {{ $year == 2025 ? 'selected' : '' }}>{{ $year }}</option>
+                   <option value="{{ $year }}" {{ $year == now()->year ? 'selected' : '' }}>{{ $year }}</option>
                  @endforeach
             </select>
           </div>
-          <div id="monthFilterContainer" class="col-12 col-md-4 col-lg-3">
-            <label for="monthFilter" class="form-label">Pilih Bulan:</label>
-            <select id="monthFilter" class="form-select">
-              <option value="all">Semua Bulan</option>
-              <option value="1">Januari</option>
-              <option value="2">Februari</option>
-              <option value="3">Maret</option>
-              <option value="4">April</option>
-              <option value="5">Mei</option>
-              <option value="6">Juni</option>
-              <option value="7">Juli</option>
-              <option value="8">Agustus</option>
-              <option value="9">September</option>
-              <option value="10">Oktober</option>
-              <option value="11">November</option>
-              <option value="12">Desember</option>
-            </select>
-          </div>
-        </div>
+          
         <!-- Grafik Section -->
         <div class="row">
           <!-- Grafik Pemasukan (Bar) -->
@@ -76,22 +58,19 @@
               
   
               
-              <!-- KARTU 4: BERDASARKAN SUMBER DANA -->
-              <div class="col-lg-6" data-aos="fade-up" data-aos-delay="200">
-                  <div class="report-card">
-                      <h3 class="report-card-title">Berdasarkan Sumber Dana</h3>
-                      <div class="chart-container-small"><canvas id="sumberDanaChart"></canvas></div>
-                      <div class="table-responsive mt-3">
-                          <table class="table modern-table-compact">
-                              <thead><tr><th>Sumber Dana</th><th class="text-end">Jumlah (Rp)</th><th class="text-center">%</th></tr></thead>
-                              <tbody>
-                                  <tr><td><span class="color-indicator" style="background-color: #4bc0c0;"></span>Rupiah Murni</td><td class="text-end">69.804.875.000</td><td class="text-center">63,33%</td></tr>
-                                  <tr><td><span class="color-indicator" style="background-color: #ff9f40;"></span>PNBP BLU</td><td class="text-end">40.423.701.000</td><td class="text-center">36,67%</td></tr>
-                              </tbody>
-                          </table>
-                      </div>
-                  </div>
-              </div>
+              <!-- ========================================================== -->
+            <!-- ===   PERUBAHAN DI SINI: KARTU SUMBER DANA DINAMIS   === -->
+            <!-- ========================================================== -->
+            <div class="col-lg-6" data-aos="fade-up" data-aos-delay="200">
+                <div class="report-card">
+                    <h3 class="report-card-title">Realisasi Berdasarkan Sumber Dana</h3>
+                    <div class="chart-container-small">
+                        {{-- Canvas tetap sama --}}
+                        <canvas id="sumberDanaChart"></canvas>
+                    </div>
+                    
+                </div>
+            </div>
           </div>
       </div>
 </section>

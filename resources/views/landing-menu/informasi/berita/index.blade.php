@@ -15,8 +15,8 @@
             <swiper-container class="newsFirstSwiper" style="height: 500px;" autoplay-delay="2500" autoplay-disable-on-interaction="false" init="false" style="height: 100%;">
               @forelse ($topHeadlines as $index => $headline)
               <swiper-slide>
-                {{-- <div class="card news-card shadow" style="background-image: url('{{ asset('uploads/'.$headline->image) ?? asset('/assets_landing/img/bandara/APT04947.JPG') }}');"> --}}
-                <div class="card news-card shadow" style="background-image: url('{{ asset('/assets_landing/img/bandara/APT04947.JPG') }}');">
+                <div class="card news-card shadow" style="background-image: url('{{ asset('uploads/'.$headline->image) ?? asset('/assets_landing/img/bandara/APT04947.JPG') }}');">
+                {{-- <div class="card news-card shadow" style="background-image: url('{{ asset('/assets_landing/img/bandara/APT04947.JPG') }}');"> --}}
                   <a href="{{ route('news.show', $headline->slug) }}" class="text-decoration-none text-white">
                     <div class="card-overlay">
                       <div class="card-body d-flex flex-column justify-content-between">
@@ -52,8 +52,8 @@
                   <a href="{{ route('news.show', $news->slug) }}" class="news-chip text-decoration-none" aria-label="Baca: {{ $news->title }}">
                     <figure class="news-chip-media">
                         <img
-                            {{-- src="{{ asset('uploads/'.$news->image) ?? asset('/assets_landing/img/bandara/DJI_0038.JPG') }}" --}}
-                            src="{{ asset('/assets_landing/img/bandara/DJI_0038.JPG') }}"
+                            src="{{ asset('uploads/'.$news->image) ?? asset('/assets_landing/img/bandara/DJI_0038.JPG') }}"
+                            {{-- src="{{ asset('/assets_landing/img/bandara/DJI_0038.JPG') }}" --}}
                             alt="Gambar {{ $news->title }}"
                             loading="lazy"
                             size="(max-width: 992px) 280px, 260px"
@@ -93,8 +93,8 @@
               <a href="{{ route('news.show', $news->slug) }}" class="news-tile" aria-label="Baca: {{ $news->title }}">
                 <figure class="news-tile-media">
                   <img
-                    {{-- src="{{ asset('uploads/'.$news->image) ?? asset('/assets_landing/img/bandara/APT_1682.JPG') }}" --}}
-                    src="{{ asset('/assets_landing/img/bandara/APT_1682.JPG') }}"
+                    src="{{ asset('uploads/'.$news->image) ?? asset('/assets_landing/img/bandara/APT_1682.JPG') }}"
+                    {{-- src="{{ asset('/assets_landing/img/bandara/APT_1682.JPG') }}" --}}
                     alt="Gambar: {{ $news->title }}"
                     loading="lazy"
                   >

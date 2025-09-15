@@ -158,16 +158,36 @@ class PersuratanController extends Controller
 
     public function show(persuratan $surat)
     {
-    $surat->load([
-        'user',
-        'assignee',
-        'finalApprover',
-        'verifications.user',
-        'revisions.user',
-        'events', // jika pakai model SuratEvent
-    ]);
 
-    return view('user_staff2.persuratan.show', ['letter' => $surat]);
+        // Eager load semua relasi yang dibutuhkan
+        $surat->load([
+            'user',
+            'assignee',
+            'finalApprover',
+            'verifications.user',
+            'revisions.user',
+            'events.actor', // <-- Load aktor untuk setiap event
+        ]);
+
+        // Kumpulkan semua ID pengguna dari meta data event untuk di-query sekaligus
+        $metaUserIds = $surat->events->pluck('meta')->flatMap(function ($meta) {
+            return [$meta['to_user_id'] ?? null, $meta['by'] ?? null];
+        })->filter()->unique()->values();
+        
+        // Ambil data user dari ID yang terkumpul dan format sebagai [id => name]
+        $metaUsers = User::whereIn('id', $metaUserIds)->pluck('name', 'id');
+
+        return view('user_staff2.persuratan.show', compact('surat', 'metaUsers'));
+    // $surat->load([
+    //     'user',
+    //     'assignee',
+    //     'finalApprover',
+    //     'verifications.user',
+    //     'revisions.user',
+    //     'events', // jika pakai model SuratEvent
+    // ]);
+
+    // return view('user_staff2.persuratan.show', ['letter' => $surat]);
     }
 
     /**

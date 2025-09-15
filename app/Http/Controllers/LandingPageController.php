@@ -639,68 +639,71 @@ class LandingPageController extends Controller
     {
         try {
                $year = $request->input('year', 'all');
-               $month = $request->input('month', 'all');
 
-               $query = Finance::with('budgetExpenses');
+            // Hapus logika filter bulan
+            $query = Finance::with('budgetExpenses');
 
-               if ($year !== 'all') {
-                   $query->whereYear('date', $year);
-                   if ($month !== 'all') {
-                       $month = (int) $month;
-                       if ($month < 1 || $month > 12) {
-                           throw new \Exception("Bulan tidak valid: {$month}");
-                       }
-                       $query->whereMonth('date', $month);
-                   }
-               }
+            if ($year !== 'all') {
+                $query->whereYear('date', $year);
+            }
 
-               $finances = $query->get();
+            $finances = $query->get();
 
-               $incomeData = [];
-               $budgetData = [];
-               $expenseData = [];
-               $labels = [];
+            $incomeData = [];
+            $budgetData = [];
+            $expenseData = [];
+            $labels = [];
+            $sourceTotals = [];
 
                if ($year === 'all') {
-                   $years = Finance::selectRaw('YEAR(date) as year')->distinct()->pluck('year')->toArray();
-                   sort($years); // Urutkan tahun dari terkecil ke terbesar
-                   $labels = $years;
-                   foreach ($years as $y) {
-                       $yearFinances = $finances->where('date', '>=', "{$y}-01-01")->where('date', '<=', "{$y}-12-31");
-                       $incomeData[] = $yearFinances->where('flow_type', 'in')->sum('amount') / 1000000;
-                       $budgetData[] = $yearFinances->where('flow_type', 'budget')->sum('amount') / 1000000;
-                       $expenseData[] = $yearFinances->where('flow_type', 'budget')->sum(function ($finance) {
-                           return $finance->budgetExpenses->sum('amount') ?? 0;
-                       }) / 1000000;
-                   }
-               } elseif ($month === 'all') {
-                   $labels = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
-                   $financesGrouped = $finances->groupBy(function ($item) {
-                       return $item->date->month;
-                   });
-                   foreach (range(1, 12) as $monthIndex) {
-                       $monthIndex -= 1;
-                       $group = $financesGrouped->get($monthIndex + 1, collect());
-                       $incomeData[$monthIndex] = $group->where('flow_type', 'in')->sum('amount') / 1000000;
-                       $budgetData[$monthIndex] = $group->where('flow_type', 'budget')->sum('amount') / 1000000;
-                       $expenseData[$monthIndex] = $group->where('flow_type', 'budget')->sum(function ($finance) {
-                           return $finance->budgetExpenses->sum('amount') ?? 0;
-                       }) / 1000000;
-                   }
-               } else {
-                   $labels = [Carbon::createFromDate($year, $month, 1)->format('M')];
-                   $incomeData[] = $finances->where('flow_type', 'in')->sum('amount') / 1000000;
-                   $budgetData[] = $finances->where('flow_type', 'budget')->sum('amount') / 1000000;
-                   $expenseData[] = $finances->where('flow_type', 'budget')->sum(function ($finance) {
-                       return $finance->budgetExpenses->sum('amount') ?? 0;
-                   }) / 1000000;
-               }
+                $years = $finances->pluck('date')->map(fn($date) => $date->year)->unique()->sort()->values();
+                $labels = $years->toArray();
+                
+                foreach ($years as $y) {
+                    $yearFinances = $finances->where('date.year', $y);
+                    // --- Ubah pembagi menjadi 1 Miliar ---
+                    $incomeData[] = $yearFinances->where('flow_type', 'in')->sum('amount') / 1000000000;
+                    $budgetData[] = $yearFinances->where('flow_type', 'budget')->sum('amount') / 1000000000;
+                    $expenseData[] = $yearFinances->where('flow_type', 'budget')->sum(fn($f) => $f->budgetExpenses->sum('amount')) / 1000000000;
+                }
+            } else {
+                $labels = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+                $financesGrouped = $finances->groupBy(fn($item) => $item->date->month);
+
+                foreach (range(1, 12) as $monthIndex) {
+                    $group = $financesGrouped->get($monthIndex, collect());
+                    // --- Ubah pembagi menjadi 1 Miliar ---
+                    $incomeData[] = $group->where('flow_type', 'in')->sum('amount') / 1000000000;
+                    $budgetData[] = $group->where('flow_type', 'budget')->sum('amount') / 1000000000;
+                    $expenseData[] = $group->where('flow_type', 'budget')->sum(fn($f) => $f->budgetExpenses->sum('amount')) / 1000000000;
+                }
+            }
+
+                // ========================================================== //
+                // ===          LOGIKA BARU UNTUK SUMBER DANA             === //
+                // ========================================================== //
+                $sourceDataQuery = $finances->whereNotNull('source')->where('source', '!=', '');
+                
+                $sourceTotals = $sourceDataQuery
+                    ->groupBy('source')
+                    ->map(function ($group) {
+                        return $group->sum('amount');
+                    });
+
+                $sourceLabels = $sourceTotals->keys()->all();
+                $sourceValues = $sourceTotals->values()->all();
+            
 
                return response()->json([
                    'labels' => $labels,
                    'income' => $incomeData,
                    'budget' => $budgetData,
                    'expense' => $expenseData,
+                   // Tambahkan data baru ke response JSON
+                'sourceData' => [
+                    'labels' => $sourceLabels,
+                    'values' => $sourceValues,
+                ]
                ]);
            } catch (\Exception $e) {
                \Log::error('Error in getFinancialData: ' . $e->getMessage());

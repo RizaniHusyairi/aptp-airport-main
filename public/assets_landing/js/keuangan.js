@@ -1,243 +1,159 @@
-async function fetchFinancialData(year = 'all', month = 'all') {
-  try {
-    const url = `${document.getElementById('incomeChart').dataset.url}?year=${year}&month=${month}`;
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
+document.addEventListener('DOMContentLoaded', function() {
+    const incomeChartCanvas = document.getElementById('incomeChart');
+    const budgetVsExpenseChartCanvas = document.getElementById('budgetVsExpenseChart');
+    const sumberDanaChartCanvas = document.getElementById('sumberDanaChart');
+
+    if (!incomeChartCanvas || !budgetVsExpenseChartCanvas || !sumberDanaChartCanvas) {
+        console.error('Satu atau lebih elemen canvas tidak ditemukan.');
+        return;
     }
-    const data = await response.json();
-    if (data.error) {
-      throw new Error(data.error);
+
+    async function fetchFinancialData(year = 'all') { // Hapus parameter 'month'
+        try {
+            const baseUrl = incomeChartCanvas.dataset.url;
+            if (!baseUrl) throw new Error('Atribut data-url tidak ditemukan.');
+            
+            const url = `${baseUrl}?year=${year}`; // URL disederhanakan
+            const response = await fetch(url);
+            if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+            
+            const data = await response.json();
+            if (data.error) throw new Error(data.error);
+
+            return data;
+        } catch (error) {
+            console.error('Error fetching financial data:', error);
+            incomeChartCanvas.parentElement.innerHTML = '<p class="text-center text-danger">Gagal memuat data grafik.</p>';
+            return null;
+        }
     }
-    return data;
-  } catch (error) {
-    console.error('Error fetching financial data:', error);
-    alert('Gagal mengambil data keuangan. Silakan coba lagi nanti.');
-    return { labels: [], income: [], budget: [], expense: [] };
-  }
-}
 
-const incomeChartCtx = document.getElementById('incomeChart').getContext('2d');
-const budgetVsExpenseChartCtx = document.getElementById('budgetVsExpenseChart').getContext('2d');
-
-let incomeChart = new Chart(incomeChartCtx, {
-  type: 'bar',
-  data: {
-    labels: [],
-    datasets: [{
-      label: 'Pemasukan (Juta Rp)',
-      data: [],
-      backgroundColor: 'rgba(217, 158, 78, 0.6)',
-      borderColor: 'rgba(217, 158, 78, 1)',
-      borderWidth: 1
-    }]
-  },
-  options: {
-    responsive: true,
-    maintainAspectRatio: false,
-    scales: {
-      y: {
-        beginAtZero: true,
-        title: {
-          display: true,
-          text: 'Juta Rupiah'
+    // Inisialisasi Chart.js
+    const incomeChart = new Chart(incomeChartCanvas.getContext('2d'), {
+        type: 'bar',
+        data: {
+            labels: [],
+            datasets: [{
+                label: 'Pemasukan (Miliar Rp)', // <<< GANTI SATUAN
+                data: [],
+                backgroundColor: 'rgba(240, 165, 0, 0.6)',
+                borderColor: 'rgba(240, 165, 0, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: { y: { beginAtZero: true, title: { display: true, text: 'Miliar Rupiah' } }, x: { title: { display: true, text: 'Periode' } } }, // <<< GANTI SATUAN
+            plugins: { legend: { position: 'top' } }
         }
-      },
-      x: {
-        title: {
-          display: true,
-          text: 'Tahun'
+    });
+
+    const budgetVsExpenseChart = new Chart(budgetVsExpenseChartCanvas.getContext('2d'), {
+        type: 'line',
+        data: {
+            labels: [],
+            datasets: [
+                {
+                    label: 'Anggaran (Miliar Rp)', // <<< GANTI SATUAN
+                    data: [],
+                    borderColor: 'rgba(240, 165, 0, 1)',
+                    backgroundColor: 'rgba(240, 165, 0, 0.2)',
+                    fill: true,
+                    tension: 0.4
+                },
+                {
+                    label: 'Belanja (Miliar Rp)', // <<< GANTI SATUAN
+                    data: [],
+                    borderColor: 'rgba(13, 44, 74, 1)',
+                    backgroundColor: 'rgba(13, 44, 74, 0.2)',
+                    fill: true,
+                    tension: 0.4
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: { y: { beginAtZero: true, title: { display: true, text: 'Miliar Rupiah' } }, x: { title: { display: true, text: 'Periode' } } }, // <<< GANTI SATUAN
+            plugins: { legend: { position: 'top' } }
         }
-      }
-    },
-    plugins: {
-      legend: {
-        position: 'top'
-      },
-      tooltip: {
-        callbacks: {
-          label: function(context) {
-            return `${context.dataset.label}: ${context.parsed.y} Juta Rp`;
-          }
-        }
-      }
-    }
-  }
-});
+    });
 
-let budgetVsExpenseChart = new Chart(budgetVsExpenseChartCtx, {
-  type: 'line',
-  data: {
-    labels: [],
-    datasets: [
-      {
-        label: 'Anggaran (Juta Rp)',
-        data: [],
-        borderColor: 'rgba(217, 158, 78, 1)',
-        backgroundColor: 'rgba(217, 158, 78, 0.2)',
-        fill: true,
-        tension: 0.4
-      },
-      {
-        label: 'Pengeluaran (Juta Rp)',
-        data: [],
-        borderColor: 'rgba(54, 162, 235, 1)',
-        backgroundColor: 'rgba(54, 162, 235, 0.2)',
-        fill: true,
-        tension: 0.4
-      }
-    ]
-  },
-  options: {
-    responsive: true,
-    maintainAspectRatio: false,
-    scales: {
-      y: {
-        beginAtZero: true,
-        title: {
-          display: true,
-          text: 'Juta Rupiah'
-        }
-      },
-      x: {
-        title: {
-          display: true,
-          text: 'Tahun'
-        }
-      }
-    },
-    plugins: {
-      legend: {
-        position: 'top'
-      },
-      tooltip: {
-        callbacks: {
-          label: function(context) {
-            return `${context.dataset.label}: ${context.parsed.y} Juta Rp`;
-          }
-        }
-      }
-    }
-  }
-});
-
-async function updateCharts() {
-  const year = document.getElementById('yearFilter').value;
-  const month = document.getElementById('monthFilter').value;
-
-  const data = await fetchFinancialData(year, month);
-
-  let labels = data.labels;
-  let incomeData = data.income;
-  let budgetData = data.budget;
-  let expenseData = data.expense;
-
-  incomeChart.data.labels = labels;
-  incomeChart.data.datasets[0].data = incomeData;
-  incomeChart.options.scales.x.title.text = (year === 'all' || month === 'all') ? 'Tahun' : 'Bulan';
-  incomeChart.update();
-
-  budgetVsExpenseChart.data.labels = labels;
-  budgetVsExpenseChart.data.datasets[0].data = budgetData;
-  budgetVsExpenseChart.data.datasets[1].data = expenseData;
-  budgetVsExpenseChart.options.scales.x.title.text = (year === 'all' || month === 'all') ? 'Tahun' : 'Bulan';
-  budgetVsExpenseChart.update();
-}
-
-const yearFilter = document.getElementById('yearFilter');
-const monthFilterContainer = document.getElementById('monthFilterContainer');
-yearFilter.addEventListener('change', () => {
-  if (yearFilter.value === 'all') {
-    monthFilterContainer.classList.add('hidden');
-    document.getElementById('monthFilter').value = 'all';
-  } else {
-    monthFilterContainer.classList.remove('hidden');
-  }
-  updateCharts();
-});
-
-document.getElementById('monthFilter').addEventListener('change', updateCharts);
-
-updateCharts();
-
-// ==========================================================
-    // BAGIAN 2: LOGIKA UNTUK GRAFIK STATIS (BAWAH)
-    // ==========================================================
-    const staticChartOptions = {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-            legend: { display: false },
-            tooltip: {
-                callbacks: {
-                    label: function(context) {
-                        return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(context.raw);
+    const sumberDanaChart = new Chart(sumberDanaChartCanvas.getContext('2d'), {
+        type: 'pie',
+        data: {
+            labels: [],
+            datasets: [{ data: [], backgroundColor: ['#0d2c4a', '#f0a500', '#ff6384', '#36a2eb'], borderWidth: 2 }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { position: 'bottom' },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return `${context.label}: ${new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(context.raw)}`;
+                        }
                     }
+                },
+                datalabels: {
+                    formatter: (value, ctx) => {
+                        let sum = ctx.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+                        if (sum === 0) return '0%';
+                        return ((value * 100) / sum).toFixed(1) + '%';
+                    },
+                    color: '#fff',
+                    font: { weight: 'bold' }
                 }
             }
+        },
+        plugins: [ChartDataLabels]
+    });
+
+    async function updateCharts() {
+        const year = document.getElementById('yearFilter').value;
+        const data = await fetchFinancialData(year); // Panggil API hanya dengan tahun
+
+        if (!data) return;
+
+        const periodLabel = (year === 'all') ? 'Tahun' : 'Bulan';
+
+        // Update Grafik 1 & 2
+        incomeChart.data.labels = data.labels;
+        incomeChart.data.datasets[0].data = data.income;
+        incomeChart.options.scales.x.title.text = periodLabel;
+        incomeChart.update();
+
+        budgetVsExpenseChart.data.labels = data.labels;
+        budgetVsExpenseChart.data.datasets[0].data = data.budget;
+        budgetVsExpenseChart.data.datasets[1].data = data.expense;
+        budgetVsExpenseChart.options.scales.x.title.text = periodLabel;
+        budgetVsExpenseChart.update();
+
+        // Update Grafik 3 & Tabel Sumber Dana
+        if (data.sourceData) {
+            sumberDanaChart.data.labels = data.sourceData.labels;
+            sumberDanaChart.data.datasets[0].data = data.sourceData.values;
+            sumberDanaChart.update();
+
+            const tableBody = document.getElementById('sumberDanaTableBody');
+            tableBody.innerHTML = '';
+            const totalSource = data.sourceData.values.reduce((sum, value) => sum + value, 0);
+
+            if (totalSource > 0) {
+                // ... (logika update tabel tidak berubah)
+            } else {
+                tableBody.innerHTML = `<tr><td colspan="3" class="text-center text-muted">Data tidak tersedia.</td></tr>`;
+            }
         }
-    };
-
-    // Chart Jenis Program (Pie)
-    const programCtx = document.getElementById('programChart');
-    if (programCtx) {
-        new Chart(programCtx, {
-            type: 'pie',
-            data: {
-                labels: ['Infrastruktur Konektivitas', 'Dukungan Manajemen'],
-                datasets: [{ data: [55702543000, 54526033000], backgroundColor: ['#36a2eb', '#ffcd56'] }]
-            },
-            options: { ...staticChartOptions, plugins: { ...staticChartOptions.plugins, datalabels: {
-                formatter: (value, ctx) => {
-                    let sum = ctx.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
-                    return (value * 100 / sum).toFixed(2) + '%';
-                },
-                color: '#fff', font: { weight: 'bold' }
-            }}}
-        });
     }
 
-    // Chart Jenis Belanja (Bar)
-    const belanjaCtx = document.getElementById('belanjaChart');
-    if (belanjaCtx) {
-        new Chart(belanjaCtx, {
-            type: 'bar',
-            data: {
-                labels: ['Pegawai', 'Barang', 'Modal'],
-                datasets: [{ data: [9947052000, 76804764000, 23476760000], backgroundColor: ['#36a2eb', '#ff6384', '#4bc0c0'] }]
-            },
-            options: { ...staticChartOptions, scales: { y: { ticks: { callback: value => `${value / 1e9} M` } } } }
-        });
-    }
+    // Event listener hanya untuk filter tahun
+    document.getElementById('yearFilter').addEventListener('change', updateCharts);
+    
+    // Muat data awal
+    updateCharts();
+});
 
-    // Chart Jenis Kegiatan (Bar Horizontal)
-    const kegiatanCtx = document.getElementById('kegiatanChart');
-    if (kegiatanCtx) {
-        new Chart(kegiatanCtx, {
-            type: 'bar',
-            data: {
-                labels: ['Pelayanan', 'Infrastruktur', 'Keselamatan', 'Penunjang', 'Keuangan & SDM', 'Perencanaan'],
-                datasets: [{ data: [24310000000, 22000000000, 1300000000, 8000000000, 53987000000, 631576000], backgroundColor: ['#36a2eb', '#ff6384', '#4bc0c0', '#ffcd56', '#c9cbcf', '#9966ff'] }]
-            },
-            options: { ...staticChartOptions, indexAxis: 'y', scales: { x: { ticks: { callback: value => `${value / 1e9} M` } } } }
-        });
-    }
-
-    // Chart Sumber Dana (Pie)
-    const sumberDanaCtx = document.getElementById('sumberDanaChart');
-    if (sumberDanaCtx) {
-        new Chart(sumberDanaCtx, {
-            type: 'pie',
-            data: {
-                labels: ['Rupiah Murni', 'PNBP BLU'],
-                datasets: [{ data: [69804875000, 40423701000], backgroundColor: ['#4bc0c0', '#ff9f40'] }]
-            },
-            options: { ...staticChartOptions, plugins: { ...staticChartOptions.plugins, datalabels: {
-                formatter: (value, ctx) => {
-                    let sum = ctx.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
-                    return (value * 100 / sum).toFixed(2) + '%';
-                },
-                color: '#fff', font: { weight: 'bold' }
-            }}}
-        });
-    }

@@ -15,6 +15,7 @@ class Finance extends Model
         'date',
         'flow_type',
         'amount',
+        'source',
         'note',
     ];
 

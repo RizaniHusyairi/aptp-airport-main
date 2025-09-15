@@ -13,7 +13,7 @@ class NewsSeeder extends Seeder
             [
                 'title' => 'Peningkatan Fasilitas Lounge di Bandara APT Pranoto',
                 'slug' => 'peningkatan-fasilitas-lounge-apt-pranoto',
-                'image' => 'documents/news/lounge-upgrade.jpg',
+                'image' => '',
                 'content' => 'Bandara APT Pranoto meluncurkan lounge baru dengan fasilitas modern untuk meningkatkan kenyamanan penumpang. Lounge ini dilengkapi Wi-Fi gratis dan area relaksasi.',
                 'is_published' => true,
                 'is_headline' => true,
@@ -23,7 +23,7 @@ class NewsSeeder extends Seeder
             [
                 'title' => 'Latihan Evakuasi Darurat di Terminal Bandara',
                 'slug' => 'latihan-evakuasi-darurat-2025',
-                'image' => 'documents/news/evacuation-drill.jpg',
+                'image' => '',
                 'content' => 'Tim bandara mengadakan latihan evakuasi darurat untuk memastikan kesiapan dalam situasi krisis. Kegiatan ini melibatkan petugas dan penumpang sukarela.',
                 'is_published' => true,
                 'is_headline' => false,
@@ -33,7 +33,7 @@ class NewsSeeder extends Seeder
             [
                 'title' => 'Penerbangan Baru ke Surabaya Dibuka',
                 'slug' => 'penerbangan-baru-surabaya',
-                'image' => 'documents/news/flight-surabaya.jpg',
+                'image' => '',
                 'content' => 'Maskapai Lion Air membuka rute baru Samarinda-Surabaya mulai Juni 2025, dengan frekuensi tiga kali seminggu.',
                 'is_published' => true,
                 'is_headline' => true,
@@ -43,7 +43,7 @@ class NewsSeeder extends Seeder
             [
                 'title' => 'Pameran Produk UMKM di Area Check-in',
                 'slug' => 'pameran-umkm-apt-pranoto',
-                'image' => 'documents/news/umkm-exhibition.jpg',
+                'image' => '',
                 'content' => 'Bandara APT Pranoto menggelar pameran UMKM lokal untuk mempromosikan produk khas Samarinda. Pameran berlangsung hingga akhir Mei.',
                 'is_published' => true,
                 'is_headline' => false,

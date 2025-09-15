@@ -59,6 +59,7 @@ class ViewServiceProvider extends ServiceProvider
                         ['name' => 'Profil Bandara', 'route' => route('profilBandara')],
                         ['name' => 'Struktur Organisasi', 'route' => route('strukturOrganisasi')],
                         ['name' => 'Pejabat Bandara', 'route' => route('pejabatBandara')],
+                        ['name' => 'Fasilitas Bandara' ,'route' => route('fasilitas')]
                         
                         ],
 

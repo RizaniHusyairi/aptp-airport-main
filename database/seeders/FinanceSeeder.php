@@ -219,5 +219,34 @@ class FinanceSeeder extends Seeder
         // Data untuk Mei 2025 (saat ini)
         $finance5 = Finance::create(['date' => '2025-05-15', 'flow_type' => 'budget', 'amount' => 62000000, 'note' => 'Anggaran Mei 2025']);
         BudgetExpense::create(['finance_id' => $finance5->id, 'description' => 'Pemeliharaan', 'amount' => 47000000]);
+
+        $anggaran2024 = Finance::create([
+            'date' => '2024-01-01',
+            'flow_type' => 'budget',
+            'source' => 'Rupiah Murni',
+            'amount' => 1000000000, // 1 Miliar
+            'note' => 'Anggaran Tahunan 2024 dari Rupiah Murni'
+        ]);
+        $anggaran2024->budgetExpenses()->create(['description' => 'Gaji Pegawai', 'amount' => 500000000]);
+        $anggaran2024->budgetExpenses()->create(['description' => 'Perawatan Fasilitas', 'amount' => 300000000]);
+
+        Finance::create([
+            'date' => '2024-03-15',
+            'flow_type' => 'in',
+            'source' => 'PNBP BLU',
+            'amount' => 250000000, // 250 Juta
+            'note' => 'Pemasukan dari layanan parkir Q1'
+        ]);
+
+        // Data untuk 2025
+        $anggaran2025 = Finance::create([
+            'date' => '2025-01-01',
+            'flow_type' => 'budget',
+            'source' => 'PNBP BLU',
+            'amount' => 1200000000, // 1.2 Miliar
+            'note' => 'Anggaran Tahunan 2025 dari PNBP BLU'
+        ]);
+        $anggaran2025->budgetExpenses()->create(['description' => 'Pengembangan Sistem IT', 'amount' => 400000000]);
+        $anggaran2025->budgetExpenses()->create(['description' => 'Promosi dan Marketing', 'amount' => 150000000]);
     }
 }

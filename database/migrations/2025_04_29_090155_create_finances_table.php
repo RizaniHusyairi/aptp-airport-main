@@ -14,6 +14,7 @@ return new class extends Migration
             $table->enum('flow_type', ['in', 'budget']); 
             $table->unsignedInteger('amount'); 
             $table->text('note')->nullable(); 
+            $table->string('source')->nullable();
         
             $table->timestamps();
         });

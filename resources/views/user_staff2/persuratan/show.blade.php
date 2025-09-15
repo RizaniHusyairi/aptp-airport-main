@@ -4,7 +4,7 @@
 @section('styles_admin')
     <link rel="stylesheet" href="{{ asset('assetsv2/extensions/datatables.net-bs5/css/dataTables.bootstrap5.min.css') }}">
     <style>
-        .chip{display:inline-block;padding:.25rem .5rem;border-radius:999px;background:#424253;font-size:.85rem;margin:.125rem .25rem}
+        .chip{ color: white; display:inline-block;padding:.25rem .5rem;border-radius:999px;background:#424253;font-size:.85rem;margin:.125rem .25rem}
         .timeline{position:relative;margin-left:1rem;padding-left:1.25rem}
         .timeline::before{content:'';position:absolute;left:6px;top:0;bottom:0;width:2px;background:#e9ecef}
         .timeline-item{position:relative;margin-bottom:1rem}
@@ -17,7 +17,7 @@
 @section('content')
 @php
     // helper badge
-    $badgeClass = match($letter->status) {
+    $badgeClass = match($surat->status) {
         'Disetujui' => 'bg-success',
         'Ditolak' => 'bg-danger',
         'Revisi Diperlukan' => 'bg-warning',
@@ -26,12 +26,12 @@
         default => 'bg-secondary',
     };
 
-    $isAssignee = auth()->id() === ($letter->assigned_to_user_id ?? -1);
-    $isFinalApprover = auth()->id() === $letter->final_approver_id;
-    $isCreator = auth()->id() === $letter->user_id;
+    $isAssignee = auth()->id() === ($surat->assigned_to_user_id ?? -1);
+    $isFinalApprover = auth()->id() === $surat->final_approver_id;
+    $isCreator = auth()->id() === $surat->user_id;
 
     // cek apakah user login adalah verifikator pending berikutnya
-    $pendingMine = $letter->verifications
+    $pendingMine = $surat->verifications
         ->where('status','Menunggu')
         ->sortBy('order')
         ->firstWhere('user_id', auth()->id());
@@ -41,11 +41,11 @@
     <div class="page-title">
         <div class="row">
             <div class="col-12 col-md-8 order-md-1 order-last">
-                <h3 class="mb-1">{{ $letter->subject }}</h3>
+                <h3 class="mb-1">{{ $surat->subject }}</h3>
                 <div>
-                    <span class="badge {{ $badgeClass }}">{{ $letter->status }}</span>
-                    @if($letter->assigned_to_user_id)
-                        <span class="ms-2 text-muted">• Ditugaskan ke: <strong>{{ $letter->assignee->name ?? '-' }}</strong></span>
+                    <span class="badge {{ $badgeClass }}">{{ $surat->status }}</span>
+                    @if($surat->assigned_to_user_id)
+                        <span class="ms-2 text-muted">• Ditugaskan ke: <strong>{{ $surat->assignee->name ?? '-' }}</strong></span>
                     @endif
                 </div>
             </div>
@@ -65,13 +65,13 @@
     <div class="card mb-3">
         <div class="card-body d-flex flex-wrap gap-2 justify-content-between align-items-center">
             <div class="text-muted small">
-                Terakhir diperbarui: {{ optional($letter->updated_at)->translatedFormat('d M Y H:i') }}
+                Terakhir diperbarui: {{ optional($surat->updated_at)->translatedFormat('d M Y H:i') }}
             </div>
 
             <div class="d-flex flex-wrap gap-2">
                 {{-- Aksi verifikator (approve/reject/request revision) --}}
-                @if($isAssignee && $letter->status === 'Verifikasi Tambahan' && $pendingMine)
-                    <form action="{{ route('persuratan.verify.approve', $letter) }}" method="POST" class="d-inline">
+                @if($isAssignee && $surat->status === 'Verifikasi Tambahan' && $pendingMine)
+                    <form action="{{ route('persuratan.verify.approve', $surat) }}" method="POST" class="d-inline">
                         @csrf
                         <button class="btn btn-success btn-sm"><i class="bi bi-check"></i> Setujui</button>
                     </form>
@@ -86,7 +86,7 @@
                 @endif
 
                 {{-- Aksi final approver --}}
-                @if($isAssignee && $letter->status === 'Menunggu Persetujuan Atasan' && $isFinalApprover)
+                @if($isAssignee && $surat->status === 'Menunggu Persetujuan Atasan' && $isFinalApprover)
                     {{-- Tombol ini sekarang membuka modal, bukan submit form langsung --}}
                     <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modalFinalApprove">
                         <i class="bi bi-check2-circle"></i> Setujui Final & Tanda Tangan
@@ -100,11 +100,11 @@
 
             </div>
         </div>
-        @if($isAssignee && $letter->status === 'Revisi Diperlukan' && $isCreator)
+        @if($isAssignee && $surat->status === 'Revisi Diperlukan' && $isCreator)
             <div class="card mb-3">
                 <div class="card-header"><h6 class="mb-0">Kirim Revisi</h6></div>
                 <div class="card-body">
-                    <form action="{{ route('persuratan.revision.submit', $letter) }}" method="POST">
+                    <form action="{{ route('persuratan.revision.submit', $surat) }}" method="POST">
                     @csrf
                     <div id="rev-link-wrapper" class="d-flex flex-column gap-2 mb-2">
                         <div class="input-group rev-link-row">
@@ -133,15 +133,15 @@
                 <div class="card-header"><h6 class="mb-0">Informasi Surat</h6></div>
                 <div class="card-body">
                     <div class="kv">
-                        <div class="text-muted">Jenis Surat</div><div>{{ $letter->letter_type }}</div>
-                        <div class="text-muted">Tanggal Surat</div><div>{{ $letter->letter_date?->translatedFormat('d M Y') }}</div>
-                        <div class="text-muted">Pembuat</div><div>{{ $letter->user->name ?? '-' }}</div>
-                        <div class="text-muted">Pejabat Final</div><div>{{ $letter->finalApprover->name ?? '-' }}</div>
-                        <div class="text-muted">Tujuan Alamat</div><div>{{ $letter->recipient_address }}</div>
-                        @if(!empty($letter->collaborators))
+                        <div class="text-muted">Jenis Surat</div><div>{{ $surat->letter_type }}</div>
+                        <div class="text-muted">Tanggal Surat</div><div>{{ $surat->letter_date?->translatedFormat('d M Y') }}</div>
+                        <div class="text-muted">Pembuat</div><div>{{ $surat->user->name ?? '-' }}</div>
+                        <div class="text-muted">Pejabat Final</div><div>{{ $surat->finalApprover->name ?? '-' }}</div>
+                        <div class="text-muted">Tujuan Alamat</div><div>{{ $surat->recipient_address }}</div>
+                        @if(!empty($surat->collaborators))
                             <div class="text-muted">Kolaborator</div>
                             <div>
-                                @foreach($letter->collaborators as $uid)
+                                @foreach($surat->collaborators as $uid)
                                     <span class="chip">
                                         {{ optional(\App\Models\User::find($uid))->name ?? ('User #'.$uid) }}
                                     </span>
@@ -152,14 +152,13 @@
                 </div>
             </div>
 
-            @if($letter->status == 'Disetujui' && $letter->signed_document_link)
+            @if($surat->status == 'Disetujui' && $surat->signed_document_link)
             <div class="card mb-3 border-success border-2">
                 <div class="card-header bg-success text-white">
                     <h6 class="mb-0 text-white"><i class="bi bi-patch-check-fill me-2"></i>Dokumen Final Bertanda Tangan</h6>
                 </div>
-                <div class="card-body">
-                     <p class="text-muted">Surat ini telah disetujui secara final. Dokumen yang sudah ditandatangani dapat diakses melalui tautan di bawah ini.</p>
-                     <a href="{{ $letter->signed_document_link }}" target="_blank" rel="noopener" class="btn btn-success w-100">
+                <div class="card-body mt-5">
+                     <a href="{{ $surat->signed_document_link }}" target="_blank" rel="noopener" class="btn btn-success w-100">
                         <i class="bi bi-box-arrow-up-right me-2"></i> Buka Dokumen Final
                     </a>
                 </div>
@@ -171,9 +170,9 @@
             <div class="card mb-3">
                 <div class="card-header"><h6 class="mb-0">Lampiran Dokumen</h6></div>
                 <div class="card-body">
-                    @if(!empty($letter->attachments))
+                    @if(!empty($surat->attachments))
                         <ul class="list-group">
-                            @foreach($letter->attachments as $url)
+                            @foreach($surat->attachments as $url)
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
                                     <div class="text-truncate" style="max-width: 75%;">
                                         <i class="bi bi-link-45deg me-2"></i>
@@ -211,7 +210,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @forelse($letter->verifications->sortBy('order') as $v)
+                                @forelse($surat->verifications->sortBy('order') as $v)
                                     @php
                                         $badge = match($v->status){
                                             'Disetujui'=>'bg-success',
@@ -242,7 +241,7 @@
             <div class="card mb-3">
                 <div class="card-header"><h6 class="mb-0">Riwayat Revisi</h6></div>
                 <div class="card-body">
-                    @forelse($letter->revisions->sortByDesc('created_at') as $rev)
+                    @forelse($surat->revisions->sortByDesc('created_at') as $rev)
                         <div class="mb-3">
                             <div class="fw-semibold">{{ $rev->user->name ?? '-' }}</div>
                             <div class="small text-muted">
@@ -261,25 +260,52 @@
             <div class="card">
                 <div class="card-header"><h6 class="mb-0">Aktivitas</h6></div>
                 <div class="card-body">
-                    @if(method_exists($letter,'events') && $letter->events->count())
+                    @if(method_exists($surat,'events') && $surat->events->count())
                         <div class="timeline">
-                            @foreach($letter->events->sortByDesc('created_at') as $ev)
+                            @foreach($surat->events->sortByDesc('created_at') as $ev)
+                                @php
+                                    // Logika untuk menerjemahkan event dan mengambil nama
+                                    $meta = $ev->meta ?? [];
+                                    $actorName = $ev->actor->name ?? 'Sistem';
+                                    $message = '';
+
+                                    switch ($ev->event_type) {
+                                        case 'created':
+                                            $message = "Surat dibuat dengan perihal '<strong>" . e($meta['subject'] ?? '') . "</strong>'";
+                                            break;
+                                        case 'assigned':
+                                            $toUserName = $metaUsers[$meta['to_user_id']] ?? 'N/A';
+                                            $message = "Ditugaskan kepada <strong>" . e($toUserName) . "</strong>";
+                                            break;
+                                        case 'verification_requested':
+                                            $message = "Proses verifikasi dimulai dengan " . e($meta['queue_size'] ?? 0) . " pejabat.";
+                                            break;
+                                        case 'verified':
+                                            $byUserName = $metaUsers[$meta['by']] ?? $actorName;
+                                            $message = "Diverifikasi oleh <strong>" . e($byUserName) . "</strong> (Urutan #" . e($meta['order'] ?? '?') . ")";
+                                            break;
+                                        case 'rejected':
+                                            $message = "Ditolak dengan alasan: \"" . e($meta['comments'] ?? '') . "\"";
+                                            break;
+                                        case 'revision_requested':
+                                            $message = "Revisi diminta dengan catatan: \"" . e($meta['comments'] ?? '') . "\"";
+                                            break;
+                                        case 'revision_submitted':
+                                            $message = "Revisi telah dikirim kembali.";
+                                            break;
+                                        case 'final_approved':
+                                            $message = "Surat disetujui secara final.";
+                                            break;
+                                        default:
+                                            $message = "Melakukan aksi: " . e(ucfirst(str_replace('_',' ', $ev->event_type)));
+                                    }
+                                @endphp
                                 <div class="timeline-item">
-                                    <div class="fw-semibold">{{ ucfirst(str_replace('_',' ', $ev->event_type)) }}</div>
+                                    <div class="fw-semibold">{!! $message !!}</div>
                                     <div class="small text-muted">
                                         {{ optional($ev->created_at)->translatedFormat('d M Y H:i') }}
-                                        @if($ev->actor_user_id)
-                                            • oleh {{ optional(optional($ev->actor)->name ?? null, fn($n)=>$n) ?? 'User #'.$ev->actor_user_id }}
-                                        @endif
+                                        • oleh {{ e($actorName) }}
                                     </div>
-                                    @if(!empty($ev->meta))
-                                        <div class="mt-1 small text-muted">
-                                            {{-- tampilkan meta ringkas --}}
-                                            @foreach($ev->meta as $k=>$v)
-                                                <span class="chip">{{ $k }}: {{ is_array($v)? json_encode($v) : $v }}</span>
-                                            @endforeach
-                                        </div>
-                                    @endif
                                 </div>
                             @endforeach
                         </div>
@@ -298,7 +324,7 @@
 <!-- Modal Final Approve -->
 <div class="modal fade" id="modalFinalApprove" tabindex="-1" aria-labelledby="modalFinalApproveLabel" aria-hidden="true">
   <div class="modal-dialog">
-    <form class="modal-content" method="POST" action="{{ route('persuratan.final.approve', $letter) }}">
+    <form class="modal-content" method="POST" action="{{ route('persuratan.final.approve', $surat) }}">
         @csrf
         <div class="modal-header">
             <h5 class="modal-title" id="modalFinalApproveLabel">Persetujuan Final</h5>
@@ -324,7 +350,7 @@
 {{-- Modal Tolak --}}
 <div class="modal fade" id="modalTolak" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog">
-    <form class="modal-content" method="POST" action="{{ route('persuratan.verify.reject', $letter) }}">
+    <form class="modal-content" method="POST" action="{{ route('persuratan.verify.reject', $surat) }}">
       @csrf
       <div class="modal-header">
         <h5 class="modal-title">Tolak Surat</h5>
@@ -347,7 +373,7 @@
 {{-- Modal Minta Revisi --}}
 <div class="modal fade" id="modalRevisi" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog">
-    <form class="modal-content" method="POST" action="{{ route('persuratan.revision.request', $letter) }}">
+    <form class="modal-content" method="POST" action="{{ route('persuratan.revision.request', $surat) }}">
       @csrf
       <div class="modal-header">
         <h5 class="modal-title">Minta Revisi</h5>

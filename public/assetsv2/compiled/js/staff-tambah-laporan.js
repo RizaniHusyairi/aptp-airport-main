@@ -1,121 +1,113 @@
-$(document).ready(function() {
-    // Format Rupiah untuk input jumlah
-    $('.jumlah-rupiah').each(function() {
-        if (typeof Cleave !== 'undefined') {
-            new Cleave(this, {
-                numeral: true,
-                numeralThousandsGroupStyle: 'thousand',
-                prefix: 'Rp ',
-                noImmediatePrefix: true,
-                rawValueTrimPrefix: true
-            });
+document.addEventListener('DOMContentLoaded', function() {
+    const flowTypeSelect = document.getElementById('flow_type');
+    const sourceContainer = document.getElementById('source-container');
+    const detailPengeluaranContainer = document.getElementById('detail-pengeluaran-container');
+    const form = document.getElementById('form-laporan-keuangan');
+
+    function toggleSections() {
+        const selectedValue = flowTypeSelect.value;
+        const expenseInputs = detailPengeluaranContainer.querySelectorAll('input');
+
+        // Tampilkan 'Sumber Dana' jika 'Pemasukan' atau 'Anggaran' dipilih
+        if (selectedValue === 'in' || selectedValue === 'budget') {
+            sourceContainer.style.display = 'block';
         } else {
-            console.warn('Cleave.js tidak dimuat. Format Rupiah tidak diterapkan.');
-            $(this).attr('type', 'number');
+            sourceContainer.style.display = 'none';
         }
-    });
 
-    // Tampilkan/sembunyikan tabel detail pengeluaran
-    $('#flow_type').on('change', function() {
-        if ($(this).val() === 'budget') {
-            $('#detail-pengeluaran-container').show();
-            if ($('#budget-expenses-table tbody tr').length === 0) {
-                tambahBaris();
-            }
+        // Tampilkan 'Detail Pengeluaran' hanya jika 'Anggaran' dipilih
+        if (selectedValue === 'budget') {
+            detailPengeluaranContainer.style.display = 'block';
+            // === PERBAIKAN DI SINI: Tambahkan 'required' ke input yang terlihat ===
+            expenseInputs.forEach(input => input.setAttribute('required', 'required'));
         } else {
-            $('#detail-pengeluaran-container').hide();
-            $('#budget-expenses-table tbody').empty();
-            updateTotalPengeluaran();
-        }
-    });
-
-    // Tambah baris baru ke tabel detail pengeluaran
-    $('#tambah-baris').on('click', function() {
-        tambahBaris();
-    });
-
-    // Hapus baris dari tabel
-    $(document).on('click', '.btn-hapus-baris', function() {
-        $(this).closest('tr').remove();
-        updateTotalPengeluaran();
-    });
-
-    // Update total pengeluaran saat input jumlah berubah
-    $(document).on('input', '.jumlah-rupiah', function() {
-        updateTotalPengeluaran();
-    });
-
-    // Update total pengeluaran saat jumlah anggaran berubah
-    $('#amount').on('input', function() {
-        updateTotalPengeluaran();
-    });
-
-    // Fungsi untuk menambah baris
-    function tambahBaris() {
-        const rowCount = $('#budget-expenses-table tbody tr').length + 1;
-        const row = `
-            <tr>
-                <td><input type="text" name="budget_expenses[${rowCount}][description]" class="form-control" required></td>
-                <td><input type="text" name="budget_expenses[${rowCount}][amount]" class="form-control jumlah-rupiah" required></td>
-                <td><button type="button" class="btn btn-sm btn-danger btn-hapus-baris" data-bs-toggle="tooltip" title="Hapus Baris"><i class="bi bi-trash"></i></button></td>
-            </tr>
-        `;
-        $('#budget-expenses-table tbody').append(row);
-
-        // Terapkan Cleave.js pada input jumlah baru
-        $('#budget-expenses-table tbody tr:last .jumlah-rupiah').each(function() {
-            if (typeof Cleave !== 'undefined') {
-                new Cleave(this, {
-                    numeral: true,
-                    numeralThousandsGroupStyle: 'thousand',
-                    prefix: 'Rp ',
-                    noImmediatePrefix: true,
-                    rawValueTrimPrefix: true
-                });
-            } else {
-                console.warn('Cleave.js tidak dimuat. Format Rupiah tidak diterapkan.');
-                $(this).attr('type', 'number');
-            }
-        });
-
-        // Inisialisasi ulang tooltip
-        $('[data-bs-toggle="tooltip"]').tooltip();
-
-        updateTotalPengeluaran();
-    }
-
-    // Fungsi untuk menghitung dan memperbarui total pengeluaran
-    function updateTotalPengeluaran() {
-        let total = 0;
-        $('#budget-expenses-table tbody tr').each(function() {
-            const jumlah = $(this).find('input[name$="[amount]"]').val().replace(/[^0-9]/g, '');
-            if (jumlah && !isNaN(parseInt(jumlah))) {
-                total += parseInt(jumlah);
-            }
-        });
-
-        const formattedTotal = typeof Cleave !== 'undefined' ?
-            'Rp ' + total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') :
-            'Rp ' + total;
-        $('#total-pengeluaran').text(formattedTotal);
-
-        const jumlahAnggaran = $('#amount').val().replace(/[^0-9]/g, '');
-        const errorElement = $('#error-pengeluaran');
-        const simpanButton = $('#btn-simpan');
-
-        if ($('#flow_type').val() === 'budget' && jumlahAnggaran && total > parseInt(jumlahAnggaran)) {
-            const formattedAnggaran = typeof Cleave !== 'undefined' ?
-                'Rp ' + jumlahAnggaran.replace(/\B(?=(\d{3})+(?!\d))/g, ',') :
-                'Rp ' + jumlahAnggaran;
-            errorElement.text(`Total pengeluaran (${formattedTotal}) melebihi jumlah anggaran (${formattedAnggaran})!`);
-            errorElement.show();
-            simpanButton.prop('disabled', true);
-        } else {
-            errorElement.hide();
-            simpanButton.prop('disabled', false);
+            detailPengeluaranContainer.style.display = 'none';
+            // === PERBAIKAN DI SINI: Hapus 'required' dari input yang tersembunyi ===
+            expenseInputs.forEach(input => input.removeAttribute('required'));
         }
     }
 
-    // Inisialisasi tooltip saat halaman dimuat
-    $('[data-bs-toggle="tooltip"]').tooltip();
+    flowTypeSelect.addEventListener('change', toggleSections);
+    
+    // Inisialisasi format Rupiah dan kalkulasi
+    initializeExpenseTable();
+    new Cleave(document.querySelector('#amount'), {
+        numeral: true,
+        numeralThousandsGroupStyle: 'thousand'
+    });
 });
+
+function initializeExpenseTable() {
+    const tableBody = document.getElementById('budget-expenses-table')?.querySelector('tbody');
+    const btnTambahBaris = document.getElementById('tambah-baris');
+    
+    if (!tableBody) return;
+
+    function addRow() {
+        const newIndex = tableBody.rows.length;
+        const newRow = tableBody.insertRow();
+        // === PERBAIKAN DI SINI: Tambahkan 'required' langsung saat membuat baris ===
+        newRow.innerHTML = `
+            <td><input type="text" name="budget_expenses[${newIndex}][description]" class="form-control" required></td>
+            <td><input type="text" name="budget_expenses[${newIndex}][amount]" class="form-control jumlah-rupiah" required></td>
+            <td><button type="button" class="btn btn-sm btn-danger btn-hapus-baris"><i class="bi bi-trash"></i></button></td>
+        `;
+        // Terapkan Cleave.js pada input jumlah yang baru
+        new Cleave(newRow.querySelector('.jumlah-rupiah'), {
+            numeral: true,
+            numeralThousandsGroupStyle: 'thousand'
+        });
+    }
+    
+    // Terapkan Cleave.js pada input jumlah yang sudah ada
+    document.querySelectorAll('#budget-expenses-table .jumlah-rupiah').forEach(input => {
+        new Cleave(input, {
+            numeral: true,
+            numeralThousandsGroupStyle: 'thousand'
+        });
+    });
+
+    btnTambahBaris.addEventListener('click', addRow);
+
+    tableBody.addEventListener('click', function(e) {
+        if (e.target.closest('.btn-hapus-baris')) {
+            e.target.closest('tr').remove();
+            calculateTotal();
+        }
+    });
+
+    // Kalkulasi total
+    const totalPengeluaranSpan = document.getElementById('total-pengeluaran');
+    const errorPengeluaranDiv = document.getElementById('error-pengeluaran');
+    const anggaranInput = document.getElementById('amount');
+
+    function calculateTotal() {
+        let total = 0;
+        tableBody.querySelectorAll('.jumlah-rupiah').forEach(input => {
+            const value = Number(input.value.replace(/[^0-9,-]+/g,"")) || 0;
+            total += value;
+        });
+        
+        totalPengeluaranSpan.textContent = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(total);
+
+        const budgetAmount = Number(anggaranInput.value.replace(/[^0-9,-]+/g,"")) || 0;
+
+        if (total > budgetAmount) {
+            errorPengeluaranDiv.textContent = 'Peringatan: Total pengeluaran melebihi jumlah anggaran!';
+            errorPengeluaranDiv.style.display = 'block';
+        } else {
+            errorPengeluaranDiv.style.display = 'none';
+        }
+    }
+
+    // Hitung total saat halaman dimuat dan setiap kali ada perubahan
+    calculateTotal();
+    tableBody.addEventListener('input', calculateTotal);
+    anggaranInput.addEventListener('input', calculateTotal);
+
+    // Tambah baris pertama jika tabel kosong dan tipenya Anggaran
+    if(tableBody.rows.length === 0 && document.getElementById('flow_type').value === 'budget'){
+        addRow();
+    }
+}
+
