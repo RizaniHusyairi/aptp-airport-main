@@ -12,7 +12,7 @@
             <div class="col-12 col-md-6 order-md-2 order-first">
                 <x-breadcrumb2 :items="[
                     ['label' => 'Menu', 'url' => route('profile')],
-                    ['label' => 'Extend Advance', 'url' => auth()->user()->is_staff ? route('staff.extend-advance.index') : route('extend-advance.index')],
+                    ['label' => 'Extend Advance', 'url' => auth()->user()->is_staff ? route('extend-advance.staffIndex') : route('extend-advance.index')],
                     ['label' => 'Detail', 'active' => true]
                 ]" />
             </div>
@@ -37,7 +37,8 @@
         </div>
     @endif
 
-    @if($submission->submission_status == 'Menunggu Dokumen Ditandatangani')
+    {{-- Kotak instruksi untuk Pengaju --}}
+    @if(auth()->user()->is_staff == false && $submission->submission_status == 'Menunggu Dokumen Ditandatangani')
         <div class="alert alert-info">
             <h4 class="alert-heading">Langkah Selanjutnya</h4>
             <p>1. Silakan unduh dokumen permohonan Anda dengan menekan tombol <strong>"Ekspor ke PDF"</strong>.</p>
@@ -51,7 +52,10 @@
             <div class="card">
                 <div class="card-header">
                     <h5 class="card-title mb-0">Rincian Permohonan</h5>
+                    @notstaff
                     <a href="{{ route('extend-advance.export-pdf', $submission->id) }}" class="btn btn-secondary"><i class="bi bi-file-earmark-pdf-fill"></i> Ekspor ke PDF</a>
+                    
+                    @endnotstaff
                 
                 </div>
                 <div class="card-body">
@@ -64,7 +68,7 @@
 
                     <h6 class="mt-4">II. Penerbangan</h6>
                     <table class="table table-bordered table-sm">
-                        <tr><th style="width: 40%;">Tanggal</th><td>{{ $submission->flight_date->format('d F Y') }}</td></tr>
+                        <tr><th style="width: 40%;">Tanggal</th><td>{{ $submission->flight_date->translatedFormat('d M Y') }}</td></tr>
                         <tr><th>Jam Keberangkatan (EOBT)</th><td>{{ $submission->eobt }}</td></tr>
                         <tr><th>Jam Kedatangan (AOBT)</th><td>{{ $submission->aobt }}</td></tr>
                         <tr><th>Rute</th><td>{{ $submission->route }}</td></tr>
@@ -81,6 +85,7 @@
             {{-- ========================================================== --}}
             {{-- ===            FORMULIR UNGGAH DOKUMEN               === --}}
             {{-- ========================================================== --}}
+            @notstaff
             @if($submission->submission_status == 'Menunggu Dokumen Ditandatangani')
             <div class="card">
                 <div class="card-header"><h5 class="card-title mb-0">Unggah Dokumen Bertanda Tangan</h5></div>
@@ -97,6 +102,33 @@
                 </div>
             </div>
             @endif
+            @endnotstaff
+            {{-- ========================================================== --}}
+            {{-- ===            PERUBAHAN DI SINI (UNTUK STAF)          === --}}
+            {{-- ========================================================== --}}
+            @staff
+                @if($submission->signed_document_path)
+                <div class="card">
+                    <div class="card-header"><h5 class="card-title mb-0">Dokumen Pengajuan (Ditandatangani)</h5></div>
+                    <div class="card-body">
+                        <p>Berikut adalah dokumen yang telah ditandatangani dan diunggah oleh pengaju.</p>
+                        <a href="{{ asset('uploads/signed_documents/extend_advance/' . basename($submission->signed_document_path)) }} " target="_blank" class="btn btn-info w-100">
+                            <i class="bi bi-file-earmark-arrow-down-fill me-2"></i> Lihat Dokumen Pengajuan
+                        </a>
+                    </div>
+                </div>
+                @elseif($submission->submission_status != 'Menunggu Dokumen Ditandatangani')
+                <div class="card">
+                     <div class="card-header"><h5 class="card-title mb-0">Dokumen Pengajuan (Ditandatangani)</h5></div>
+                     <div class="card-body">
+                        <div class="alert alert-light-warning mb-0">
+                            <p class="mb-0">Pengaju belum mengunggah dokumen yang sudah ditandatangani.</p>
+                        </div>
+                    </div>
+                </div>
+                @endif
+            @endstaff
+
 
         </div>
         <div class="col-lg-5">
@@ -127,7 +159,7 @@
 
                     {{-- Form tindakan untuk staff --}}
                     @staff
-                    <form action="{{ route('staff.extend-advance.updateStatus', $submission->id) }}" method="POST">
+                    <form action="{{ route('extend-advance.updateStatus', $submission->id) }}" method="POST">
                         @csrf
                         @method('PATCH')
                         <div class="form-group">

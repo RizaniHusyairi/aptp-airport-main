@@ -8,70 +8,72 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Times+New+Roman&display=swap');
 
+        @page {
+            
+          padding: 0;
+          margin: 25px 70px;
+
+        }
 body {
     font-family: 'Times New Roman', Times, serif;
-    background-color: #f4f4f4;
+    background-color: white;
     display: flex;
     justify-content: center;
     margin: 0;
-    padding: 20px;
+    padding: 0;
+    
+    
 }
 
-/* .container {
-    background-color: white;
-    width: 210mm;
-    min-height: 297mm;
-    padding: 2cm;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    box-sizing: border-box;
-    font-size: 12pt;
-    color: black;
-} */
-
+.container {
+transform-origin:top ;
+ width: 100%; 
+ font-size: 13px;  
+}
 header {
-    text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 h1, h2, h3 {
+    text-align: center;
     margin: 0;
     padding: 0;
     font-weight: bold;
 }
 
 h1 {
-    font-size: 16pt;
-    text-decoration: underline;
+    font-size: 14pt;
 }
 
 h2 {
-    font-size: 14pt;
+    font-size: 13pt;
 }
 
 h3 {
-    font-size: 14pt;
-    margin-bottom: 15px;
+    font-size: 13pt;
 }
 
 .nomor-surat {
     display: inline-block;
     text-align: left;
     margin-top: 5px;
+    margin-left: 150px;
 }
 
 .nomor-surat span {
     font-weight: bold;
 }
 
-.nomor-surat .line {
-    width: 250px;
-    height: 1px;
+.line {
+    width: 80%;
+    height: 2px;
     background-color: black;
     margin-top: 2px;
+    margin: auto;
 }
 
 main {
-    margin-top: 25px;
+    margin-top: 10px;
 }
 
 .form-section table {
@@ -80,7 +82,7 @@ main {
 }
 
 .form-section td {
-    padding: 4px 0;
+    padding: 2px 0;
     vertical-align: top;
 }
 
@@ -93,9 +95,10 @@ main {
 }
 
 .label {
-    padding-left: 20px;
-    width: 250px;
+    
+    width: 280px;
 }
+
 
 .separator {
     width: 10px;
@@ -104,16 +107,18 @@ main {
 
 
 .statement-content {
-    text-align: justify;
+        margin-left: 25px;
+        font-size: 13px;
 }
 
-footer {
-    margin-top: 30px;
+.w-0{
+    width: 0;
 }
+
+
 
 .signature-section {
-    display: flex;
-    justify-content: flex-end;
+   
     text-align: center;
 }
 
@@ -126,10 +131,13 @@ footer {
 }
 
 .approval-section {
-    margin-top: 20px;
-    display: flex;
-    justify-content: space-between;
-    text-align: center;
+    width: 100%; 
+    text-align: center; 
+    margin-top: 10px;
+    border-collapse: collapse;
+}
+.approval-section tr td {
+    border: 1px solid #000;
 }
 
 .approval-box {
@@ -148,6 +156,33 @@ footer {
 .signature-name {
     font-weight: bold;
 }
+
+
+.pernyataan {
+    font-style: italic;
+    font-weight: bold;
+    text-align: justify;
+}
+
+.underline {
+    text-decoration: underline;
+}
+
+.underline-2 {
+    border-bottom: 2px solid
+}
+
+.label-t{
+    margin-left: 28px;
+}
+.p-5{
+    padding-left: 15px;
+}
+.table-title{
+    font-size: 13px
+}
+
+
     </style>
 </head>
 <body>
@@ -158,122 +193,190 @@ footer {
             <h3>DI BANDAR UDARA AJI PANGERAN TUMENGGUNG PRANOTO SAMARINDA</h3>
             <div class="nomor-surat">
                 <span>NOMOR:</span>
-                <div class="line"></div>
             </div>
+            <div class="line"></div>
         </header>
 
         <main>
-            <p>Yang bertanda tangan di bawah ini:</p>
+            <p style="margin: 0 0 8px 0; font-size:13px;">Yang bertanda tangan di bawah ini:</p>
 
             <section class="form-section">
-                <table>
+                <table class="table-title">
                     <tr>
                         <td class="section-number">I.</td>
-                        <td class="section-title" colspan="2"><b>Pesawat Udara</b><br><i>Aircraft</i></td>
+                        <td class="section-title" colspan="2"><b class="underline-2">Pesawat Udara</b><br><i>Aircraft</i></td>
                     </tr>
                 </table>
                 <table class="statement-content">
                     <tr>
                         
-                        <td class="label">a. Operator (Pemilik/Penyewa)<br><i>Operator (Owner/Charterer)</i></td>
+                        <td class="w-0">
+                            <div class="label">
+                                a. <span class="underline p-5">Operator (Pemilik/Penyewa)</span>
+
+                            </div>
+                            
+                            <i class="label-t">Operator (Owner/Charterer)</i>
+                        </td>
                         <td class="separator">:</td>
-                        <td class="value"></td>
+                        <td class="value">{{ $submission->operator }}</td>
                     </tr>
                     <tr>
-                        <td class="label">b. Tipe<br><i>Type</i></td>
+                        <td class="w-0">
+                            <div class="label">
+                                   b. <span class="underline p-5">Tipe</span>
+                            </div>
+                            <i class="label-t">Type</i>
+
+                        </td>
+                        
                         <td class="separator">:</td>
-                        <td class="value"></td>
+                        <td class="value">{{ $submission->aircraft_type }}</td>
                     </tr>
                     <tr>
-                        <td class="label">c. Tanda Pendaftaran / No Penerbangan<br><i>Registration and Flight Number</i></td>
+                        <td class="w-0">
+                            <div class="label">
+                                   c. <span class="underline p-5">Tanda Pendaftaran / No Penerbangan</span>
+                            </div>
+                            <i class="label-t">Registration and Flight Number</i>
+
+                        </td>
+                        
                         <td class="separator">:</td>
-                        <td class="value"></td>
+                        <td class="value">{{ $submission->registration_and_flight_number }}</td>
                     </tr>
                 </table>
-                <table>
+                <table class="table-title">
                         <tr>
                             <td class="section-number">II.</td>
-                            <td class="section-title" colspan="2"><b>Penerbangan</b><br><i>Flight</i></td>
+                            <td class="section-title" colspan="2"><b class="underline-2">Penerbangan</b><br><i>Flight</i></td>
                         </tr>
                         
                 </table>
-                <table>
+                <table class="statement-content">
                     <tr>
-                        <td></td>
-                        <td class="label">a. Tanggal<br><i>Date</i></td>
+                        <td class="w-0">
+                            <div class="label">
+                                   a. <span class="underline p-5">Tanggal</span>
+                            </div>
+                            <i class="label-t">Date</i>
+
+                        </td>
                         <td class="separator">:</td>
-                        <td class="value"></td>
+                        <td class="value">{{ $submission->flight_date->format('d F Y') }}</td>
                     </tr>
                     <tr>
-                        <td></td>
-                        <td class="label">b. Jam Keberangkatan / EOBT</td>
+                        <td class="w-0">
+                            <div class="label">
+                                   b. <span class="underline p-5">Jam Keberangkatan</span>
+                            </div>
+                            <i class="label-t">EOBT</i>
+
+                        </td>
                         <td class="separator">:</td>
-                        <td class="value"></td>
+                        <td class="value">{{ \Carbon\Carbon::parse($submission->eobt)->format('H:i') }} UTC</td>
                     </tr>
                     <tr>
-                        <td></td>
-                        <td class="label">c. Jam Kedatangan / AOBT</td>
+                        <td class="w-0">
+                            <div class="label">
+                                   c. <span class="underline p-5">Jam Kedatangan</span>
+                            </div>
+                            <i class="label-t">AOBT</i>
+
+                        </td>
                         <td class="separator">:</td>
-                        <td class="value"></td>
+                        <td class="value">{{ \Carbon\Carbon::parse($submission->aobt)->format('H:i') }} UTC</td>
                     </tr>
                     <tr>
-                        <td></td>
-                        <td class="label">d. Rute<br><i>Route</i></td>
+                        <td class="w-0">
+                            <div class="label">
+                                   d. <span class="underline p-5">Rute</span>
+                            </div>
+                            <i class="label-t">Route</i>
+
+                        </td>
                         <td class="separator">:</td>
-                        <td class="value"></td>
+                        <td class="value">{{ $submission->route }}</td>
                     </tr>
                     <tr>
-                        <td></td>
-                        <td class="label">e. Alternate Take Off<br><i>Take off Alternate</i></td>
+                        <td class="w-0">
+                            <div class="label">
+                                   e. <span class="underline p-5">Alternate Take Off</span>
+                            </div>
+                            <i class="label-t">Take off Alternate</i>
+                        </td>
                         <td class="separator">:</td>
-                        <td class="value"></td>
+                        <td class="value">{{ $submission->take_off_alternate ?? '-' }}</td>
                     </tr>
                     <tr>
-                        <td></td>
-                        <td class="label">f. Keperluan Terbang<br><i>Purpose of Flight</i></td>
+                        <td class="w-0">
+                            <div class="label">
+                                   f. <span class="underline p-5">Keperluan Terbang</span>
+                            </div>
+                            <i class="label-t">Purpose of Flight</i>    
+                        </td>
                         <td class="separator">:</td>
-                        <td class="value"></td>
+                        <td class="value">{{ $submission->purpose_of_flight }}</td>
                     </tr>
+                    </table>
+                    <table class="table-title">
 
                     <tr>
                         <td class="section-number" style="vertical-align: top;">III.</td>
-                        <td class="section-title" colspan="2" style="vertical-align: top;"><b>Pernyataan</b><br><i>Statement</i></td>
-                         <td class="separator" style="vertical-align: top;">:</td>
+                        <td class="section-title" colspan="2" style="vertical-align: top;"><b class="underline-2">Pernyataan</b><br><i>Statement</i></td>
+                         
                         </tr>
                     </table>
-                    <p>
-                        Mendasari NOTAM Nomor C1070/25 NOTAMN (Perubahan Sementara Jam Operasi Bandara) Bandar udara APT Pranoto Samarinda hanya melayani penerbangan yang beroperasi mulai pukul 23.00 s/d 12.00 Utc
-                            <br><br>
-                            Bila kegiatan operasi penerbangan dilaksanakan setelah pukul 12.00 utc atau sebelum pukul 23.00 Utc Maka segala resiko menjadi tanggung jawab pihak maskapai yang dalam hal ini oleh Pilot In Command (PIC)
+                    <p class="statement-content pernyataan">
+                        {{ $submission->statement_notes }}
                         </p>
             </section>
-        </main>
+            <table style="    text-align: center; margin: auto;">
+                <tr>
+                    <td>
 
-        <footer>
-            <div class="signature-section">
-                <div class="signature-box applicant">
-                    <div>Samarinda, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2025</div>
-                    <div><b>PEMOHON</b></div>
-                    <div class="pilot-title"><i>Pilot in Command</i></div>
-                    <div class="signature-space"></div>
-                    <div class="signature-name">(...........................................)</div>
-                </div>
-            </div>
-            <div class="approval-section">
-                 <div class="approval-box">
-                    <div>Mengetahui</div>
-                    <div class="approval-title">PIC - PERUM LPPNPI<br>KCP SAMARINDA</div>
-                    <div class="signature-space"></div>
-                    <div class="signature-name">(...........................................)</div>
-                </div>
-                <div class="approval-box">
-                    <br>
-                    <div class="approval-title">PIC - BANDAR UDARA<br>APT PRANOTO SAMARINDA</div>
-                    <div class="signature-space"></div>
-                    <div class="signature-name">(...........................................)</div>
-                </div>
-            </div>
-        </footer>
+                        <div class="signature-section">
+                            <div class="signature-box applicant">
+                                <div>Samarinda, {{ $submission->flight_date->format('d F Y') }} 2025</div>
+                                <div><b class="underline-2">PEMOHON</b></div>
+                                <div class="pilot-title"><i>Pilot in Command</i></div>
+                                <div class="signature-space"></div>
+                                <div class="signature-name">{{ $submission->pic_name }}</div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+                        <hr>
+                        <div style="text-align: center;">Samarinda, {{ $submission->flight_date->format('d F Y') }}</div>
+                        <table class="approval-section">
+                           <tr>
+                               <td colspan="2" style="font-weight: 600; background-color: #9bba58;">Mengetahui</td>
+                           </tr>
+                           <tr>
+                               <td style="width: 50%;">
+                                   <div class="">
+                                       <div class="approval-title">PIC - PERUM LPPNPI<br>KCP SAMARINDA</div>
+                                       <div class="signature-space"></div>
+                                       <div class="signature-name">(...........................................)</div>
+                                   </div>
+            
+                               </td>
+                               <td style="width: 50%;">
+                                   <div class="">
+                                       <div class="approval-title">PIC - BANDAR UDARA<br>APT PRANOTO SAMARINDA</div>
+                                       <div class="signature-space"></div>
+                                       <div class="signature-name">(...........................................)</div>
+                                   </div>
+            
+                               </td>
+                           </tr>
+                        </table>
+                        
+                        
+                        
+        </main>
+       
     </div>
 </body>
 </html>

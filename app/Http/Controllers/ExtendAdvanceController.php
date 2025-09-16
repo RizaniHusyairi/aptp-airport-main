@@ -78,6 +78,7 @@ class ExtendAdvanceController extends Controller
 
         // Render view 'pdf_template' dengan data, lalu buat PDF
         $pdf = PDF::loadView('user_staff2.extend-advance.pdf_template', compact('submission'));
+        $pdf->setPaper('a4', 'portrait'); 
 
         // Nama file saat diunduh
         $fileName = 'Extend-Advance-' . $submission->operator . '-' . $submission->flight_date->format('Y-m-d') . '.pdf';
@@ -117,7 +118,7 @@ class ExtendAdvanceController extends Controller
         $submission->submission_status = 'Diajukan'; // Status berubah menjadi "Diajukan"
         $submission->save();
 
-        return redirect()->route('extend-advance.show', $submission->id)
+        return redirect()->route('extend-advance.userShow', $submission->id)
             ->with('success', 'Dokumen berhasil diunggah dan pengajuan Anda telah diteruskan untuk verifikasi staf.');
     }
 
@@ -138,9 +139,17 @@ class ExtendAdvanceController extends Controller
      */
     public function show($id)
     {
-        $submission = ExtendAdvance::where('id', $id)
-            ->where('user_id', Auth::id()) // Pastikan hanya pemilik yang bisa lihat
-            ->firstOrFail();
+        $user = Auth::user();
+
+        if ($user->is_staff) {
+            // Jika Staf, bisa lihat pengajuan manapun
+            $submission = ExtendAdvance::with('user')->findOrFail($id);
+        } else {
+            // Jika Pengaju, hanya bisa lihat pengajuan miliknya sendiri
+            $submission = ExtendAdvance::where('id', $id)
+                ->where('user_id', $user->id)
+                ->firstOrFail();
+        }
             
         return view('user_staff2.extend-advance.show', compact('submission'));
     }
@@ -172,7 +181,7 @@ class ExtendAdvanceController extends Controller
 
         $extendAdvance->save();
 
-        return redirect()->route('staff.extend-advance.show', $extendAdvance->id)->with('success', 'Status pengajuan berhasil diperbarui.');
+        return redirect()->route('extend-advance.show', $extendAdvance->id)->with('success', 'Status pengajuan berhasil diperbarui.');
     }
 
     /**
