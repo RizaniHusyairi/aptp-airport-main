@@ -100,6 +100,8 @@ Route::group(["prefix" => 'dashboard'], function () {
         Route::post('/extend-advance/store', [ExtendAdvanceController::class, 'store'])->name('extend-advance.store');
         Route::delete('/extend-advance/{id}', [ExtendAdvanceController::class, 'destroy'])->name('extend-advance.destroy');
         Route::get('/extend-advance/{id}', [ExtendAdvanceController::class, 'show'])->name('extend-advance.userShow');
+        Route::get('/{id}/export-pdf', [ExtendAdvanceController::class, 'exportPdf'])->name('extend-advance.export-pdf');
+        Route::post('/{id}/upload-signed-document', [ExtendAdvanceController::class, 'uploadSignedDocument'])->name('extend-advance.upload-signed-document');
         
         // Pengiklanan User Routes
         Route::get('/pengiklanan', [PengiklananController::class, 'indexUser'])->name('pengiklanan.index');

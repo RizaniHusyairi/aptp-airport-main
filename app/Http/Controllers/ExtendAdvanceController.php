@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\ExtendAdvance;
 use App\Models\ExtendAdvanceSetting;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use PDF; // Pastikan package baris ini sudah ada
 
 class ExtendAdvanceController extends Controller
 {
@@ -55,10 +57,68 @@ class ExtendAdvanceController extends Controller
         $submission = new ExtendAdvance($validated);
         $submission->user_id = Auth::id();
         $submission->statement_notes = $currentStatement;
+        $submission->submission_status = 'Menunggu Dokumen Ditandatangani'; 
         $submission->save();
 
-        return redirect()->route('extend-advance.index')
-            ->with('success', 'Pengajuan Extend/Advance Hour berhasil dikirim dan sedang menunggu verifikasi.');
+        // Alihkan ke halaman detail agar user bisa langsung ekspor PDF
+        return redirect()->route('extend-advance.userShow', $submission->id)
+            ->with('success', 'Pengajuan awal berhasil disimpan. Silakan ekspor PDF untuk ditandatangani.');
+        
+    }
+
+    /**
+     * === METHOD BARU: EKSPOR KE PDF ===
+     * Membuat dan mengunduh file PDF dari data pengajuan.
+     */
+    public function exportPdf($id)
+    {
+        $submission = ExtendAdvance::where('id', $id)
+            ->where('user_id', Auth::id())
+            ->firstOrFail();
+
+        // Render view 'pdf_template' dengan data, lalu buat PDF
+        $pdf = PDF::loadView('user_staff2.extend-advance.pdf_template', compact('submission'));
+
+        // Nama file saat diunduh
+        $fileName = 'Extend-Advance-' . $submission->operator . '-' . $submission->flight_date->format('Y-m-d') . '.pdf';
+
+        // Unduh file PDF di browser
+        return $pdf->download($fileName);
+    }
+
+    /**
+     * === METHOD BARU: UNGGAH DOKUMEN TTD ===
+     * Menyimpan file yang diunggah oleh pengaju dan mengubah status.
+     */
+    public function uploadSignedDocument(Request $request, $id)
+    {
+        $submission = ExtendAdvance::where('id', $id)
+            ->where('user_id', Auth::id())
+            ->firstOrFail();
+
+        $validated = $request->validate([
+            'signed_document' => 'required|file|mimes:pdf|max:2048', // Maks 2MB
+        ], [
+            'signed_document.required' => 'Anda harus memilih file untuk diunggah.',
+            'signed_document.mimes' => 'File yang diunggah harus dalam format PDF.',
+            'signed_document.max' => 'Ukuran file tidak boleh melebihi 2MB.',
+        ]);
+
+        // Hapus file lama jika ada (untuk kasus revisi di masa depan)
+        if ($submission->signed_document_path) {
+            Storage::disk('public')->delete($submission->signed_document_path);
+        }
+
+        // Simpan file baru
+        $filePath = $request->file('signed_document')->store('signed_documents/extend_advance', 'public');
+
+        // Update database
+        $submission->signed_document_path = $filePath;
+        $submission->submission_status = 'Diajukan'; // Status berubah menjadi "Diajukan"
+        $submission->save();
+
+        return redirect()->route('extend-advance.show', $submission->id)
+            ->with('success', 'Dokumen berhasil diunggah dan pengajuan Anda telah diteruskan untuk verifikasi staf.');
     }
 
     /* ================== STAFF ROUTES (BARU) ================== */
@@ -73,14 +133,18 @@ class ExtendAdvanceController extends Controller
         return view('user_staff2.extend-advance.index', compact('submissions', 'statementText'));
     }
 
-    /**
-     * Menampilkan detail satu pengajuan untuk staf.
+       /**
+     * Menampilkan detail pengajuan untuk Pengaju.
      */
     public function show($id)
     {
-        $submission = ExtendAdvance::with('user')->findOrFail($id);
+        $submission = ExtendAdvance::where('id', $id)
+            ->where('user_id', Auth::id()) // Pastikan hanya pemilik yang bisa lihat
+            ->firstOrFail();
+            
         return view('user_staff2.extend-advance.show', compact('submission'));
     }
+
 
     /**
      * Memperbarui status pengajuan oleh staf.

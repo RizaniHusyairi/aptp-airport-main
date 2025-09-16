@@ -75,7 +75,7 @@
                                 <span class="badge {{ $statusClass }}">{{ $submission->submission_status }}</span>
                             </td>
                             <td>
-                                <a href="{{ auth()->user()->is_staff ? route('staff.extend-advance.show', $submission->id) : route('extend-advance.show', $submission->id) }}" class="btn btn-sm btn-primary">Lihat Detail</a>
+                                <a href="{{ auth()->user()->is_staff ? route('extend-advance.show', $submission->id) : route('extend-advance.userShow', $submission->id) }}" class="btn btn-sm btn-primary">Lihat Detail</a>
                             </td>
                         </tr>
                         @empty

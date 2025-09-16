@@ -27,11 +27,33 @@
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @endif
+    
+    @if ($errors->any())
+        <div class="alert alert-danger alert-dismissible fade show m-4" role="alert">
+            @foreach ($errors->all() as $error)
+                <p class="mb-0">{{ $error }}</p>
+            @endforeach
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
+    @if($submission->submission_status == 'Menunggu Dokumen Ditandatangani')
+        <div class="alert alert-info">
+            <h4 class="alert-heading">Langkah Selanjutnya</h4>
+            <p>1. Silakan unduh dokumen permohonan Anda dengan menekan tombol <strong>"Ekspor ke PDF"</strong>.</p>
+            <p>2. Cetak dan tandatangani dokumen tersebut.</p>
+            <p class="mb-0">3. Unggah kembali dokumen yang sudah ditandatangani pada formulir di bawah ini untuk melanjutkan proses verifikasi.</p>
+        </div>
+    @endif
 
     <div class="row">
         <div class="col-lg-7">
             <div class="card">
-                <div class="card-header"><h5 class="card-title mb-0">Rincian Permohonan</h5></div>
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Rincian Permohonan</h5>
+                    <a href="{{ route('extend-advance.export-pdf', $submission->id) }}" class="btn btn-secondary"><i class="bi bi-file-earmark-pdf-fill"></i> Ekspor ke PDF</a>
+                
+                </div>
                 <div class="card-body">
                     <h6>I. Pesawat Udara</h6>
                     <table class="table table-bordered table-sm">
@@ -56,6 +78,26 @@
                     </table>
                 </div>
             </div>
+            {{-- ========================================================== --}}
+            {{-- ===            FORMULIR UNGGAH DOKUMEN               === --}}
+            {{-- ========================================================== --}}
+            @if($submission->submission_status == 'Menunggu Dokumen Ditandatangani')
+            <div class="card">
+                <div class="card-header"><h5 class="card-title mb-0">Unggah Dokumen Bertanda Tangan</h5></div>
+                <div class="card-body">
+                    <form action="{{ route('extend-advance.upload-signed-document', $submission->id) }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <div class="form-group mb-3">
+                            <label for="signed_document" class="form-label">Pilih File PDF <span class="text-danger">*</span></label>
+                            <input class="form-control" type="file" id="signed_document" name="signed_document" accept=".pdf" required>
+                            <small class="form-text text-muted">Pastikan file yang diunggah adalah PDF yang sudah Anda tandatangani. Maksimal ukuran file 2MB.</small>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Unggah dan Kirim</button>
+                    </form>
+                </div>
+            </div>
+            @endif
+
         </div>
         <div class="col-lg-5">
             <div class="card">

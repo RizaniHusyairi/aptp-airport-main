@@ -29,9 +29,17 @@ return new class extends Migration
             $table->string('pic_name'); // Nama Pilot in Command
             
             // Kolom status untuk tracking oleh staff
-            $table->enum('submission_status', ['Diajukan', 'Disetujui', 'Ditolak', 'Revisi Diperlukan'])->default('Diajukan');
+             $table->enum('submission_status', [
+                'Menunggu Dokumen Ditandatangani', // Status baru
+                'Diajukan',
+                'Disetujui',
+                'Ditolak',
+                'Revisi Diperlukan'
+            ])->default('Menunggu Dokumen Ditandatangani');
             $table->text('staff_notes')->nullable();
             $table->string('reply_document_path')->nullable();
+             $table->string('signed_document_path')->nullable();
+             $table->text('statement_notes')->nullable(); // Simpan teks pernyataan saat pengajuan
 
             
 
