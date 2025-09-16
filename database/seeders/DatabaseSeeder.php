@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Airport;
+use App\Models\ExtendAdvance;
 use App\Models\Finance;
 use App\Models\ImmediateInformation;
 use App\Models\Zone;
@@ -34,7 +35,9 @@ class DatabaseSeeder extends Seeder
             PeriodicDocumentSeeder::class,
             PpidRegulationSeeder::class,
             InformationServiceReportSeeder::class,
-            EvergreenInformationSeeder::class
+            EvergreenInformationSeeder::class,
+            
+            ExtendAdvanceSettingSeeder::class,
 
         ]);
     }

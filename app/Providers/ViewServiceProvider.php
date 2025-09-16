@@ -118,7 +118,8 @@ class ViewServiceProvider extends ServiceProvider
                 'Ajukan Lelang' => ['route' => 'lelang.index', 'icon' => 'bi bi-hammer', 'label' => 'Ajukan Lelang/Beauty Contest'],
                 'Ajukan Slot Charter' => ['route' => 'slot.index', 'icon' => 'bi bi-clock', 'label' => 'Ajukan Slot Charter'],
                 'Ajukan Perijinan Kerja' => ['route' => 'kerja.userindex', 'icon' => 'bi bi-person-workspace', 'label' => 'Ajukan Perizinan Kerja'],
-                'Ajukan Informasi Publik' => ['route' => 'informasiPublik.index', 'icon' => 'bi bi-info-circle', 'label' => 'Ajukan Informasi Publik']
+                'Ajukan Informasi Publik' => ['route' => 'informasiPublik.index', 'icon' => 'bi bi-info-circle', 'label' => 'Ajukan Informasi Publik'],
+                'Ajukan Extend Advance' => ['route' => 'extend-advance.index', 'icon' => 'bi bi-clock-history', 'label' => 'Ajukan Extend Advance'],
             ];
             $view->with('userRoutes', $userRoutes);
         });
@@ -139,6 +140,8 @@ class ViewServiceProvider extends ServiceProvider
                 'Manajemen Lalu Lintas Angkutan Udara' => ['route' => 'laluLintas.staffIndex', 'icon' => 'bi bi-airplane', 'label' => 'Lalu Lintas Angkutan Udara'],
                 'Manajemen Pengaduan' => ['route' => 'pengaduan.staffIndex', 'icon' => 'bi bi-exclamation-triangle', 'label' => 'Pengaduan'],
                 'Manajemen Regulasi' => ['route' => 'letters.staff.index', 'icon' => 'bi bi-book', 'label' => 'Regulasi'],
+                'Manajemen Extend Advance' => ['route' => 'extend-advance.staffIndex', 'icon' => 'bi bi-clock-history', 'label' => 'Extend Advance'],
+
             ];
 
             $view->with('permissionRoutes',$permissionRoutes);

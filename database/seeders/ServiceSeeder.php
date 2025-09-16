@@ -127,9 +127,9 @@ class ServiceSeeder extends Seeder
             'submission_url' => 'dashboard/beauty-contest',
         ]);
         Service::create([
-            'name' => 'Extand/Advand',
-            'slug' => 'extand-advand',
-            'title' => 'Syarat & Ketentuan Pengajuan Extand/Advand',
+            'name' => 'Slot Charter',
+            'slug' => 'slot-charter',
+            'title' => 'Syarat & Ketentuan Pengajuan Slot Charter',
             'requirements' => [
                 "Dokumen dari aplikasi crounus"
             ],
@@ -140,6 +140,22 @@ class ServiceSeeder extends Seeder
                 "Melengkapi administrasi dan kontrak jika disetujui"
             ],
             'submission_url' => 'dashboard/slot',
+        ]);
+
+        Service::create([
+            'name' => 'Extend Advance',
+            'slug' => 'extend-advance',
+            'title' => 'Syarat & Ketentuan Pengajuan Extend Advance',
+            'requirements' => [
+                "Dokumen dari aplikasi crounus"
+            ],
+            'steps' => [
+                "Mengajukan surat permohonan kepada Kabandara",
+                "Verifikasi dokumen dan persyaratan oleh petugas pengembangan usaha",
+                "Presentasi bisnis sesuai dengan bidang usaha yang diajukan",
+                "Melengkapi administrasi dan kontrak jika disetujui"
+            ],
+            'submission_url' => 'dashboard/extend-advance',
         ]);
         Service::create([
             'name' => 'Pengajuan Informasi Publik',

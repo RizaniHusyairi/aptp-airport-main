@@ -34,6 +34,7 @@ use App\Http\Controllers\Staff_User\{
 };
 
 use App\Http\Controllers\{
+    ExtendAdvanceController,
     LandingPageController,
     PersuratanController,
     SandboxController,
@@ -93,6 +94,12 @@ Route::group(["prefix" => 'dashboard'], function () {
         Route::post('/slot/store', [SlotController::class, 'store'])->name('slot.store');
         Route::delete('/slot/{id}', [SlotController::class, 'destroy'])->name('slot.destroy');
         Route::get('/slot/{id}', [SlotController::class, 'show'])->name('slot.userShow');
+        
+        Route::get('/extend-advance', [ExtendAdvanceController::class, 'index'])->name('extend-advance.index');
+        Route::get('/extend-advance/create', [ExtendAdvanceController::class, 'create'])->name('extend-advance.create');
+        Route::post('/extend-advance/store', [ExtendAdvanceController::class, 'store'])->name('extend-advance.store');
+        Route::delete('/extend-advance/{id}', [ExtendAdvanceController::class, 'destroy'])->name('extend-advance.destroy');
+        Route::get('/extend-advance/{id}', [ExtendAdvanceController::class, 'show'])->name('extend-advance.userShow');
         
         // Pengiklanan User Routes
         Route::get('/pengiklanan', [PengiklananController::class, 'indexUser'])->name('pengiklanan.index');
@@ -154,7 +161,12 @@ Route::group(["prefix" => 'dashboard'], function () {
             // Perijinan Staff Routes
             Route::get('staff/perijinan', [PerijinanUsahaController::class, 'index'])->name('perijinan.staffIndex');
             Route::get('staff/perijinan/{id}', [PerijinanUsahaController::class, 'show'])->name('perijinan.show');
-            Route::patch('satff/perijinan/{license}', [PerijinanUsahaController::class, 'updateStatus'])->name('perijinan.updateStatus');
+            Route::patch('staff/perijinan/{license}', [PerijinanUsahaController::class, 'updateStatus'])->name('perijinan.updateStatus');
+            
+            Route::get('staff/extend-advance', [ExtendAdvanceController::class, 'indexStaff'])->name('extend-advance.staffIndex');
+            Route::get('staff/extend-advance/{id}', [ExtendAdvanceController::class, 'show'])->name('extend-advance.show');
+            Route::patch('staff/extend-advance/{extendAdvance}', [ExtendAdvanceController::class, 'updateStatus'])->name('extend-advance.updateStatus');
+            Route::post('staff/extend-advance/settings', [ExtendAdvanceController::class, 'updateStatement'])->name('extend-advance.settings.statement.update');
 
             // Lelang Staff Routes
             Route::get('staff/beauty-contest', [LelangController::class, 'index'])->name('lelang.staffIndex');

@@ -25,6 +25,7 @@ class PermissionSeeder extends Seeder
             'Manajemen Lelang',
             'Manajemen Slot Charter',
             'Manajemen Perijinan Kerja',
+            'Manajemen Extend Advance',
             
         ];
 
