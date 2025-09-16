@@ -130,7 +130,9 @@ class ExtendAdvanceController extends Controller
     public function indexStaff()
     {
         $submissions = ExtendAdvance::with('user')->latest()->get();
-        $statementText = ExtendAdvanceSetting::where('key', 'statement_notes')->first()->value ?? 'Default statement not found.';
+        // === PERBAIKAN DI SINI: Query dibuat lebih andal ===
+        // Menggunakan optional() untuk mencegah error jika setting belum ada
+        $statementText = optional(ExtendAdvanceSetting::where('key', 'statement_notes')->first())->value ?? 'Teks pernyataan default belum diatur.';
         return view('user_staff2.extend-advance.index', compact('submissions', 'statementText'));
     }
 
@@ -198,7 +200,7 @@ class ExtendAdvanceController extends Controller
             ['value' => $validated['statement_notes']]
         );
 
-        return redirect()->route('staff.extend-advance.index')
+        return redirect()->route('extend-advance.staffIndex')
             ->with('success', 'Teks Pernyataan Tanggung Jawab berhasil diperbarui.');
     }
 }

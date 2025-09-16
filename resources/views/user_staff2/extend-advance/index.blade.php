@@ -103,7 +103,8 @@
             <div class="modal-body">
                 <p class="text-muted">Teks yang Anda ubah di sini akan ditampilkan di formulir pengajuan untuk semua pengguna.</p>
                 <div class="form-group">
-                    <textarea class="form-control" name="statement_notes" rows="8" required>{{ old('statement_notes', $statementText ?? '') }}</textarea>
+                    {{-- === PERBAIKAN DI SINI: Menghapus old() agar selalu menampilkan data terbaru === --}}
+                    <textarea class="form-control" name="statement_notes" rows="8" required>{{ $statementText ?? '' }}</textarea>
                 </div>
             </div>
             <div class="modal-footer">
