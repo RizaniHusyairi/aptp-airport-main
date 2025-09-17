@@ -146,14 +146,12 @@ class ServiceSeeder extends Seeder
             'name' => 'Extend Advance',
             'slug' => 'extend-advance',
             'title' => 'Syarat & Ketentuan Pengajuan Extend Advance',
-            'requirements' => [
-                "Dokumen dari aplikasi crounus"
-            ],
+            
             'steps' => [
-                "Mengajukan surat permohonan kepada Kabandara",
-                "Verifikasi dokumen dan persyaratan oleh petugas pengembangan usaha",
-                "Presentasi bisnis sesuai dengan bidang usaha yang diajukan",
-                "Melengkapi administrasi dan kontrak jika disetujui"
+                "Mengisi Formulir Permohonan Awal",
+                "Ekspor, Cetak, dan Tandatangani Dokumen",
+                "Unggah Kembali Dokumen yang Sudah Ditandatangani",
+                "Menunggu Verifikasi Staf"
             ],
             'submission_url' => 'dashboard/extend-advance',
         ]);

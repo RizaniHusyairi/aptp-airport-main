@@ -7,7 +7,7 @@
 @endpush
 
 @section('content')
-<section id="informasi-serta-merta" class="section-modern informasi-serta-merta pt-6">
+<section id="informasi-serta-merta" class="section-modern informasi-serta-merta pt-6 light-background">
 
     <div class="container">
         

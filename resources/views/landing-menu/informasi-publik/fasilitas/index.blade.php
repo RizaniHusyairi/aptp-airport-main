@@ -7,7 +7,7 @@
 @endpush
 
 @section('content')
-<section id="facilities-page" class="section-modern facilities-page pt-6">
+<section id="facilities-page" class="section-modern facilities-page pt-6 light-background">
     <div class="container">
         <div class="container section-title" data-aos="fade-up">
             <h2>Informasi<br></h2>

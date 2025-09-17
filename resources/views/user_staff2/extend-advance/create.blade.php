@@ -21,6 +21,60 @@
 </div>
 
 <section class="section">
+    {{-- ========================================================== --}}
+    {{-- ===            PANDUAN DITAMBAHKAN DI SINI             === --}}
+    {{-- ========================================================== --}}
+    <div class="card">
+        <div class="card-body">
+            <div class="accordion" id="accordionPanduan">
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingPanduan">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePanduan" aria-expanded="false" aria-controls="collapsePanduan">
+                            <i class="bi bi-info-circle-fill me-2"></i> Klik di sini untuk melihat Panduan Lengkap Pengajuan
+                        </button>
+                    </h2>
+                    <div id="collapsePanduan" class="accordion-collapse collapse" aria-labelledby="headingPanduan" data-bs-parent="#accordionPanduan">
+                        <div class="accordion-body">
+                            <p>Berikut adalah alur dan langkah-langkah yang perlu Anda ikuti untuk mengajukan permohonan <em>Extend / Advance Hour</em> secara digital.</p>
+                            <hr>
+
+                            <h5>Langkah 1: Mengisi Formulir Permohonan Awal</h5>
+                            <ol>
+                                <li>Buka menu <strong>"Ajukan Extend Advance"</strong> dari dasbor Anda.</li>
+                                <li>Klik tombol <strong>"Tambah Pengajuan"</strong>.</li>
+                                <li>Isi semua kolom yang tersedia sesuai dengan data penerbangan yang sebenarnya, mulai dari detail pesawat hingga nama Pilot in Command (PIC).</li>
+                                <li>Setelah semua data terisi, klik tombol <strong>"Kirim Pengajuan"</strong>.</li>
+                            </ol>
+                            <p class="mt-2">Setelah tahap ini, pengajuan Anda akan disimpan dengan status <strong>"Menunggu Dokumen Ditandatangani"</strong>.</p>
+                            
+                            <h5 class="mt-4">Langkah 2: Ekspor, Cetak, dan Tandatangani Dokumen</h5>
+                            <ol>
+                                <li>Setelah menyimpan formulir awal, sistem akan secara otomatis mengarahkan Anda ke halaman detail pengajuan.</li>
+                                <li>Di halaman detail, Anda akan melihat instruksi dan tombol <strong>"Ekspor ke PDF"</strong>.</li>
+                                <li>Klik tombol tersebut untuk mengunduh Surat Pernyataan resmi dalam format PDF.</li>
+                                <li><strong>Cetak (Print)</strong> dokumen PDF yang telah Anda unduh.</li>
+                                <li>Pastikan <strong>Pilot in Command (PIC)</strong> menandatangani dokumen tersebut pada kolom yang telah disediakan.</li>
+                            </ol>
+
+                            <h5 class="mt-4">Langkah 3: Unggah Kembali Dokumen yang Sudah Ditandatangani</h5>
+                            <ol>
+                                <li>Kembali ke halaman detail pengajuan yang sama.</li>
+                                <li>Anda akan melihat formulir <strong>"Unggah Dokumen Bertanda Tangan"</strong>.</li>
+                                <li>Pilih file PDF yang sudah Anda pindai (scan) setelah ditandatangani.</li>
+                                <li>Klik tombol <strong>"Unggah dan Kirim"</strong>.</li>
+                            </ol>
+
+                            <h5 class="mt-4">Langkah 4: Menunggu Verifikasi Staf</h5>
+                            <p>Setelah Anda berhasil mengunggah dokumen yang sudah ditandatangani, status pengajuan Anda akan otomatis berubah menjadi <strong>"Diajukan"</strong> dan masuk ke dalam antrian verifikasi staf bandara. Anda dapat memantau progresnya melalui dasbor Anda.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{-- ========================================================== --}}
+    {{-- ===            FORMULIR DITAMBAHKAN DI SINI             === --}}
+    {{-- ========================================================== --}}
     <div class="card">
         <div class="card-header">
             <h5 class="card-title">Surat Pernyataan dan Permohonan</h5>

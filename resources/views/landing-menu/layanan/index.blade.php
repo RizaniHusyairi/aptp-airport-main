@@ -3,7 +3,7 @@
 @section('title', $service->name . ' - Bandara APT Pranoto')
 
 @section('content')
-<section id="about" class="about section pt-6">
+<section id="about" class="about section pt-6 light-background">
     <div class="container section-title" data-aos="fade-up">
         <h2>Layanan<br></h2>
         <p><span>Pengajuan</span> <span class="description-title">{{ $service->name }}</span></p>

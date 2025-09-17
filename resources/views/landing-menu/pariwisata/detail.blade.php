@@ -9,7 +9,7 @@
 
 
 
-<section id="pariwisata-detail" class="pariwisata-detail section pt-6">
+<section id="pariwisata-detail" class="pariwisata-detail section pt-6 light-background">
       
     <div class="container section-title" data-aos="fade-up">
         <h2>Pariwisata</h2>
