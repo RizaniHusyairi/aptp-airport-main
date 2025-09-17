@@ -11,7 +11,7 @@
         <div class="container">
             <div class="wrapper">
                 <div class="main-title">{{ $service->title }}</div>
-                
+                @if($service->requirements)
                 {{-- Dokumen yang Diperlukan --}}
                 <input type="radio" id="radioDokumen" name="accordion" checked="checked"/>
                 <label class="item" for="radioDokumen">
@@ -24,6 +24,7 @@
                         </ul>
                     </div>
                 </label>
+                @endif
 
                 {{-- Kategori / Info Harga (Jika ada) --}}
                 @if($service->has_pricing)
