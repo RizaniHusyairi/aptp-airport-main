@@ -54,3 +54,74 @@
     margin-right: 15px;
     margin-top: 5px;
 }
+
+
+/* public/assets_landing/css/profil-ppid.css */
+
+.document-card {
+    display: flex;
+    align-items: center;
+    padding: 25px;
+    background-color: #f8f9fa; /* Warna latar sedikit abu-abu */
+    border-radius: 12px;
+    border: 1px solid #e9ecef;
+    transition: all 0.3s ease;
+}
+
+.document-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    border-color: var(--primary-color);
+}
+
+.doc-icon {
+    font-size: 3.5rem;
+    color: var(--primary-color);
+    margin-right: 25px;
+}
+
+.doc-info {
+    flex-grow: 1;
+}
+
+.doc-title {
+    font-weight: 600;
+    font-size: 1.2rem;
+    color: var(--heading-color);
+    margin-bottom: 5px;
+}
+
+.doc-description {
+    margin-bottom: 0;
+    font-size: 0.95rem;
+}
+
+.doc-action .btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    font-weight: 500;
+    padding: 10px 25px;
+    border-radius: 50px;
+    white-space: nowrap;
+}
+
+.doc-action .btn-primary:hover {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+    color: var(--primary-color);
+}
+
+/* Penyesuaian untuk layar mobile */
+@media (max-width: 768px) {
+    .document-card {
+        flex-direction: column;
+        text-align: center;
+    }
+    .doc-icon {
+        margin-right: 0;
+        margin-bottom: 15px;
+    }
+    .doc-action {
+        margin-top: 20px;
+    }
+}

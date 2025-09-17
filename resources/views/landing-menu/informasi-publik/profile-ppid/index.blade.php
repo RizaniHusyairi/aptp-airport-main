@@ -2,13 +2,20 @@
 
 @section('title', 'Profil PPID - Bandara APT Pranoto')
 
+
+@push('page-styles')
+    <link href="{{ asset('assets_landing/css/profil-ppid.css') }}" rel="stylesheet">
+@endpush
+
+@section('styles')
+
 @section('content')
 <!-- About Section -->
-<section id="about" class="about section pt-6">
+<section id="about" class="about section pt-6 light-background">
 
     <!-- Section Title -->
     <div class="container section-title" data-aos="fade-up">
-        <h2>Informasi Publik<br></h2>
+        <h2>PPID<br></h2>
         <p><span>Profil PPID</span> <span class="description-title"> BLU Kantor UPBU Kelas I A.P.T. Pranoto</span></p>
     </div><!-- End Section Title -->
 
@@ -112,6 +119,30 @@
             </section>
 
             <!-- ### SEKSI BARU: PPID PELAKSANA UPT ### -->
+            {{-- ================================================ --}}
+            {{-- ===            SEKSI BARU DIMULAI              === --}}
+            {{-- ================================================ --}}
+            <section class="bg-white p-4 rounded shadow mb-5" data-aos="fade-up" data-aos-delay="400">
+                <h2 class="h3 mb-2 text-dark">SK Tim PPID</h2>
+                <hr class="my-3">
+                <div class="document-card">
+                    <div class="doc-icon">
+                        <i class="bi bi-file-earmark-richtext-fill"></i>
+                    </div>
+                    <div class="doc-info">
+                        <h5 class="doc-title">SK Tim Pejabat Pengelola Informasi dan Dokumentasi (PPID)</h5>
+                        <p class="doc-description text-muted">Surat Keputusan resmi yang menetapkan tim dan struktur PPID di lingkungan BLU Kantor UPBU Kelas I A.P.T. Pranoto Samarinda.</p>
+                    </div>
+                    <div class="doc-action">
+                        <a href="https://drive.google.com/file/d/1OPPKzeAyWu1J53CO0CG8Cbhhte-dFYLr/view" target="_blank" class="btn btn-primary">
+                            Lihat Dokumen <i class="bi bi-box-arrow-up-right ms-2"></i>
+                        </a>
+                    </div>
+                </div>
+            </section>
+            {{-- ================================================ --}}
+            {{-- ===             SEKSI BARU SELESAI             === --}}
+            {{-- ================================================ --}}
             
 
             <section class="bg-white p-4 rounded shadow mb-5" data-aos="fade-up" data-aos-delay="500">
