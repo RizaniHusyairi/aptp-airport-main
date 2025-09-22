@@ -27,7 +27,7 @@
         <div class="card-body">
             <form action="{{ route('admin.facilities.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
-                @include('admin2.fa._form')
+                @include('admin2.fasilitas.parties._form')
             </form>
         </div>
     </div>

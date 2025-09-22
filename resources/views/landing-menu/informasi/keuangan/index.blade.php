@@ -12,9 +12,10 @@
 <!-- ============================================ -->
 <section id="realization-report" class="section-modern financial-report pt-6 light-background">
     <div class="container">
-        <div class="container section-title" data-aos="fade-up">
-        <h2>Informasi<br></h2>
-        <p><span>Laporan Keuangan</span> <span class="description-title">Bandara A.P.T. Pranoto Samarinda</span></p>
+      <div class="container section-title" data-aos="fade-up">
+        <h2>Badan Layanan Umum<br></h2>
+        <p class="text-center" style="font-size: 17px"><span class="description-title">Bandar Udara Aji Pangeran Tumenggung Pranoto - Samarinda</span> <br>
+        <span style="font-size: 20px">Kinerja Keuangan</span></p>
       </div>
       <div class="container php-email-form ">
         <!-- Filter Section -->
@@ -54,25 +55,22 @@
             </div>
           </div>
         </div>
-        <div class="row mt-4 justify-content-center">
-              
-  
-              
-              <!-- ========================================================== -->
-            <!-- ===   PERUBAHAN DI SINI: KARTU SUMBER DANA DINAMIS   === -->
-            <!-- ========================================================== -->
-            <div class="col-lg-6" data-aos="fade-up" data-aos-delay="200">
-                <div class="report-card">
-                    <h3 class="report-card-title">Realisasi Berdasarkan Sumber Dana</h3>
-                    <div class="chart-container-small">
-                        {{-- Canvas tetap sama --}}
-                        <canvas id="sumberDanaChart"></canvas>
-                    </div>
-                    
-                </div>
-            </div>
+        <div class="row mt-4 justify-content-center">    
+          <!-- ========================================================== -->
+          <!-- ===   PERUBAHAN DI SINI: KARTU SUMBER DANA DINAMIS   === -->
+          <!-- ========================================================== -->
+          <div class="col-lg-6" data-aos="fade-up" data-aos-delay="200">
+              <div class="report-card">
+                  <h3 class="report-card-title">Realisasi Berdasarkan Sumber Dana</h3>
+                  <div class="chart-container-small">
+                      {{-- Canvas tetap sama --}}
+                      <canvas id="sumberDanaChart"></canvas>
+                  </div>
+                  
+              </div>
           </div>
-      </div>
+        </div>
+    </div>
 </section>
 
 @endsection
