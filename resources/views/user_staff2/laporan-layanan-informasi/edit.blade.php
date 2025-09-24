@@ -24,7 +24,7 @@
     <div class="card">
         <div class="card-header"><h5 class="card-title">Formulir Edit Dokumen</h5></div>
         <div class="card-body">
-            <form action="{{ route('staff.information-service-reports.update', $information->id) }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('staff.information-service-reports.update', $report->id) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                 @include('user_staff2.laporan-layanan-informasi._form')

@@ -43,7 +43,7 @@ class EvergreenInformationController extends Controller
 
     public function edit(EvergreenInformation $evergreenInformation)
     {
-        return view('user_staff2.informasi-publik.informasi-setiap-saat.edit', [
+        return view('user_staff2.informasi-setiap-saat.edit', [
             'information' => $evergreenInformation,
             'categories' => $this->categories
         ]);
