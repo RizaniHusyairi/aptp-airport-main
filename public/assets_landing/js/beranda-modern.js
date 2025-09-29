@@ -184,10 +184,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     <img src="${logoUrl}" alt="${airline}" onerror="this.src='https://placehold.co/100x100/png?text=LOGO'; this.onerror=null;">
                     <span>${airline}</span>
                 </div>
-                <div class="flight-destination">${kota}</div>
-                <div class="flight-number">${nomor_penerbangan}</div>
-                <div class="flight-time">${jadwal}</div>
-                <div class="flight-gate">${gate}</div>
+                <div class="flight-destination"><span>${kota}</span></div>
+                <div class="flight-number"><span>${nomor_penerbangan}</span></div>
+                <div class="flight-time"><span>${jadwal}</span></div>
+                <div class="flight-gate"><span>${gate}</span></div>
 
                 <div class="flight-status"><span class="${statusClass}">${statusText}</span></div>
             </div>

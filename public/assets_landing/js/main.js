@@ -176,7 +176,7 @@
    * Navmenu Scrollspy
    */
   let navmenulinks = document.querySelectorAll('.navmenu a');
-
+  
   function navmenuScrollspy() {
     navmenulinks.forEach(navmenulink => {
       if (!navmenulink.hash) return;
@@ -194,7 +194,7 @@
   window.addEventListener('load', navmenuScrollspy);
   document.addEventListener('scroll', navmenuScrollspy);
 
-    /* ====================================================== */
+  /* ====================================================== */
   /* ==   KODE BARU: LOGIKA UNTUK WIDGET AKSESIBILITAS   == */
   /* ====================================================== */
   const accessibilityWidget = document.querySelector('.accessibility-widget');
@@ -202,20 +202,94 @@
     const toggleButton = document.getElementById('accessibility-toggle');
     const panel = document.getElementById('accessibility-panel');
     const options = panel.querySelectorAll('.panel-option, .size-buttons button');
-    
-    // <<< PERUBAHAN TARGET DARI body KE #page-wrapper >>>
-    const pageWrapper = document.getElementById('page-wrapper'); 
-    const body = document.body; // body masih kita perlukan untuk ukuran font
+    const pageWrapper = document.getElementById('page-wrapper');
+    const body = document.body;
 
-    // --- Inisialisasi dari Local Storage ---
+    // === PERUBAHAN DI SINI: Logika Baru untuk Text-to-Speech ===
+    let ttsIsActive = false;
+    let indonesianVoice = null;
+
+    // Fungsi untuk mencari dan menyimpan suara Bahasa Indonesia
+    function loadIndonesianVoice() {
+        const voices = window.speechSynthesis.getVoices();
+        if (!voices.length) {
+            return;
+        }
+        
+        // --- PERBAIKAN LOGIKA PENCARIAN ---
+        // Cari suara yang bahasanya "id-ID" atau dimulai dengan "id-"
+        indonesianVoice = voices.find(voice => voice.lang === 'id-ID') || voices.find(voice => voice.lang.startsWith('id-'));
+    }
+    
+    // Panggil fungsi ini saat daftar suara di browser berubah atau selesai dimuat
+    window.speechSynthesis.onvoiceschanged = loadIndonesianVoice;
+    // Panggil juga sekali di awal untuk mencoba memuatnya
+    loadIndonesianVoice();
+
+    const utterance = new SpeechSynthesisUtterance();
+    const ttsHighlightClass = 'tts-highlight';
+    let currentHighlightedElement = null;
+
+    const speakText = (element) => {
+        if (!element || !element.textContent) return;
+        window.speechSynthesis.cancel(); // Hentikan pembicaraan sebelumnya
+        
+        // Atur teks dan properti suara
+        utterance.text = element.textContent;
+        utterance.lang = 'id-ID'; // Beri petunjuk bahasa ke browser
+
+        // Gunakan suara Bahasa Indonesia jika ditemukan
+        if (indonesianVoice) {
+            utterance.voice = indonesianVoice;
+        }
+        
+        window.speechSynthesis.speak(utterance);
+
+        // Highlight elemen yang sedang dibaca
+        if (currentHighlightedElement) {
+            currentHighlightedElement.classList.remove(ttsHighlightClass);
+        }
+        element.classList.add(ttsHighlightClass);
+        currentHighlightedElement = element;
+    };
+
+    const handleMouseOver = (e) => {
+        const target = e.target.closest('h1, h2, h3, h4, h5, h6, p, a, button,span');
+        if (target) {
+            speakText(target);
+        }
+    };
+    
+    const handleMouseOut = () => {
+        window.speechSynthesis.cancel();
+        if (currentHighlightedElement) {
+            currentHighlightedElement.classList.remove(ttsHighlightClass);
+            currentHighlightedElement = null;
+        }
+    };
+    
+    function toggleTTS(forceState) {
+        ttsIsActive = (typeof forceState === 'boolean') ? forceState : !ttsIsActive;
+        
+        if (ttsIsActive) {
+            document.addEventListener('mouseover', handleMouseOver);
+            document.addEventListener('mouseout', handleMouseOut);
+        } else {
+            document.removeEventListener('mouseover', handleMouseOver);
+            document.removeEventListener('mouseout', handleMouseOut);
+            handleMouseOut(); // Hentikan suara dan hapus highlight saat dinonaktifkan
+        }
+    }
+    // === Akhir Logika Baru ===
+
+
+    // Inisialisasi dari Local Storage
     const settings = {
         grayscale: localStorage.getItem('accessibility-grayscale') === 'true',
         highContrast: localStorage.getItem('accessibility-high-contrast') === 'true',
         textSize: localStorage.getItem('accessibility-text-size') || 'normal',
-        tts: false
     };
 
-    // Terapkan pengaturan saat halaman dimuat
     function applyInitialSettings() {
         if (settings.grayscale) pageWrapper.classList.add('accessibility-grayscale');
         if (settings.highContrast) pageWrapper.classList.add('accessibility-high-contrast');
@@ -224,7 +298,7 @@
     }
     applyInitialSettings();
 
-    // --- Fungsi Utama ---
+    // Event Listeners Utama
     toggleButton.addEventListener('click', () => {
         accessibilityWidget.classList.toggle('open');
     });
@@ -247,12 +321,12 @@
         switch(action) {
             case 'grayscale':
                 settings.grayscale = !settings.grayscale;
-                pageWrapper.classList.toggle('accessibility-grayscale'); // <<< GANTI TARGET
+                pageWrapper.classList.toggle('accessibility-grayscale');
                 localStorage.setItem('accessibility-grayscale', settings.grayscale);
                 break;
             case 'high-contrast':
                 settings.highContrast = !settings.highContrast;
-                pageWrapper.classList.toggle('accessibility-high-contrast'); // <<< GANTI TARGET
+                pageWrapper.classList.toggle('accessibility-high-contrast');
                 localStorage.setItem('accessibility-high-contrast', settings.highContrast);
                 break;
             case 'text-increase':
@@ -262,7 +336,6 @@
                 changeTextSize(false);
                 break;
             case 'text-to-speech':
-                settings.tts = !settings.tts;
                 toggleTTS();
                 break;
             case 'reset':
@@ -272,12 +345,10 @@
         updateActiveButtons();
     }
 
-    // --- Fungsi Helper ---
-
+    // Fungsi Helper
     function changeTextSize(increase) {
         const sizes = ['xsmall', 'small', 'normal', 'large', 'xlarge'];
         let currentIndex = sizes.indexOf(settings.textSize);
-        
         body.classList.remove(`text-${settings.textSize}`);
 
         if (increase) {
@@ -294,51 +365,26 @@
     }
 
     function resetAccessibility() {
-        pageWrapper.classList.remove('accessibility-grayscale', 'accessibility-high-contrast'); // <<< GANTI TARGET
+        pageWrapper.classList.remove('accessibility-grayscale', 'accessibility-high-contrast');
         body.classList.remove('text-xsmall', 'text-small', 'text-large', 'text-xlarge');
         
         settings.grayscale = false;
         settings.highContrast = false;
         settings.textSize = 'normal';
-        settings.tts = false;
 
         localStorage.removeItem('accessibility-grayscale');
         localStorage.removeItem('accessibility-high-contrast');
         localStorage.removeItem('accessibility-text-size');
         
-        toggleTTS(false);
+        toggleTTS(false); // Pastikan TTS dinonaktifkan
         updateActiveButtons();
         accessibilityWidget.classList.remove('open');
     }
-
+    
     function updateActiveButtons() {
         document.querySelector('[data-action="grayscale"]').classList.toggle('active', settings.grayscale);
         document.querySelector('[data-action="high-contrast"]').classList.toggle('active', settings.highContrast);
-        document.querySelector('[data-action="text-to-speech"]').classList.toggle('active', settings.tts);
-    }
-
-    // --- Logika Text-to-Speech (TTS) ---
-    let speech = new SpeechSynthesisUtterance();
-    let currentHighlight = null;
-    const readableElements = 'p, h1, h2, h3, h4, h5, h6, a, li, span';
-
-    function toggleTTS(forceOff = null) {
-        const ttsElements = document.querySelectorAll(readableElements);
-        if (forceOff !== null) settings.tts = !forceOff;
-
-        if (settings.tts) {
-            ttsElements.forEach(el => {
-                el.addEventListener('mouseenter', handleTTSHighlight);
-                el.addEventListener('mouseleave', clearTTSHighlight);
-            });
-        } else {
-            speechSynthesis.cancel();
-            clearTTSHighlight();
-            ttsElements.forEach(el => {
-                el.removeEventListener('mouseenter', handleTTSHighlight);
-                el.removeEventListener('mouseleave', clearTTSHighlight);
-            });
-        }
+        document.querySelector('[data-action="text-to-speech"]').classList.toggle('active', ttsIsActive);
     }
 
     function handleTTSHighlight(e) {
