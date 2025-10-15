@@ -38,7 +38,9 @@
             </div>
         </div>
         @endif
+
         {{-- Seksi Fasilitas Darat --}}
+        
         @if(isset($facilities['darat']) && $facilities['darat']->isNotEmpty())
         <div class="facility-category" data-aos="fade-up" data-aos-delay="200">
             <h3 class="category-title">Fasilitas Sisi Darat</h3>

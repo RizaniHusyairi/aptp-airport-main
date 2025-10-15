@@ -36,7 +36,7 @@
               <swiper-slide>
                 <div class="card news-card shadow">
                   <div class="card-body text-center">
-                    <p>Tidak ada berita headline saat ini.</p>
+                    <p>Tidak ada berita headline ksaat ini.</p>
                   </div>
                 </div>
               </swiper-slide>

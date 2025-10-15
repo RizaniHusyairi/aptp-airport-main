@@ -134,7 +134,7 @@
                     <div class="col-md-6">
                         <h6>KTP</h6>
                         @if ($publicInformation->ktp)
-                            <a href="{{ asset('Uploads/' . $publicInformation->ktp) }}" class="btn btn-sm btn-primary" target="_blank" id="lihat-dokumen" data-bs-toggle="tooltip" title="Lihat Dokumen"><i class="bi bi-file-earmark-pdf"></i> {{ basename($publicInformation->ktp) }}</a>
+                            <a href="{{ asset('uploads/' . $publicInformation->ktp) }}" class="btn btn-sm btn-primary" target="_blank" id="lihat-dokumen" data-bs-toggle="tooltip" title="Lihat Dokumen"><i class="bi bi-file-earmark-pdf"></i> {{ basename($publicInformation->ktp) }}</a>
                         @else
                             <p>Tidak ada file</p>
                         @endif
@@ -142,7 +142,7 @@
                     <div class="col-md-6">
                         <h6>Surat Pertanggung jawaban</h6>
                         @if ($publicInformation->surat_pertanggungjawaban)
-                            <a href="{{ asset('Uploads/' . $publicInformation->surat_pertanggungjawaban) }}" class="btn btn-sm btn-primary" id="lihat-dokumen" data-bs-toggle="tooltip" title="Lihat Dokumen"><i class="bi bi-file-earmark-pdf"></i> {{ basename($publicInformation->surat_pertanggungjawaban) }}</a>
+                            <a href="{{ asset('uploads/' . $publicInformation->surat_pertanggungjawaban) }}" class="btn btn-sm btn-primary" id="lihat-dokumen" data-bs-toggle="tooltip" title="Lihat Dokumen"><i class="bi bi-file-earmark-pdf"></i> {{ basename($publicInformation->surat_pertanggungjawaban) }}</a>
                         @else
                             <p>Tidak ada File</p>    
                         @endif

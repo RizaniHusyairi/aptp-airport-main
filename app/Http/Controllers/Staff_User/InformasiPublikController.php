@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Staff_User;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Http\Request;
 use App\Models\PublicInformation;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class InformasiPublikController extends Controller
@@ -107,5 +108,26 @@ class InformasiPublikController extends Controller
         ]));
 
         return redirect()->route('informasiPublik.index')->with('success', 'Pengajuan informasi publik berhasil dikirim.');
+    }
+    
+    public function destroy($id)
+    {
+        // Cari data berdasarkan ID, jika tidak ketemu akan error 404
+        $submission = PublicInformation::findOrFail($id);
+
+        // Hapus file dari storage untuk menjaga kebersihan server
+        if ($submission->ktp) {
+            Storage::disk('public')->delete($submission->ktp);
+        }
+        if ($submission->surat_pertanggungjawaban) {
+            Storage::disk('public')->delete($submission->surat_pertanggungjawaban);
+        }
+        
+        // Hapus record dari database
+        $submission->delete();
+
+        // Redirect kembali ke halaman index dengan pesan sukses
+        return redirect()->route('informasiPublik.staffIndex')
+            ->with('success', 'Pengajuan informasi publik berhasil dihapus.');
     }
 }

@@ -74,7 +74,7 @@
                                                         <td>
                                                             @if ($rental->documents)
                                                             <div class="d-flex">
-                                                                <a href="{{ route('sewa.show', $Prental->id) }}" class="me-1 btn btn-sm btn-info text-white btn-tooltip" data-bs-toggle="tooltip" title="Lihat Detail"><i class="bi bi-eye"></i></a>
+                                                                <a href="{{ route('sewa.show', $rental->id) }}" class="me-1 btn btn-sm btn-info text-white btn-tooltip" data-bs-toggle="tooltip" title="Lihat Detail"><i class="bi bi-eye"></i></a>
                                                                 
                                                                 
                                                                 @if ($rental->submission_status == 'Diajukan')
