@@ -37,6 +37,7 @@ use App\Http\Controllers\{
     ExtendAdvanceController,
     LandingPageController,
     PersuratanController,
+    InventoryController,
     SandboxController,
     SlotController,
     TourismController,
@@ -149,6 +150,8 @@ Route::group(["prefix" => 'dashboard'], function () {
             // Lelang Staff Routes
             // Route::get('staff/letter', [LetterController::class, 'index'])->name('lelang.staffIndex');
             Route::resource('staff/letter', LetterController::class)->names('letters.staff');
+
+            Route::resource('staff/inventaris', InventoryController::class)->names('staff.inventories');
             
 
 

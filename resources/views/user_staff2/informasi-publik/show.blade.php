@@ -117,6 +117,7 @@
                         @endphp
                         <p class="badge {{ $badgeClass }}">
                             {{ $publicInformation->status }}
+              
                         </p>
                     </div>
                     
@@ -142,7 +143,7 @@
                     <div class="col-md-6">
                         <h6>Surat Pertanggung jawaban</h6>
                         @if ($publicInformation->surat_pertanggungjawaban)
-                            <a href="{{ asset('uploads/' . $publicInformation->surat_pertanggungjawaban) }}" class="btn btn-sm btn-primary" id="lihat-dokumen" data-bs-toggle="tooltip" title="Lihat Dokumen"><i class="bi bi-file-earmark-pdf"></i> {{ basename($publicInformation->surat_pertanggungjawaban) }}</a>
+                            <a href="{{ asset('uploads/' . $publicInformation->surat_pertanggungjawaban) }}" target="_blank" class="btn btn-sm btn-primary" id="lihat-dokumen" data-bs-toggle="tooltip" title="Lihat Dokumen"><i class="bi bi-file-earmark-pdf"></i> {{ basename($publicInformation->surat_pertanggungjawaban) }}</a>
                         @else
                             <p>Tidak ada File</p>    
                         @endif

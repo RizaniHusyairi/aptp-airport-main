@@ -1,4 +1,4 @@
-$(document).ready(function() {
+
 $(document).ready(function() {
     // Inisialisasi DataTable untuk pengajuan sewa
     $('#table-data').DataTable({
@@ -7,7 +7,7 @@ $(document).ready(function() {
         language: {
             // Sesuaikan bahasa untuk pengalaman pengguna yang lebih baik
             "decimal": "",
-            "emptyTable": "Tidak ada data informasi setiap saat",
+            "emptyTable": "Tidak ada data inventaris",
             "info": "Menampilkan _START_ sampai _END_ dari _TOTAL_ entri",
             "infoEmpty": "Menampilkan 0 sampai 0 dari 0 entri",
             "infoFiltered": "(disaring dari _MAX_ total entri)",

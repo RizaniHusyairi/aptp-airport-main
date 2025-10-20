@@ -37,6 +37,7 @@ class ProfileController extends Controller
                     'Manajemen Pengaduan' => 'secondary',
                     'Manajemen Slot Charter' => 'warning',
                     'Manajemen Extend Advance' => 'primary',
+                    'Manajemen Inventaris' => 'secondary',
                 ];
 
         // $lastFlights = Flight::latest()->take(5)->get();
