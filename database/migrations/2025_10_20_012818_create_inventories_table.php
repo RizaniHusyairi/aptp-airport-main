@@ -14,8 +14,13 @@ return new class extends Migration
         Schema::create('inventories', function (Blueprint $table) {
             $table->id();
             $table->string('name'); // Untuk Nama Alat
+            $table->enum('status', ['Baik', 'Pemeliharaan'])->default('Baik');
             $table->string('photo_path'); // Untuk Path Foto Alat
+            $table->string('maintenance_report_link')->nullable();
             $table->date('input_date'); // Untuk Tanggal Penginputan
+            // Kolom untuk status kondisi alat
+            
+            // Kolom untuk menyimpan link laporan pemeliharaan
             $table->timestamps();
         });
     }

@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Models\Inventory;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
 
 class InventoryController extends Controller
@@ -98,5 +99,32 @@ class InventoryController extends Controller
 
         $inventory->delete();
         return redirect()->route('staff.inventories.index')->with('success', 'Item inventaris berhasil dihapus.');
+    }
+
+    /**
+     * === METHOD BARU: Memperbarui Status Kondisi ===
+     */
+    public function updateStatus(Request $request, Inventory $inventory)
+    {
+        $validated = $request->validate([
+            'status' => ['required', Rule::in(['Baik', 'Pemeliharaan'])],
+            'maintenance_report_link' => 'required_if:status,Pemeliharaan|nullable|url',
+        ], [
+            'maintenance_report_link.required_if' => 'Link laporan pemeliharaan wajib diisi jika status adalah "Pemeliharaan".',
+            'maintenance_report_link.url' => 'Input harus berupa URL yang valid.',
+        ]);
+
+        $inventory->status = $validated['status'];
+
+        // Jika status "Baik", hapus link laporan. Jika "Pemeliharaan", simpan linknya.
+        if ($validated['status'] === 'Baik') {
+            $inventory->maintenance_report_link = null;
+        } else {
+            $inventory->maintenance_report_link = $validated['maintenance_report_link'];
+        }
+
+        $inventory->save();
+
+        return redirect()->route('staff.inventories.index')->with('success', 'Status kondisi untuk ' . $inventory->name . ' berhasil diperbarui.');
     }
 }

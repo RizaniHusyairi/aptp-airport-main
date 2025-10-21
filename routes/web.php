@@ -152,6 +152,8 @@ Route::group(["prefix" => 'dashboard'], function () {
             Route::resource('staff/letter', LetterController::class)->names('letters.staff');
 
             Route::resource('staff/inventaris', InventoryController::class)->names('staff.inventories');
+            Route::patch('staff/inventaris/{inventory}/status', [InventoryController::class, 'updateStatus'])->name('staff.inventories.updateStatus');
+
             
 
 

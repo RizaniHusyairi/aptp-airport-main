@@ -34,4 +34,15 @@ $(document).ready(function() {
         pageLength: 10, // Jumlah baris default per halaman
         lengthMenu: [5, 10, 25, 50], // Pilihan jumlah baris per halaman
     });
+
+    $('.status-select').on('change', function() {
+        const targetContainer = $(this).data('target');
+        if ($(this).val() === 'Pemeliharaan') {
+            $(targetContainer).slideDown();
+            $(targetContainer).find('input').prop('required', true);
+        } else {
+            $(targetContainer).slideUp();
+            $(targetContainer).find('input').prop('required', false);
+        }
+    });
 });

@@ -141,10 +141,11 @@ class ViewServiceProvider extends ServiceProvider
                 'Manajemen Lalu Lintas Angkutan Udara' => ['route' => 'laluLintas.staffIndex', 'icon' => 'bi bi-airplane', 'label' => 'Lalu Lintas Angkutan Udara'],
                 'Manajemen Pengaduan' => ['route' => 'pengaduan.staffIndex', 'icon' => 'bi bi-exclamation-triangle', 'label' => 'Pengaduan'],
                 'Manajemen Regulasi' => ['route' => 'letters.staff.index', 'icon' => 'bi bi-book', 'label' => 'Regulasi'],
-                'Manajemen Inventaris' => ['route' => 'staff.inventories.index', 'icon' => 'bi bi-book', 'label' => 'Regulasi'],
-                'Manajemen Suku Cadang' => ['route' => '', 'icon' => 'bi bi-book', 'label' => 'Regulasi'],
-                'Manajemen Inventaris' => ['route' => '', 'icon' => 'bi bi-book', 'label' => 'Regulasi'],
-                'Manajemen Program kerja' => ['route' => '', 'icon' => 'bi bi-book', 'label' => 'Regulasi'],
+                'Manajemen Inventaris' => ['route' => 'staff.inventories.index', 'icon' => 'bi bi-book', 'label' => 'Inventaris'],
+
+                // 'Manajemen Suku Cadang' => ['route' => 'letters.staff.index', 'icon' => 'bi bi-book', 'label' => 'Regulasi'],
+                // 'Manajemen Inventaris' => ['route' => 'letters.staff.index', 'icon' => 'bi bi-book', 'label' => 'Regulasi'],
+                // 'Manajemen Program kerja' => ['route' => 'letters.staff.index', 'icon' => 'bi bi-book', 'label' => 'Regulasi'],
 
             ];
 
