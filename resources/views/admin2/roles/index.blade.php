@@ -21,6 +21,9 @@
                     'Manajemen Lelang' => 'info',
                     'Manajemen Pengaduan' => 'secondary',
                     'Manajemen Slot Charter' => 'warning',
+                    'Manajemen Extend Advance' => 'primary',
+                    'Manajemen Inventaris' => 'secondary',
+                    'Manajemen Suku Cadang' => 'warning',
                 ];
 @endphp
 @section('content')

@@ -41,6 +41,8 @@ use App\Http\Controllers\{
     SandboxController,
     SlotController,
     TourismController,
+    SparePartController,
+    SparePartRequestController
 };
 
 Auth::routes();
@@ -164,6 +166,14 @@ Route::group(["prefix" => 'dashboard'], function () {
 
             });
             
+            Route::resource('staff/spare-parts', SparePartController::class)
+                ->except(['show']) // Tidak ada halaman detail
+                ->names('staff.spare-parts');
+
+                // === ROUTE BARU UNTUK PERMINTAAN SUKU CADANG ===
+    Route::resource('staff/spare-part-requests', SparePartRequestController::class)
+        ->except(['show', 'edit', 'update']) // Hanya index, create, store, destroy
+        ->names('staff.spare-part-requests');
             
             // Perijinan Staff Routes
             Route::get('staff/perijinan', [PerijinanUsahaController::class, 'index'])->name('perijinan.staffIndex');

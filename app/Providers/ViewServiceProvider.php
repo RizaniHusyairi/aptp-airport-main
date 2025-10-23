@@ -143,7 +143,8 @@ class ViewServiceProvider extends ServiceProvider
                 'Manajemen Regulasi' => ['route' => 'letters.staff.index', 'icon' => 'bi bi-book', 'label' => 'Regulasi'],
                 'Manajemen Inventaris' => ['route' => 'staff.inventories.index', 'icon' => 'bi bi-book', 'label' => 'Inventaris'],
 
-                // 'Manajemen Suku Cadang' => ['route' => 'letters.staff.index', 'icon' => 'bi bi-book', 'label' => 'Regulasi'],
+                'Manajemen Suku Cadang' => ['route' => 'staff.spare-parts.index', 'icon' => 'bi bi-book', 'label' => 'Suku Cadang'],
+                'Permintaan Suku Cadang' => ['route' => 'staff.spare-part-requests.index', 'icon' => 'bi bi-book', 'label' => 'Permintaan Suku Cadang'],
                 // 'Manajemen Inventaris' => ['route' => 'letters.staff.index', 'icon' => 'bi bi-book', 'label' => 'Regulasi'],
                 // 'Manajemen Program kerja' => ['route' => 'letters.staff.index', 'icon' => 'bi bi-book', 'label' => 'Regulasi'],
 

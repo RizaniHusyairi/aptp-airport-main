@@ -55,7 +55,7 @@
         {{-- STRUKTUR JUDUL BARU --}}
         <div class="hero-title-reveal-v2">
             <div class="title-line-v2 line-1">
-                <span>Bandara</span>
+                <span>Bandar Udara</span>
             </div>
 
             <div class="title-line-v2 line-2">

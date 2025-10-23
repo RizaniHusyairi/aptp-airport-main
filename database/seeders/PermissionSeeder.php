@@ -27,6 +27,8 @@ class PermissionSeeder extends Seeder
             'Manajemen Perijinan Kerja',
             'Manajemen Extend Advance',
             'Manajemen Inventaris',
+            'Manajemen Suku Cadang',
+            'Permintaan Suku Cadang',
             
         ];
 

@@ -51,7 +51,7 @@
                             </div>
                             <div class="col-md-6">
                                 <h6>Email</h6>
-                                <p>{{ $publicInformation->user->name }}</p>
+                                <p>{{ $publicInformation->user->email }}</p>
                             </div>
                             <div class="col-md-6">
                                 <h6>No. hp</h6>
@@ -62,7 +62,7 @@
                                 <p>{{ $publicInformation->pekerjaan }}</p>
                             </div>
                             <div class="col-md-6">
-                                <h6>NPWP</h6>
+                                <h6>NIK</h6>
                                 <p>{{ $publicInformation->npwp }}</p>
                             </div>
                             <div class="col-md-6">
