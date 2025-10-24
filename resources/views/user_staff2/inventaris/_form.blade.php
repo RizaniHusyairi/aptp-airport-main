@@ -17,7 +17,7 @@
         @if(isset($inventory) && $inventory->photo_path)
             <div class="mt-2">
                 <small class="form-text text-muted">Foto saat ini:</small><br>
-                <img src="{{ asset('storage/' . $inventory->photo_path) }}" alt="{{ $inventory->name }}" width="150" class="rounded mt-1">
+                <img src="{{ asset('uploads/' . $inventory->photo_path) }}" alt="{{ $inventory->name }}" width="150" class="rounded mt-1">
             </div>
         @endif
     </div>

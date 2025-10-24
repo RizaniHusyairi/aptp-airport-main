@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Inventory;
-use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
+use App\Models\Inventory;
+use App\Models\InventoryStatusLog; // <<< TAMBAHKAN MODEL LOG
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth; // <<< TAMBAHKAN AUTH
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 
 class InventoryController extends Controller
 {
@@ -17,6 +19,16 @@ class InventoryController extends Controller
     {
         $inventories = Inventory::latest('input_date')->get();
         return view('user_staff2.inventaris.index', compact('inventories'));
+    }
+
+    /**
+     * === METHOD BARU: Menampilkan Halaman Detail ===
+     */
+    public function show(Inventory $inventory)
+    {
+        // Eager load riwayat status beserta user yang mengubah
+        $inventory->load(['statusLogs.user']);
+        return view('user_staff2.inventaris.show', compact('inventory'));
     }
 
     /**
@@ -104,6 +116,9 @@ class InventoryController extends Controller
     /**
      * === METHOD BARU: Memperbarui Status Kondisi ===
      */
+    /**
+     * Memperbarui Status Kondisi dan Mencatat Riwayat
+     */
     public function updateStatus(Request $request, Inventory $inventory)
     {
         $validated = $request->validate([
@@ -114,17 +129,36 @@ class InventoryController extends Controller
             'maintenance_report_link.url' => 'Input harus berupa URL yang valid.',
         ]);
 
-        $inventory->status = $validated['status'];
+        $previousStatus = $inventory->status; // Simpan status lama
+        $newStatus = $validated['status'];
+        $reportLink = $validated['maintenance_report_link'] ?? null;
 
-        // Jika status "Baik", hapus link laporan. Jika "Pemeliharaan", simpan linknya.
-        if ($validated['status'] === 'Baik') {
-            $inventory->maintenance_report_link = null;
-        } else {
-            $inventory->maintenance_report_link = $validated['maintenance_report_link'];
+        // Hanya proses jika status berubah
+        if ($previousStatus !== $newStatus) {
+            $inventory->status = $newStatus;
+            $inventory->maintenance_report_link = ($newStatus === 'Pemeliharaan') ? $reportLink : null;
+            $inventory->save();
+
+            // === CATAT RIWAYAT PERUBAHAN ===
+            InventoryStatusLog::create([
+                'inventory_id' => $inventory->id,
+                'user_id' => Auth::id(),
+                'previous_status' => $previousStatus,
+                'new_status' => $newStatus,
+                'notes' => ($newStatus === 'Pemeliharaan') ? $reportLink : null, // Simpan link di notes
+            ]);
+            
+             return redirect()->route('staff.inventories.show', $inventory->id)->with('success', 'Status kondisi berhasil diperbarui.');
         }
 
-        $inventory->save();
+        // Jika status tidak berubah, update link saja (jika ada)
+        if ($newStatus === 'Pemeliharaan' && $reportLink !== $inventory->maintenance_report_link) {
+             $inventory->maintenance_report_link = $reportLink;
+             $inventory->save();
+             // (Opsional) Anda bisa mencatat pembaruan link laporan di sini jika perlu
+             return redirect()->route('staff.inventories.show', $inventory->id)->with('success', 'Link laporan pemeliharaan berhasil diperbarui.');
+        }
 
-        return redirect()->route('staff.inventories.index')->with('success', 'Status kondisi untuk ' . $inventory->name . ' berhasil diperbarui.');
+        return redirect()->route('staff.inventories.show', $inventory->id)->with('info', 'Tidak ada perubahan status.');
     }
 }

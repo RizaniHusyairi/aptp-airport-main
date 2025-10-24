@@ -141,13 +141,11 @@ class ViewServiceProvider extends ServiceProvider
                 'Manajemen Lalu Lintas Angkutan Udara' => ['route' => 'laluLintas.staffIndex', 'icon' => 'bi bi-airplane', 'label' => 'Lalu Lintas Angkutan Udara'],
                 'Manajemen Pengaduan' => ['route' => 'pengaduan.staffIndex', 'icon' => 'bi bi-exclamation-triangle', 'label' => 'Pengaduan'],
                 'Manajemen Regulasi' => ['route' => 'letters.staff.index', 'icon' => 'bi bi-book', 'label' => 'Regulasi'],
-                'Manajemen Inventaris' => ['route' => 'staff.inventories.index', 'icon' => 'bi bi-book', 'label' => 'Inventaris'],
-
-                'Manajemen Suku Cadang' => ['route' => 'staff.spare-parts.index', 'icon' => 'bi bi-book', 'label' => 'Suku Cadang'],
-                'Permintaan Suku Cadang' => ['route' => 'staff.spare-part-requests.index', 'icon' => 'bi bi-book', 'label' => 'Permintaan Suku Cadang'],
-                // 'Manajemen Inventaris' => ['route' => 'letters.staff.index', 'icon' => 'bi bi-book', 'label' => 'Regulasi'],
-                // 'Manajemen Program kerja' => ['route' => 'letters.staff.index', 'icon' => 'bi bi-book', 'label' => 'Regulasi'],
-
+                'Manajemen Program Kerja' => ['route' => 'staff.work-programs.index', 'icon' => 'bi bi-clipboard-check', 'label' => 'Program Kerja'],
+ 'Manajemen Inventaris' => ['route' => 'staff.inventories.index', 'icon' => 'bi bi-box-seam', 'label' => 'Inventaris'],
+                'Manajemen Suku Cadang' => ['route' => 'staff.spare-parts.index', 'icon' => 'bi bi-gear-wide-connected', 'label' => 'Suku Cadang'],
+                'Permintaan Suku Cadang' => ['route' => 'staff.spare-part-requests.index', 'icon' => 'bi bi-send-check', 'label' => 'Permintaan Suku Cadang'],
+                
             ];
 
             $view->with('permissionRoutes',$permissionRoutes);

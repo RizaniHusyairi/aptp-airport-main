@@ -40,6 +40,7 @@ class ProfileController extends Controller
                     'Manajemen Inventaris' => 'secondary',
                     'Manajemen Suku Cadang' => 'warning',
                     'Permintaan Suku Cadang' => 'warning',
+                    'Manajemen Program Kerja' => 'light',
                 ];
 
         // $lastFlights = Flight::latest()->take(5)->get();

@@ -24,6 +24,8 @@
                     'Manajemen Extend Advance' => 'primary',
                     'Manajemen Inventaris' => 'secondary',
                     'Manajemen Suku Cadang' => 'warning',
+                    'Manajemen Program Kerja' => 'light',
+
                 ];
 @endphp
 @section('content')

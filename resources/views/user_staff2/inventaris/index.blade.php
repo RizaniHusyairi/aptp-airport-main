@@ -78,13 +78,12 @@
                             <td>{{ $item->input_date->translatedFormat('d F Y') }}</td>
                             <td>
                                 <div class="d-flex gap-2">
-                                    <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#statusModal-{{ $item->id }}">
-                                        Ubah Status
-                                    </button>
+                                    {{-- === PERUBAHAN DI SINI: Tombol Detail === --}}
+                                    <a href="{{ route('staff.inventories.show', $item->id) }}" class="btn btn-primary btn-sm">Detail</a>
+                                    
                                     <a href="{{ route('staff.inventories.edit', $item->id) }}" class="btn btn-warning btn-sm"><i class="bi bi-pencil-square"></i></a>
                                     <form action="{{ route('staff.inventories.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin?')">
-                                        @csrf
-                                        @method('DELETE')
+                                        @csrf @method('DELETE')
                                         <button type="submit" class="btn btn-danger btn-sm"><i class="bi bi-trash"></i></button>
                                     </form>
                                 </div>
@@ -100,38 +99,7 @@
     </div>
 </section>
 
-{{-- MODAL UNTUK SETIAP ITEM INVENTARIS --}}
-@foreach ($inventories as $item)
-<div class="modal fade" id="statusModal-{{ $item->id }}" tabindex="-1" aria-labelledby="statusModalLabel-{{ $item->id }}" aria-hidden="true">
-    <div class="modal-dialog">
-        <form class="modal-content" method="POST" action="{{ route('staff.inventories.updateStatus', $item->id) }}">
-            @csrf
-            @method('PATCH')
-            <div class="modal-header">
-                <h5 class="modal-title" id="statusModalLabel-{{ $item->id }}">Ubah Status: {{ $item->name }}</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="mb-3">
-                    <label for="status-{{ $item->id }}" class="form-label">Status Kondisi</label>
-                    <select class="form-select status-select" id="status-{{ $item->id }}" name="status" data-target="#report-link-container-{{ $item->id }}">
-                        <option value="Baik" @selected($item->status == 'Baik')>Baik</option>
-                        <option value="Pemeliharaan" @selected($item->status == 'Pemeliharaan')>Pemeliharaan</option>
-                    </select>
-                </div>
-                <div class="mb-3 report-link-container" id="report-link-container-{{ $item->id }}" style="display: {{ $item->status == 'Pemeliharaan' ? 'block' : 'none' }};">
-                    <label for="maintenance_report_link-{{ $item->id }}" class="form-label">Link Laporan Pemeliharaan (Google Drive) <span class="text-danger">*</span></label>
-                    <input type="url" class="form-control" id="maintenance_report_link-{{ $item->id }}" name="maintenance_report_link" value="{{ old('maintenance_report_link', $item->maintenance_report_link) }}" placeholder="https://...">
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">Batal</button>
-                <button type="submit" class="btn btn-primary">Simpan Status</button>
-            </div>
-        </form>
-    </div>
-</div>
-@endforeach
+
 
 @endsection
 

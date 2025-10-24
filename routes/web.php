@@ -42,7 +42,8 @@ use App\Http\Controllers\{
     SlotController,
     TourismController,
     SparePartController,
-    SparePartRequestController
+    SparePartRequestController,
+    WorkProgramController
 };
 
 Auth::routes();
@@ -153,8 +154,26 @@ Route::group(["prefix" => 'dashboard'], function () {
             // Route::get('staff/letter', [LetterController::class, 'index'])->name('lelang.staffIndex');
             Route::resource('staff/letter', LetterController::class)->names('letters.staff');
 
-            Route::resource('staff/inventaris', InventoryController::class)->names('staff.inventories');
-            Route::patch('staff/inventaris/{inventory}/status', [InventoryController::class, 'updateStatus'])->name('staff.inventories.updateStatus');
+            Route::prefix('staff/inventories')->name('staff.inventories.')->group(function () {
+                Route::get('/', [InventoryController::class, 'index'])->name('index');
+                Route::get('/create', [InventoryController::class, 'create'])->name('create');
+                Route::post('/', [InventoryController::class, 'store'])->name('store');
+                Route::get('/{inventory}', [InventoryController::class, 'show'])->name('show'); // <<< ROUTE DETAIL BARU
+                Route::get('/{inventory}/edit', [InventoryController::class, 'edit'])->name('edit');
+                Route::put('/{inventory}', [InventoryController::class, 'update'])->name('update');
+                Route::delete('/{inventory}', [InventoryController::class, 'destroy'])->name('destroy');
+                Route::patch('/{inventory}/status', [InventoryController::class, 'updateStatus'])->name('updateStatus');
+            });
+
+            // === ROUTE BARU UNTUK PROGRAM KERJA ===
+                Route::resource('staff/work-programs', WorkProgramController::class)
+                    ->names('staff.work-programs');
+                    
+                // Route khusus untuk update status task via AJAX
+                Route::patch('staff/tasks/{task}/status', [WorkProgramController::class, 'updateTaskStatus'])
+                    ->name('staff.tasks.updateStatus');
+            // Route::resource('staff/inventaris', InventoryController::class)->names('staff.inventories');
+            // Route::patch('staff/inventaris/{inventory}/status', [InventoryController::class, 'updateStatus'])->name('staff.inventories.updateStatus');
 
             
 
