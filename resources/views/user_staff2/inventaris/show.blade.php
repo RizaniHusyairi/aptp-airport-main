@@ -57,7 +57,9 @@
                 <div class="card-header"><h5 class="card-title mb-0">Informasi Alat</h5></div>
                 <div class="card-body">
                     <div class="mb-3 text-center">
-                        <img src="{{ asset('uploads/' . $inventory->photo_path) }}" alt="{{ $inventory->name }}" class="img-fluid rounded mb-2" style="max-height: 250px;">
+                        <a href="{{ asset('uploads/' . $inventory->photo_path) }}" class="glightbox" data-gallery="inventaris-gallery">
+                            <img src="{{ asset('uploads/' . $inventory->photo_path) }}" alt="{{ $inventory->name }}" width="100" class="rounded img-thumbnail">
+                        </a>
                     </div>
                     <p><strong>Nama Alat:</strong> {{ $inventory->name }}</p>
                     <p><strong>Tanggal Input:</strong> {{ $inventory->input_date?->translatedFormat('d F Y') }}</p>
@@ -155,6 +157,33 @@
                     $(targetContainer).find('input').prop('required', false);
                 }
             });
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            
+            // Inisialisasi GLightbox
+            const lightbox = GLightbox({
+                selector: '.glightbox' // Menargetkan semua link dengan class 'glightbox'
+            });
+
+            // Logika untuk modal status (tidak berubah)
+            $('.status-select').on('change', function() {
+                const targetContainer = $(this).data('target');
+                if ($(this).val() === 'Pemeliharaan') {
+                    $(targetContainer).slideDown();
+                    $(targetContainer).find('input').prop('required', true);
+                } else {
+                    $(targetContainer).slideUp();
+                    $(targetContainer).find('input').prop('required', false);
+                }
+            });
+            
+             // Inisialisasi tooltip Bootstrap (jika menggunakan)
+             var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+             var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                 return new bootstrap.Tooltip(tooltipTriggerEl)
+             })
         });
     </script>
 @endsection

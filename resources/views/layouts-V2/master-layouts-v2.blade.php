@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="{{ asset('assetsv2/compiled/css/iconly.css') }}">
     <link rel="stylesheet" href="{{ asset('assetsv2/compiled/css/main.css') }}">
     <link rel="stylesheet" href="{{ asset('assetsv2/compiled/css/custom.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets_landing/vendor/glightbox/css/glightbox.min.css') }}">
 
     <!-- Page-specific CSS -->
     @yield('styles_admin')
@@ -56,6 +57,7 @@
     <script src="{{ asset('assetsv2/extensions/jquery/jquery.min.js') }}"></script>
     <script src="{{ asset('assetsv2/compiled/js/app.js') }}"></script>
     <script src="{{ asset('assetsv2/compiled/js/custom-sidebar.js') }}"></script>
+    <script src="{{ asset('assets_landing/vendor/glightbox/js/glightbox.min.js') }}"></script>
 
     <!-- Page-specific JS -->
     @yield('scripts_admin')

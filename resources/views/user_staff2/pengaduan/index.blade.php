@@ -102,6 +102,10 @@
                                                 <label class="form-label">Nomor Telepon</label>
                                                 <p id="modal-telepon" class="form-control-static"></p>
                                             </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Tanggal Pengaduan</label>
+                                                <p id="modal-tanggal" class="form-control-static"></p>
+                                            </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="mb-3">

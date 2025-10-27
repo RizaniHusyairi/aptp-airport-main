@@ -13,7 +13,7 @@
                     'Manajemen Pengiklanan' => 'info',
                     'Manajemen Field Trip' => 'secondary',
                     'Manajemen Berita' => 'danger',
-                    'Manajemen Laporan Keuangan' => 'dark',
+                    'Manajemen Kinerja Keuangan' => 'dark',
                     'Manajemen Slider' => 'light',
                     'Manajemen Ajuan Informasi Publik' => 'primary',
                     'Manajemen Lalu Lintas Angkutan Udara' => 'danger',

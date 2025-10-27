@@ -78,13 +78,15 @@ $(document).ready(function() {
         const email = row.find('td:nth-child(2)').text();
         const telepon = row.data('telepon');
         const kategori = row.find('td:nth-child(3)').text();
+        const tgl = row.find('td:nth-child(4)').text();
         const pesan = row.find('.show-message').data('message');
-        const status = row.find('td:nth-child(4) .badge').text();
+        const status = row.find('td:nth-child(5) .badge').text();
         const url = row.data('url');
         // Isi data ke modal
         $('#complaint-id').val(id);
         $('#modal-nama').text(nama);
         $('#modal-email').text(email);
+        $('#modal-tanggal').text(tgl);
         $('#modal-telepon').text(telepon || '-');
         $('#modal-kategori').text(kategori);
         $('#modal-pesan').text(pesan);

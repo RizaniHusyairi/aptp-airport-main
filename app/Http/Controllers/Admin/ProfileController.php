@@ -28,7 +28,7 @@ class ProfileController extends Controller
                     'Manajemen Pengiklanan' => 'info',
                     'Manajemen Field Trip' => 'secondary',
                     'Manajemen Berita' => 'danger',
-                    'Manajemen Laporan Keuangan' => 'dark',
+                    'Manajemen Kinerja Keuangan' => 'dark',
                     'Manajemen Perijinan Kerja' => 'light',
                     'Manajemen Ajuan Informasi Publik' => 'primary',
                     'Manajemen Lalu Lintas Angkutan Udara' => 'danger',

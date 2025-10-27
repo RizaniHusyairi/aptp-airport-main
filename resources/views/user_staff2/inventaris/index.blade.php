@@ -60,7 +60,12 @@
                     <tbody>
                         @forelse ($inventories as $item)
                         <tr>
-                            <td><img src="{{ asset('uploads/' . $item->photo_path) }}" alt="{{ $item->name }}" width="100" class="rounded"></td>
+                            <td>
+                                {{-- <img src="{{ asset('uploads/' . $item->photo_path) }}" alt="{{ $item->name }}" width="100" class="rounded"> --}}
+                                <a href="{{ asset('uploads/' . $item->photo_path) }}" class="glightbox" data-gallery="inventaris-gallery">
+                                    <img src="{{ asset('uploads/' . $item->photo_path) }}" alt="{{ $item->name }}" width="100" class="rounded img-thumbnail">
+                                </a>
+                            </td>
                             <td>{{ $item->name }}</td>
                             <td>
                                 @php
@@ -108,6 +113,33 @@
     <script src="{{ asset('assetsv2/extensions/datatables.net/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('assetsv2/extensions/datatables.net-bs5/js/dataTables.bootstrap5.min.js') }}"></script>
     <script src="{{ asset('assetsv2/compiled/js/staff-inventaris.js') }}"></script>
+    <script>
+        $(document).ready(function() {
+            
+            // Inisialisasi GLightbox
+            const lightbox = GLightbox({
+                selector: '.glightbox' // Menargetkan semua link dengan class 'glightbox'
+            });
+
+            // Logika untuk modal status (tidak berubah)
+            $('.status-select').on('change', function() {
+                const targetContainer = $(this).data('target');
+                if ($(this).val() === 'Pemeliharaan') {
+                    $(targetContainer).slideDown();
+                    $(targetContainer).find('input').prop('required', true);
+                } else {
+                    $(targetContainer).slideUp();
+                    $(targetContainer).find('input').prop('required', false);
+                }
+            });
+            
+             // Inisialisasi tooltip Bootstrap (jika menggunakan)
+             var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+             var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                 return new bootstrap.Tooltip(tooltipTriggerEl)
+             })
+        });
+    </script>
 
     
 @endsection
