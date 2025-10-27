@@ -10,16 +10,7 @@ use Illuminate\Support\ServiceProvider;
 
 class ViewServiceProvider extends ServiceProvider
 {
-    /**
-     * Register services.
-     *
-     * @return void
-     */
-    public function register()
-    {
-        //
-    }
-
+    
     /**
      * Bootstrap services.
      *
@@ -91,7 +82,7 @@ class ViewServiceProvider extends ServiceProvider
                     ]],
                     ['name' => 'Informasi', 'dropdown' => [
                         ['name' => 'Berita', 'route' => route('berita')],
-                        ['name' => 'Laporan Keuangan', 'route' => route('laporanKeuangan')],
+                        ['name' => 'Kinerja Keuangan', 'route' => route('laporanKeuangan')],
                     ]],
                     
                     

@@ -34,9 +34,25 @@
 <!--           HERO SECTION (VERSI LAMA)          -->
 <!-- ============================================ -->
 <section id="hero-modern" class="hero-modern">
-    <div class="swiper hero-slider">
+    {{-- === PERUBAHAN DI SINI: Background Dinamis === --}}
+    <div class="hero-background-container">
+        @if ($heroSettings['hero_type'] == 'video' && !empty($heroSettings['hero_video_path']))
+            <video autoplay muted loop playsinline class="hero-background-media">
+                {{-- <source src="{{ Storage::url($heroSettings['hero_video_path']) }}" type="video/{{ pathinfo($heroSettings['hero_video_path'], PATHINFO_EXTENSION) }}"> --}}
+                <source src="{{ asset('uploads/' . $heroSettings['hero_video_path']) }}" type="video/{{ pathinfo($heroSettings['hero_video_path'], PATHINFO_EXTENSION) }}">
+                Browser Anda tidak mendukung video background.
+            </video>
+        @elseif (!empty($heroSettings['hero_image_path']))
+            <div class="hero-background-media" style="background-image: url('{{ asset('uploads/' . $heroSettings['hero_image_path']) }}')"></div>
+        @else
+            {{-- Fallback jika tidak ada setting atau file --}}
+            <div class="hero-background-media" style="background-image: url('{{ asset('assets_landing/img/bg-1.png') }}');"></div>
+        @endif
+    </div>
+    {{-- === Akhir Perubahan Background === --}}
+    {{-- <div class="swiper hero-slider">
         <div class="swiper-wrapper">
-            @forelse ($sliders as $slider)
+            @forelse ($sliders as $slider)  
                 <div class="swiper-slide">
                     <div class="hero-background-image" style="background-image: url('{{ asset('uploads/' . $slider->documents) }}')"></div>
                 </div>
@@ -47,7 +63,7 @@
             @endforelse
         </div>
         <div class="swiper-pagination"></div>
-    </div>
+    </div> --}}
 
     <div class="hero-background-overlay"></div>
 
@@ -159,7 +175,7 @@
             </div>
             <div class="col-lg-7" data-aos="fade-left" data-aos-delay="200">
                 <div class="welcome-content">
-                    <h2 class="welcome-title">Sambutan dari Kepala Bandara</h2>
+                    <h2 class="welcome-title">Sambutan dari Kepala Bandar Udara</h2>
                     <div class="welcome-text-body">
                         <p>
                             "Dalam era yang penuh tantangan ini, di mana teknologi dan informasi berkembang begitu pesat, kita di BLU Kantor UPBU Kelas I APT. Pranoto Samarinda merasa penting untuk terus beradaptasi. Teknologi telah membawa kita ke Era Revolusi Industri 4.0, yang menuntut kita untuk memanfaatkannya dengan efektif dan efisien."
@@ -188,7 +204,7 @@
 <section id="traffic-stats" class="section-modern traffic-stats" data-detail-url="{{ route('lalulintas') }}">
     <div class="container" data-aos="fade-up">
         <div class="section-title-modern">
-            <h2>Aktivitas Bandara Bulan Ini</h2>
+            <h2>Aktivitas Bandar Udara Bulan Ini</h2>
             <p>Data Lalu Lintas Udara hingga hari ini di bulan {{ \Carbon\Carbon::now()->translatedFormat('F Y') }}</p>
         </div>
         
@@ -275,7 +291,7 @@
 <section id="explore-section" class="section-modern explore-section">
     <div class="container" data-aos="fade-up">
         <div class="section-title-modern text-center">
-            <h2>Jelajahi Bandara & Sekitarnya</h2>
+            <h2>Jelajahi Bandar Udara & Sekitarnya</h2>
             <p>Temukan kenyamanan di dalam terminal dan keindahan destinasi di sekitar kami.</p>
         </div>
 
@@ -386,7 +402,7 @@
     <div class="container" data-aos="fade-up">
         <div class="section-title-modern">
             <h2>Kabar Terbaru dari Gerbang Udara Anda</h2>
-            <p>Ikuti terus informasi, acara, dan pengembangan terbaru langsung dari Bandara APT Pranoto.</p>
+            <p>Ikuti terus informasi, acara, dan pengembangan terbaru langsung dari Bandar Udara APT Pranoto.</p>
         </div>
         <div class="row g-4">
             @forelse ($headlines as $news)

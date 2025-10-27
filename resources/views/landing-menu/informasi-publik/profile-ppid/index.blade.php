@@ -16,7 +16,7 @@
     <!-- Section Title -->
     <div class="container section-title" data-aos="fade-up">
         <h2>PPID<br></h2>
-        <p><span>Profil PPID</span> <span class="description-title"> BLU Kantor UPBU Kelas I A.P.T. Pranoto</span></p>
+        <p><span>Profil PPID</span> <span class="description-title"> BLU Kantor UPBU Kelas I APT Pranoto</span></p>
     </div><!-- End Section Title -->
 
     <div class="container-fluid light-background" >

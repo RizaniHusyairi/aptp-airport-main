@@ -6,7 +6,7 @@
 <section id="traffic" class="section light-background pt-6">
     <div class="container section-title" data-aos="fade-up">
         <h2>Lalu Lintas<br></h2>
-        <p><span>Angkutan Udara</span> <span class="description-title">Bandara A.P.T. Pranoto Samarinda</span></p>
+        <p><span>Angkutan Udara</span> <span class="description-title">Bandar Udara APT Pranoto Samarinda</span></p>
     </div>
     <div class="container php-email-form">
         <!-- Filter Section -->
@@ -54,9 +54,9 @@
             </div>
         </div>
         <!-- Download Button -->
-        <div class="text-center mt-4" data-aos="fade-up" data-aos-delay="100">
+        {{-- <div class="text-center mt-4" data-aos="fade-up" data-aos-delay="100">
             <a href="{{ asset('assets_landing/pdf/lalu-lintas-angkutan-udara-2025.pdf') }}" class="btn btn-primary" download>Unduh Laporan (PDF)</a>
-        </div>
+        </div> --}}
     </div>
 </section>
 @endsection

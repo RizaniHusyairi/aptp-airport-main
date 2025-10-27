@@ -6,7 +6,7 @@
   <section id="about" class="about section pt-6 light-background">
     <div class="container section-title" data-aos="fade-up">
       <h2>Informasi<br></h2>
-      <p><span>Berita Seputar</span> <span class="description-title">Bandara A.P.T. Pranoto Samarinda</span></p>
+      <p><span>Berita Seputar</span> <span class="description-title">Bandar Udara APT Pranoto Samarinda</span></p>
     </div>
     
     <div class="container ">

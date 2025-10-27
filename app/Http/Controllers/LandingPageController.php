@@ -8,6 +8,7 @@ use App\Models\Letter;
 use App\Models\Slider;
 use App\Models\Finance;
 use App\Models\Service;
+use App\Models\Setting;
 use App\Models\Tourism;
 use App\Models\Visitor;
 use App\Models\Facility;
@@ -103,9 +104,25 @@ class LandingPageController extends Controller
             return Tourism::where('status', 'published')->latest()->take(3)->get();
         });
 
-        // BARU: Cache query untuk sliders selama 1 jam
-        $sliders = Slider::where('is_visible_home', 1)->get();
-        
+        // // BARU: Cache query untuk sliders selama 1 jam
+        // $sliders = Slider::where('is_visible_home', 1)->get();
+        // Ambil data sliders (dari kode Anda sebelumnya)
+        $sliders = Slider::all(); // Atau query lain sesuai kebutuhan
+        // === KODE BARU: AMBIL PENGATURAN HERO ===
+        $heroSettings = Setting::whereIn('key', [
+                'hero_type',
+                'hero_image_path',
+                'hero_video_path'
+            ])
+            ->pluck('value', 'key')
+            ->all(); // Ambil sebagai array
+
+        // Berikan nilai default jika pengaturan belum ada
+        $heroSettings = array_merge([
+            'hero_type' => 'image', // Default ke gambar jika belum diatur
+            'hero_image_path' => null,
+            'hero_video_path' => null,
+        ], $heroSettings);
 
         // BARU: Cache query untuk total angkutan udara selama 3 jam
         $totalAngkutanUdara = Cache::remember('total_air_freight_monthly', now()->addHours(3), function() {
@@ -157,7 +174,8 @@ class LandingPageController extends Controller
             'destinations',
             'weather',
             'meta',
-            'facilityImages'
+            'facilityImages',
+            'heroSettings'
         ));
     }
 

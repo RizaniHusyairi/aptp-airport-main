@@ -7,7 +7,7 @@
 <section id="pengajuan-informasi" class="section pt-6 light-background">
     <div class="container section-title" data-aos="fade-up">
         <h2>Pengajuan<br></h2>
-        <p><span>Informasi Publik</span> <span class="description-title">Bandara A.P.T. Pranoto Samarinda</span></p>
+        <p><span>Informasi Publik</span> <span class="description-title">Bandar Udara APT Pranoto</span></p>
     </div>
 
     <div class="container">

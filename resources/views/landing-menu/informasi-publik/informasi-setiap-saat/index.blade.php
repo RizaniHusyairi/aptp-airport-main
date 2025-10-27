@@ -16,7 +16,7 @@
         <div class="container section-title" data-aos="fade-up">
             {{-- PERBAIKAN: Ubah H2 agar konsisten --}}
             <h2>PPID</h2>
-            <p><span>Informasi Setiap Saat</span> <span class="description-title">Bandara A.P.T. Pranoto</span></p>
+            <p><span>Informasi Setiap Saat</span> <span class="description-title">Bandar Udara APT Pranoto</span></p>
         </div>
         
         <div class="row justify-content-center" data-aos="fade-up" data-aos-delay="100">

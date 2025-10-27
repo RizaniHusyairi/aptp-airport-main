@@ -14,7 +14,7 @@
     <div class="container">
         <div class="container section-title" data-aos="fade-up">
             <h2>Informasi<br></h2>
-            <p><span> Destinasi Pariwisata Terdekat</span> <span class="description-title">Bandara A.P.T. Pranoto</span></p>
+            <p><span> Destinasi Pariwisata Terdekat</span> <span class="description-title">Bandar Udara APT Pranoto</span></p>
         </div>
 
       <div class="row mb-5" data-aos="fade-up" data-aos-delay="100">

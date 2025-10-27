@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\{
     ProfileController,
     RoleController,
     ImmediateInformationController,
+    HeroSettingController,
     EvergreenInformationController,
     InformationServiceReportController,
     InfoSlideController,
@@ -321,6 +322,14 @@ Route::group(["prefix" => 'dashboard'], function () {
             
             Route::resource('staff/ppid-regulations', PpidRegulationController::class)->names('staff.ppid-regulations');
         
+            // routes/web.php (dalam grup admin/staff)
+            // === ROUTE UNTUK PENGATURAN HERO ===
+            Route::prefix('hero-settings')->name('admin.hero-settings.')->group(function () {
+                // Halaman untuk menampilkan form pengaturan
+                Route::get('/', [HeroSettingController::class, 'index'])->name('index');
+                // Rute untuk memproses penyimpanan
+                Route::post('/update', [HeroSettingController::class, 'update'])->name('update');
+            });
         
         });
     });
@@ -388,7 +397,7 @@ Route::prefix('informasi')->group(function () {
 });
 
 
-Route::get('/informasi-keuangan/data', [LandingPageController::class, 'getFinanceData'])->name('informasiKeuangan.data');
+Route::get('/informasi-keuangan/data', [LandingPageController::class, 'getFinancialData'])->name('informasiKeuangan.data');
 
 Route::get('/informasi/tenant', [LandingPageController::class, 'tenant'])->name('tenant');
 Route::get('/informasi/sewa', [LandingPageController::class, 'sewa'])->name('sewa');

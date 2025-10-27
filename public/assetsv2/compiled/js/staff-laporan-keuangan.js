@@ -48,6 +48,12 @@ $(document).ready(function() {
         const modalTableBody = $('#table-detail-pengeluaran tbody');
         modalTableBody.empty();
 
+        // === PERUBAHAN DI SINI: Ambil data Periode dan Total Anggaran ===
+        const periode = row.find('td:eq(0)').text(); // Kolom pertama (Tanggal)
+        const totalAnggaran = row.find('td:eq(3)').text(); // Kolom keempat (Jumlah)
+        // Tampilkan data ke modal
+        $('#modal-periode').text(periode);
+        $('#modal-total-anggaran').text(totalAnggaran);
         row.find('.expense').each(function() {
             const nomor = $(this).find('.nomor').text();
             const deskripsi = $(this).find('.deskripsi').text();

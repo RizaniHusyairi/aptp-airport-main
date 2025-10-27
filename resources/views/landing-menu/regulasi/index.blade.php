@@ -13,7 +13,7 @@
         
         <div class="container section-title" data-aos="fade-up">
             <h2>Regulasi</h2>
-            <p><span>Surat {{ ucfirst($type) }}</span> <span class="description-title">Bandara A.P.T. Pranoto</span></p>
+            <p><span>Surat {{ ucfirst($type) }}</span> <span class="description-title">Bandar Udara APT Pranoto</span></p>
         </div>
 
         <!-- Search Bar -->

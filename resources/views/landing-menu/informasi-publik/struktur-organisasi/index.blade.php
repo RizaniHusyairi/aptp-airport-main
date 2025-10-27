@@ -10,7 +10,7 @@
   <!-- Section Title -->
   <div class="container section-title" data-aos="fade-up">
     <h2>Informasi Publik<br></h2>
-    <p><span>Struktur Organisasi</span> <span class="description-title"> A.P.T. Pranoto Samarinda</span></p>
+    <p><span>Struktur Organisasi</span> <span class="description-title"> Bandar Udara APT Pranoto</span></p>
   </div><!-- End Section Title -->
 
   <div class="container-fluid light-background" >
