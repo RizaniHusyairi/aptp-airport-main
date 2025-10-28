@@ -173,6 +173,14 @@ Route::group(["prefix" => 'dashboard'], function () {
                 // Route khusus untuk update status task via AJAX
                 Route::patch('staff/tasks/{task}/status', [WorkProgramController::class, 'updateTaskStatus'])
                     ->name('staff.tasks.updateStatus');
+
+                // Rute terpisah untuk Aksi Tugas (lebih terstruktur)
+                Route::prefix('staff/tasks')->name('staff.tasks.')->group(function () {
+                    // Route untuk Staf mengajukan verifikasi
+                    Route::post('/{task}/submit-verification', [WorkProgramController::class, 'submitTaskForVerification'])->name('submitVerification');
+                    // Route untuk Kanit melakukan verifikasi
+                    Route::post('/{task}/verify', [WorkProgramController::class, 'verifyTask'])->name('verify');
+                });
             // Route::resource('staff/inventaris', InventoryController::class)->names('staff.inventories');
             // Route::patch('staff/inventaris/{inventory}/status', [InventoryController::class, 'updateStatus'])->name('staff.inventories.updateStatus');
 

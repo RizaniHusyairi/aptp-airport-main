@@ -22,6 +22,7 @@ class WorkProgram extends Model
 
     /**
      * Accessor untuk menghitung persentase progres.
+     * Dihitung berdasarkan tugas yang statusnya 'Diverifikasi'.
      *
      * @return float
      */
@@ -29,12 +30,12 @@ class WorkProgram extends Model
     {
         $totalTasks = $this->tasks()->count();
         if ($totalTasks === 0) {
-            return 0; // Jika tidak ada tugas, progres 0%
+            return 0;
         }
 
-        $completedTasks = $this->tasks()->where('is_completed', true)->count();
+        // Hitung tugas yang statusnya 'Diverifikasi'
+        $verifiedTasks = $this->tasks()->where('status', 'Diverifikasi')->count();
 
-        return round(($completedTasks / $totalTasks) * 100);
+        return round(($verifiedTasks / $totalTasks) * 100);
     }
 }
-

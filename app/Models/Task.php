@@ -12,6 +12,11 @@ class Task extends Model
 
     protected $guarded = [];
 
+    // Cast status sebagai string (karena sudah enum)
+    protected $casts = [
+        // Hapus 'is_completed' jika masih ada
+    ];
+
     /**
      * Relasi ke program kerja induk.
      */
@@ -19,4 +24,14 @@ class Task extends Model
     {
         return $this->belongsTo(WorkProgram::class);
     }
+
+    /**
+     * Relasi ke user (Kanit) yang melakukan verifikasi.
+     */
+    public function verifier(): BelongsTo
+    {
+        // Relasi ke User model, menggunakan foreign key 'verifier_id'
+        return $this->belongsTo(User::class, 'verifier_id');
+    }
 }
+

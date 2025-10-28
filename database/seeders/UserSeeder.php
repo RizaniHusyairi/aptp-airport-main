@@ -68,6 +68,20 @@ class UserSeeder extends Seeder
             $kasubbag->roles()->attach($roleKasubbag->id);
             $roleKasubbag->permissions()->attach($allPermissions);
         }
+        // 2. Kasubbag
+        $kanit = User::create([
+            'name' => 'Kanit',
+            'email' => 'kanit@aptpairport.id',
+            'password' => Hash::make('12345678'),
+            'phone' => '081234534265',
+            'is_staff' => true,
+            'is_accepted' => true,
+        ]);
+        $rolekanit = Role::where('name', 'Kanit')->first();
+        if ($rolekanit) {
+            $kanit->roles()->attach($rolekanit->id);
+            $rolekanit->permissions()->attach($allPermissions);
+        }
 
         // 3. Kasi Keamanan
         $kasi1 = User::create([

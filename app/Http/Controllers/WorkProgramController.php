@@ -75,9 +75,10 @@ class WorkProgramController extends Controller
     /**
      * Menampilkan detail program kerja dan tugas-tugasnya.
      */
-    public function show(WorkProgram $workProgram)
+public function show(WorkProgram $workProgram)
     {
-        $workProgram->load('tasks'); // Load tugas
+        // Eager load tasks beserta relasi verifier-nya
+        $workProgram->load(['tasks.verifier']);
         return view('user_staff2.program-kerja.show', compact('workProgram'));
     }
 
@@ -97,63 +98,53 @@ class WorkProgramController extends Controller
     {
          $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'tasks' => 'nullable|array', // Tugas bisa jadi array kosong jika semua dihapus
-            'tasks.*.id' => 'nullable|exists:tasks,id', // ID tugas yang sudah ada
+            'tasks' => 'required|array|min:1',
+            'tasks.*.id' => 'nullable|exists:tasks,id', // Untuk tugas yang sudah ada
             'tasks.*.description' => 'required|string|max:255',
-            'tasks.*.is_completed' => 'sometimes|boolean', // Status selesai
+        ], [
+             'tasks.*.description.required' => 'Deskripsi untuk setiap tugas wajib diisi.',
+             'tasks.min' => 'Minimal harus ada satu tugas.'
         ]);
 
         DB::beginTransaction();
         try {
-            // Update nama program kerja
             $workProgram->update(['name' => $validated['name']]);
 
-            $existingTaskIds = [];
-            $tasksToProcess = $validated['tasks'] ?? [];
+            $existingTaskIds = $workProgram->tasks()->pluck('id')->toArray();
+            $newTaskIds = [];
 
-            foreach ($tasksToProcess as $taskData) {
+            foreach ($validated['tasks'] as $taskData) {
                  if (!empty(trim($taskData['description']))) {
-                    if (isset($taskData['id'])) {
+                    if (isset($taskData['id']) && in_array($taskData['id'], $existingTaskIds)) {
                         // Update tugas yang sudah ada
                         $task = Task::find($taskData['id']);
-                        if ($task && $task->work_program_id === $workProgram->id) { // Pastikan task milik program ini
-                            $task->update([
-                                'description' => $taskData['description'],
-                                'is_completed' => $taskData['is_completed'] ?? $task->is_completed ?? false,
-                            ]);
-                            $existingTaskIds[] = $task->id;
+                        if ($task) {
+                            $task->update(['description' => $taskData['description']]);
+                            $newTaskIds[] = $task->id;
                         }
                     } else {
-                        // Buat tugas baru
-                        $newTask = $workProgram->tasks()->create([
-                            'description' => $taskData['description'],
-                            'is_completed' => $taskData['is_completed'] ?? false,
-                        ]);
-                         $existingTaskIds[] = $newTask->id;
+                        // Tambah tugas baru
+                        $newTask = $workProgram->tasks()->create(['description' => $taskData['description']]);
+                        $newTaskIds[] = $newTask->id;
                     }
-                 }
+                }
             }
 
-            // Hapus tugas yang tidak ada di request (sudah dihapus di form)
-            $workProgram->tasks()->whereNotIn('id', $existingTaskIds)->delete();
-            
-             // Validasi ulang: pastikan masih ada minimal 1 tugas setelah update/delete
-            if ($workProgram->tasks()->count() === 0 && count($tasksToProcess) > 0) {
-                 DB::rollBack();
-                 return back()->withInput()->withErrors(['tasks' => 'Program kerja harus memiliki minimal satu tugas yang valid.']);
-            } elseif ($workProgram->tasks()->count() === 0 && count($tasksToProcess) == 0) {
-                 // Jika memang sengaja dihapus semua, biarkan saja (atau beri validasi lain jika perlu)
+            // Hapus tugas yang tidak ada di form (sudah dihapus user)
+            $tasksToDelete = array_diff($existingTaskIds, $newTaskIds);
+            if (!empty($tasksToDelete)) {
+                Task::destroy($tasksToDelete);
             }
-
 
             DB::commit();
-            return redirect()->route('staff.work-programs.index')->with('success', 'Program kerja berhasil diperbarui.');
+            return redirect()->route('staff.work-programs.show', $workProgram->id)->with('success', 'Program kerja berhasil diperbarui.');
 
         } catch (\Exception $e) {
             DB::rollBack();
             return back()->with('error', 'Gagal memperbarui program kerja: ' . $e->getMessage())->withInput();
         }
     }
+
 
     /**
      * Menghapus program kerja beserta tugas-tugasnya.
@@ -170,23 +161,72 @@ class WorkProgramController extends Controller
     }
 
     /**
-     * Memperbarui status selesai/belum selesai suatu tugas via AJAX.
+     * Staf mengajukan tugas untuk diverifikasi.
      */
-    public function updateTaskStatus(Request $request, Task $task)
+    public function submitTaskForVerification(Request $request, Task $task)
     {
-        // Pastikan task milik program kerja yang benar (optional, tergantung route)
-        // if ($task->work_program_id !== $workProgramId) { abort(403); }
-
         $validated = $request->validate([
-            'is_completed' => 'required|boolean',
+            'supporting_document_link' => 'required|url',
+        ], [
+            'supporting_document_link.required' => 'Link data dukung wajib diisi.',
+            'supporting_document_link.url' => 'Input harus berupa URL yang valid.',
         ]);
 
-        $task->update(['is_completed' => $validated['is_completed']]);
+        // Pastikan hanya tugas yang 'Belum Selesai' atau 'Revisi Diperlukan' yang bisa diajukan
+        if (!in_array($task->status, ['Belum Selesai', 'Revisi Diperlukan'])) {
+             return back()->with('error', 'Status tugas tidak valid untuk diajukan.');
+        }
 
-        // Hitung ulang progres program kerja induk
-        $workProgram = $task->workProgram()->with('tasks')->first();
-        $progress = $workProgram->progress_percentage; // Gunakan accessor
+        $previousStatus = $task->status;
+        $task->status = 'Menunggu Verifikasi';
+        $task->supporting_document_link = $validated['supporting_document_link'];
+        $task->verification_notes = null; // Hapus catatan lama jika ada
+        $task->verifier_id = null; // Hapus verifier lama jika ada
+        $task->save();
 
-        return response()->json(['success' => true, 'progress' => $progress]);
+        // Catat Log (jika ada model log)
+        // $this->logTaskStatusChange($task, Auth::id(), $previousStatus, $task->status, $validated['supporting_document_link']);
+
+        return back()->with('success', 'Tugas berhasil diajukan untuk verifikasi.');
     }
+
+    /**
+     * Kanit melakukan verifikasi tugas.
+     */
+    public function verifyTask(Request $request, Task $task)
+    {
+        // Pastikan hanya Kanit yang bisa verifikasi (implementasi role/permission di sini)
+        // if (!Auth::user()->hasRole('Kanit')) { abort(403); }
+
+        $validated = $request->validate([
+            'verification_status' => ['required', Rule::in(['Diverifikasi', 'Revisi Diperlukan'])],
+            'verification_notes' => 'required_if:verification_status,Revisi Diperlukan|nullable|string',
+        ], [
+            'verification_notes.required_if' => 'Catatan wajib diisi jika meminta revisi.',
+        ]);
+
+        // Pastikan hanya tugas yang 'Menunggu Verifikasi' yang bisa diproses
+        if ($task->status !== 'Menunggu Verifikasi') {
+            return back()->with('error', 'Status tugas tidak valid untuk diverifikasi.');
+        }
+
+        $previousStatus = $task->status;
+        $task->status = $validated['verification_status'];
+        $task->verifier_id = Auth::id();
+        $task->verification_notes = $validated['verification_notes'];
+
+        // Jika status Diverifikasi, hapus link data dukung agar tidak membingungkan (opsional)
+        // if ($task->status === 'Diverifikasi') {
+        //     $task->supporting_document_link = null;
+        // }
+        
+        $task->save();
+
+        // Catat Log (jika ada model log)
+        // $this->logTaskStatusChange($task, Auth::id(), $previousStatus, $task->status, $validated['verification_notes']);
+
+
+        return back()->with('success', 'Verifikasi tugas berhasil disimpan.');
+    }
+
 }

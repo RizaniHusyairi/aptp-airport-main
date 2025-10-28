@@ -22,6 +22,7 @@ class RoleSeeder extends Seeder
         $kasiKeamanan = Role::create(['name' => 'Kepala Seksi Keamanan Penerbangan dan Pelayanan Darurat', 'parent_role_id' => $kasubbag->id]);
         $kasiPelayanan = Role::create(['name' => 'Kepala Seksi Pelayanan dan Kerjasama', 'parent_role_id' => $kasubbag->id]);
         $kasiTeknik = Role::create(['name' => 'Kepala Seksi Teknik dan Operasi', 'parent_role_id' => $kasubbag->id]);
+        $kanit = Role::create(['name' => 'Kanit', 'parent_role_id' => $kasubbag->id]);
 
         // Level 4: Jabatan Staff umum (atasan bisa bervariasi)
         $staffKeamanan = Role::create(['name' => 'Staff Keamanan', 'parent_role_id' => $kasiKeamanan->id]);
