@@ -7,7 +7,7 @@
         .task-item { border-bottom: 1px solid #eee; padding-bottom: 1rem; margin-bottom: 1rem; }
         .task-item:last-child { border-bottom: none; }
         .verification-notes { 
-            background-color: #f8f9fa; 
+            background-color: #181818; 
             border-left: 3px solid #6c757d; 
             padding: 8px 12px; 
             font-size: 0.9em;

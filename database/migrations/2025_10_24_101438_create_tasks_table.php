@@ -21,10 +21,9 @@ return new class extends Migration
             $table->string('supporting_document_link')->nullable();
 
             // 3. Tambahkan kolom untuk ID verifikator (Kanit)
-            $table->foreignId('verifier_id')->nullable()->after('supporting_document_link')
-                  ->constrained('users')->nullOnDelete();
+            $table->foreignId('verifier_id')->nullable()->constrained('users')->nullOnDelete();
 
-            $table->text('verification_notes')->nullable()->after('verifier_id');
+            $table->text('verification_notes')->nullable();
 
             $table->timestamps();
         });
