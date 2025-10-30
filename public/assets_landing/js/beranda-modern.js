@@ -166,6 +166,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // const logoUrl = logoFileName ? `http://103.210.122.2/storage/logo/${logoFileName}` : 'https://placehold.co/100x100/png?text=LOGO';
         const kota = destinationData?.nama || 'N/A';
         const nomor_penerbangan = flight.pesawat?.kode_penerbangan || 'N/A';
+        const kodebandara = destinationData?.iata || 'N/A';
         const jadwal = flight.jam || '--:--';   
         const statusText = flight.remark?.status || 'SCHEDULED';
 
@@ -184,7 +185,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     <img src="${logoUrl}" alt="${airline}" onerror="this.src='https://placehold.co/100x100/png?text=LOGO'; this.onerror=null;">
                     <span>${airline}</span>
                 </div>
-                <div class="flight-destination"><span>${kota}</span></div>
+                <div class="flight-destination"><span>${kota} (${kodebandara})</span></div>
                 <div class="flight-number"><span>${nomor_penerbangan}</span></div>
                 <div class="flight-time"><span>${jadwal}</span></div>
                 <div class="flight-gate"><span>${gate}</span></div>

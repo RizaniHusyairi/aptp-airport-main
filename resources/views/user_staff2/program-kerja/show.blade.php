@@ -112,7 +112,7 @@
                             <form action="{{ route('staff.tasks.submitVerification', $task->id) }}" method="POST" class="mt-3">
                                 @csrf
                                 <div class="input-group input-group-sm">
-                                    <input type="url" name="supporting_document_link" class="form-control" placeholder="Masukkan link data dukung (Google Drive)" required>
+                                    <input type="url" name="supporting_document_link" class="form-control" placeholder="Masukkan link data dukung" required>
                                     <button class="btn btn-outline-primary" type="submit">Ajukan Verifikasi</button>
                                 </div>
                                 @error('supporting_document_link', $task->id . '_submit') 
