@@ -24,4 +24,13 @@ class Inventory extends Model
         // Urutkan berdasarkan yang terbaru
         return $this->hasMany(InventoryStatusLog::class)->latest();
     }
+
+    /**
+     * === RELASI BARU ===
+     * Relasi ke catatan logbook.
+     */
+    public function logbooks(): HasMany
+    {
+        return $this->hasMany(InventoryLogbook::class)->latest();
+    }
 }

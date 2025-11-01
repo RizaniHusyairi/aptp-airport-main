@@ -164,6 +164,13 @@ Route::group(["prefix" => 'dashboard'], function () {
                 Route::put('/{inventory}', [InventoryController::class, 'update'])->name('update');
                 Route::delete('/{inventory}', [InventoryController::class, 'destroy'])->name('destroy');
                 Route::patch('/{inventory}/status', [InventoryController::class, 'updateStatus'])->name('updateStatus');
+                Route::post('/{inventory}/logbook', [InventoryController::class, 'storeLogbook'])->name('storeLogbook');
+                Route::get('/{inventory}/logbook/create', [InventoryController::class, 'createLogbook'])->name('createLogbook');
+                Route::get('/{inventory}/logbook/{logbook}/edit', [InventoryController::class, 'editLogbook'])->name('editLogbook');
+                Route::put('/{inventory}/logbook/{logbook}', [InventoryController::class, 'updateLogbook'])->name('updateLogbook');
+                Route::delete('/{inventory}/logbook/{logbook}', [InventoryController::class, 'destroyLogbook'])->name('destroyLogbook');
+
+                Route::get('/{inventory}/logbook/export', [InventoryController::class, 'exportLogbookPdf'])->name('exportLogbookPdf');
             });
 
             // === ROUTE BARU UNTUK PROGRAM KERJA ===

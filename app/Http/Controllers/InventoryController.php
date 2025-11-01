@@ -2,13 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Models\Inventory;
-use App\Models\InventoryStatusLog; // <<< TAMBAHKAN MODEL LOG
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth; // <<< TAMBAHKAN AUTH
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
+use App\Models\InventoryStatusLog;
+use App\Http\Controllers\Controller;
+use Carbon\Carbon; // <-- Import Carbon
+use Illuminate\Support\Facades\Storage;
+use Barryvdh\DomPDF\Facade\Pdf; // <-- Import PDF
+use App\Models\User; // <-- Pastikan User di-import
+use Illuminate\Support\Facades\Auth; // <-- Import Auth
+use App\Models\InventoryLogbook; // <-- Import model logbook
 
 class InventoryController extends Controller
 {
@@ -26,8 +31,8 @@ class InventoryController extends Controller
      */
     public function show(Inventory $inventory)
     {
-        // Eager load riwayat status beserta user yang mengubah
-        $inventory->load(['statusLogs.user']);
+        // Eager load riwayat status DAN riwayat logbook
+        $inventory->load(['statusLogs.user', 'logbooks.user']);
         return view('user_staff2.inventaris.show', compact('inventory'));
     }
 
@@ -161,4 +166,168 @@ class InventoryController extends Controller
 
         return redirect()->route('staff.inventories.show', $inventory->id)->with('info', 'Tidak ada perubahan status.');
     }
+
+
+    /**
+     * Menampilkan formulir untuk menambah entri logbook baru.
+     */
+    public function createLogbook(Inventory $inventory)
+    {
+        return view('user_staff2.inventaris.create-logbook', compact('inventory'));
+    }
+
+    /**
+     * === METHOD BARU: Menyimpan entri logbook baru ===
+     */
+    public function storeLogbook(Request $request, Inventory $inventory)
+    {
+        $validated = $request->validate([
+            'log_date' => 'required|date',
+            'schedule_time' => 'required|date_format:H:i',
+            'notes' => 'required|string',
+            'documentation' => 'nullable|array',
+            'documentation.*' => 'image|mimes:jpeg,png,jpg,webp|max:2048', // Validasi setiap file
+        ], [
+            'documentation.*.image' => 'File dokumentasi harus berupa gambar.',
+            'documentation.*.mimes' => 'Format foto harus: jpeg, png, jpg, webp.',
+            'documentation.*.max' => 'Ukuran foto maksimal 2MB per file.',
+        ]);
+
+        $documentationPaths = [];
+        if ($request->hasFile('documentation')) {
+            foreach ($request->file('documentation') as $file) {
+                // Simpan setiap file dan kumpulkan path-nya
+                $path = $file->store('inventory_logbooks/' . $inventory->id, 'public');
+                $documentationPaths[] = $path;
+            }
+        }
+
+        $inventory->logbooks()->create([
+            'user_id' => Auth::id(),
+            'log_date' => $validated['log_date'],
+            'schedule_time' => $validated['schedule_time'],
+            'notes' => $validated['notes'],
+            'documentation' => $documentationPaths, // Simpan array path ke kolom JSON
+        ]);
+
+        return redirect()->route('staff.inventories.show', $inventory->id)->with('success', 'Catatan logbook baru berhasil ditambahkan.');
+    }
+
+        /**
+     * Menampilkan formulir untuk mengedit entri logbook.
+     */
+    public function editLogbook(Inventory $inventory, InventoryLogbook $logbook)
+    {
+        // Pastikan logbook milik inventaris yang benar
+        if ($logbook->inventory_id !== $inventory->id) {
+            abort(404);
+        }
+        return view('user_staff2.inventaris.edit-logbook', compact('inventory', 'logbook'));
+    }
+
+    /**
+     * Memperbarui entri logbook.
+     */
+    public function updateLogbook(Request $request, Inventory $inventory, InventoryLogbook $logbook)
+    {
+        $validated = $request->validate([
+            'log_date' => 'required|date',
+            'schedule_time' => 'required|date_format:H:i',
+            'notes' => 'required|string',
+            'documentation' => 'nullable|array',
+            'documentation.*' => 'image|mimes:jpeg,png,jpg,webp|max:2048',
+            'deleted_photos' => 'nullable|array', // <-- Validasi array foto yang dihapus
+            'deleted_photos.*' => 'string' // <-- Validasi path foto adalah string
+        ]);
+
+        $existingPhotos = $logbook->documentation ?? []; // Ambil path foto lama
+
+        // 1. Proses Hapus Foto
+        $deletedPhotos = $request->input('deleted_photos', []);
+        if (!empty($deletedPhotos)) {
+            foreach ($deletedPhotos as $pathToDelete) {
+                // Hapus file dari storage
+                Storage::disk('public')->delete($pathToDelete);
+            }
+            // Filter array $existingPhotos, hapus yang ada di $deletedPhotos
+            $existingPhotos = array_values(array_diff($existingPhotos, $deletedPhotos));
+        }
+
+        // 2. Proses Tambah Foto Baru
+        if ($request->hasFile('documentation')) {
+            foreach ($request->file('documentation') as $file) {
+                $path = $file->store('inventory_logbooks/' . $inventory->id, 'public');
+                $existingPhotos[] = $path; // Tambahkan path baru ke array
+            }
+        }
+
+        // 3. Update database
+        $logbook->update([
+            'user_id' => Auth::id(), // Perbarui user ID ke pengedit terakhir
+            'log_date' => $validated['log_date'],
+            'schedule_time' => $validated['schedule_time'],
+            'notes' => $validated['notes'],
+            'documentation' => $existingPhotos, // Simpan array yang sudah final
+        ]);
+
+        return redirect()->route('staff.inventories.show', $inventory->id)->with('success', 'Catatan logbook berhasil diperbarui.');
+    }
+
+    /**
+     * Menghapus entri logbook.
+     */
+    public function destroyLogbook(Inventory $inventory, InventoryLogbook $logbook)
+    {
+        // Hapus semua foto dokumentasi dari storage
+        if (!empty($logbook->documentation)) {
+            foreach ($logbook->documentation as $photoPath) {
+                Storage::disk('public')->delete($photoPath);
+            }
+        }
+
+        $logbook->delete();
+        return redirect()->route('staff.inventories.show', $inventory->id)->with('success', 'Catatan logbook berhasil dihapus.');
+    }
+
+    /**
+     * Mengekspor logbook inventaris ke PDF berdasarkan periode.
+     */
+    public function exportLogbookPdf(Request $request, Inventory $inventory)
+    {
+        $validated = $request->validate([
+            'month_year' => 'required|date_format:Y-m',
+        ], [
+            'month_year.required' => 'Periode bulan dan tahun wajib dipilih.',
+            'month_year.date_format' => 'Format periode tidak valid.'
+        ]);
+
+        try {
+            $period = Carbon::createFromFormat('Y-m', $validated['month_year']);
+        } catch (\Exception $e) {
+            return back()->with('error', 'Format periode tidak valid.');
+        }
+
+        $logbooks = $inventory->logbooks()
+            ->whereYear('log_date', $period->year)
+            ->whereMonth('log_date', $period->month)
+            ->with('user') // Eager load user
+            ->latest('log_date') // Urutkan berdasarkan tanggal
+            ->get();
+
+        $periodeString = $period->translatedFormat('F Y');
+
+        $pdf = PDF::loadView('user_staff2.inventaris.logbook_pdf', [
+            'inventory' => $inventory,
+            'logbooks' => $logbooks,
+            'periode' => $periodeString
+        ]);
+
+        $pdf->setPaper('a4', 'portrait');
+
+        $fileName = 'Logbook-' . Str::slug($inventory->name) . '-' . $period->format('Y-m') . '.pdf';
+        
+        return $pdf->download($fileName);
+    }
+
+
 }
