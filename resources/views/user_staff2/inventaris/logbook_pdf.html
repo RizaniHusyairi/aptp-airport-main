@@ -41,9 +41,7 @@
             border: 1px solid #ccc;
             border-radius: 4px;
             margin: 0 2px;
-            margin-top: 10px;
         }
-
         .Lampiran {
             display:inline-flex;
             width: 100%;
@@ -56,7 +54,7 @@
         }
         .Lampiran .isi {
             margin-left: auto;
-            width: 200px;
+            width: 13%;
         }
     </style>
 </head>
@@ -86,38 +84,38 @@
                 <th style="width: 50px;">Jadwal</th>
                 <th class="notes">Catatan / Tindakan</th>
                 <th style="width: 100px;">Teknisi</th>
-                <th class="doc-gallery">Dokumentasi</th> {{-- <<< KOLOM BARU --}}
+                <th class="doc-gallery">Dokumentasi</th> 
             </tr>
         </thead>
         <tbody>
-            @forelse ($logbooks as $log)
+            
                 <tr>
                     <td class="text-center">{{ $loop->iteration }}</td>
                     <td class="text-center">{{ $log->log_date->format('d/m/Y') }}</td>
                     <td class="text-center">{{ \Carbon\Carbon::parse($log->schedule_time)->format('H:i') }}</td>
                     <td>{!! nl2br(e($log->notes)) !!}</td> {{-- Ubah agar baris baru di catatan tampil --}}
                     <td>{{ $log->user->name ?? '-' }}</td>
-                    <td class="text-center"> {{-- <<< DATA KOLOM BARU --}}
-                        @if($log->documentation && count($log->documentation) > 0)
-                            @foreach($log->documentation as $photoPath)
-                                {{-- 
-                                    Kita gunakan public_path() agar dompdf bisa mengakses file
-                                    langsung dari sistem file server.
-                                --}}
-                                @if(file_exists(public_path('uploads/' . $photoPath)))
-                                    <img src="{{ public_path('uploads/' . $photoPath) }}" class="doc-thumb" alt="Doc">
-                                @endif
-                            @endforeach
-                        @else
-                            -
-                        @endif
+                    <td class="text-center">
+                        
+                                    <img src="1.jpg" class="doc-thumb" alt="Doc">
+                                    <img src="1.jpg" class="doc-thumb" alt="Doc">
+                                
                     </td>
                 </tr>
-            @empty
                 <tr>
-                    <td colspan="6" class="text-center">Tidak ada catatan logbook untuk periode ini.</td> {{-- <<< COLSPAN DIUBAH --}}
+                    <td class="text-center">{{ $loop->iteration }}</td>
+                    <td class="text-center">11/12/2001</td>
+                    <td class="text-center">00.00</td>
+                    <td>{!! nl2br(e($log->notes)) !!}</td> {{-- Ubah agar baris baru di catatan tampil --}}
+                    <td>{{ $log->user->name ?? '-' }}</td>
+                    <td class="text-center">
+                        
+                                    <img src="1.jpg" class="doc-thumb" alt="Doc">
+                                    <img src="1.jpg" class="doc-thumb" alt="Doc">
+                                
+                    </td>
                 </tr>
-            @endforelse
+            
         </tbody>
     </table>
 
