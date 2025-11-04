@@ -30,18 +30,21 @@
         .notes { min-width: 150px; } /* Sedikit diubah untuk memberi ruang */
         
         /* === CSS BARU UNTUK DOKUMENTASI === */
+
+        .doc{
+            margin-top: 20px;
+        }
         .doc-gallery { 
             width: 200px; /* Lebar kolom dokumentasi */
             text-align: center;
         }
         .doc-thumb {
-            width: 45px;
-            height: 45px;
+            width: 75px;
+            height: 75px;
             object-fit: cover;
             border: 1px solid #ccc;
             border-radius: 4px;
-            margin: 0 2px;
-            margin-top: 10px;
+            margin: 1px 1px;
         }
 
         .Lampiran {
@@ -74,6 +77,8 @@
     <div class="header">
         <h1>BUKU CATATAN FASILITAS DAN KEGIATAN</h1>
         <h2>(FACILITY LOGBOOK)</h2>
+        <p><strong>BANDARA:</strong> BLU Kantor UPBU Kelas 1 A.P.T Pranoto</p>
+        <p><strong>Fasilitas:</strong> Fasilitas Bantu Pelayanan Bandar Udara</p>
         <p><strong>NAMA ALAT:</strong> {{ strtoupper($inventory->name) }}</p>
         <p><strong>PERIODE:</strong> {{ $periode }}</p>
     </div>
@@ -83,7 +88,7 @@
             <tr>
                 <th style="width: 30px;">No.</th>
                 <th style="width: 70px;">Tanggal</th>
-                <th style="width: 50px;">Jadwal</th>
+                <th style="width: 50px;">Bulan</th>
                 <th class="notes">Catatan / Tindakan</th>
                 <th style="width: 100px;">Teknisi</th>
                 <th class="doc-gallery">Dokumentasi</th> {{-- <<< KOLOM BARU --}}
@@ -97,20 +102,23 @@
                     <td class="text-center">{{ \Carbon\Carbon::parse($log->schedule_time)->format('H:i') }}</td>
                     <td>{!! nl2br(e($log->notes)) !!}</td> {{-- Ubah agar baris baru di catatan tampil --}}
                     <td>{{ $log->user->name ?? '-' }}</td>
-                    <td class="text-center"> {{-- <<< DATA KOLOM BARU --}}
-                        @if($log->documentation && count($log->documentation) > 0)
-                            @foreach($log->documentation as $photoPath)
-                                {{-- 
-                                    Kita gunakan public_path() agar dompdf bisa mengakses file
-                                    langsung dari sistem file server.
-                                --}}
-                                @if(file_exists(public_path('uploads/' . $photoPath)))
-                                    <img src="{{ public_path('uploads/' . $photoPath) }}" class="doc-thumb" alt="Doc">
-                                @endif
-                            @endforeach
-                        @else
-                            -
-                        @endif
+                    <td class="text-center">
+                        <div class="doc">
+                        
+                            @if($log->documentation && count($log->documentation) > 0)
+                                @foreach($log->documentation as $photoPath)
+                                    {{-- 
+                                        Kita gunakan public_path() agar dompdf bisa mengakses file
+                                        langsung dari sistem file server.
+                                    --}}
+                                    @if(file_exists(public_path('uploads/' . $photoPath)))
+                                        <img src="{{ public_path('uploads/' . $photoPath) }}" class="doc-thumb" alt="Doc">
+                                    @endif
+                                @endforeach
+                            @else
+                                -
+                            @endif
+                        </div> {{-- <<< DATA KOLOM BARU --}}
                     </td>
                 </tr>
             @empty
