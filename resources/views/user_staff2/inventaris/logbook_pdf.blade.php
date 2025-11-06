@@ -17,6 +17,7 @@
         }
         th, td {
             border: 1px solid #000;
+            font-size: 12px;
             padding: 6px;
             text-align: left;
             vertical-align: top;
@@ -77,10 +78,10 @@
     <div class="header">
         <h1>BUKU CATATAN FASILITAS DAN KEGIATAN</h1>
         <h2>(FACILITY LOGBOOK)</h2>
-        <p><strong>BANDARA:</strong> BLU Kantor UPBU Kelas 1 A.P.T Pranoto</p>
+        <p><strong>Bandara:</strong> BLU Kantor UPBU Kelas 1 A.P.T Pranoto</p>
         <p><strong>Fasilitas:</strong> Fasilitas Bantu Pelayanan Bandar Udara</p>
-        <p><strong>NAMA ALAT:</strong> {{ strtoupper($inventory->name) }}</p>
-        <p><strong>PERIODE:</strong> {{ $periode }}</p>
+        <p><strong>Peralatan:</strong> {{ strtoupper($inventory->name) }}</p>
+        <p><strong>Bulan:</strong> {{ $periode }}</p>
     </div>
 
     <table>
@@ -88,7 +89,7 @@
             <tr>
                 <th style="width: 30px;">No.</th>
                 <th style="width: 70px;">Tanggal</th>
-                <th style="width: 50px;">Bulan</th>
+                <th style="width: 50px;">Jadwal</th>
                 <th class="notes">Catatan / Tindakan</th>
                 <th style="width: 100px;">Teknisi</th>
                 <th class="doc-gallery">Dokumentasi</th> {{-- <<< KOLOM BARU --}}

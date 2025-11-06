@@ -44,7 +44,8 @@ use App\Http\Controllers\{
     TourismController,
     SparePartController,
     SparePartRequestController,
-    WorkProgramController
+    WorkProgramController,
+    AirTrafficLogController
 };
 
 Auth::routes();
@@ -269,6 +270,18 @@ Route::group(["prefix" => 'dashboard'], function () {
             Route::get('staff/lalu-lintas/{id}/edit', [LaluLintasController::class, 'edit'])->name('laluLintas.edit');
             Route::put('staff/lalu-lintas/{id}', [LaluLintasController::class, 'update'])->name('laluLintas.update');
             Route::delete('staff/lalu-lintas/{id}', [LaluLintasController::class, 'destroy'])->name('laluLintas.destroy');
+
+            Route::prefix('staff/llau-harian')->name('staff.air-traffic.')->group(function () {
+                Route::get('/', [AirTrafficLogController::class, 'index'])->name('index');
+                Route::get('/create', [AirTrafficLogController::class, 'create'])->name('create');
+                Route::post('/', [AirTrafficLogController::class, 'store'])->name('store');
+                Route::get('/{airTrafficLog}/edit', [AirTrafficLogController::class, 'edit'])->name('edit');
+                Route::put('/{airTrafficLog}', [AirTrafficLogController::class, 'update'])->name('update');
+                Route::delete('/{airTrafficLog}', [AirTrafficLogController::class, 'destroy'])->name('destroy');
+            });
+
+
+
             
             Route::get('staff/persuratan',[PersuratanController::class, 'index'])->name('persuratan.staffIndex');
             Route::get('staff/persuratan/create',[PersuratanController::class, 'create'])->name('persuratan.create');
