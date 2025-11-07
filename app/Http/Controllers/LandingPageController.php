@@ -16,6 +16,7 @@ use App\Models\Complaint;
 use App\Models\InfoSlide;
 use App\Jobs\LogVisitorJob;
 use Illuminate\Http\Request;
+use App\Models\AirTrafficLog;
 use App\Models\BudgetExpense;
 use App\Models\PpidRegulation;
 use App\Models\PeriodicDocument;
@@ -108,7 +109,14 @@ class LandingPageController extends Controller
         // $sliders = Slider::where('is_visible_home', 1)->get();
         // Ambil data sliders (dari kode Anda sebelumnya)
         $sliders = Slider::all(); // Atau query lain sesuai kebutuhan
-        // === KODE BARU: AMBIL PENGATURAN HERO ===
+
+
+        // Ambil data statistik penerbangan (dari kode Anda sebelumnya)
+        $flightStats = $this->airportApi->getFlightStats();
+        // Contoh data dummy jika API belum siap:
+        // $flightStats = ['total_flights' => 120, 'total_passengers' => 15000, 'cargo_volume' => 50000];
+        $totalAngkutanUdara = $flightStats['total_flights'] ?? 0; // Sesuaikan key jika berbeda
+
         $heroSettings = Setting::whereIn('key', [
                 'hero_type',
                 'hero_image_path',
@@ -125,11 +133,11 @@ class LandingPageController extends Controller
         ], $heroSettings);
 
         // BARU: Cache query untuk total angkutan udara selama 3 jam
-        $totalAngkutanUdara = Cache::remember('total_air_freight_monthly', now()->addHours(3), function() {
-            return AirFreightTraffic::whereYear('date', now()->year)
-                                      ->whereMonth('date', now()->month)
-                                      ->sum(DB::raw('arrival + departure'));
-        });
+        // $totalAngkutanUdara = Cache::remember('total_air_freight_monthly', now()->addHours(3), function() {
+        //     return AirFreightTraffic::whereYear('date', now()->year)
+        //                               ->whereMonth('date', now()->month)
+        //                               ->sum(DB::raw('arrival + departure'));
+        // });
 
         // BARU: Cache query untuk berita utama selama 15 menit
         $headlines = Cache::remember('home_headlines', now()->addMinutes(15), function() {
@@ -308,47 +316,47 @@ class LandingPageController extends Controller
         return response()->json(['success' => false, 'error' => 'Gagal mendapatkan jawaban dari AI.'], 500);
     }
 
-    public function getMonthlyTrafficStats()
-    {
-        try {
-            // Cache hasil ini untuk mengurangi beban database
-            $stats = Cache::remember('monthly_traffic_stats_full', now()->addHours(3), function () {
-                $now = \Carbon\Carbon::now();
-                $query = \App\Models\AirFreightTraffic::whereYear('date', $now->year)
-                                                    ->whereMonth('date', $now->month);
+    // public function getMonthlyTrafficStats()
+    // {
+    //     try {
+    //         // Cache hasil ini untuk mengurangi beban database
+    //         $stats = Cache::remember('monthly_traffic_stats_full', now()->addHours(3), function () {
+    //             $now = \Carbon\Carbon::now();
+    //             $query = \App\Models\AirFreightTraffic::whereYear('date', $now->year)
+    //                                                 ->whereMonth('date', $now->month);
 
-                // Ambil semua data dalam satu query untuk efisiensi
-                $monthlyData = (clone $query)
-                    ->groupBy('type')
-                    ->select('type', DB::raw('SUM(arrival + departure) as total'))
-                    ->pluck('total', 'type');
+    //             // Ambil semua data dalam satu query untuk efisiensi
+    //             $monthlyData = (clone $query)
+    //                 ->groupBy('type')
+    //                 ->select('type', DB::raw('SUM(arrival + departure) as total'))
+    //                 ->pluck('total', 'type');
 
-                // Siapkan data dengan nilai default 0
-                $data = [
-                    'aircraft'   => (int) ($monthlyData['Pesawat'] ?? 0),
-                    'passengers' => (int) ($monthlyData['Penumpang'] ?? 0),
-                    'transit'    => (int) ($monthlyData['Penumpang Transit'] ?? 0),
-                    'baggage'    => (int) ($monthlyData['Bagasi'] ?? 0),
-                    'cargo'      => (int) ($monthlyData['Kargo'] ?? 0),
-                    'mail'       => (int) ($monthlyData['Pos'] ?? 0),
-                ];
+    //             // Siapkan data dengan nilai default 0
+    //             $data = [
+    //                 'aircraft'   => (int) ($monthlyData['Pesawat'] ?? 0),
+    //                 'passengers' => (int) ($monthlyData['Penumpang'] ?? 0),
+    //                 'transit'    => (int) ($monthlyData['Penumpang Transit'] ?? 0),
+    //                 'baggage'    => (int) ($monthlyData['Bagasi'] ?? 0),
+    //                 'cargo'      => (int) ($monthlyData['Kargo'] ?? 0),
+    //                 'mail'       => (int) ($monthlyData['Pos'] ?? 0),
+    //             ];
                 
-                // Hitung total semua aktivitas
-                $data['total'] = array_sum($data);
+    //             // Hitung total semua aktivitas
+    //             $data['total'] = array_sum($data);
 
-                return $data;
-            });
+    //             return $data;
+    //         });
 
-            return response()->json([
-                'success' => true,
-                'data'    => $stats,
-            ]);
+    //         return response()->json([
+    //             'success' => true,
+    //             'data'    => $stats,
+    //         ]);
 
-        } catch (\Exception $e) {
-            Log::error('Error fetching monthly traffic stats: ' . $e->getMessage());
-            return response()->json(['success' => false, 'message' => 'Gagal mengambil data statistik.'], 500);
-        }
-    }
+    //     } catch (\Exception $e) {
+    //         Log::error('Error fetching monthly traffic stats: ' . $e->getMessage());
+    //         return response()->json(['success' => false, 'message' => 'Gagal mengambil data statistik.'], 500);
+    //     }
+    // }
 
     public function pariwisata(Request $request){
         $query = Tourism::where('status', 'published');
@@ -1001,6 +1009,144 @@ class LandingPageController extends Controller
                                 ->groupBy('category');
         
         return view('landing-menu.informasi-publik.regulasi-ppid.index', compact('regulationCategories'));
+    }
+
+
+    /**
+     * API Endpoint untuk halaman LLAU (grafik detail).
+     * Mengambil data dari tabel baru dan mentransformasikannya
+     * ke format lama yang diharapkan oleh lalu-lintas.js
+     */
+    public function getAirFreightTraffic(Request $request)
+    {
+        $year = $request->input('year', 'all');
+        $month = $request->input('month', 'all');
+
+        $query = AirTrafficLog::query();
+
+        // Ambil semua tahun unik untuk filter di frontend
+        $availableYears = AirTrafficLog::selectRaw('YEAR(date) as year')
+            ->distinct()
+            ->orderBy('year', 'desc')
+            ->pluck('year')
+            ->toArray();
+
+        // Filter berdasarkan tahun
+        if ($year !== 'all') {
+            $query->whereYear('date', $year);
+        }
+
+        // Filter berdasarkan bulan (jika tahun juga dipilih)
+        if ($year !== 'all' && $month !== 'all') {
+            $query->whereMonth('date', $month);
+        }
+
+        $trafficData = $query->get();
+
+        // Siapkan data dalam format yang diharapkan JavaScript
+        $data = [];
+        
+        if ($year === 'all') {
+            // Jika semua tahun, kelompokkan per tahun
+            $grouped = $trafficData->groupBy(fn($item) => $item->date->year);
+            foreach ($availableYears as $y) {
+                $yearData = $grouped->get($y, collect());
+                $data[$y] = $this->formatDataForJs($yearData);
+            }
+        } else {
+            // Jika satu tahun, kelompokkan per bulan
+            $grouped = $trafficData->groupBy(fn($item) => $item->date->month);
+            $data[$year] = $this->formatDataForJs($grouped, true); // true = format bulanan
+        }
+
+        return response()->json([
+            'success' => true,
+            'data' => $data,
+            'years' => $availableYears
+        ]);
+    }
+
+    /**
+     * Helper function untuk mentransformasi data ke format JS
+     */
+    private function formatDataForJs($data, $isMonthly = false)
+    {
+        $categories = [
+            'aircraft' => 'Pesawat',
+            'passengers' => 'Penumpang',
+            // 'transit' => 'Penumpang Transit', // Kolom ini tidak ada di tabel baru Anda
+            'baggage' => 'Bagasi',
+            'cargo' => 'Kargo',
+            // 'mail' => 'Pos', // Kolom ini tidak ada di tabel baru Anda
+        ];
+
+        $result = [];
+        
+        if ($isMonthly) {
+            // Inisialisasi array 12 bulan untuk setiap kategori
+            foreach ($categories as $key => $jsKey) {
+                $result[$jsKey] = array_fill(0, 12, 0);
+            }
+
+            // Isi data bulanan
+            foreach ($data as $month => $logs) {
+                $monthIndex = $month - 1; // Konversi bulan (1-12) ke index (0-11)
+                $result['Pesawat'][$monthIndex] = $logs->sum(fn($log) => $log->aircraft_arrival + $log->aircraft_departure);
+                $result['Penumpang'][$monthIndex] = $logs->sum(fn($log) => $log->passenger_arrival + $log->passenger_departure);
+                $result['Bagasi'][$monthIndex] = $logs->sum(fn($log) => $log->baggage_arrival + $log->baggage_departure);
+                $result['Kargo'][$monthIndex] = $logs->sum(fn($log) => $log->cargo_arrival + $log->cargo_departure);
+            }
+        } else {
+            // Format tahunan (hanya total)
+            foreach ($categories as $key => $jsKey) {
+                $result[$jsKey] = $data->sum(fn($log) => $log->{$key.'_arrival'} + $log->{$key.'_departure'});
+            }
+        }
+        
+        // Tambahkan data kosong untuk kategori yang hilang (Transit & Pos)
+        $result['Penumpang Transit'] = $isMonthly ? array_fill(0, 12, 0) : 0;
+        $result['Pos'] = $isMonthly ? array_fill(0, 12, 0) : 0;
+
+        return $result;
+    }
+
+
+    /**
+     * API Endpoint untuk statistik di Halaman Beranda.
+     */
+    public function getMonthlyTrafficStats()
+    {
+        $now = Carbon::now();
+        $currentMonthStats = AirTrafficLog::whereYear('date', $now->year)
+            ->whereMonth('date', $now->month)
+            ->select(
+                DB::raw('SUM(aircraft_arrival + aircraft_departure) as aircraft'),
+                DB::raw('SUM(passenger_arrival + passenger_departure) as passengers'),
+                DB::raw('SUM(baggage_arrival + baggage_departure) as baggage'),
+                DB::raw('SUM(cargo_arrival + cargo_departure) as cargo')
+                // Tambahkan transit dan pos jika ada
+                // DB::raw('SUM(transit_arrival + transit_departure) as transit'),
+                // DB::raw('SUM(mail_arrival + mail_departure) as mail')
+            )
+            ->first();
+            
+        $stats = [
+            'aircraft' => $currentMonthStats->aircraft ?? 0,
+            'passengers' => $currentMonthStats->passengers ?? 0,
+            'baggage' => $currentMonthStats->baggage ?? 0,
+            'cargo' => $currentMonthStats->cargo ?? 0,
+            // Data statis untuk yang hilang
+            'transit' => 0, 
+            'mail' => 0,
+        ];
+
+        // Hitung total (hanya dari 4 kategori utama)
+        $stats['total'] = $stats['aircraft'] + $stats['passengers'] + $stats['baggage'] + $stats['cargo'];
+
+        return response()->json([
+            'success' => true,
+            'data' => $stats
+        ]);
     }
     
 }

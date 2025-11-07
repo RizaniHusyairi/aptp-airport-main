@@ -265,17 +265,12 @@ document.addEventListener('DOMContentLoaded', function() {
                                 <div class="stat-item-compact"><div class="stat-icon"><i class="bi bi-people-fill"></i></div><div class="stat-value" data-value="${stats.passengers}">0</div><div class="stat-label">Penumpang</div></div>
                             </div>
                             <div class="col-6 col-md-4 col-lg-2">
-                                <div class="stat-item-compact"><div class="stat-icon"><i class="bi bi-arrow-left-right"></i></div><div class="stat-value" data-value="${stats.transit}">0</div><div class="stat-label">Transit</div></div>
-                            </div>
-                            <div class="col-6 col-md-4 col-lg-2">
                                 <div class="stat-item-compact"><div class="stat-icon"><i class="bi bi-briefcase-fill"></i></div><div class="stat-value" data-value="${stats.baggage}">0</div><div class="stat-label">Bagasi</div></div>
                             </div>
                             <div class="col-6 col-md-4 col-lg-2">
                                 <div class="stat-item-compact"><div class="stat-icon"><i class="bi bi-box-seam"></i></div><div class="stat-value" data-value="${stats.cargo}">0</div><div class="stat-label">Kargo</div></div>
                             </div>
-                            <div class="col-6 col-md-4 col-lg-2">
-                                <div class="stat-item-compact"><div class="stat-icon"><i class="bi bi-envelope-paper-fill"></i></div><div class="stat-value" data-value="${stats.mail}">0</div><div class="stat-label">Pos</div></div>
-                            </div>
+                            
                         </div>
                     `;
                     

@@ -278,7 +278,11 @@ Route::group(["prefix" => 'dashboard'], function () {
                 Route::get('/{airTrafficLog}/edit', [AirTrafficLogController::class, 'edit'])->name('edit');
                 Route::put('/{airTrafficLog}', [AirTrafficLogController::class, 'update'])->name('update');
                 Route::delete('/{airTrafficLog}', [AirTrafficLogController::class, 'destroy'])->name('destroy');
+
+                
+                Route::get('/export-pdf', [AirTrafficLogController::class, 'exportPdf'])->name('exportPdf');
             });
+
 
 
 
@@ -402,7 +406,14 @@ Route::get('/kedatangan', [LandingPageController::class, 'kedatangan'])->name('k
 Route::post('/contact', [LandingPageController::class, 'submitContact'])->name('contact.submit');
 // Route::post('/pengaduan', [LandingPageController::class, 'storePengaduan'])->name('pengaduan.store');
 
-
+// === TAMBAHKAN ROUTE API INI (di luar grup middleware 'auth') ===
+Route::prefix('api')->name('api.')->group(function () {
+    // API untuk halaman detail LLAU (/lalu-lintas)
+    Route::get('/air-freight-traffic', [LandingPageController::class, 'getAirFreightTraffic'])->name('air-freight-traffic');
+    
+    // API untuk statistik di beranda
+    Route::get('/monthly-traffic-stats', [LandingPageController::class, 'getMonthlyTrafficStats'])->name('monthly-traffic-stats');
+});
 
 // API Routes
 Route::prefix('api')->group(function () {

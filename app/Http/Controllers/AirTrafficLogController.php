@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use App\Models\AirTrafficLog;
+use Carbon\Carbon;
+use Barryvdh\DomPDF\Facade\Pdf; // Import PDF
 use Illuminate\Http\Request;
+use App\Models\AirTrafficLog;
 use Illuminate\Validation\Rule;
+use App\Http\Controllers\Controller;
 
 class AirTrafficLogController extends Controller
 {
@@ -94,5 +96,64 @@ class AirTrafficLogController extends Controller
     {
         $airTrafficLog->delete();
         return redirect()->route('staff.air-traffic.index')->with('success', 'Data lalu lintas udara berhasil dihapus.');
+    }
+
+    /**
+     * Mengekspor data LLAU bulanan ke PDF.
+     */
+    public function exportPdf(Request $request)
+    {
+        $validated = $request->validate([
+            'month_year' => 'required|date_format:Y-m',
+        ], [
+            'month_year.required' => 'Periode bulan dan tahun wajib dipilih.',
+            'month_year.date_format' => 'Format periode tidak valid.'
+        ]);
+
+        try {
+            $period = Carbon::createFromFormat('Y-m', $validated['month_year']);
+        } catch (\Exception $e) {
+            return back()->with('error', 'Format periode tidak valid.');
+        }
+
+        $traffics = AirTrafficLog::whereYear('date', $period->year)
+            ->whereMonth('date', $period->month)
+            ->orderBy('date', 'asc') // Urutkan berdasarkan tanggal
+            ->get();
+
+        if ($traffics->isEmpty()) {
+            return back()->with('error', 'Tidak ada data lalu lintas udara untuk periode yang dipilih.');
+        }
+
+        $periodeString = $period->translatedFormat('F Y');
+
+        // Hitung Total
+        $totals = [
+            'aircraft_arrival' => $traffics->sum('aircraft_arrival'),
+            'aircraft_departure' => $traffics->sum('aircraft_departure'),
+            'aircraft_total' => $traffics->sum('aircraft_arrival') + $traffics->sum('aircraft_departure'),
+            'passenger_arrival' => $traffics->sum('passenger_arrival'),
+            'passenger_departure' => $traffics->sum('passenger_departure'),
+            'passenger_total' => $traffics->sum('passenger_arrival') + $traffics->sum('passenger_departure'),
+            'baggage_arrival' => $traffics->sum('baggage_arrival'),
+            'baggage_departure' => $traffics->sum('baggage_departure'),
+            'baggage_total' => $traffics->sum('baggage_arrival') + $traffics->sum('baggage_departure'),
+            'cargo_arrival' => $traffics->sum('cargo_arrival'),
+            'cargo_departure' => $traffics->sum('cargo_departure'),
+            'cargo_total' => $traffics->sum('cargo_arrival') + $traffics->sum('cargo_departure'),
+        ];
+
+        $pdf = PDF::loadView('user_staff2.lalu-lintas-harian.llau_pdf', [
+            'traffics' => $traffics,
+            'periode' => $periodeString,
+            'totals' => $totals
+        ]);
+
+        // Atur ke landscape agar tabel muat
+        $pdf->setPaper('a4', 'potrait');
+
+        $fileName = 'Rekapitulasi-LLAU-' . $period->format('Y-m') . '.pdf';
+        
+        return $pdf->download($fileName);
     }
 }

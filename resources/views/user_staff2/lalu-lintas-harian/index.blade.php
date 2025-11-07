@@ -25,14 +25,37 @@
 </div>
 <section class="section">
     <div class="card">
-        <div class="card-header d-flex justify-content-between align-items-center">
+        {{-- === PERUBAHAN DI SINI: Memperbarui Card Header === --}}
+        <div class="card-header d-flex flex-wrap justify-content-between align-items-center gap-2">
             <h5 class="card-title mb-0">Daftar Data LLAU</h5>
-            <a href="{{ route('staff.air-traffic.create') }}" class="btn btn-primary"><i class="bi bi-plus-circle me-2"></i> Tambah Data Harian</a>
+            
+            <div class="d-flex flex-wrap gap-2">
+                <!-- FORM EKSPOR PDF BARU -->
+                <form action="{{ route('staff.air-traffic.exportPdf') }}" method="GET" class="d-flex gap-2">
+                    <input type="month" name="month_year" class="form-control form-control-sm" value="{{ now()->format('Y-m') }}" required>
+                    <button type="submit" class="btn btn-secondary btn-sm flex-shrink-0">
+                        <i class="bi bi-file-earmark-pdf"></i> Ekspor PDF
+                    </button>
+                </form>
+                
+                <!-- Tombol Tambah Data -->
+                <a href="{{ route('staff.air-traffic.create') }}" class="btn btn-primary btn-sm flex-shrink-0">
+                    <i class="bi bi-plus-circle me-2"></i> Tambah Data Harian
+                </a>
+            </div>
         </div>
+        
+        
         <div class="card-body">
             @if(session('success'))
             <div class="alert alert-success alert-dismissible fade show" role="alert">
                 {{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            @endif
+            @if(session('error')) {{-- Menambahkan notifikasi error untuk filter --}}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                {{ session('error') }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
             @endif

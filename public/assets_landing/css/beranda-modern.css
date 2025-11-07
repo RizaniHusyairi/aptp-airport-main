@@ -923,6 +923,7 @@ left: 30px;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     height: 100%;
 }
+
 .news-card-modern:hover {
     transform: translateY(-10px);
     box-shadow: 0 10px 30px rgba(0,0,0,0.3);
@@ -1085,7 +1086,6 @@ left: 30px;
 /* Responsif untuk mobile */
 @media (max-width: 768px) {
     #contact-fab-container {
-        bottom: 20px;
         right: 20px;
     }
     #contact-form-wrapper {

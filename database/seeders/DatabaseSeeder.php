@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Airport;
+use App\Models\AirTrafficLog;
 use App\Models\ExtendAdvance;
 use App\Models\Finance;
 use App\Models\ImmediateInformation;
@@ -28,7 +29,8 @@ class DatabaseSeeder extends Seeder
             NewsSeeder::class,
             LetterSeeder::class,
             FinanceSeeder::class,
-            AirFreightTrafficSeeder::class,
+            // AirFreightTrafficSeeder::class,
+            AirTrafficLogSeeder::class,
             TourismSeeder::class,
             FacilitySeeder::class,
             ImmediateInformationSeeder::class,
