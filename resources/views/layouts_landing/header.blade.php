@@ -52,11 +52,22 @@
         </nav>
         @auth
             <div >
-                @if (Auth::user()->is_admin)
-                    <a class="btn-getstarted" href="{{ route('root') }}">Dashboard</a>
-                @else
-                    <a class="btn-getstarted" href="{{ route('root') }}/profile">Dashboard</a>
-                @endif
+                @admin
+                <a class="btn-getstarted" href="{{ route('root') }}">Dashboard</a>
+
+                @endadmin
+
+                @staff
+                <a class="btn-getstarted" href="{{ route('staff.dashboard.index') }}">Dashboard</a>
+                @endstaff
+                
+                @notadmin
+                @notstaff
+                <a class="btn-getstarted" href="{{ route('root') }}/profile">Dashboard</a>
+
+                @endnotstaff
+                @endnotadmin
+                
             </div>
             @else
             <div >
