@@ -53,6 +53,12 @@
             <a href="{{ route("roles.create") }}" class="btn btn-success">Tambah Role</a>
         </div>
         <div class="card-body">
+            @if(session('success'))
+                <div class="alert alert-success">{{ session('success') }}</div>
+            @endif
+            @if(session('error'))
+                <div class="alert alert-danger">{{ session('error') }}</div>
+            @endif
             <div class="table-responsive">
                 <table class="table" id="table-role">
                     <thead>
@@ -81,13 +87,14 @@
                                             <div class="d-flex">
                                                 <a href="{{ route('roles.edit', $role->id) }}"
                                                     class="btn btn-primary btn-sm me-1">Edit</a>
-                                                <form action="{{ route('roles.destroy', $role->id) }}"
-                                                    method="POST" class="d-inline"
-                                                    onsubmit="return confirm('Apakah Anda yakin ingin menghapus role ini?');">
+                                                @if(!in_array($role->name, $coreRoles))
+                                                <form action="{{ route('roles.destroy', $role->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus role ini? Role yang memiliki user tidak dapat dihapus.')">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
+                                                    <button type-="submit" class="btn btn-danger btn-sm">Hapus</button>
                                                 </form>
+                                                @endif
+                                                
                                             </div>
                                         </td>
                                     </tr>

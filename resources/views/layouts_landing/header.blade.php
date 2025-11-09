@@ -54,7 +54,6 @@
             <div >
                 @admin
                 <a class="btn-getstarted" href="{{ route('root') }}">Dashboard</a>
-
                 @endadmin
 
                 @staff
@@ -64,7 +63,6 @@
                 @notadmin
                 @notstaff
                 <a class="btn-getstarted" href="{{ route('root') }}/profile">Dashboard</a>
-
                 @endnotstaff
                 @endnotadmin
                 

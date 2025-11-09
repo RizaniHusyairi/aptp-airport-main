@@ -15,6 +15,11 @@ use App\Models\Slot; // Model untuk Slot Charter
 use App\Models\Inventory;  // <<< TAMBAHKAN MODEL INVENTARIS
 use App\Models\WorkProgram; // <<< TAMBAHKAN MODEL PROGRAM KERJA
 use App\Models\Task;       // <<< TAMBAHKAN MODEL TUGAS
+use App\Models\License;    // <-- TAMBAHKAN
+use App\Models\Ad;        // <-- TAMBAHKAN
+use App\Models\Fieldtrip; // <-- TAMBAHKAN
+use App\Models\Lelang;    // <-- TAMBAHKAN
+use Carbon\Carbon;
 
 class StaffDashboardController extends Controller
 {
@@ -49,26 +54,89 @@ class StaffDashboardController extends Controller
             $data['llau_logs_this_month'] = AirTrafficLog::whereMonth('date', now()->month)
                                             ->whereYear('date', now()->year)
                                             ->count();
+
+            // === LOGIKA BARU UNTUK GRAFIK 7 HARI ===
+            $startDate = now()->subDays(6);
+            $endDate = now();
+            
+            // Ambil data log 7 hari terakhir
+            $logs = AirTrafficLog::whereBetween('date', [$startDate, $endDate])
+                                ->get()
+                                ->keyBy(fn($log) => $log->date->format('Y-m-d')); // Jadikan tanggal sebagai key
+
+            $llau_chart_labels = [];
+            $llau_series_pesawat = [];
+            $llau_series_penumpang = [];
+            $llau_series_bagasi = [];
+            $llau_series_kargo = [];
+
+            // Loop 7 hari dari $startDate sampai $endDate
+            for ($i = 0; $i < 7; $i++) {
+                $date = $startDate->copy()->addDays($i);
+                $dateString = $date->format('Y-m-d');
+                
+                // Tambahkan label (misal: "10 Nov")
+                $llau_chart_labels[] = $date->translatedFormat('d M');
+                
+                // Cek apakah ada data di tanggal ini
+                $logForDay = $logs->get($dateString);
+
+                if ($logForDay) {
+                    // Jika ada data, jumlahkan arrival + departure
+                    $llau_series_pesawat[] = $logForDay->aircraft_arrival + $logForDay->aircraft_departure;
+                    $llau_series_penumpang[] = $logForDay->passenger_arrival + $logForDay->passenger_departure;
+                    $llau_series_bagasi[] = $logForDay->baggage_arrival + $logForDay->baggage_departure;
+                    $llau_series_kargo[] = $logForDay->cargo_arrival + $logForDay->cargo_departure;
+                } else {
+                    // Jika tidak ada data di tanggal itu, isi dengan 0
+                    $llau_series_pesawat[] = 0;
+                    $llau_series_penumpang[] = 0;
+                    $llau_series_bagasi[] = 0;
+                    $llau_series_kargo[] = 0;
+                }
+            }
+
+            // Masukkan data yang sudah diformat ke $data
+            $data['llau_7day_chart'] = [
+                'labels' => $llau_chart_labels,
+                'series' => [
+                    ['name' => 'Pesawat', 'data' => $llau_series_pesawat],
+                    ['name' => 'Penumpang', 'data' => $llau_series_penumpang],
+                    ['name' => 'Bagasi (Kg)', 'data' => $llau_series_bagasi],
+                    ['name' => 'Kargo (Kg)', 'data' => $llau_series_kargo],
+                ]
+            ];
+            // === AKHIR LOGIKA BARU ===
         }
 
         // 4. Hitung total pengajuan layanan yang "Diajukan"
-        $pending_submissions = 0;
+        // 4. Hitung pengajuan layanan yang "Diajukan" (secara terpisah)
         if ($permissions->contains('Manajemen Tenant')) {
-            $pending_submissions += Tenant::where('submission_status', 'Diajukan')->count();
+            $data['pending_tenant_count'] = Tenant::where('submission_status', 'Diajukan')->count();
         }
         if ($permissions->contains('Manajemen Sewa')) {
-            $pending_submissions += Rental::where('submission_status', 'Diajukan')->count();
+            $data['pending_rental_count'] = Rental::where('submission_status', 'Diajukan')->count();
         }
         if ($permissions->contains('Manajemen Extend Advance')) {
-            $pending_submissions += ExtendAdvance::where('submission_status', 'Diajukan')->count();
+            $data['pending_extend_advance_count'] = ExtendAdvance::where('submission_status', 'Diajukan')->count();
         }
         if ($permissions->contains('Manajemen Slot Charter')) {
-            // Asumsi model 'Slot' memiliki kolom 'submission_status'
-            $pending_submissions += Slot::where('submission_status', 'Diajukan')->count();
+            $data['pending_slot_charter_count'] = Slot::where('submission_status', 'Diajukan')->count();
+        }
+        if ($permissions->contains('Manajemen Perijinan Usaha')) {
+            $data['pending_license_count'] = License::where('submission_status', 'Diajukan')->count();
+        }
+        if ($permissions->contains('Manajemen Pengiklanan')) {
+            $data['pending_ad_count'] = Ad::where('submission_status', 'Diajukan')->count();
+        }
+        if ($permissions->contains('Manajemen Field Trip')) {
+            $data['pending_fieldtrip_count'] = Fieldtrip::where('submission_status', 'Diajukan')->count();
+        }
+        if ($permissions->contains('Manajemen Lelang')) {
+            $data['pending_lelang_count'] = Lelang::where('submission_status', 'Diajukan')->count();
         }
         // ... Tambahkan query untuk layanan lain di sini ...
         
-        $data['pending_submissions_count'] = $pending_submissions;
         
         // 5. Ambil data Inventaris (jika punya izin)
         if ($permissions->contains('Manajemen Inventaris')) {

@@ -13,7 +13,7 @@
                             </div>
                             <div class="col-12 col-md-6 order-md-2 order-first">
                                 <x-breadcrumb2 :items="[
-                                    ['label' => 'Menu', 'url' => route('profile')],
+                                    ['label' => 'Menu', 'url' => route('staff.dashboard.index')],
                                     ['label' => 'Laporan Keuangan', 'url' => route('keuangan.index')],
                                     ['label' => 'Tambah Laporan Keuangan', 'active' => true]
                                 ]" />

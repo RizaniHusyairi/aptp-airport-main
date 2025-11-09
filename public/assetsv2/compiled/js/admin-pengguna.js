@@ -26,11 +26,7 @@ $(document).ready(function() {
                 sortDescending: ": aktifkan untuk mengurutkan kolom secara turun"
             }
         },
-        columnDefs: [
-            { targets: 0, responsivePriority: 1 }, // Kolom '#'
-            { targets: 7, orderable: false, responsivePriority: 1 }, // Kolom 'Aksi'
-            { targets: 1, responsivePriority: 2 } // Kolom 'Nama'
-        ],
+
         order: [[5, 'desc']], // Urutkan berdasarkan 'Dibuat Pada'
         pageLength: 10,
         lengthMenu: [5, 10, 25, 50]

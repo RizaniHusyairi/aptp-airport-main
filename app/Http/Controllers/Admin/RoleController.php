@@ -10,13 +10,25 @@ use Yajra\DataTables\Facades\DataTables;
 
 class RoleController extends Controller
 {
+
+    private $coreRoles = [
+        'Kepala Bandara',
+        'Kepala Subbagian Keuangan dan Tata Usaha',
+        'Kepala Seksi Keamanan Penerbangan dan Pelayanan Darurat',
+        'Kepala Seksi Pelayanan dan Kerjasama',
+        'Kepala Seksi Teknik dan Operasi',
+        'Kanit'
+        // Tambahkan 'Admin' atau 'Super Admin' di sini jika perlu
+    ];
+
     public function index(Request $request)
     {
         
         $roles = Role::with('permissions')->get();
+        $coreRoles = $this->coreRoles;
         
 
-        return view('admin2.roles.index', compact('roles'));
+        return view('admin2.roles.index', compact('roles','coreRoles'));
 
     }
 
@@ -40,6 +52,11 @@ class RoleController extends Controller
             'permissions.min' => 'Pilih setidaknya satu izin.',
             'permissions.*.exists' => 'Izin yang dipilih tidak valid.',
         ]);
+
+        // Proteksi tambahan: jangan izinkan membuat role dengan nama yang sudah dilindungi
+        if (in_array($validated['name'], $this->coreRoles)) {
+            return back()->withInput()->withErrors(['name' => 'Nama role ini dilindungi oleh sistem dan tidak dapat dibuat ulang.']);
+        }
         
 
         $role = Role::create(['name' => $request->name]);
@@ -56,37 +73,57 @@ class RoleController extends Controller
         $role = Role::with('permissions')->findOrFail($id); // Menyertakan permissions yang dimiliki role
         $permissions = Permission::all(); // Mengambil semua permissions
         $roles = Role::orderBy('name')->get();
-        return view('admin2.roles.edit', compact('role', 'permissions','roles'));
+        // Cek apakah role yang sedang diedit adalah core role
+        $isCoreRole = in_array($role->name, $this->coreRoles);
+
+        return view('admin2.roles.edit', compact('role', 'permissions','roles','isCoreRole'));
     }
 
     public function update(Request $request, Role $role)
     {
+
+        $isCoreRole = in_array($role->name, $this->coreRoles);
+
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'permissions' => 'array|exists:permissions,id',
+            // Validasi 'name' hanya jika BUKAN core role
+            'name' => $isCoreRole 
+                        ? 'nullable|string' 
+                        : ['required', 'string', 'max:255', Rule::unique('roles')->ignore($role->id)],
+            'permissions' => 'required|array|min:1',
+            'permissions.*' => 'exists:permissions,id',
         ]);
 
-        $role->name = $request->name;
-
-        if ($role->isDirty('name')) {
-            $role->save(); // akan update updated_at
+        // === INI ADALAH LOGIKA PERBAIKANNYA ===
+        if ($isCoreRole) {
+            // Jika ini adalah core role, JANGAN perbarui nama,
+            // $roleName diambil dari data yang sudah ada, BUKAN dari request
+            $roleName = $role->name; 
         } else {
-            $role->touch(); // tetap update updated_at walaupun nama tidak berubah
+            // Jika bukan core role, baru perbarui namanya dari request
+            $roleName = $validated['name'];
         }
 
-        $role->update([
-            'name' => $validated['name'],
-        ]);
-
-        // Sink permission many-to-many
+        // Perbarui database dengan nama yang dijamin tidak null
+        $role->update(['name' => $roleName]);
         $role->permissions()->sync($request->permissions);
 
-        return redirect()->route('roles.index')->with('success', 'Role berhasil diperbarui!');
+        return redirect()->route('roles.index')->with('success', 'Role berhasil diperbarui.');
+
     }
 
     public function destroy($id)
     {
         $role = Role::findOrFail($id);
+
+        // === Logika Pengaman di Backend ===
+        if (in_array($role->name, $this->coreRoles)) {
+            return back()->with('error', 'Role inti sistem (' . $role->name . ') tidak dapat dihapus.');
+        }
+        
+        if ($role->users()->count() > 0) {
+             return back()->with('error', 'Role ini tidak dapat dihapus karena masih digunakan oleh user.');
+        }
+
         $role->delete();
 
         return redirect()->route('roles.index')->with('success', 'Role berhasil dihapus!');
