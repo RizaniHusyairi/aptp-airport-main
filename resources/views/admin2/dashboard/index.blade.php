@@ -41,117 +41,90 @@
     </div>
     <div class="page-content">
         <section class="row">
+            {{-- === PERUBAHAN DI SINI: Mengubah layout kolom & menambahkan widget === --}}
+            
             <!-- Total Pengunjung Card -->
-            <div class="col-6 col-lg-6 col-md-12">
-                <div class="card">
+            <div class="col-6 col-lg-4 col-md-6">
+                {{-- Kita buat non-klilkable untuk saat ini, atau Anda bisa tambahkan route ke halaman statistik pengunjung jika ada --}}
+                <div class="card card-widget" style="cursor: default;"> 
                     <div class="card-body px-4 py-4-5">
                         <div class="row">
                             <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start">
                                 <div class="stats-icon purple mb-2">
-                                    <i class="iconly-boldShow"></i>
+                                    <i class="icon-dashboard iconly-boldShow"></i>
                                 </div>
                             </div>
                             <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
-                                <h6 class="text-muted font-semibold">Total Pengunjung website</h6>
+                                <h6 class="text-muted font-semibold">Total Pengunjung</h6>
                                 <h6 class="font-extrabold mb-0">{{ number_format($totalVisitors) }}</h6>
                             </div>
                         </div>
                     </div>
-                    <div class="col-6 col-lg-4 col-md-6">
-                        <a href="{{ route('customers.index') }}" class="card-widget">
-                            <div class="card">
-                                <div class="card-body px-4 py-4-5">
-                                    <div class="row">
-                                        <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start">
-                                            <div class="stats-icon blue mb-2">
-                                                <i class="icon-dashboard iconly-boldProfile"></i>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
-                                            <h6 class="text-muted font-semibold">Total Pengguna</h6>
-                                            <h6 class="font-extrabold mb-0">{{ number_format($totalUsers) }}</h6>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
+                </div>
+            </div>
 
-                    <!-- WIDGET BARU: Total Role -->
-                    <div class="col-6 col-lg-4 col-md-6">
-                        <a href="{{ route('roles.index') }}" class="card-widget">
-                            <div class="card">
-                                <div class="card-body px-4 py-4-5">
-                                    <div class="row">
-                                        <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start">
-                                            <div class="stats-icon green mb-2">
-                                                <i class="icon-dashboard bi bi-shield-lock-fill"></i>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
-                                            <h6 class="text-muted font-semibold">Total Role</h6>
-                                            <h6 class="font-extrabold mb-0">{{ number_format($totalRoles) }}</h6>
-                                        </div>
+            <!-- WIDGET BARU: Total Pengguna -->
+            <div class="col-6 col-lg-4 col-md-6">
+                <a href="{{ route('customers.index') }}" class="card-widget">
+                    <div class="card">
+                        <div class="card-body px-4 py-4-5">
+                            <div class="row">
+                                <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start">
+                                    <div class="stats-icon blue mb-2">
+                                        <i class="icon-dashboard iconly-boldProfile"></i>
                                     </div>
                                 </div>
+                                <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
+                                    <h6 class="text-muted font-semibold">Total Pengguna</h6>
+                                    <h6 class="font-extrabold mb-0">{{ number_format($totalUsers) }}</h6>
+                                </div>
                             </div>
-                        </a>
+                        </div>
                     </div>
+                </a>
+            </div>
+
+            <!-- WIDGET BARU: Total Role -->
+            <div class="col-6 col-lg-4 col-md-6">
+                <a href="{{ route('roles.index') }}" class="card-widget">
+                    <div class="card">
+                        <div class="card-body px-4 py-4-5">
+                            <div class="row">
+                                <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start">
+                                    <div class="stats-icon green mb-2">
+                                        <i class="icon-dashboard bi bi-shield-lock-fill"></i>
+                                    </div>
+                                </div>
+                                <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
+                                    <h6 class="text-muted font-semibold">Total Role</h6>
+                                    <h6 class="font-extrabold mb-0">{{ number_format($totalRoles) }}</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
             
-                </div>
-            </div>
+            {{-- === Akhir Perubahan === --}}
+        </section>
+        
             <!-- Charts -->
-            <div class="row">
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <h4>Grafik pengunjung (7 hari terakhir)</h4>
-                        </div>
-                        <div class="card-body">
-                            <div id="chart-profile-visit" 
-                                data-categories='@json($visitorCategories)' 
-                                data-series='@json($visitorSeries)'>
-                            </div>
-                            
-                        </div>
+        <section class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Grafik pengunjung (7 hari terakhir)</h4>
                     </div>
-                </div>
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-header d-flex justify-content-between align-items-center">
-                            <h4>Grafik Pemasukan</h4>
-                            <select id="pemasukan-filter" class="form-select w-auto">
-                                <option value="all">Semua Tahun</option>
-                                    @foreach ($years as $year)
-                                        <option value="{{ $year }}">{{ $year }}</option>
-                                    @endforeach
-                            </select>
+                    <div class="card-body">
+                        <div id="chart-profile-visit" 
+                            data-categories='@json($visitorCategories)' 
+                            data-series='@json($visitorSeries)'>
                         </div>
-                        <div class="card-body">
-                            <div id="chart-pemasukan"
-                            data-pemasukan='@json($pemasukanData)'></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-header d-flex justify-content-between align-items-center">
-                            <h4>Grafik Perbandingan Anggaran dan Belanja</h4>
-                            <select id="anggaran-belanja-filter" class="form-select w-auto">
-                                <option value="all">Semua Tahun</option>
-                                    @foreach ($years as $year)
-                                        <option value="{{ $year }}">{{ $year }}</option>
-                                    @endforeach
-                            </select>
-                        </div>
-                        <div class="card-body">
-                            <div id="chart-anggaran-belanja"
-                            data-anggaran='@json($anggaranBelanjaData)'
-                            ></div>
-                        </div>
+                        
                     </div>
                 </div>
             </div>
+            
         </section>
     </div>
     <script>
