@@ -231,6 +231,10 @@ class HomeController extends Controller
                 : 0;
         }
 
+        // === 3. DATA BARU UNTUK WIDGETS ===
+        $totalUsers = User::count();
+        $totalRoles = Role::count();
+
         
 
 
@@ -241,6 +245,8 @@ class HomeController extends Controller
         // ));
         return view('admin2.dashboard.index', compact(
             'totalVisitors',
+            'totalUsers',
+            'totalRoles',
             'visitorCategories',
             'visitorSeries',
             'years',

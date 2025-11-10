@@ -2,6 +2,25 @@
 @section('title', 'Dashboard')
 @section('styles_admin')
     <link rel="stylesheet" href="{{ asset('assetsv2/compiled/css/custom.css') }}">
+    <style>
+        .icon-dashboard {
+            font-size: 2.5rem;
+        }
+        /* CSS untuk efek klik pada widget */
+        .card-widget {
+            transition: all 0.3s ease;
+            text-decoration: none; /* Menghilangkan garis bawah dari link */
+        }
+        .card-widget:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        /* Memastikan warna teks di dalam link widget tetap normal */
+        .card-widget .text-muted,
+        .card-widget .font-extrabold {
+            color: inherit !important;
+        }
+    </style>
 @endsection
 @section('content')
     <div class="page-heading">
@@ -38,6 +57,47 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col-6 col-lg-4 col-md-6">
+                        <a href="{{ route('users.index') }}" class="card-widget">
+                            <div class="card">
+                                <div class="card-body px-4 py-4-5">
+                                    <div class="row">
+                                        <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start">
+                                            <div class="stats-icon blue mb-2">
+                                                <i class="icon-dashboard iconly-boldProfile"></i>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
+                                            <h6 class="text-muted font-semibold">Total Pengguna</h6>
+                                            <h6 class="font-extrabold mb-0">{{ number_format($totalUsers) }}</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+
+                    <!-- WIDGET BARU: Total Role -->
+                    <div class="col-6 col-lg-4 col-md-6">
+                        <a href="{{ route('roles.index') }}" class="card-widget">
+                            <div class="card">
+                                <div class="card-body px-4 py-4-5">
+                                    <div class="row">
+                                        <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start">
+                                            <div class="stats-icon green mb-2">
+                                                <i class="icon-dashboard bi bi-shield-lock-fill"></i>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
+                                            <h6 class="text-muted font-semibold">Total Role</h6>
+                                            <h6 class="font-extrabold mb-0">{{ number_format($totalRoles) }}</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+            
                 </div>
             </div>
             <!-- Charts -->
