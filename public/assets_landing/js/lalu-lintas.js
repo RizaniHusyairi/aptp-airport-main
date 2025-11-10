@@ -1,5 +1,5 @@
 const months = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"];
-const categories = ["Pesawat", "Penumpang", "Penumpang Transit", "Kargo", "Bagasi", "Pos"];
+const categories = ["Pesawat", "Penumpang", "Kargo", "Bagasi"];
 
 // Referensi elemen DOM
 const yearFilter = document.getElementById('yearFilter');

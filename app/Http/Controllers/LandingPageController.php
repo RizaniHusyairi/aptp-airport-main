@@ -1051,7 +1051,7 @@ class LandingPageController extends Controller
             $grouped = $trafficData->groupBy(fn($item) => $item->date->year);
             foreach ($availableYears as $y) {
                 $yearData = $grouped->get($y, collect());
-                $data[$y] = $this->formatDataForJs($yearData);
+                $data[$y] = $this->formatDataForJs($yearData,false);
             }
         } else {
             // Jika satu tahun, kelompokkan per bulan
@@ -1084,29 +1084,32 @@ class LandingPageController extends Controller
         
         if ($isMonthly) {
             // Inisialisasi array 12 bulan untuk setiap kategori
-            foreach ($categories as $key => $jsKey) {
-                $result[$jsKey] = array_fill(0, 12, 0);
+            foreach ($categories as $jskey => $dbKey) {
+                $result[$jskey] = array_fill(0, 12, 0);
             }
 
             // Isi data bulanan
             foreach ($data as $month => $logs) {
                 $monthIndex = $month - 1; // Konversi bulan (1-12) ke index (0-11)
-                $result['Pesawat'][$monthIndex] = $logs->sum(fn($log) => $log->aircraft_arrival + $log->aircraft_departure);
-                $result['Penumpang'][$monthIndex] = $logs->sum(fn($log) => $log->passenger_arrival + $log->passenger_departure);
-                $result['Bagasi'][$monthIndex] = $logs->sum(fn($log) => $log->baggage_arrival + $log->baggage_departure);
-                $result['Kargo'][$monthIndex] = $logs->sum(fn($log) => $log->cargo_arrival + $log->cargo_departure);
+                $result['aircraft'][$monthIndex] = $logs->sum(fn($log) => $log->aircraft_arrival + $log->aircraft_departure);
+                $result['passengers'][$monthIndex] = $logs->sum(fn($log) => $log->passenger_arrival + $log->passenger_departure);
+                $result['baggage'][$monthIndex] = $logs->sum(fn($log) => $log->baggage_arrival + $log->baggage_departure);
+                $result['cargo'][$monthIndex] = $logs->sum(fn($log) => $log->cargo_arrival + $log->cargo_departure);
             }
         } else {
             // Format tahunan (hanya total)
-            foreach ($categories as $key => $jsKey) {
-                $result[$jsKey] = $data->sum(fn($log) => $log->{$key.'_arrival'} + $log->{$key.'_departure'});
+            foreach ($categories as $jskey => $dbKey) {
+                $result[$jskey] = $data->sum(fn($log) => $log->{$dbKey.'_arrival'} + $log->{$dbKey.'_departure'});
+                // $result[$jsKey] = $data->sum(fn($log) => $log->{$key.'_arrival'} + $log->{$key.'_departure'});
             }
         }
         
         // Tambahkan data kosong untuk kategori yang hilang (Transit & Pos)
-        $result['Penumpang Transit'] = $isMonthly ? array_fill(0, 12, 0) : 0;
-        $result['Pos'] = $isMonthly ? array_fill(0, 12, 0) : 0;
-
+        // Tambahkan data kosong untuk kategori yang hilang (Transit & Pos)
+        // Ini PENTING agar JavaScript frontend tidak error
+        $result['transit'] = $isMonthly ? array_fill(0, 12, 0) : 0;
+        $result['mail'] = $isMonthly ? array_fill(0, 12, 0) : 0;
+        
         return $result;
     }
 
