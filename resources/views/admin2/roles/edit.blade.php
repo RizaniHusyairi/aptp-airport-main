@@ -38,7 +38,11 @@
                             <label for="roleName" class="form-label">Nama Role</label>
                             <input type="text" class="form-control @error('name') is-invalid @enderror"
                                 id="roleName" name="name" value="{{ old('name', $role->name) }}"
+                                {{ $isCoreRole ? 'disabled' : '' }}
                                 placeholder="Contoh: Admin">
+                                @if($isCoreRole)
+                                    <small class="form-text text-muted mt-1">Nama role inti sistem tidak dapat diubah.</small>
+                                @endif
                             @error('name')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror

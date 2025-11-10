@@ -1043,6 +1043,10 @@ class LandingPageController extends Controller
 
         $trafficData = $query->get();
 
+        // --- TITIK DEBUG 1 ---
+        // Hentikan eksekusi dan tampilkan data mentah dari database
+        // dd($trafficData[0]); 
+
         // Siapkan data dalam format yang diharapkan JavaScript
         $data = [];
         
@@ -1059,6 +1063,8 @@ class LandingPageController extends Controller
             $data[$year] = $this->formatDataForJs($grouped, true); // true = format bulanan
         }
 
+
+
         return response()->json([
             'success' => true,
             'data' => $data,
@@ -1071,26 +1077,29 @@ class LandingPageController extends Controller
      */
     private function formatDataForJs($data, $isMonthly = false)
     {
+        // Kunci (key) adalah 'aircraft', 'passengers', dll. (sesuai ekspektasi JS)
+        // Nilai (value) adalah 'aircraft', 'passenger', dll. (basis nama kolom di DB)
         $categories = [
-            'aircraft' => 'Pesawat',
-            'passengers' => 'Penumpang',
-            // 'transit' => 'Penumpang Transit', // Kolom ini tidak ada di tabel baru Anda
-            'baggage' => 'Bagasi',
-            'cargo' => 'Kargo',
-            // 'mail' => 'Pos', // Kolom ini tidak ada di tabel baru Anda
+            'aircraft' => 'aircraft',
+            'passengers' => 'passenger',
+            'baggage' => 'baggage',
+            'cargo' => 'cargo',
         ];
 
         $result = [];
         
         if ($isMonthly) {
             // Inisialisasi array 12 bulan untuk setiap kategori
-            foreach ($categories as $jskey => $dbKey) {
-                $result[$jskey] = array_fill(0, 12, 0);
+            foreach ($categories as $jsKey => $dbKey) {
+                $result[$jsKey] = array_fill(0, 12, 0);
             }
 
             // Isi data bulanan
             foreach ($data as $month => $logs) {
                 $monthIndex = $month - 1; // Konversi bulan (1-12) ke index (0-11)
+                
+                // === PERBAIKAN DI SINI ===
+                // Gunakan $jsKey ('aircraft', 'passengers') sebagai kunci array $result
                 $result['aircraft'][$monthIndex] = $logs->sum(fn($log) => $log->aircraft_arrival + $log->aircraft_departure);
                 $result['passengers'][$monthIndex] = $logs->sum(fn($log) => $log->passenger_arrival + $log->passenger_departure);
                 $result['baggage'][$monthIndex] = $logs->sum(fn($log) => $log->baggage_arrival + $log->baggage_departure);
@@ -1098,20 +1107,19 @@ class LandingPageController extends Controller
             }
         } else {
             // Format tahunan (hanya total)
-            foreach ($categories as $jskey => $dbKey) {
-                $result[$jskey] = $data->sum(fn($log) => $log->{$dbKey.'_arrival'} + $log->{$dbKey.'_departure'});
-                // $result[$jsKey] = $data->sum(fn($log) => $log->{$key.'_arrival'} + $log->{$key.'_departure'});
+            foreach ($categories as $jsKey => $dbKey) {
+                // Gunakan $jsKey ('aircraft') sebagai kunci dan $dbKey ('aircraft') untuk nama kolom
+                $result[$jsKey] = $data->sum(fn($log) => $log->{$dbKey.'_arrival'} + $log->{$dbKey.'_departure'});
             }
         }
         
         // Tambahkan data kosong untuk kategori yang hilang (Transit & Pos)
-        // Tambahkan data kosong untuk kategori yang hilang (Transit & Pos)
-        // Ini PENTING agar JavaScript frontend tidak error
         $result['transit'] = $isMonthly ? array_fill(0, 12, 0) : 0;
         $result['mail'] = $isMonthly ? array_fill(0, 12, 0) : 0;
-        
+
         return $result;
     }
+
 
 
     /**
@@ -1133,6 +1141,7 @@ class LandingPageController extends Controller
             )
             ->first();
             
+
         $stats = [
             'aircraft' => $currentMonthStats->aircraft ?? 0,
             'passengers' => $currentMonthStats->passengers ?? 0,

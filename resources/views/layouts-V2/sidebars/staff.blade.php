@@ -26,6 +26,12 @@
     <div class="sidebar-menu">
         <ul class="menu">
             <li class="sidebar-title">Menu</li>
+            <li class="sidebar-item {{ Route::is('staff.dashboard.index') ? 'active' : '' }}">
+                <a href="{{ route('staff.dashboard.index') }}" class='sidebar-link' data-bs-toggle="tooltip" data-bs-placement="right" title="Dashboard">
+                    <i class="bi bi-grid-fill"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
             <li class="sidebar-item {{ Route::is('persuratan.staffIndex') ? 'active' : '' }}">
                 <a href="{{ route('persuratan.staffIndex') }}" class='sidebar-link' data-bs-toggle="tooltip" data-bs-placement="right" title="Surat">
                     <i class="bi bi-book"></i>

@@ -70,6 +70,7 @@ class CustomerController extends Controller
     
     $users = User::select('id', 'name', 'email', 'phone', 'created_at', 'is_accepted')
             ->where('is_admin', false) // Hanya pengguna non-admin
+            ->with('roles')->latest()
             ->get();
 
     return view('admin2.users.index', compact('users'));

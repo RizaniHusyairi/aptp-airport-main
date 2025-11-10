@@ -1,5 +1,10 @@
 const months = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"];
-const categories = ["Pesawat", "Penumpang", "Kargo", "Bagasi"];
+
+
+// === PERBAIKAN DI SINI ===
+// Daftar ini HARUS cocok dengan 'categoryConfig' di bar-chart.js dan 'datasets' di line-chart.js
+const categories = ["Pesawat", "Penumpang", "Penumpang Transit", "Kargo", "Bagasi", "Pos"];
+// === AKHIR PERBAIKAN ===
 
 // Referensi elemen DOM
 const yearFilter = document.getElementById('yearFilter');
@@ -41,7 +46,7 @@ async function fetchTrafficData(year, month) {
         if (!result.success) {
             throw new Error(result.message || 'Gagal mengambil data.');
         }
-
+        console.log('Fetched traffic data:', result);
         return result;
     } catch (error) {
         console.error('Error fetching traffic data:', error);
@@ -52,15 +57,24 @@ async function fetchTrafficData(year, month) {
 // Fungsi untuk memperbarui filter tahun
 function updateYearFilter(years) {
     yearFilter.innerHTML = '<option value="all">Semua Tahun</option>';
+    let currentYearSelected = false;
+    const currentYear = new Date().getFullYear().toString();
+
     years.forEach(year => {
         const option = document.createElement('option');
         option.value = year;
         option.textContent = year;
-        if (year == new Date().getFullYear()) {
+        if (year.toString() === currentYear) {
             option.selected = true;
+            currentYearSelected = true;
         }
         yearFilter.appendChild(option);
     });
+
+    // Jika tahun saat ini tidak ada di data, pilih tahun terbaru
+    if (!currentYearSelected && years.length > 0) {
+        yearFilter.value = years[0];
+    }
 }
 
 // Fungsi untuk memperbarui grafik berdasarkan filter
@@ -71,24 +85,33 @@ async function updateCharts() {
     // Ambil data dari API
     const { success, data, years } = await fetchTrafficData(year, month);
 
+    // Perbarui filter tahun jika belum diisi (hanya sekali)
+    if (yearFilter.options.length <= 1 && years.length > 0) {
+        updateYearFilter(years);
+        // Panggil updateCharts lagi jika tahun berubah (misalnya, dari 'all' ke tahun terbaru)
+        if (yearFilter.value !== year) {
+            updateCharts();
+            return;
+        }
+    }
+
     if (!success || Object.keys(data).length === 0) {
         console.warn('Tidak ada data tersedia.');
-        toggleChartVisibility(false);
-        updateLineChart(['Tidak ada data'], {}, year, month, years, months, categories);
+        toggleChartVisibility(false); // Tampilkan line chart
+        // Kirim data kosong ke line chart agar bersih
+        updateLineChart([], {}, year, month, years, months, categories); 
         return;
     }
 
-    // Perbarui filter tahun jika belum diisi
-    if (yearFilter.options.length <= 1) {
-        updateYearFilter(years);
-    }
 
     const isBarChart = year !== 'all' && month !== 'all';
     toggleChartVisibility(isBarChart);
 
     if (isBarChart) {
+        // 'data[year]' berisi objek { aircraft: [...], passengers: [...] }
         updateBarChart(data, year, month, categories);
     } else {
+        // 'data' berisi objek { 2024: {...}, 2025: {...} }
         updateLineChart(categories, data, year, month, years, months, categories);
     }
 }
@@ -112,5 +135,9 @@ const observer = new IntersectionObserver((entries) => {
         updateCharts();
         observer.disconnect();
     }
-});
-observer.observe(document.querySelector('.chart-container'));
+}, { threshold: 0.1 }); // Trigger saat 10% elemen terlihat
+
+const chartContainer = document.querySelector('.chart-container');
+if (chartContainer) {
+    observer.observe(chartContainer);
+}

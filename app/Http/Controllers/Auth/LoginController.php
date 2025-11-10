@@ -37,7 +37,7 @@ class LoginController extends Controller
 
     public function redirectTo()
     {
-        return Auth::user()->is_admin ? route('root') : route('profile');
+        return Auth::user()->is_admin ? route('root') : route('staff.dashboard.index');
     }
 
     public function login(Request $request)

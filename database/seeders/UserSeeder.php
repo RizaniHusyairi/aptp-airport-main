@@ -81,7 +81,18 @@ class UserSeeder extends Seeder
         $rolekanit = Role::where('name', 'Kanit')->first();
         if ($rolekanit) {
             $kanit->roles()->attach($rolekanit->id);
-            $rolekanit->permissions()->attach($allPermissions);
+
+            // Ambil hanya permission yang relevan untuk Kanit
+            $kanitPermissions = Permission::whereIn('permission_name', [
+                'Manajemen Inventaris',
+                'Manajemen Suku Cadang',
+                'Permintaan Suku Cadang', // Terkait dengan Suku Cadang
+                'Manajemen Program Kerja'
+            ])->pluck('id');
+
+            // Terapkan permission khusus ini
+            // Menggunakan sync() lebih aman agar tidak ada duplikat jika seeder dijalankan lagi
+            $rolekanit->permissions()->sync($kanitPermissions); 
         }
 
         // 3. Kasi Keamanan

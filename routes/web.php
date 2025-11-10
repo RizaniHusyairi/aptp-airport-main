@@ -44,6 +44,7 @@ use App\Http\Controllers\{
     TourismController,
     SparePartController,
     SparePartRequestController,
+    StaffDashboardController,
     WorkProgramController,
     AirTrafficLogController
 };
@@ -132,6 +133,8 @@ Route::group(["prefix" => 'dashboard'], function () {
 
 
         Route::middleware(['auth', 'staff'])->group(function () {
+
+            Route::get('/staff', [StaffDashboardController::class, 'index'])->name('staff.dashboard.index');
             // News Staff Routes
             Route::get('staff/berita', [NewsController::class, 'index'])->name('berita.staffIndex');
             Route::get('staff/berita/create', [NewsController::class, 'create'])->name('berita.create');
@@ -391,7 +394,7 @@ Route::group(["prefix" => 'dashboard'], function () {
 
 Route::get('/', [LandingPageController::class, 'home'])->name('home');
 Route::get('/lalu-lintas-angkutan', [LandingPageController::class, 'lalulintas'])->name('lalulintas');
-Route::get('/api/air-freight-traffic', [LandingPageController::class, 'getTrafficData'])->name('api.air-freight-traffic');
+Route::get('/api/air-freight-traffic', [LandingPageController::class, 'getAirFreightTraffic'])->name('api.air-freight-traffic');
 Route::get('/api/monthly-traffic-stats', [LandingPageController::class, 'getMonthlyTrafficStats']);
 
 Route::post('api/ai/generate-trip-plan', [LandingPageController::class, 'generateTripPlan']);
@@ -409,7 +412,7 @@ Route::post('/contact', [LandingPageController::class, 'submitContact'])->name('
 // === TAMBAHKAN ROUTE API INI (di luar grup middleware 'auth') ===
 Route::prefix('api')->name('api.')->group(function () {
     // API untuk halaman detail LLAU (/lalu-lintas)
-    Route::get('/air-freight-traffic', [LandingPageController::class, 'getAirFreightTraffic'])->name('air-freight-traffic');
+    // Route::get('/air-freight-traffic', [LandingPageController::class, 'getAirFreightTraffic'])->name('air-freight-traffic');
     
     // API untuk statistik di beranda
     Route::get('/monthly-traffic-stats', [LandingPageController::class, 'getMonthlyTrafficStats'])->name('monthly-traffic-stats');

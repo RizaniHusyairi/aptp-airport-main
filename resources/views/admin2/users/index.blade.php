@@ -39,7 +39,7 @@
                             <th>Nama</th>
                             <th>Email</th>
                             <th>Telepon</th>
-                            <th>Dibuat Pada</th>
+                            <th>Role</th> {{-- <<< KOLOM BARU --}}
                             <th>Status</th>
                             <th>Aksi</th>
                         </tr>
@@ -51,7 +51,16 @@
                                 <td>{{ $user->name }}</td>
                                 <td>{{ $user->email }}</td>
                                 <td>{{ $user->phone }}</td>
-                                <td>{{ \Carbon\Carbon::parse($user->created_at)->format('d/m/Y') }}</td>
+                                <td>
+                                
+                                    {{-- === DATA ROLE BARU === --}}
+                                    @forelse ($user->roles as $role)
+                                        <span class="badge bg-light-primary">{{ $role->name }}</span>
+                                    @empty
+                                        <span class="badge bg-light-secondary">N/A</span>
+                                    @endforelse
+                                
+                                </td>
                                 <td>
                                     <span class="badge bg-{{ $user->is_accepted ? 'success' : 'warning' }}">
                                         {{ $user->is_accepted ? 'Terverifikasi' : 'Belum Verifikasi' }}
@@ -71,6 +80,7 @@
                                 </td>
                             </tr>
                         @endforeach
+                        
                     </tbody>
                 </table>
             </div>
@@ -83,5 +93,5 @@
     <script src="{{ asset('assetsv2/extensions/jquery/jquery.min.js') }}"></script>
     <script src="{{ asset('assetsv2/extensions/datatables.net/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('assetsv2/extensions/datatables.net-bs5/js/dataTables.bootstrap5.min.js') }}"></script>
-    <script src="{{ asset('assetsv2/static/js/pages/admin-pengguna.js') }}"></script>
+    <script src="{{ asset('assetsv2/compiled/js/admin-pengguna.js') }}"></script>
 @endsection

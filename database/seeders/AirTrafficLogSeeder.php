@@ -17,6 +17,7 @@ class AirTrafficLogSeeder extends Seeder
         // Tentukan periode (September dan Oktober 2025)
         $startDate = Carbon::create(2025, 9, 1);
         $endDate = Carbon::create(2025, 10, 31);
+        $endDate = Carbon::create(2025, 11, 30);
         
         for ($date = $startDate->copy(); $date->lte($endDate); $date->addDay()) {
             

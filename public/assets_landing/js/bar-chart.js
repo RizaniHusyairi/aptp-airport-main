@@ -7,40 +7,45 @@ function updateBarChart(trafficData, year, month, categories) {
 
     // Validasi monthIndex
     if (isNaN(monthIndex) || monthIndex < 0 || monthIndex >= 12) {
-        console.warn(`Indeks bulan ${month} tidak valid. Menggunakan nilai default.`);
-        monthIndex = 0;
+        console.warn(`Indeks bulan ${month} tidak valid.`);
+        return;
     }
 
-    let datasets = [
-        { key: 'aircraft', label: 'Pesawat', borderColor: 'rgba(217, 158, 78, 1)', backgroundColor: 'rgba(217, 158, 78, 0.6)' },
-        { key: 'passengers', label: 'Penumpang', borderColor: 'rgba(54, 162, 235, 1)', backgroundColor: 'rgba(54, 162, 235, 0.6)' },
-        { key: 'transit', label: 'Penumpang Transit', borderColor: 'rgba(75, 192, 192, 1)', backgroundColor: 'rgba(75, 192, 192, 0.6)' },
-        { key: 'cargo', label: 'Kargo (Ton)', borderColor: 'rgba(255, 99, 132, 1)', backgroundColor: 'rgba(255, 99, 132, 0.6)' },
-        { key: 'baggage', label: 'Bagasi (Ton)', borderColor: 'rgba(153, 102, 255, 1)', backgroundColor: 'rgba(153, 102, 255, 0.6)' },
-        { key: 'mail', label: 'Pos (Ton)', borderColor: 'rgba(255, 205, 86, 1)', backgroundColor: 'rgba(255, 205, 86, 0.6)' }
+    // === PERBAIKAN LOGIKA DIMULAI DI SINI ===
+
+    // 1. Definisikan kunci dan warna untuk setiap kategori
+    const categoryConfig = [
+        { key: 'aircraft', label: 'Pesawat', color: 'rgba(217, 158, 78, 0.6)' },
+        { key: 'passengers', label: 'Penumpang', color: 'rgba(54, 162, 235, 0.6)' },
+        { key: 'transit', label: 'Penumpang Transit', color: 'rgba(75, 192, 192, 0.6)' },
+        { key: 'cargo', label: 'Kargo (Ton)', color: 'rgba(255, 99, 132, 0.6)' },
+        { key: 'baggage', label: 'Bagasi (Ton)', color: 'rgba(153, 102, 255, 0.6)' },
+        { key: 'mail', label: 'Pos (Ton)', color: 'rgba(255, 205, 86, 0.6)' }
     ];
 
-    datasets = datasets.map((dataset, index) => {
-        const dataArray = Array(categories.length).fill(0);
-        const yearData = trafficData[year]?.[dataset.key];
+    // 2. Buat satu array data untuk bulan yang dipilih
+    const dataForThisMonth = categoryConfig.map(config => {
+        const yearData = trafficData[year]?.[config.key];
         if (!yearData || !Array.isArray(yearData) || yearData.length <= monthIndex) {
-            console.warn(`Data untuk ${dataset.key} pada tahun ${year} dan bulan ${month} tidak tersedia.`);
-            dataArray[index] = 0;
-        } else {
-            dataArray[index] = yearData[monthIndex] || 0;
+            console.warn(`Data untuk ${config.key} pada tahun ${year} dan bulan ${month} tidak tersedia.`);
+            return 0;
         }
-
-        return {
-            label: dataset.label,
-            data: dataArray,
-            borderColor: dataset.borderColor,
-            backgroundColor: dataset.backgroundColor,
-            fill: true,
-            borderWidth: 1,
-            barPercentage: 10,
-            categoryPercentage:  0.1
-        };
+        return yearData[monthIndex] || 0;
     });
+
+    // 3. Buat satu dataset, bukan enam
+    const datasets = [{
+        label: `Data LLAU untuk ${months[monthIndex]} ${year}`,
+        data: dataForThisMonth,
+        // Ambil array warna dari config
+        backgroundColor: categoryConfig.map(config => config.color),
+        borderWidth: 1
+    }];
+
+    // 4. Pastikan label sudah benar (sesuai dengan 'categories' dari lalu-lintas.js)
+    const labels = categories;
+
+    // === AKHIR PERBAIKAN LOGIKA ===
 
     // Jika grafik sudah ada, hancurkan dulu
     if (barChart) {
@@ -51,8 +56,8 @@ function updateBarChart(trafficData, year, month, categories) {
     barChart = new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: categories,
-            datasets: datasets
+            labels: labels, // Harusnya: ["Pesawat", "Penumpang", ...]
+            datasets: datasets // Hanya satu dataset
         },
         options: {
             responsive: true,
@@ -89,20 +94,18 @@ function updateBarChart(trafficData, year, month, categories) {
             },
             plugins: {
                 legend: {
-                    position: 'top',
-                    labels: {
-                        boxWidth: 20,
-                        padding: 15
-                    }
+                    // Sembunyikan legenda karena kita sudah punya label di sumbu-x
+                    display: false 
                 },
                 tooltip: {
                     callbacks: {
                         label: function(context) {
-                            const label = context.dataset.label;
+                            const label = context.label;
                             const value = context.parsed.y;
                             if (label === 'Pesawat') return `${label}: ${value.toLocaleString('id-ID')} penerbangan`;
                             if (label === 'Penumpang' || label === 'Penumpang Transit') return `${label}: ${value.toLocaleString('id-ID')} orang`;
-                            return `${label}: ${value.toLocaleString('id-ID')} ton`;
+                            // Gunakan format standar untuk sisanya
+                            return `${label}: ${value.toLocaleString('id-ID')}`;
                         }
                     }
                 }

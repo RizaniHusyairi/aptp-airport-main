@@ -11,7 +11,7 @@
             </div>
             <div class="col-12 col-md-6 order-md-2 order-first">
                 <x-breadcrumb2 :items="[
-                    ['label' => 'Dashboard', 'url' => route('root')],
+                    ['label' => 'Dashboard', 'url' => route('staff.dashboard.index')],
                     ['label' => 'Inventaris', 'url' => route('staff.inventories.index')],
                     ['label' => 'Detail', 'url' => route('staff.inventories.show', $inventory->id)],
                     ['label' => 'Tambah Logbook', 'active' => true]

@@ -11,7 +11,7 @@
             </div>
             <div class="col-12 col-md-6 order-md-2 order-first">
                 <x-breadcrumb2 :items="[
-                    ['label' => 'Menu', 'url' => route('profile')],
+                    ['label' => 'Menu', 'url' => route('staff.dashboard.index')],
                     ['label' => 'Extend Advance', 'url' => auth()->user()->is_staff ? route('extend-advance.staffIndex') : route('extend-advance.index')],
                     ['label' => 'Detail', 'active' => true]
                 ]" />
