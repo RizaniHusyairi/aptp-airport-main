@@ -11,6 +11,7 @@ use App\Models\Ticket;
 use App\Models\Airline;
 use App\Models\Airport;
 use App\Models\Finance;
+use App\Models\Role;
 use App\Models\Visitor;
 use Illuminate\Http\Request;
 use App\Models\BudgetExpense;

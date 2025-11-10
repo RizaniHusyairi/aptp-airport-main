@@ -58,7 +58,7 @@
                         </div>
                     </div>
                     <div class="col-6 col-lg-4 col-md-6">
-                        <a href="{{ route('users.index') }}" class="card-widget">
+                        <a href="{{ route('customers.index') }}" class="card-widget">
                             <div class="card">
                                 <div class="card-body px-4 py-4-5">
                                     <div class="row">
