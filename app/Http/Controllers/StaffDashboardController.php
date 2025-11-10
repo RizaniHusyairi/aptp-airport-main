@@ -19,6 +19,8 @@ use App\Models\License;    // <-- TAMBAHKAN
 use App\Models\Ad;        // <-- TAMBAHKAN
 use App\Models\Fieldtrip; // <-- TAMBAHKAN
 use App\Models\Lelang;    // <-- TAMBAHKAN
+use App\Models\Finance;
+use Illuminate\Support\Facades\DB; 
 use Carbon\Carbon;
 
 class StaffDashboardController extends Controller
@@ -137,6 +139,74 @@ class StaffDashboardController extends Controller
         }
         // ... Tambahkan query untuk layanan lain di sini ...
         
+        if ($permissions->contains('Manajemen Kinerja Keuangan')) {
+            $data['finance_years'] = Finance::selectRaw('YEAR(date) as year')
+                                    ->distinct()->orderBy('year', 'desc')->pluck('year')->toArray();
+
+            // Ambil Pemasukan
+            $pemasukan = Finance::where('flow_type', 'in')
+                ->select(DB::raw('YEAR(date) as year'), DB::raw('MONTH(date) as month'), DB::raw('SUM(amount) as total'))
+                ->groupBy('year', 'month')
+                ->get();
+            
+            // Ambil Anggaran & Belanja
+            $anggaran = Finance::with('budgetExpenses')->where('flow_type', 'budget')
+                ->select(DB::raw('YEAR(date) as year'), DB::raw('MONTH(date) as month'), DB::raw('SUM(amount) as total_anggaran'))
+                ->groupBy('year', 'month')
+                ->get();
+
+            // Hitung total belanja per bulan/tahun
+            $belanja = Finance::where('flow_type', 'budget')
+                ->join('budget_expenses', 'finances.id', '=', 'budget_expenses.finance_id')
+                ->select(DB::raw('YEAR(finances.date) as year'), DB::raw('MONTH(finances.date) as month'), DB::raw('SUM(budget_expenses.amount) as total_belanja'))
+                ->groupBy('year', 'month')
+                ->get();
+
+            // Format data untuk chart
+            $pemasukanChartData = [];
+            $anggaranChartData = [];
+            $belanjaChartData = [];
+
+            foreach ($data['finance_years'] as $year) {
+                $pemasukanChartData[$year] = array_fill(0, 12, 0);
+                $anggaranChartData[$year] = array_fill(0, 12, 0);
+                $belanjaChartData[$year] = array_fill(0, 12, 0);
+            }
+            $pemasukanChartData['all'] = array_fill(0, 12, 0);
+            $anggaranChartData['all'] = array_fill(0, 12, 0);
+            $belanjaChartData['all'] = array_fill(0, 12, 0);
+
+            // Isi data Pemasukan
+            foreach ($pemasukan as $item) {
+                $monthIndex = $item->month - 1;
+                if (isset($pemasukanChartData[$item->year])) {
+                    $pemasukanChartData[$item->year][$monthIndex] = $item->total;
+                }
+                $pemasukanChartData['all'][$monthIndex] += $item->total;
+            }
+
+            // Isi data Anggaran
+            foreach ($anggaran as $item) {
+                $monthIndex = $item->month - 1;
+                if (isset($anggaranChartData[$item->year])) {
+                    $anggaranChartData[$item->year][$monthIndex] = $item->total_anggaran;
+                }
+                $anggaranChartData['all'][$monthIndex] += $item->total_anggaran;
+            }
+
+            // Isi data Belanja
+            foreach ($belanja as $item) {
+                $monthIndex = $item->month - 1;
+                if (isset($belanjaChartData[$item->year])) {
+                    $belanjaChartData[$item->year][$monthIndex] = $item->total_belanja;
+                }
+                $belanjaChartData['all'][$monthIndex] += $item->total_belanja;
+            }
+            
+            $data['pemasukan_chart_data'] = $pemasukanChartData;
+            $data['anggaran_chart_data'] = $anggaranChartData;
+            $data['belanja_chart_data'] = $belanjaChartData;
+        }
         
         // 5. Ambil data Inventaris (jika punya izin)
         if ($permissions->contains('Manajemen Inventaris')) {
