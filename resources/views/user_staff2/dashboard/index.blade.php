@@ -2,7 +2,10 @@
 @section('title', 'Dasbor Staff')
 
 @section('styles_admin')
+    <link rel="stylesheet" href="{{ asset('assetsv2/extensions/apexcharts/apexcharts.css') }}">
+    
     <style>
+
         .icon-dashboard {
             font-size: 2.5rem;
         }
@@ -346,6 +349,57 @@
             </div>
         </div>
         @endif
+
+        {{-- === GRAFIK BARU: PEMASUKAN === --}}
+        @if($permissions->contains('Manajemen Kinerja Keuangan'))
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h4 class="card-title">Grafik Pemasukan</h4>
+                    <select id="pemasukan-filter" class="form-select w-auto">
+                        <option value="all">Semua Tahun</option>
+                        @foreach ($data['finance_years'] as $year)
+                            <option value="{{ $year }}">{{ $year }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="card-body">
+                    {{-- Berikan data ke div untuk diambil oleh JavaScript --}}
+                    <div id="chart-pemasukan" 
+                         data-pemasukan='@json($data['pemasukan_chart_data'])' 
+                         style="height: 350px;">
+                    </div>
+                </div>
+            </div>
+        </div>
+        @endif
+
+        {{-- Grafik Anggaran vs Belanja --}}
+        @if($permissions->contains('Manajemen Kinerja Keuangan'))
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h4 class="card-title">Grafik Perbandingan Anggaran dan Belanja</h4>
+                    <select id="anggaran-belanja-filter" class="form-select w-auto">
+                        <option value="all">Semua Tahun</option>
+                         @if(isset($data['finance_years']))
+                            @foreach ($data['finance_years'] as $year)
+                                <option value="{{ $year }}">{{ $year }}</option>
+                            @endforeach
+                        @endif
+                    </select>
+                </div>
+                <div class="card-body">
+                    <div id="chart-anggaran-belanja"
+                         data-anggaran='@json($data['anggaran_chart_data'] ?? [])'
+                         data-belanja='@json($data['belanja_chart_data'] ?? [])'
+                         style="height: 350px;">
+                    </div>
+                </div>
+            </div>
+        </div>
+        @endif
+
         {{-- Kolom Ajuan Informasi Publik Terbaru --}}
         @if($permissions->contains('Manajemen Ajuan Informasi Publik') && $data['recent_public_info']->isNotEmpty())
         <div class="col-lg-6 col-12">
@@ -474,6 +528,142 @@
                 llauChart.render();
             }
             @endif
+            // ======================================================
+        // ===          GRAFIK PEMASUKAN (BARU)               ===
+        // ======================================================
+        const pemasukanChartEl = document.getElementById('chart-pemasukan');
+        @if($permissions->contains('Manajemen Kinerja Keuangan'))
+        if (pemasukanChartEl) {
+            // Ambil data JSON dari atribut data-
+            const pemasukanData = JSON.parse(pemasukanChartEl.dataset.pemasukan);
+            
+            const pemasukanChartOptions = {
+                series: [{
+                    name: 'Pemasukan (Rp)',
+                    data: pemasukanData['all'] // Tampilkan 'Semua Tahun' secara default
+                }],
+                chart: {
+                    type: 'bar',
+                    height: 350,
+                    toolbar: { show: true }
+                },
+                plotOptions: {
+                    bar: {
+                        horizontal: false,
+                        columnWidth: '55%',
+                        endingShape: 'rounded'
+                    },
+                },
+                dataLabels: {
+                    enabled: false
+                },
+                stroke: {
+                    show: true,
+                    width: 2,
+                    colors: ['transparent']
+                },
+                xaxis: {
+                    categories: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'],
+                },
+                yaxis: {
+                    title: {
+                        text: 'Rupiah (Rp)'
+                    },
+                    labels: {
+                        formatter: function (val) {
+                            // Format ke Juta, Miliar, dll.
+                            if (val >= 1000000000) {
+                                return (val / 1000000000).toFixed(1) + ' M';
+                            }
+                            if (val >= 1000000) {
+                                return (val / 1000000).toFixed(1) + ' Jt';
+                            }
+                            return val.toLocaleString('id-ID');
+                        }
+                    }
+                },
+                fill: {
+                    opacity: 1
+                },
+                tooltip: {
+                    y: {
+                        formatter: function (val) {
+                            return "Rp " + val.toLocaleString('id-ID');
+                        }
+                    }
+                }
+            };
+
+            var pemasukanChart = new ApexCharts(pemasukanChartEl, pemasukanChartOptions);
+            pemasukanChart.render();
+
+            // Tambahkan event listener ke filter dropdown
+            const pemasukanFilter = document.getElementById('pemasukan-filter');
+            pemasukanFilter.addEventListener('change', function() {
+                const selectedYear = this.value;
+                // Update data series pada grafik berdasarkan tahun yang dipilih
+                pemasukanChart.updateSeries([{
+                    data: pemasukanData[selectedYear]
+                }]);
+            });
+        }
+        @endif
+
+        // ======================================================
+        // ===       GRAFIK ANGGARAN VS BELANJA (BARU)        ===
+        // ======================================================
+        const anggaranChartEl = document.getElementById('chart-anggaran-belanja');
+        @if($permissions->contains('Manajemen Kinerja Keuangan') && isset($data['anggaran_chart_data']))
+        if (anggaranChartEl) {
+            const anggaranData = JSON.parse(anggaranChartEl.dataset.anggaran);
+            const belanjaData = JSON.parse(anggaranChartEl.dataset.belanja);
+
+            const anggaranChartOptions = {
+                series: [
+                    { name: 'Anggaran (Rp)', data: anggaranData['all'] },
+                    { name: 'Belanja (Rp)', data: belanjaData['all'] }
+                ],
+                chart: { type: 'line', height: 350, toolbar: { show: true }, zoom: { enabled: false } },
+                dataLabels: { enabled: false },
+                stroke: { curve: 'smooth', width: 3 },
+                xaxis: {
+                    categories: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'],
+                },
+                yaxis: {
+                    title: { text: 'Rupiah (Rp)' },
+                    labels: {
+                        formatter: function (val) {
+                            if (val >= 1000000000) return (val / 1000000000).toFixed(1) + ' M';
+                            if (val >= 1000000) return (val / 1000000).toFixed(1) + ' Jt';
+                            return val.toLocaleString('id-ID');
+                        }
+                    }
+                },
+                legend: { position: 'top' },
+                tooltip: {
+                    y: {
+                        formatter: function (val) {
+                            return "Rp " + val.toLocaleString('id-ID');
+                        }
+                    }
+                }
+            };
+
+            var anggaranChart = new ApexCharts(anggaranChartEl, anggaranChartOptions);
+            anggaranChart.render();
+
+            const anggaranFilter = document.getElementById('anggaran-belanja-filter');
+            if(anggaranFilter) {
+                anggaranFilter.addEventListener('change', function() {
+                    const selectedYear = this.value;
+                    anggaranChart.updateSeries([
+                        { data: anggaranData[selectedYear] },
+                        { data: belanjaData[selectedYear] }
+                    ]);
+                });
+            }
+        }
+        @endif
         });
     </script>
 @endsection

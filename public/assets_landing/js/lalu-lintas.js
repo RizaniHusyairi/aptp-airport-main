@@ -1,5 +1,6 @@
 const months = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"];
 
+
 // === PERBAIKAN DI SINI ===
 // Daftar ini HARUS cocok dengan 'categoryConfig' di bar-chart.js dan 'datasets' di line-chart.js
 const categories = ["Pesawat", "Penumpang", "Penumpang Transit", "Kargo", "Bagasi", "Pos"];

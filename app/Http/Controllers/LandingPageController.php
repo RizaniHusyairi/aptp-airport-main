@@ -1055,7 +1055,7 @@ class LandingPageController extends Controller
             $grouped = $trafficData->groupBy(fn($item) => $item->date->year);
             foreach ($availableYears as $y) {
                 $yearData = $grouped->get($y, collect());
-                $data[$y] = $this->formatDataForJs($yearData);
+                $data[$y] = $this->formatDataForJs($yearData,false);
             }
         } else {
             // Jika satu tahun, kelompokkan per bulan
