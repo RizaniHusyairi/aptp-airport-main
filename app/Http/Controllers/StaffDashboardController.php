@@ -11,7 +11,7 @@ use App\Models\AirTrafficLog; // Model untuk LLAU
 use App\Models\Tenant; // Model untuk Tenant
 use App\Models\Rental; // Model untuk Sewa
 use App\Models\ExtendAdvance; // Model untuk Extend Advance
-use App\Models\Slot; // Model untuk Slot Charter
+use App\Models\slot; // Model untuk Slot Charter
 use App\Models\Inventory;  // <<< TAMBAHKAN MODEL INVENTARIS
 use App\Models\WorkProgram; // <<< TAMBAHKAN MODEL PROGRAM KERJA
 use App\Models\Task;       // <<< TAMBAHKAN MODEL TUGAS

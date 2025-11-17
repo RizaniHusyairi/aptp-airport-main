@@ -7,6 +7,7 @@ use App\Models\Role;
 use App\Models\Permission;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Validation\Rule;
 
 class RoleController extends Controller
 {
@@ -18,7 +19,6 @@ class RoleController extends Controller
         'Kepala Seksi Pelayanan dan Kerjasama',
         'Kepala Seksi Teknik dan Operasi',
         'Kanit'
-        // Tambahkan 'Admin' atau 'Super Admin' di sini jika perlu
     ];
 
     public function index(Request $request)
