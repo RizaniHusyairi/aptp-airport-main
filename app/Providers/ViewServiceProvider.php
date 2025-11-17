@@ -106,7 +106,7 @@ class ViewServiceProvider extends ServiceProvider
                 'Ajukan Perijinan Usaha' => ['route' => 'perijinan.index', 'icon' => 'bi bi-file-earmark-text', 'label' => 'Ajukan Perijinan Usaha'],
                 'Ajukan Pengiklanan' => ['route' => 'pengiklanan.index', 'icon' => 'bi bi-megaphone', 'label' => 'Ajukan Pengiklanan'],
                 'Ajukan Field Trip' => ['route' => 'fieldtrip.index', 'icon' => 'bi bi-bus-front', 'label' => 'Ajukan Field Trip'],
-                'Ajukan Lelang' => ['route' => 'lelang.index', 'icon' => 'bi bi-hammer', 'label' => 'Ajukan Lelang/Beauty Contest'],
+                'Ajukan Lelang' => ['route' => 'lelang.index', 'icon' => 'bi bi-hammer', 'label' => 'Ajukan Beauty Contest'],
                 'Ajukan Slot Charter' => ['route' => 'slot.index', 'icon' => 'bi bi-clock', 'label' => 'Ajukan Slot Charter'],
                 'Ajukan Extend Advance' => ['route' => 'extend-advance.index', 'icon' => 'bi bi-clock-history', 'label' => 'Ajukan Extend Advance'],
                 'Ajukan Perijinan Kerja' => ['route' => 'kerja.userindex', 'icon' => 'bi bi-person-workspace', 'label' => 'Ajukan Perizinan Kerja'],

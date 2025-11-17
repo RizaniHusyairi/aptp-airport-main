@@ -1,5 +1,5 @@
 @extends('layouts-V2.master-layouts-v2')
-@section('title', 'Manajemen Lelang/Beauty Contest')
+@section('title', 'Manajemen Beauty Contest')
 @section('styles_admin')
     <link rel="stylesheet" href="{{ asset('assetsv2/extensions/datatables.net-bs5/css/dataTables.bootstrap5.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assetsv2/compiled/css/table-datatable-jquery.css') }}">
@@ -9,13 +9,13 @@
                     <div class="page-title">
                         <div class="row">
                             <div class="col-12 col-md-6 order-md-1 order-last">
-                                <h3>Manajemen Lelang/Beauty Contest</h3>
-                                <p class="text-subtitle text-muted">Lihat data pengajuan Lelang/Beauty Contest.</p>
+                                <h3>Manajemen Beauty Contest</h3>
+                                <p class="text-subtitle text-muted">Lihat data pengajuan Beauty Contest.</p>
                             </div>
                             <div class="col-12 col-md-6 order-md-2 order-first">
                                 <x-breadcrumb2 :items="[
                                         ['label' => 'Menu', 'url' => route('profile')],
-                                        ['label' => 'Lelang/Beauty Contest', 'active' => true]
+                                        ['label' => 'Beauty Contest', 'active' => true]
                                     ]" />
                                 
                             </div>
@@ -30,7 +30,7 @@
                             </div>
                             @endif
                             <div class="card-header d-flex justify-content-between align-items-center">
-                                <h5 class="card-title">Daftar Pengajuan Lelang/Beauty Contest</h5>
+                                <h5 class="card-title">Daftar Pengajuan Beauty Contest</h5>
                                 @notadmin
                                 @notstaff
                                     <a href="{{ route('lelang.create') }}" class="btn btn-primary"><i class="bi bi-plus"></i> Tambah Pengajuan</a>
