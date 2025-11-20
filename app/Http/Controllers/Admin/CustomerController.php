@@ -8,6 +8,7 @@ use App\Models\Role;
 use App\Models\Permission;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Facades\Hash; // <<< PENTING: Tambahkan ini
 
 class CustomerController extends Controller
 {
@@ -108,5 +109,20 @@ class CustomerController extends Controller
         $user->delete();
 
         return redirect()->route('customers.index')->with('success', 'User berhasil dihapus.');
+    }
+
+    /**
+     * ### METHOD BARU: Reset Password Pengguna ###
+     */
+    public function resetPassword(User $user)
+    {
+        // Set password default
+        $defaultPassword = 'Apt123';
+
+        $user->update([
+            'password' => Hash::make($defaultPassword)
+        ]);
+
+        return back()->with('success', 'Password pengguna ' . $user->name . ' berhasil direset menjadi: ' . $defaultPassword);
     }
 }

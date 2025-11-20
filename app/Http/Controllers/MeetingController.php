@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Meeting;
+use App\Models\Attendance; // <<< Import Model Attendance
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
-use Barryvdh\DomPDF\Facade\Pdf; // <<< Import PDF
+use Illuminate\Support\Facades\Storage; // <<< Import Storage
+use Barryvdh\DomPDF\Facade\Pdf; 
 
 class MeetingController extends Controller
 {
@@ -168,8 +170,15 @@ class MeetingController extends Controller
     public function destroyAttendance(Attendance $attendance)
     {
         // Hapus file tanda tangan jika ada
-        if ($attendance->signature && Storage::disk('public')->exists($attendance->signature)) {
-            Storage::disk('public')->delete($attendance->signature);
+        // if ($attendance->signature && Storage::disk('public')->exists($attendance->signature)) {
+        //     Storage::disk('public')->delete($attendance->signature);
+        // }
+
+        if ($attendance->signature) {
+            $documentPath = public_path('uploads/signatures/' . basename($attendance->signature));
+            if (file_exists($documentPath)) {
+                unlink($documentPath);
+            }
         }
 
         $attendance->delete();

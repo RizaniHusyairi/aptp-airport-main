@@ -355,6 +355,7 @@ Route::group(["prefix" => 'dashboard'], function () {
             Route::put('customers/{user}/update-role', [CustomerController::class, 'updateRole'])->name('customers.updateRole');
             Route::get('customers/{user}/edit-role', [CustomerController::class, 'editRole'])->name('customers.editRole');
             Route::put('customers/{user}/update-supervisor', [CustomerController::class, 'updateSupervisor'])->name('customers.updateSupervisor');
+            Route::patch('/customers/{user}/reset-password', [CustomerController::class, 'resetPassword'])->name('customers.resetPassword');
             
             //roles
             Route::resource('roles', RoleController::class);

@@ -67,16 +67,27 @@
                                     </span>
                                 </td>
                                 <td>
-                                    <div class="d-flex">
+                                    <div class="d-flex gap-1"> {{-- Tambahkan gap agar tombol tidak nempel --}}
                                         <a href="{{ route('customers.show', $user->id) }}" class="btn btn-primary btn-sm">Lihat</a>
+                                        
+                                        {{-- === TOMBOL RESET PASSWORD BARU === --}}
+                                        <form action="{{ route('customers.resetPassword', $user->id) }}"
+                                            method="POST" class="d-inline"
+                                            onsubmit="return confirm('Apakah Anda yakin ingin mereset password pengguna ini menjadi Apt123?');">
+                                            @csrf
+                                            @method('PATCH')
+                                            <button type="submit" class="btn btn-warning btn-sm text-white" title="Reset Password ke 12345678">Reset</button>
+                                        </form>
+                                        {{-- ================================== --}}
+
                                         <form action="{{ route('customers.destroy', $user->id) }}"
-                                            method="POST" class="d-inline ms-1"
+                                            method="POST" class="d-inline"
                                             onsubmit="return confirm('Apakah Anda yakin ingin menghapus pengguna ini?');">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
                                         </form>
-                                            </div>
+                                    </div>
                                 </td>
                             </tr>
                         @endforeach
