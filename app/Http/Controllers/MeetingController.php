@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Meeting;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
+use Barryvdh\DomPDF\Facade\Pdf; // <<< Import PDF
 
 class MeetingController extends Controller
 {
@@ -87,5 +88,92 @@ class MeetingController extends Controller
         
         $status = $meeting->is_active ? 'dibuka' : 'ditutup';
         return back()->with('success', "Absensi berhasil $status.");
+    }
+
+    /**
+     * === METHOD BARU: Export PDF Daftar Hadir ===
+     */
+    public function exportPdf(Meeting $meeting)
+    {
+        // Ambil data peserta
+        $meeting->load('attendances');
+
+        // Render PDF
+        $pdf = PDF::loadView('user_staff2.rapat.attendance_pdf', [
+            'meeting' => $meeting,
+            'attendances' => $meeting->attendances
+        ]);
+
+        // Set ukuran kertas A4 Portrait
+        $pdf->setPaper('a4', 'portrait');
+
+        // Nama file yang rapi
+        $fileName = 'Daftar-Hadir-' . Str::slug($meeting->title) . '-' . $meeting->date->format('Y-m-d') . '.pdf';
+
+        return $pdf->download($fileName);
+    }
+
+    /**
+     * === METHOD BARU: Tampilkan Form Edit ===
+     */
+    public function edit(Meeting $meeting)
+    {
+        return view('user_staff2.rapat.edit', compact('meeting'));
+    }
+
+    /**
+     * === METHOD BARU: Update Data Rapat ===
+     */
+    public function update(Request $request, Meeting $meeting)
+    {
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'date' => 'required|date',
+            'start_time' => 'required',
+            'location' => 'required|string|max:255',
+            'organizer' => 'required|string|max:255',
+        ], [
+            'title.required' => 'Judul rapat wajib diisi.',
+            'date.required' => 'Tanggal pelaksanaan wajib diisi.',
+            'start_time.required' => 'Jam mulai wajib diisi.',
+            'location.required' => 'Lokasi rapat wajib diisi.',
+            'organizer.required' => 'Pimpinan/Penyelenggara wajib diisi.',
+        ]);
+
+        $meeting->update([
+            'title' => $validated['title'],
+            'date' => $validated['date'],
+            'start_time' => $validated['start_time'],
+            'location' => $validated['location'],
+            'organizer' => $validated['organizer'],
+            // Slug tidak diupdate agar link yang sudah dibagikan tidak mati
+        ]);
+
+        return redirect()->route('staff.meetings.index')->with('success', 'Data rapat berhasil diperbarui.');
+    }
+
+    /**
+     * === METHOD BARU: Hapus Rapat ===
+     */
+    public function destroy(Meeting $meeting)
+    {
+        // Data absensi terkait akan otomatis terhapus karena onDelete('cascade') di database
+        $meeting->delete();
+        return redirect()->route('staff.meetings.index')->with('success', 'Agenda rapat berhasil dihapus.');
+    }
+
+    /**
+     * === METHOD BARU: Hapus Peserta Absen ===
+     */
+    public function destroyAttendance(Attendance $attendance)
+    {
+        // Hapus file tanda tangan jika ada
+        if ($attendance->signature && Storage::disk('public')->exists($attendance->signature)) {
+            Storage::disk('public')->delete($attendance->signature);
+        }
+
+        $attendance->delete();
+
+        return back()->with('success', 'Data peserta berhasil dihapus.');
     }
 }

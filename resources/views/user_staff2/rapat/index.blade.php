@@ -73,15 +73,23 @@
                             <td>
                                 <div class="d-flex gap-2">
                                     {{-- Tombol Salin Link (Nanti akan berfungsi setelah kita buat route publiknya) --}}
-                                    <button class="btn btn-sm btn-outline-primary copy-link" 
-                                            data-link="{{ url('/absensi/' . $meeting->slug) }}" 
-                                            data-bs-toggle="tooltip" title="Salin Link Absensi">
-                                        <i class="bi bi-link-45deg"></i>
-                                    </button>
-                                    
+                                  
                                     <a href="{{ route('staff.meetings.show', $meeting->id) }}" class="btn btn-sm btn-info text-white" data-bs-toggle="tooltip" title="Detail & QR Code">
                                         <i class="bi bi-eye"></i>
                                     </a>
+
+                                    {{-- === TOMBOL EDIT & HAPUS DITAMBAHKAN === --}}
+                                    <a href="{{ route('staff.meetings.edit', $meeting->id) }}" class="btn btn-sm btn-warning text-white" data-bs-toggle="tooltip" title="Edit Agenda">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </a>
+
+                                    <form action="{{ route('staff.meetings.destroy', $meeting->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus rapat ini? Data absensi terkait juga akan terhapus.')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-sm btn-danger" data-bs-toggle="tooltip" title="Hapus Agenda">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
                                 </div>
                             </td>
                         </tr>

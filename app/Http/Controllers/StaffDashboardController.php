@@ -19,6 +19,7 @@ use App\Models\License;    // <-- TAMBAHKAN
 use App\Models\Ad;        // <-- TAMBAHKAN
 use App\Models\Fieldtrip; // <-- TAMBAHKAN
 use App\Models\Lelang;    // <-- TAMBAHKAN
+use App\Models\Meeting;
 use App\Models\Finance;
 use Illuminate\Support\Facades\DB; 
 use Carbon\Carbon;
@@ -30,12 +31,33 @@ class StaffDashboardController extends Controller
      */
     public function index()
     {
+
+
         $user = Auth::user();
         // Ambil daftar nama permission yang dimiliki user
         $permissions = $user->getAllPermissions()->pluck('permission_name');
 
         $data = [];
 
+        
+        // ========================================================== //
+        // ===        LOGIKA UNTUK MANAJEMEN RAPAT ABSENSI        === //
+        // ========================================================== //
+        if ($permissions->contains('Manajemen Absensi Rapat')) {
+            // 1. Ambil Daftar Rapat yang Sedang Aktif (Absensi Dibuka)
+            // Kita ambil data lengkapnya, bukan cuma count()
+            $data['active_meetings'] = Meeting::withCount('attendances')
+                                        ->where('is_active', true)
+                                        ->latest('date')
+                                        ->get();
+
+            // 2. Ambil Daftar Agenda Rapat Hari Ini
+            $data['today_meetings'] = Meeting::withCount('attendances')
+                                        ->whereDate('date', Carbon::today())
+                                        ->orderBy('start_time', 'asc')
+                                        ->get();
+        }
+        
         // 1. Ambil data Pengaduan (jika punya izin)
         if ($permissions->contains('Manajemen Pengaduan')) {
             $data['pending_complaints_count'] = Complaint::where('status', 'Menunggu')->count();

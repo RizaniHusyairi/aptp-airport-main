@@ -329,12 +329,125 @@
             </a>
         </div>
         @endif
+        
     </section>
 
     <section class="row">
         {{-- ====================================================== --}}
         {{-- ===              DAFTAR TUGAS TERBARU              === --}}
         {{-- ====================================================== --}}
+        {{-- === BAGIAN BARU: TABEL INFORMASI RAPAT === --}}
+    @if($permissions->contains('Manajemen Absensi Rapat'))
+        
+        {{-- Tabel 1: Agenda Rapat Hari Ini --}}
+        <div class="col-lg-6 col-12 mb-3">
+            <div class="card h-100">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h4 class="card-title mb-0">
+                        <i class="bi bi-calendar-event text-primary me-2"></i>Agenda Rapat Hari Ini
+                    </h4>
+                    <span class="badge bg-light-primary">{{ $data['today_meetings']->count() }} Agenda</span>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Jam</th>
+                                    <th>Agenda & Lokasi</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse($data['today_meetings'] as $meeting)
+                                <tr>
+                                    <td style="width: 15%;">
+                                        <span class="fw-bold">{{ \Carbon\Carbon::parse($meeting->start_time)->format('H:i') }}</span>
+                                        <br><small>WITA</small>
+                                    </td>
+                                    <td>
+                                        <span class="fw-bold d-block text-dark">{{ $meeting->title }}</span>
+                                        <small class="text-muted"><i class="bi bi-geo-alt"></i> {{ $meeting->location }}</small>
+                                    </td>
+                                    <td style="width: 15%;">
+                                        <a href="{{ route('staff.meetings.show', $meeting->id) }}" class="btn btn-sm btn-info text-white" data-bs-toggle="tooltip" title="Lihat Detail & QR">
+                                            <i class="bi bi-eye"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                @empty
+                                <tr>
+                                    <td colspan="3" class="text-center text-muted py-4">
+                                        <em>Tidak ada agenda rapat hari ini.</em>
+                                    </td>
+                                </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{-- Tabel 2: Rapat dengan Absensi Aktif (Lupa ditutup atau sedang jalan) --}}
+        <div class="col-lg-6 col-12 mb-3">
+            <div class="card h-100">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h4 class="card-title mb-0">
+                        <i class="bi bi-broadcast text-success me-2"></i>Absensi Sedang Dibuka
+                    </h4>
+                    <span class="badge bg-light-success">{{ $data['active_meetings']->count() }} Aktif</span>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Tanggal</th>
+                                    <th>Agenda</th>
+                                    <th>Hadir</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse($data['active_meetings'] as $meeting)
+                                <tr>
+                                    <td style="width: 20%;">
+                                        {{ $meeting->date->translatedFormat('d M') }}
+                                    </td>
+                                    <td>
+                                        <span class="fw-bold d-block">{{ $meeting->title }}</span>
+                                        <small class="text-success fw-bold">● Link Aktif</small>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-info">{{ $meeting->attendances_count }}</span>
+                                    </td>
+                                    <td>
+                                        <a href="{{ route('staff.meetings.show', $meeting->id) }}" class="btn btn-sm btn-primary" data-bs-toggle="tooltip" title="Kelola Absensi">
+                                            <i class="bi bi-gear"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                @empty
+                                <tr>
+                                    <td colspan="4" class="text-center text-muted py-4">
+                                        <em>Tidak ada absensi yang sedang aktif.</em>
+                                    </td>
+                                </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+    @endif
+
+
+
+
+
         {{-- === GRAFIK BARU: LLAU 7 HARI TERAKHIR === --}}
         @if($permissions->contains('Manajemen Lalu Lintas Angkutan Udara'))
         <div class="col-12">

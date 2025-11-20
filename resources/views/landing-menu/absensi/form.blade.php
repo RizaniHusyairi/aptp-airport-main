@@ -24,7 +24,7 @@
             overflow: hidden;
         }
         .card-header {
-            background: linear-gradient(45deg, #0d2c4a, #1a4b7a);
+            background: linear-gradient(13deg, #0d1718, #4da3fb);
             color: white;
             padding: 2rem;
             text-align: center;
@@ -68,7 +68,7 @@
         <div class="card-header">
             <div class="mb-3">
                 {{-- Ganti dengan logo bandara Anda --}}
-                <img src="{{ asset('assets_landing/img/logo.png') }}" alt="Logo" style="height: 50px;">
+                <img src="{{ asset('assets_landing/img/logo/logo-apt.svg') }}" alt="Logo" style="height: 50px;">
             </div>
             <h1 class="meeting-title">{{ $meeting->title }}</h1>
             <div class="meeting-info">
@@ -102,8 +102,8 @@
                         <input type="text" class="form-control" id="department" name="department" placeholder="Contoh: Dinas Perhubungan / Bag. Keuangan" required>
                     </div>
                     <div class="mb-3">
-                        <label for="phone" class="form-label">Nomor HP (WhatsApp)</label>
-                        <input type="text" class="form-control" id="phone" name="phone" placeholder="Opsional">
+                        <label for="phone" class="form-label">Nomor HP (WhatsApp) <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="phone" name="phone" placeholder="08..." required>
                     </div>
 
                     {{-- === INPUT TANDA TANGAN DIGITAL === --}}

@@ -315,6 +315,14 @@ Route::group(["prefix" => 'dashboard'], function () {
                 Route::get('/{meeting}', [MeetingController::class, 'show'])->name('show');
                 // Tambahan Route Tutup Absensi (Opsional)
                 Route::patch('/{meeting}/toggle', [MeetingController::class, 'toggleStatus'])->name('toggle');
+                Route::get('/{meeting}/export-pdf', [MeetingController::class, 'exportPdf'])->name('exportPdf');
+
+                // <<< ROUTE BARU UNTUK EDIT & HAPUS >>>
+                Route::get('/{meeting}/edit', [MeetingController::class, 'edit'])->name('edit');
+                Route::put('/{meeting}', [MeetingController::class, 'update'])->name('update');
+                Route::delete('/{meeting}', [MeetingController::class, 'destroy'])->name('destroy');
+
+                Route::delete('/attendance/{attendance}', [MeetingController::class, 'destroyAttendance'])->name('destroyAttendance');
             });
         
         

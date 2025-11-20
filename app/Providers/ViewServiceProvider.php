@@ -123,7 +123,7 @@ class ViewServiceProvider extends ServiceProvider
                 'Manajemen Perijinan Usaha' => ['route' => 'perijinan.staffIndex', 'icon' => 'bi bi-file-earmark-check', 'label' => 'Perijinan Usaha'],
                 'Manajemen Pengiklanan' => ['route' => 'pengiklanan.staffIndex', 'icon' => 'bi bi-megaphone', 'label' => 'Pengiklanan'],
                 'Manajemen Field Trip' => ['route' => 'fieldtrip.staffIndex', 'icon' => 'bi bi-geo-alt', 'label' => 'Field Trip'],
-                'Manajemen Lelang' => ['route' => 'lelang.staffIndex', 'icon' => 'bi bi-hammer', 'label' => 'Lelang/Beauty Contest'],
+                'Manajemen Lelang' => ['route' => 'lelang.staffIndex', 'icon' => 'bi bi-hammer', 'label' => 'Beauty Contest'],
                 'Manajemen Slot Charter' => ['route' => 'slot.staffIndex', 'icon' => 'bi bi-clock', 'label' => 'Slot Charter'],
                 'Manajemen Extend Advance' => ['route' => 'extend-advance.staffIndex', 'icon' => 'bi bi-clock-history', 'label' => 'Extend Advance'],
                 'Manajemen Perijinan Kerja' => ['route' => 'kerja.index', 'icon' => 'bi bi-person-workspace', 'label' => 'Perizinan Kerja'],

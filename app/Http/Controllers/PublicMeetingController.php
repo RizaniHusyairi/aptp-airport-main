@@ -42,11 +42,12 @@ class PublicMeetingController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'department' => 'required|string|max:255',
-            'phone' => 'nullable|string|max:20',
+            'phone' =>'required|string|max:20',
             'signature' => 'required', // Validasi tanda tangan harus ada
         ], [
             'name.required' => 'Nama lengkap wajib diisi.',
             'department.required' => 'Instansi/Unit Kerja wajib diisi.',
+            'phone.required' => 'Nomor HP wajib diisi.', // Tambahkan pesan error
             'signature.required' => 'Tanda tangan wajib diisi.',
         ]);
 

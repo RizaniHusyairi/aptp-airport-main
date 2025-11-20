@@ -23,6 +23,11 @@
             transform: scale(1.1);
             border-color: #aaa;
         }
+
+        /* Memaksa gambar di dalam lightbox memiliki background putih */
+        .gslide-image img {
+            background-color: #ffffff !important;
+        }
     </style>
 @endsection
 
@@ -92,7 +97,12 @@
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h5 class="card-title mb-0">Daftar Peserta Hadir ({{ $meeting->attendances->count() }})</h5>
-                    <button class="btn btn-sm btn-success" onclick="window.print()"><i class="bi bi-printer"></i> Cetak</button>
+                    <div class="d-flex gap-2">
+                        {{-- === PERUBAHAN: Tombol Export PDF === --}}
+                        <a href="{{ route('staff.meetings.exportPdf', $meeting->id) }}" class="btn btn-sm btn-danger" target="_blank">
+                            <i class="bi bi-file-earmark-pdf"></i> Export PDF
+                        </a>
+                    </div>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -104,6 +114,7 @@
                                     <th>Instansi / Unit</th>
                                     <th>Waktu Absen</th>
                                     <th>Tanda Tangan</th> {{-- <<< KOLOM BARU --}}
+                                    <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -126,11 +137,19 @@
                                             <span class="badge bg-light-secondary text-muted">Tidak ada</span>
                                         @endif
                                     </td>
+                                    <td>
+                                        {{-- TOMBOL HAPUS --}}
+                                        <form action="{{ route('staff.meetings.destroyAttendance', $attendance->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus peserta ini?')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-sm btn-danger" data-bs-toggle="tooltip" title="Hapus Peserta">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </form>
+                                    </td>
                                 </tr>
                                 @empty
-                                <tr>
-                                    <td colspan="5" class="text-center text-muted">Belum ada peserta yang mengisi absen.</td>
-                                </tr>
+
                                 @endforelse
                             </tbody>
                         </table>
