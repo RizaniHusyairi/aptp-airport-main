@@ -46,7 +46,9 @@ use App\Http\Controllers\{
     SparePartRequestController,
     StaffDashboardController,
     WorkProgramController,
-    AirTrafficLogController
+    AirTrafficLogController,
+    MeetingController,
+    PublicMeetingController
 };
 
 Auth::routes();
@@ -303,6 +305,19 @@ Route::group(["prefix" => 'dashboard'], function () {
             Route::post('staff/persuratan/{surat}/final-approve',   [PersuratanController::class, 'finalApprove'])->name('persuratan.final.approve');
             Route::delete('staff/persuratan/{surat}',      [PersuratanController::class, 'destroy'])->name('persuratan.destroy');
                 
+            // === ROUTE MANAJEMEN RAPAT ABSENSI ===
+            Route::prefix('staff/rapat')->name('staff.meetings.')->group(function () {
+                Route::get('/', [MeetingController::class, 'index'])->name('index');
+                Route::get('/create', [MeetingController::class, 'create'])->name('create'); // Route Form Tambah
+                Route::post('/', [MeetingController::class, 'store'])->name('store'); 
+
+                // Tambahan Route Show (Detail)
+                Route::get('/{meeting}', [MeetingController::class, 'show'])->name('show');
+                // Tambahan Route Tutup Absensi (Opsional)
+                Route::patch('/{meeting}/toggle', [MeetingController::class, 'toggleStatus'])->name('toggle');
+            });
+        
+        
         });
 
 
@@ -407,14 +422,9 @@ Route::get('/keberangkatan', [LandingPageController::class, 'keberangkatan'])->n
 Route::get('/kedatangan', [LandingPageController::class, 'kedatangan'])->name('kedatangan');
 
 Route::post('/contact', [LandingPageController::class, 'submitContact'])->name('contact.submit');
-// Route::post('/pengaduan', [LandingPageController::class, 'storePengaduan'])->name('pengaduan.store');
 
-// === TAMBAHKAN ROUTE API INI (di luar grup middleware 'auth') ===
 Route::prefix('api')->name('api.')->group(function () {
-    // API untuk halaman detail LLAU (/lalu-lintas)
-    // Route::get('/air-freight-traffic', [LandingPageController::class, 'getAirFreightTraffic'])->name('air-freight-traffic');
     
-    // API untuk statistik di beranda
     Route::get('/monthly-traffic-stats', [LandingPageController::class, 'getMonthlyTrafficStats'])->name('monthly-traffic-stats');
 });
 
@@ -428,6 +438,11 @@ Route::prefix('api')->group(function () {
     Route::get('/pariwisata/unggulan', [LandingPageController::class, 'getFeaturedTourism']);
     
 });
+
+// Route ini bisa diakses siapa saja yang punya link
+Route::get('/absensi/{slug}', [PublicMeetingController::class, 'show'])->name('public.absensi.show');
+Route::post('/absensi/{slug}', [PublicMeetingController::class, 'store'])->name('public.absensi.store');
+
 
 
 Route::get('/informasi/berita', [LandingPageController::class, 'berita'])->name('berita');

@@ -54,7 +54,7 @@ class RoleController extends Controller
         ]);
 
         // Proteksi tambahan: jangan izinkan membuat role dengan nama yang sudah dilindungi
-        if (in_array($validated['name'], $this->coreRoles)) {
+        if (in_array($request['name'], $this->coreRoles)) {
             return back()->withInput()->withErrors(['name' => 'Nama role ini dilindungi oleh sistem dan tidak dapat dibuat ulang.']);
         }
         

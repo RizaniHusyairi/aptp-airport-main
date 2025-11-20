@@ -137,6 +137,7 @@ class ViewServiceProvider extends ServiceProvider
  'Manajemen Inventaris' => ['route' => 'staff.inventories.index', 'icon' => 'bi bi-box-seam', 'label' => 'Inventaris'],
                 'Manajemen Suku Cadang' => ['route' => 'staff.spare-parts.index', 'icon' => 'bi bi-gear-wide-connected', 'label' => 'Suku Cadang'],
                 'Permintaan Suku Cadang' => ['route' => 'staff.spare-part-requests.index', 'icon' => 'bi bi-send-check', 'label' => 'Permintaan Suku Cadang'],
+                'Manajemen Absensi Rapat' => ['route' => 'staff.meetings.index', 'icon' => 'bi bi-calendar-event', 'label' => 'Absensi Rapat'],
                 
             ];
 
