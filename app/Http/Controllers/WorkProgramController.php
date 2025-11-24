@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Task;
 use App\Models\WorkProgram;
 use Illuminate\Http\Request;
+use App\Models\RoleWorkCategory;
 use Illuminate\Validation\Rule; 
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -12,13 +13,43 @@ use Illuminate\Support\Facades\Auth;
 
 class WorkProgramController extends Controller
 {
+
+    // Daftar kategori statis (sama seperti di RoleController)
+    private $workCategories = [
+        'Alat-alat Besar',
+        'Fasilitas Sisi Udara',
+        'Fasilitas Sisi Darat',
+        'Elektronika Bandara',
+        'Listrik',
+        'Mekanikal',
+        'Fasilitas Keamanan Penerbangan',
+        'PKPPK'
+    ];
+
     /**
      * Menampilkan daftar semua program kerja.
      */
     public function index()
     {
-        // Eager load relasi tasks untuk menghitung progres
-        $programs = WorkProgram::with('tasks')->latest()->get();
+        $user = Auth::user();
+        $query = WorkProgram::with('tasks')->latest();
+
+        
+        // Mari kita cek kategori yang dimiliki user melalui role-nya
+        $userCategories = [];
+        foreach ($user->roles as $role) {
+            $categories = RoleWorkCategory::where('role_id', $role->id)->pluck('category_name')->toArray();
+            $userCategories = array_merge($userCategories, $categories);
+        }
+        $userCategories = array_unique($userCategories);
+
+        // Jika user memiliki kategori spesifik, filter query
+        if (!empty($userCategories)) {
+            $query->whereIn('category', $userCategories);
+        } 
+        
+
+        $programs = $query->get();
         return view('user_staff2.program-kerja.index', compact('programs'));
     }
 
@@ -27,7 +58,8 @@ class WorkProgramController extends Controller
      */
     public function create()
     {
-        return view('user_staff2.program-kerja.create');
+        // Kirim daftar kategori ke view untuk dropdown
+        return view('user_staff2.program-kerja.create', ['categories' => $this->workCategories]);
     }
 
     /**
@@ -197,8 +229,15 @@ public function show(WorkProgram $workProgram)
      */
     public function verifyTask(Request $request, Task $task)
     {
-        // Pastikan hanya Kanit yang bisa verifikasi (implementasi role/permission di sini)
-        // if (!Auth::user()->hasRole('Kanit')) { abort(403); }
+        $user = Auth::user(); 
+
+        
+        // Pastikan user memiliki izin khusus untuk memverifikasi
+        // Sesuaikan nama permission dengan kolom di DB Anda
+        if (!$user || !$user->hasPermissionTo('Verifikasi Program Kerja')) { 
+             return back()->with('error', 'Anda tidak memiliki izin untuk melakukan verifikasi.');
+        }
+        // === Akhir Perubahan ===
 
         $validated = $request->validate([
             'verification_status' => ['required', Rule::in(['Diverifikasi', 'Revisi Diperlukan'])],
@@ -207,26 +246,15 @@ public function show(WorkProgram $workProgram)
             'verification_notes.required_if' => 'Catatan wajib diisi jika meminta revisi.',
         ]);
 
-        // Pastikan hanya tugas yang 'Menunggu Verifikasi' yang bisa diproses
         if ($task->status !== 'Menunggu Verifikasi') {
             return back()->with('error', 'Status tugas tidak valid untuk diverifikasi.');
         }
 
-        $previousStatus = $task->status;
         $task->status = $validated['verification_status'];
-        $task->verifier_id = Auth::id();
+        $task->verifier_id = $user->id;
         $task->verification_notes = $validated['verification_notes'];
-
-        // Jika status Diverifikasi, hapus link data dukung agar tidak membingungkan (opsional)
-        // if ($task->status === 'Diverifikasi') {
-        //     $task->supporting_document_link = null;
-        // }
         
         $task->save();
-
-        // Catat Log (jika ada model log)
-        // $this->logTaskStatusChange($task, Auth::id(), $previousStatus, $task->status, $validated['verification_notes']);
-
 
         return back()->with('success', 'Verifikasi tugas berhasil disimpan.');
     }

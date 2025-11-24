@@ -6,6 +6,17 @@
         @error('name')<div class="invalid-feedback">{{ $message }}</div>@enderror
     </div>
 
+    <div class="col-md-6 mb-3">
+        <label for="category" class="form-label">Kategori Program <span class="text-danger">*</span></label>
+        <select class="form-select @error('category') is-invalid @enderror" id="category" name="category" required>
+            <option value="" selected disabled>Pilih Kategori...</option>
+            @foreach ($categories as $cat)
+                <option value="{{ $cat }}" @selected(old('category', $workProgram->category ?? '') == $cat)>{{ $cat }}</option>
+            @endforeach
+        </select>
+        @error('category')<div class="invalid-feedback">{{ $message }}</div>@enderror
+    </div>
+
     <div class="col-12 mb-3">
         <label class="form-label">Tugas-tugas yang Akan Dicapai <span class="text-danger">*</span></label>
         @error('tasks')<div class="invalid-feedback d-block mb-2">{{ $message }}</div>@enderror

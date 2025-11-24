@@ -47,7 +47,7 @@
             </div>
         </div>
     </div>
-</div>
+</div> 
 
 <section class="section">
     <div class="row">

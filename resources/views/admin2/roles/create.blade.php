@@ -26,37 +26,28 @@
 </div>
 <section class="section">
     <div class="card">
-        <div class="card-header">
-            <h4>Tambah Role</h4>
-        </div>
+        <div class="card-header"><h4>Tambah Role</h4></div>
         <div class="card-body">
-            <form action="{{ route('roles.store') }}" method="POST">
-            @csrf
+            <form action="{{ route('roles.store') }}" method="POST" id="createRoleForm">
+                @csrf
                 <div class="row">
                     <div class="col-12">
                         <div class="form-group">
-                            <label for="roleName" class="form-label">Nama Role</label>
-                            <input type="text" class="form-control @error('name') is-invalid @enderror"
-                                id="roleName" name="name" value="{{ old('name') }}"
-                                placeholder="Contoh: Admin">
-                            @error('name')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
+                            <label for="roleName">Nama Role</label>
+                            <input type="text" class="form-control" id="roleName" name="name" value="{{ old('name') }}" required>
                         </div>
+                        
                         <div class="form-group mt-4">
                             <label>Permissions</label>
-                            @error('permissions')
-                                <div class="text-danger mb-2">{{ $message }}</div>
-                            @enderror
                             <div class="row mt-2">
                                 @foreach ($permissions as $permission)
                                     <div class="col-lg-6 col-md-6 col-sm-12 mb-2">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox"
-                                                id="permission{{ $permission->id }}"
-                                                name="permissions[]"
-                                                value="{{ $permission->id }}"
-                                                {{ in_array($permission->id, old('permissions', [])) ? 'checked' : '' }}>
+                                            <input class="form-check-input permission-checkbox" type="checkbox"
+                                                   id="permission{{ $permission->id }}"
+                                                   name="permissions[]"
+                                                   value="{{ $permission->id }}"
+                                                   data-name="{{ $permission->permission_name }}">
                                             <label class="form-check-label" for="permission{{ $permission->id }}">
                                                 {{ $permission->permission_name }}
                                             </label>
@@ -65,19 +56,39 @@
                                 @endforeach
                             </div>
                         </div>
+
+                        {{-- === AREA KATEGORI PROGRAM KERJA (Hidden by Default) === --}}
+                        <div id="workProgramOptions" class="mt-3 p-3 border rounded bg-light" style="display: none;">
+                            <h6 class="text-primary"><i class="bi bi-gear"></i> Konfigurasi Program Kerja</h6>
+                            <p class="text-muted small">Pilih kategori program kerja yang dapat diakses oleh role ini.</p>
+                            
+                            <div class="row">
+                                @foreach($workCategories as $category)
+                                <div class="col-md-6 mb-2">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="work_categories[]" value="{{ $category }}" id="cat_{{ Str::slug($category) }}">
+                                        <label class="form-check-label" for="cat_{{ Str::slug($category) }}">
+                                            {{ $category }}
+                                        </label>
+                                    </div>
+                                </div>
+                                @endforeach
+                            </div>
+
+                            <hr>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" name="can_verify" id="canVerify" value="1">
+                                <label class="form-check-label fw-bold" for="canVerify">Verifikator Program Kerja</label>
+                                <small class="d-block text-muted">Jika diaktifkan, role ini berhak memverifikasi tugas dari kategori yang dipilih.</small>
+                            </div>
+                        </div>
+                        {{-- === AKHIR AREA KATEGORI === --}}
+
                     </div>
                 </div>
                 <div class="row mt-4">
                     <div class="col-12 d-flex justify-content-end">
-                        <div class="form-group mt-4 d-flex justify-content-end">
-                            <a href="{{ route('roles.index') }}" class="btn btn-secondary me-2">Kembali</a>
-                            <button type="submit" class="btn btn-primary" id="submitButton">
-                                <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
-                                Simpan Role
-                            </button>
-                        </div>
-                        {{-- <a href="{{ route('roles.index') }}" class="btn btn-secondary me-2">Kembali</a>
-                        <button type="submit" class="btn btn-primary">Simpan Role</button> --}}
+                        <button type="submit" class="btn btn-primary">Simpan Role</button>
                     </div>
                 </div>
             </form>
@@ -122,6 +133,30 @@
             $('input[name="permissions[]"]').on('change', function () {
                 $('.form-group .text-danger').remove();
             });
+
+            function toggleWorkProgramOptions() {
+                // Cari checkbox dengan nama permission yang sesuai
+                let isChecked = false;
+                $('.permission-checkbox').each(function() {
+                    if ($(this).data('name') === 'Manajemen Program Kerja' && $(this).is(':checked')) {
+                        isChecked = true;
+                    }
+                });
+
+                if (isChecked) {
+                    $('#workProgramOptions').slideDown();
+                } else {
+                    $('#workProgramOptions').slideUp();
+                    // Opsional: Uncheck semua kategori jika permission utama dimatikan
+                    $('#workProgramOptions input[type="checkbox"]').prop('checked', false);
+                }
+            }
+
+            // Jalankan saat checkbox berubah
+            $('.permission-checkbox').on('change', toggleWorkProgramOptions);
+            
+            // Jalankan saat halaman dimuat (untuk edit/old input)
+            toggleWorkProgramOptions();
         });
     </script>
 @endsection

@@ -11,6 +11,7 @@ return new class extends Migration
         Schema::create('work_programs', function (Blueprint $table) {
             $table->id();
             $table->string('name'); // Nama Program Kerja
+            $table->string('category')->nullable();
             // Tambahkan kolom lain jika perlu, misal: periode, penanggung jawab, dll.
             $table->timestamps();
         });

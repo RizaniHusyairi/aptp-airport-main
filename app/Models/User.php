@@ -13,11 +13,14 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Spatie\Permission\Traits\HasRoles; // <<< 1. IMPORT TRAIT INI
+
 
 
 class User extends Authenticatable implements HasMedia
 {
     use  Notifiable,  SoftDeletes, InteractsWithMedia;
+    use HasRoles;
 
     /**
      * The attributes that are mass assignable.

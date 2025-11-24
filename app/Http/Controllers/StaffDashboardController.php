@@ -2,27 +2,28 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
+use Carbon\Carbon;
+use App\Models\Finance;
+use App\Models\Meeting;
 use Illuminate\Http\Request;
+use App\Models\RoleWorkCategory;
+use Illuminate\Support\Facades\DB; 
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Complaint; // Model untuk Pengaduan
-use App\Models\PublicInformation; // Model untuk Ajuan Informasi Publik
-use App\Models\AirTrafficLog; // Model untuk LLAU
-use App\Models\Tenant; // Model untuk Tenant
-use App\Models\Rental; // Model untuk Sewa
-use App\Models\ExtendAdvance; // Model untuk Extend Advance
-use App\Models\slot; // Model untuk Slot Charter
-use App\Models\Inventory;  // <<< TAMBAHKAN MODEL INVENTARIS
-use App\Models\WorkProgram; // <<< TAMBAHKAN MODEL PROGRAM KERJA
-use App\Models\Task;       // <<< TAMBAHKAN MODEL TUGAS
-use App\Models\License;    // <-- TAMBAHKAN
 use App\Models\Ad;        // <-- TAMBAHKAN
 use App\Models\Fieldtrip; // <-- TAMBAHKAN
 use App\Models\Lelang;    // <-- TAMBAHKAN
-use App\Models\Meeting;
-use App\Models\Finance;
-use Illuminate\Support\Facades\DB; 
-use Carbon\Carbon;
+use App\Models\Rental; // Model untuk Sewa
+use App\Models\License;    // <-- TAMBAHKAN
+use App\Models\Tenant; // Model untuk Tenant
+use App\Models\slot; // Model untuk Slot Charter
+use App\Models\AirTrafficLog; // Model untuk LLAU
+use App\Models\Complaint; // Model untuk Pengaduan
+use App\Models\Task;       // <<< TAMBAHKAN MODEL TUGAS
+use App\Models\ExtendAdvance; // Model untuk Extend Advance
+use App\Models\Inventory;  // <<< TAMBAHKAN MODEL INVENTARIS
+use App\Models\WorkProgram; // <<< TAMBAHKAN MODEL PROGRAM KERJA
+use App\Models\PublicInformation; // Model untuk Ajuan Informasi Publik
 
 class StaffDashboardController extends Controller
 {
@@ -238,24 +239,78 @@ class StaffDashboardController extends Controller
 
         // 6. Ambil data Program Kerja (jika punya izin)
         if ($permissions->contains('Manajemen Program Kerja')) {
-            $data['total_work_programs'] = WorkProgram::count();
             
-            // Definisikan role Kanit
-            $kanitRoles = [
-                'Kanit'
-                // Tambahkan role Kepala Subbagian jika perlu
-            ];
+            // 1. Dapatkan kategori yang dimiliki user dari RoleWorkCategory
+            $userCategories = [];
+            foreach ($user->roles as $role) {
+                // Ambil semua kategori yang terkait dengan role ini
+                $roleCategories = RoleWorkCategory::where('role_id', $role->id)->pluck('category_name')->toArray();
+                $userCategories = array_merge($userCategories, $roleCategories);
+            }
+            $userCategories = array_unique($userCategories);
 
-            if ($user->hasRole($kanitRoles)) {
-                // Jika Kanit, tampilkan tugas yang perlu diverifikasi
-                $data['tasks_awaiting_verification'] = Task::where('status', 'Menunggu Verifikasi')->count();
+            // 2. Query Dasar Program Kerja (Filter Kategori)
+            $workProgramQuery = WorkProgram::query();
+            
+            // Jika user memiliki kategori spesifik, filter.
+            // Jika user adalah 'Super Admin' atau 'Admin', mungkin kita ingin tampilkan semua (opsional).
+            // Di sini kita asumsikan filter ketat berdasarkan kategori yang dimiliki.
+            if (!empty($userCategories)) {
+                $workProgramQuery->whereIn('category', $userCategories);
+            } elseif (!$user->hasRole('Super Admin') && !$user->hasRole('Admin')) {
+                // Jika tidak punya kategori dan bukan admin, jangan tampilkan apa-apa
+                $workProgramQuery->whereRaw('1 = 0'); 
+            }
+
+            // Hitung Total Program Kerja (sesuai kategori)
+            $data['total_work_programs'] = $workProgramQuery->count();
+
+            // 3. Hitung Tugas (Tasks)
+            // Kita perlu filter tugas yang induk program kerjanya sesuai kategori user
+            
+            // Cek apakah user punya hak verifikasi (Permission: 'Verifikasi Program Kerja')
+            // ATAU cek flag 'can_verify' di tabel role_work_categories (jika Anda menggunakan logika itu)
+            // Di sini kita gunakan permission 'Verifikasi Program Kerja' sebagai penentu utama apakah dia verifikator.
+            
+            $isVerifier = $user->hasPermissionTo('Verifikasi Program Kerja');
+
+            if ($isVerifier) {
+                // Jika Verifikator: Hitung tugas yang 'Menunggu Verifikasi'
+                // HANYA untuk program kerja yang kategorinya dimiliki user DAN user punya hak verifikasi di kategori itu
+                
+                // Ambil kategori di mana user punya hak verifikasi (can_verify = 1)
+                $verifyCategories = [];
+                foreach ($user->roles as $role) {
+                    $cats = RoleWorkCategory::where('role_id', $role->id)
+                                            ->where('can_verify', true)
+                                            ->pluck('category_name')
+                                            ->toArray();
+                    $verifyCategories = array_merge($verifyCategories, $cats);
+                }
+                $verifyCategories = array_unique($verifyCategories);
+
+                if (!empty($verifyCategories)) {
+                     $data['tasks_awaiting_verification'] = Task::whereHas('workProgram', function($q) use ($verifyCategories) {
+                        $q->whereIn('category', $verifyCategories);
+                    })->where('status', 'Menunggu Verifikasi')->count();
+                } else {
+                    $data['tasks_awaiting_verification'] = 0;
+                }
+
             } else {
-                // Jika Staf biasa, tampilkan tugas yang perlu direvisi
-                // Note: Ini akan menampilkan *semua* tugas revisi. 
-                // Untuk menampilkan hanya yang dibuat olehnya, diperlukan relasi 'user_id' di WorkProgram/Task.
-                $data['tasks_needing_revision'] = Task::where('status', 'Revisi Diperlukan')->count();
+                // Jika Staf Biasa: Hitung tugas yang 'Revisi Diperlukan'
+                // Filter berdasarkan semua kategori yang dia miliki (akses view/edit)
+                if (!empty($userCategories)) {
+                    $data['tasks_needing_revision'] = Task::whereHas('workProgram', function($q) use ($userCategories) {
+                        $q->whereIn('category', $userCategories);
+                    })->where('status', 'Revisi Diperlukan')->count();
+                } else {
+                    $data['tasks_needing_revision'] = 0;
+                }
             }
         }
+        // ==================================================================== //
+
 
         return view('user_staff2.dashboard.index', [
             'permissions' => $permissions,

@@ -31,6 +31,7 @@ class PermissionSeeder extends Seeder
             'Permintaan Suku Cadang',
             'Manajemen Program Kerja',
             'Manajemen Absensi Rapat',
+            'Verifikasi Program Kerja' 
             
         ];
 

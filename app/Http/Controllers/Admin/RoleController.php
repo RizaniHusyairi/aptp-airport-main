@@ -3,40 +3,49 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use App\Models\Role;
 use App\Models\Permission;
-use Illuminate\Http\Request;
-use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Validation\Rule;
+use App\Models\RoleWorkCategory; // Pastikan model ini ada
+use Illuminate\Support\Facades\DB;
 
 class RoleController extends Controller
 {
-
     private $coreRoles = [
-        'Kepala Bandara',
-        'Kepala Subbagian Keuangan dan Tata Usaha',
+        'Kepala Bandara', 'Kepala Subbagian Keuangan dan Tata Usaha',
         'Kepala Seksi Keamanan Penerbangan dan Pelayanan Darurat',
-        'Kepala Seksi Pelayanan dan Kerjasama',
-        'Kepala Seksi Teknik dan Operasi',
-        'Kanit'
+        'Kepala Seksi Pelayanan dan Kerjasama', 'Kepala Seksi Teknik dan Operasi',
+    ];
+
+    // Daftar kategori statis (bisa juga dari DB jika mau lebih dinamis)
+    private $workCategories = [
+        'Alat-alat Besar',
+        'Fasilitas Sisi Udara',
+        'Fasilitas Sisi Darat',
+        'Elektronika Bandara',
+        'Listrik',
+        'Mekanikal',
+        'Fasilitas Keamanan Penerbangan',
+        'PKPPK'
     ];
 
     public function index(Request $request)
     {
-        
         $roles = Role::with('permissions')->get();
-        $coreRoles = $this->coreRoles;
-        
-
-        return view('admin2.roles.index', compact('roles','coreRoles'));
-
+        return view('admin2.roles.index', [
+            'roles' => $roles,
+            'coreRoles' => $this->coreRoles
+        ]);
     }
 
-    public function create(Request $request){
+    public function create(Request $request)
+    {
         $permissions = Permission::all(['id', 'permission_name']);
-
-        return view('admin2.roles.create', compact('permissions'));
-        
+        return view('admin2.roles.create', [
+            'permissions' => $permissions,
+            'workCategories' => $this->workCategories // Kirim daftar kategori
+        ]);
     }
 
     public function store(Request $request)
@@ -45,87 +54,97 @@ class RoleController extends Controller
             'name' => ['required', 'string', 'max:255', 'unique:roles,name'],
             'permissions' => ['required', 'array', 'min:1'],
             'permissions.*' => ['exists:permissions,id'],
-        ], [
-            'name.required' => 'Nama role wajib diisi.',
-            'name.unique' => 'Nama role sudah digunakan.',
-            'permissions.required' => 'Pilih setidaknya satu izin.',
-            'permissions.min' => 'Pilih setidaknya satu izin.',
-            'permissions.*.exists' => 'Izin yang dipilih tidak valid.',
+            // Validasi kategori (opsional, hanya jika permission manajemen program kerja dipilih)
+            'work_categories' => 'nullable|array',
+            'can_verify' => 'nullable|boolean'
         ]);
 
-        // Proteksi tambahan: jangan izinkan membuat role dengan nama yang sudah dilindungi
-        if (in_array($request['name'], $this->coreRoles)) {
-            return back()->withInput()->withErrors(['name' => 'Nama role ini dilindungi oleh sistem dan tidak dapat dibuat ulang.']);
-        }
-        
+        DB::transaction(function () use ($request) {
+            $role = Role::create(['name' => $request->name]);
+            
+            if ($request->has('permissions')) {
+                $role->permissions()->sync($request->permissions);
+            }
 
-        $role = Role::create(['name' => $request->name]);
-
-        if ($request->has('permissions')) {
-            $role->permissions()->attach($request->permissions);
-        }
+            // Simpan Kategori Program Kerja
+            if ($request->has('work_categories')) {
+                foreach ($request->work_categories as $category) {
+                    RoleWorkCategory::create([
+                        'role_id' => $role->id,
+                        'category_name' => $category,
+                        'can_verify' => $request->has('can_verify') ? 1 : 0
+                    ]);
+                }
+            }
+        });
 
         return redirect()->route('roles.index')->with('success', 'Role berhasil dibuat!');
     }
 
     public function edit($id)
     {
-        $role = Role::with('permissions')->findOrFail($id); // Menyertakan permissions yang dimiliki role
-        $permissions = Permission::all(); // Mengambil semua permissions
-        $roles = Role::orderBy('name')->get();
-        // Cek apakah role yang sedang diedit adalah core role
+        $role = Role::with('permissions')->findOrFail($id);
+        $permissions = Permission::all();
         $isCoreRole = in_array($role->name, $this->coreRoles);
+        
+        // Ambil kategori yang sudah tersimpan untuk role ini
+        $selectedCategories = RoleWorkCategory::where('role_id', $role->id)->pluck('category_name')->toArray();
+        $canVerify = RoleWorkCategory::where('role_id', $role->id)->where('can_verify', true)->exists();
 
-        return view('admin2.roles.edit', compact('role', 'permissions','roles','isCoreRole'));
+        return view('admin2.roles.edit', [
+            'role' => $role,
+            'permissions' => $permissions,
+            'isCoreRole' => $isCoreRole,
+            'workCategories' => $this->workCategories,
+            'selectedCategories' => $selectedCategories,
+            'canVerify' => $canVerify
+        ]);
     }
 
     public function update(Request $request, Role $role)
     {
-
         $isCoreRole = in_array($role->name, $this->coreRoles);
 
         $validated = $request->validate([
-            // Validasi 'name' hanya jika BUKAN core role
-            'name' => $isCoreRole 
-                        ? 'nullable|string' 
-                        : ['required', 'string', 'max:255', Rule::unique('roles')->ignore($role->id)],
+            'name' => $isCoreRole ? 'nullable|string' : ['required', 'string', 'max:255', Rule::unique('roles')->ignore($role->id)],
             'permissions' => 'required|array|min:1',
-            'permissions.*' => 'exists:permissions,id',
+            'work_categories' => 'nullable|array',
         ]);
 
-        // === INI ADALAH LOGIKA PERBAIKANNYA ===
-        if ($isCoreRole) {
-            // Jika ini adalah core role, JANGAN perbarui nama,
-            // $roleName diambil dari data yang sudah ada, BUKAN dari request
-            $roleName = $role->name; 
-        } else {
-            // Jika bukan core role, baru perbarui namanya dari request
-            $roleName = $validated['name'];
-        }
+        DB::transaction(function () use ($request, $role, $isCoreRole, $validated) {
+            if (!$isCoreRole) {
+                $role->update(['name' => $validated['name']]);
+            }
+            
+            $role->permissions()->sync($request->permissions);
 
-        // Perbarui database dengan nama yang dijamin tidak null
-        $role->update(['name' => $roleName]);
-        $role->permissions()->sync($request->permissions);
+            // Update Kategori: Hapus lama, simpan baru
+            RoleWorkCategory::where('role_id', $role->id)->delete();
+            
+            if ($request->has('work_categories')) {
+                foreach ($request->work_categories as $category) {
+                    RoleWorkCategory::create([
+                        'role_id' => $role->id,
+                        'category_name' => $category,
+                        'can_verify' => $request->has('can_verify') ? 1 : 0
+                    ]);
+                }
+            }
+        });
 
         return redirect()->route('roles.index')->with('success', 'Role berhasil diperbarui.');
-
     }
 
     public function destroy($id)
     {
         $role = Role::findOrFail($id);
-
-        // === Logika Pengaman di Backend ===
         if (in_array($role->name, $this->coreRoles)) {
-            return back()->with('error', 'Role inti sistem (' . $role->name . ') tidak dapat dihapus.');
+            return back()->with('error', 'Role inti tidak dapat dihapus.');
         }
-        
         if ($role->users()->count() > 0) {
-             return back()->with('error', 'Role ini tidak dapat dihapus karena masih digunakan oleh user.');
+             return back()->with('error', 'Role masih digunakan oleh user.');
         }
-
         $role->delete();
-
         return redirect()->route('roles.index')->with('success', 'Role berhasil dihapus!');
     }
 }

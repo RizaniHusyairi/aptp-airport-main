@@ -310,17 +310,16 @@
                                 </div>
                             </div>
                             <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
-                                @php
-                                    $kanitRoles = [
-                                        "Kanit"
-                                    ];
-                                @endphp
-                                @if(Auth::user()->hasRole($kanitRoles))
-                                    <h6 class=" font-semibold">Tugas Perlu Verifikasi</h6>
+                            
+                                @if(Auth::user()->hasPermissionTo('Verifikasi Program Kerja'))
+                                    <h6 class="text-muted font-semibold">Tugas Perlu Verifikasi</h6>
                                     <h6 class="font-extrabold mb-0">{{ number_format($data['tasks_awaiting_verification']) }} <span class="text-sm ">Tugas</span></h6>
+
+                                    {{-- ... --}}
                                 @else
-                                    <h6 class=" font-semibold">Tugas Perlu Revisi</h6>
+                                    <h6 class="text-muted font-semibold">Tugas Perlu Revisi</h6>
                                     <h6 class="font-extrabold mb-0">{{ number_format($data['tasks_needing_revision'] ?? 0) }} <span class="text-sm ">Tugas</span></h6>
+                                    {{-- ... --}}
                                 @endif
                             </div>
                         </div>
