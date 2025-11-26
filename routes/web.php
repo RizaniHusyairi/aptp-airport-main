@@ -32,6 +32,9 @@ use App\Http\Controllers\Staff_User\{
     LelangController,
     LetterController,
     WorkPermitController,
+    NataruController,
+    NataruEventController,
+    DashboardNataruController
 };
 
 use App\Http\Controllers\{
@@ -324,6 +327,17 @@ Route::group(["prefix" => 'dashboard'], function () {
 
                 Route::delete('/attendance/{attendance}', [MeetingController::class, 'destroyAttendance'])->name('destroyAttendance');
             });
+
+            // Manajemen Posko Nataru
+            Route::get('staff/posko-nataru', [NataruController::class, 'index'])->name('staff.nataru.index');
+            Route::get('staff/posko-nataru/create', [NataruController::class, 'create'])->name('staff.nataru.create');
+            Route::post('staff/posko-nataru/store', [NataruController::class, 'store'])->name('staff.nataru.store');
+            Route::delete('staff/posko-nataru/{id}', [NataruController::class, 'destroy'])->name('staff.nataru.destroy');
+            Route::resource('staff/nataru-events', NataruEventController::class)->names('staff.nataru-events');
+
+            // Dashboard Monitoring Nataru
+            Route::get('staff/nataru-dashboard', [DashboardNataruController::class, 'index'])->name('staff.nataru.dashboard');
+            Route::get('staff/nataru-dashboard/data', [DashboardNataruController::class, 'getComparisonData'])->name('staff.nataru.dashboard.data');
         
         
         });
@@ -425,7 +439,8 @@ Route::post('api/ai/generate-trip-plan', [LandingPageController::class, 'generat
 // routes/api.php
 Route::get('/api/routes/domestic', [LandingPageController::class, 'getDomesticRoutesData']);
 
-
+Route::get('/posko/input/{token}', [App\Http\Controllers\PublicNataruController::class, 'showForm'])->name('public.nataru.form');
+Route::post('/posko/input/{token}', [App\Http\Controllers\PublicNataruController::class, 'store'])->name('public.nataru.store');
 
 Route::get('/keberangkatan', [LandingPageController::class, 'keberangkatan'])->name('keberangkatan');
 Route::get('/kedatangan', [LandingPageController::class, 'kedatangan'])->name('kedatangan');

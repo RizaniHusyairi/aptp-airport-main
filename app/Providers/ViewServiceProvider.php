@@ -138,6 +138,7 @@ class ViewServiceProvider extends ServiceProvider
                 'Manajemen Suku Cadang' => ['route' => 'staff.spare-parts.index', 'icon' => 'bi bi-gear-wide-connected', 'label' => 'Suku Cadang'],
                 'Permintaan Suku Cadang' => ['route' => 'staff.spare-part-requests.index', 'icon' => 'bi bi-send-check', 'label' => 'Permintaan Suku Cadang'],
                 'Manajemen Absensi Rapat' => ['route' => 'staff.meetings.index', 'icon' => 'bi bi-calendar-event', 'label' => 'Absensi Rapat'],
+                'Manajemen Posko Nataru' => ['route' => 'staff.nataru.index', 'icon' => 'bi bi-airplane-engines', 'label' => 'Posko Nataru'],
                 
             ];
 
