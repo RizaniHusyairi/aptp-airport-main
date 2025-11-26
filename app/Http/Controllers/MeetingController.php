@@ -41,12 +41,15 @@ class MeetingController extends Controller
             'start_time' => 'required',
             'location' => 'required|string|max:255',
             'organizer' => 'required|string|max:255',
+            'organizer_nip' => 'required|string|max:50',
+
         ], [
             'title.required' => 'Judul rapat wajib diisi.',
             'date.required' => 'Tanggal pelaksanaan wajib diisi.',
             'start_time.required' => 'Jam mulai wajib diisi.',
             'location.required' => 'Lokasi rapat wajib diisi.',
             'organizer.required' => 'Pimpinan/Penyelenggara wajib diisi.',
+            'organizer_nip.required' => 'NIP Penyelenggara wajib diisi.',
         ]);
 
         // Buat Slug Unik (Judul + Random String)
@@ -60,6 +63,7 @@ class MeetingController extends Controller
             'start_time' => $validated['start_time'],
             'location' => $validated['location'],
             'organizer' => $validated['organizer'],
+            'organizer_nip' => $validated['organizer_nip'],
             'is_active' => true,
         ]);
 
@@ -134,12 +138,14 @@ class MeetingController extends Controller
             'start_time' => 'required',
             'location' => 'required|string|max:255',
             'organizer' => 'required|string|max:255',
+            'organizer_nip' => 'required|string|max:50',
         ], [
             'title.required' => 'Judul rapat wajib diisi.',
             'date.required' => 'Tanggal pelaksanaan wajib diisi.',
             'start_time.required' => 'Jam mulai wajib diisi.',
             'location.required' => 'Lokasi rapat wajib diisi.',
             'organizer.required' => 'Pimpinan/Penyelenggara wajib diisi.',
+            'organizer_nip.required' => 'NIP Penyelenggara wajib diisi.',
         ]);
 
         $meeting->update([
@@ -148,6 +154,7 @@ class MeetingController extends Controller
             'start_time' => $validated['start_time'],
             'location' => $validated['location'],
             'organizer' => $validated['organizer'],
+            'organizer_nip' => $validated['organizer_nip'],
             // Slug tidak diupdate agar link yang sudah dibagikan tidak mati
         ]);
 

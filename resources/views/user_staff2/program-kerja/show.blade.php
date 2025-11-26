@@ -108,7 +108,7 @@
                          @endif
 
                          {{-- Form Aksi untuk Staf (Ajukan Verifikasi) --}}
-                         @if(!Auth::user()->hasPermissionTo('Verifikasi Program Kerja') && in_array($task->status, ['Belum Selesai', 'Revisi Diperlukan']))
+                         @if(!Auth::user()->hasPermission('Verifikasi Program Kerja') && in_array($task->status, ['Belum Selesai', 'Revisi Diperlukan']))
                          
                             <form action="{{ route('staff.tasks.submitVerification', $task->id) }}" method="POST" class="mt-3">
                                 @csrf
@@ -124,7 +124,7 @@
 
                          {{-- Form Aksi untuk Kanit (Verifikasi/Revisi) --}}
                          {{-- Ganti 'Kanit' dengan role yang sesuai --}}
-                         @if(Auth::user()->hasPermissionTo('Verifikasi Program Kerja') && $task->status == 'Menunggu Verifikasi')
+                         @if(Auth::user()->hasPermission('Verifikasi Program Kerja') && $task->status == 'Menunggu Verifikasi')
                             <form action="{{ route('staff.tasks.verify', $task->id) }}" method="POST" class="mt-3 border p-3 rounded bg-light">
                                 @csrf
                                 <h6 class="mb-3">Tindakan Verifikasi</h6>

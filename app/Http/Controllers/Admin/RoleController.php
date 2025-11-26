@@ -50,35 +50,57 @@ class RoleController extends Controller
 
     public function store(Request $request)
     {
+        // 1. Validasi Input
         $request->validate([
             'name' => ['required', 'string', 'max:255', 'unique:roles,name'],
-            'permissions' => ['required', 'array', 'min:1'],
+            'permissions' => ['required', 'array', 'min:1'], // Permission dasar wajib ada
             'permissions.*' => ['exists:permissions,id'],
-            // Validasi kategori (opsional, hanya jika permission manajemen program kerja dipilih)
-            'work_categories' => 'nullable|array',
-            'can_verify' => 'nullable|boolean'
+            
+            // Validasi input baru kita
+            'work_categories' => 'nullable|array', // Harus berupa array
+            'work_categories.*' => 'string', // Isinya string
+            'assign_verifier_permission' => 'nullable' // Checkbox toggle (bisa ada/tidak)
         ]);
 
         DB::transaction(function () use ($request) {
+            // 2. Buat Role Baru
             $role = Role::create(['name' => $request->name]);
             
-            if ($request->has('permissions')) {
-                $role->permissions()->sync($request->permissions);
+            // Ambil permission yang dipilih dari form
+            $permissionsToSync = $request->permissions;
+
+            // 3. LOGIKA OTOMATIS: Permission Verifikasi
+            // Cek apakah toggle 'Izinkan Verifikasi' dicentang?
+            $canVerify = $request->has('assign_verifier_permission');
+
+            if ($canVerify) {
+                // Cari ID permission 'Verifikasi Program Kerja' di database
+                $verifierPermission = Permission::where('permission_name', 'Verifikasi Program Kerja')->first();
+                
+                if ($verifierPermission) {
+                    // Masukkan ID tersebut ke dalam array permission yang akan disimpan
+                    // Jadi admin tidak perlu centang manual di daftar permission yang panjang
+                    $permissionsToSync[] = $verifierPermission->id;
+                }
             }
 
-            // Simpan Kategori Program Kerja
+            // Simpan semua permission ke role (sync memastikan tidak ada duplikat)
+            $role->permissions()->sync(array_unique($permissionsToSync));
+
+            // 4. Simpan Kategori Program Kerja (Jika Ada)
             if ($request->has('work_categories')) {
                 foreach ($request->work_categories as $category) {
                     RoleWorkCategory::create([
                         'role_id' => $role->id,
                         'category_name' => $category,
-                        'can_verify' => $request->has('can_verify') ? 1 : 0
+                        // Kolom ini menandakan di kategori ini dia berhak memverifikasi atau tidak
+                        'can_verify' => $canVerify ? 1 : 0 
                     ]);
                 }
             }
         });
 
-        return redirect()->route('roles.index')->with('success', 'Role berhasil dibuat!');
+        return redirect()->route('roles.index')->with('success', 'Role berhasil dibuat beserta konfigurasi program kerjanya!');
     }
 
     public function edit($id)
@@ -90,10 +112,14 @@ class RoleController extends Controller
         // Ambil kategori yang sudah tersimpan untuk role ini
         $selectedCategories = RoleWorkCategory::where('role_id', $role->id)->pluck('category_name')->toArray();
         $canVerify = RoleWorkCategory::where('role_id', $role->id)->where('can_verify', true)->exists();
+// === PERBAIKAN DI SINI: Ambil ID permission yang dimiliki role ===
+        $rolePermissions = $role->permissions->pluck('id')->toArray();
+
 
         return view('admin2.roles.edit', [
             'role' => $role,
             'permissions' => $permissions,
+            'rolePermissions' => $rolePermissions,
             'isCoreRole' => $isCoreRole,
             'workCategories' => $this->workCategories,
             'selectedCategories' => $selectedCategories,
@@ -108,17 +134,43 @@ class RoleController extends Controller
         $validated = $request->validate([
             'name' => $isCoreRole ? 'nullable|string' : ['required', 'string', 'max:255', Rule::unique('roles')->ignore($role->id)],
             'permissions' => 'required|array|min:1',
+            // Validasi input baru
             'work_categories' => 'nullable|array',
+            'work_categories.*' => 'string',
+            'assign_verifier_permission' => 'nullable'
         ]);
 
         DB::transaction(function () use ($request, $role, $isCoreRole, $validated) {
+            // 1. Update Nama Role (Jika bukan core role)
             if (!$isCoreRole) {
                 $role->update(['name' => $validated['name']]);
             }
             
-            $role->permissions()->sync($request->permissions);
+            // 2. Kelola Permissions
+            $permissionsToSync = $request->permissions;
+            $canVerify = $request->has('assign_verifier_permission');
 
-            // Update Kategori: Hapus lama, simpan baru
+            // Logika Otomatis Permission Verifikasi
+            $verifierPermission = Permission::where('permission_name', 'Verifikasi Program Kerja')->first();
+            
+            if ($verifierPermission) {
+                if ($canVerify) {
+                    // Jika dicentang, TAMBAHKAN permission verifikasi
+                    if (!in_array($verifierPermission->id, $permissionsToSync)) {
+                        $permissionsToSync[] = $verifierPermission->id;
+                    }
+                } else {
+                    // Jika TIDAK dicentang, HAPUS permission verifikasi dari array (jika ada)
+                    // Ini penting: user mungkin manual mencentang di daftar permission, kita override sesuai toggle
+                    $permissionsToSync = array_diff($permissionsToSync, [$verifierPermission->id]);
+                }
+            }
+
+            // Simpan permission (Sync akan menghapus yang tidak ada di array ini)
+            $role->permissions()->sync($permissionsToSync);
+
+            // 3. Kelola Kategori Program Kerja
+            // Strategi: Hapus semua kategori lama milik role ini, lalu buat baru
             RoleWorkCategory::where('role_id', $role->id)->delete();
             
             if ($request->has('work_categories')) {
@@ -126,7 +178,7 @@ class RoleController extends Controller
                     RoleWorkCategory::create([
                         'role_id' => $role->id,
                         'category_name' => $category,
-                        'can_verify' => $request->has('can_verify') ? 1 : 0
+                        'can_verify' => $canVerify ? 1 : 0 // Set status verifikasi untuk kategori ini
                     ]);
                 }
             }

@@ -57,6 +57,12 @@
                         <input type="text" class="form-control @error('organizer') is-invalid @enderror" id="organizer" name="organizer" value="{{ old('organizer', $meeting->organizer) }}" required>
                         @error('organizer')<div class="invalid-feedback">{{ $message }}</div>@enderror
                     </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label for="organizer_nip" class="form-label">NIP Pimpinan <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control @error('organizer_nip') is-invalid @enderror" id="organizer_nip" name="organizer_nip" value="{{ old('organizer_nip', $meeting->organizer_nip) }}" required>
+                        @error('organizer_nip')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                    </div>
                 </div>
 
                 <div class="d-flex justify-content-end mt-4">

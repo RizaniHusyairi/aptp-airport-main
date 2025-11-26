@@ -272,7 +272,7 @@ class StaffDashboardController extends Controller
             // ATAU cek flag 'can_verify' di tabel role_work_categories (jika Anda menggunakan logika itu)
             // Di sini kita gunakan permission 'Verifikasi Program Kerja' sebagai penentu utama apakah dia verifikator.
             
-            $isVerifier = $user->hasPermissionTo('Verifikasi Program Kerja');
+            $isVerifier = $user->hasPermission('Verifikasi Program Kerja');
 
             if ($isVerifier) {
                 // Jika Verifikator: Hitung tugas yang 'Menunggu Verifikasi'

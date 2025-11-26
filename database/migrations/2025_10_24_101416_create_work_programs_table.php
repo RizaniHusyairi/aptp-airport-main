@@ -12,6 +12,7 @@ return new class extends Migration
             $table->id();
             $table->string('name'); // Nama Program Kerja
             $table->string('category')->nullable();
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             // Tambahkan kolom lain jika perlu, misal: periode, penanggung jawab, dll.
             $table->timestamps();
         });

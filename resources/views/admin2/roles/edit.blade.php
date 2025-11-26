@@ -74,35 +74,47 @@
                             </div>
                         </div>
 
-                        {{-- === AREA KATEGORI PROGRAM KERJA (Sama seperti Create) === --}}
-                        <div id="workProgramOptions" class="mt-3 p-3 border rounded bg-light" style="display: none;">
-                            <h6 class="text-primary"><i class="bi bi-gear"></i> Konfigurasi Program Kerja</h6>
-                            <p class="text-muted small">Pilih kategori program kerja yang dapat diakses oleh role ini.</p>
+                        {{-- === AREA KATEGORI PROGRAM KERJA (Hidden by Default) === --}}
+                        <div id="workProgramOptions" class="mt-4 p-4 border rounded" style="display: none; border-left: 5px solid #ffc107 !important;">
+                            <h6 class="text-primary d-flex align-items-center">
+                                <i class="bi bi-diagram-3-fill me-2"></i> Konfigurasi Program Kerja
+                            </h6>
+                            <p class="text-muted small mb-3">
+                                Atur cakupan kerja untuk role <strong>{{ $role->name }}</strong>:
+                            </p>
                             
-                            <div class="row">
-                                @foreach($workCategories as $category)
-                                <div class="col-md-6 mb-2">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" name="work_categories[]" 
-                                               value="{{ $category }}" 
-                                               id="cat_{{ Str::slug($category) }}"
-                                               {{ in_array($category, $selectedCategories) ? 'checked' : '' }}>
-                                        <label class="form-check-label" for="cat_{{ Str::slug($category) }}">
+                            {{-- 1. Dropdown Multi-select untuk Kategori --}}
+                            <div class="form-group mb-3">
+                                <label for="work_categories" class="form-label fw-bold">Pilih Kategori Tugas</label>
+                                <select class="form-select" name="work_categories[]" id="work_categories" multiple style="height: 150px;">
+                                    @foreach($workCategories as $category)
+                                        <option value="{{ $category }}" 
+                                            {{-- Cek apakah kategori ini ada di array $selectedCategories --}}
+                                            {{ in_array($category, $selectedCategories) ? 'selected' : '' }}>
                                             {{ $category }}
-                                        </label>
-                                    </div>
-                                </div>
-                                @endforeach
+                                        </option>
+                                    @endforeach
+                                </select>
+                                <small class="text-muted">
+                                    * Tahan tombol <strong>CTRL</strong> (Windows) atau <strong>Command</strong> (Mac) untuk memilih lebih dari satu.
+                                </small>
                             </div>
 
                             <hr>
+
+                            {{-- 2. Opsi Verifikator --}}
                             <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" name="can_verify" id="canVerify" value="1" {{ $canVerify ? 'checked' : '' }}>
-                                <label class="form-check-label fw-bold" for="canVerify">Verifikator Program Kerja</label>
-                                <small class="d-block text-muted">Jika diaktifkan, role ini berhak memverifikasi tugas dari kategori yang dipilih.</small>
+                                {{-- Cek apakah $canVerify bernilai true --}}
+                                <input class="form-check-input" type="checkbox" name="assign_verifier_permission" id="assignVerifierPermission" value="1" 
+                                    {{ $canVerify ? 'checked' : '' }}>
+                                <label class="form-check-label fw-bold" for="assignVerifierPermission">
+                                    Izinkan Verifikasi Program Kerja?
+                                </label>
+                                <small class="d-block text-muted mt-1">
+                                    Aktifkan jika role ini bertugas memverifikasi pekerjaan staf lain.
+                                </small>
                             </div>
                         </div>
-                        {{-- === AKHIR AREA KATEGORI === --}}
 
                     </div>
                 </div>
@@ -156,25 +168,32 @@
             });
 
             function toggleWorkProgramOptions() {
-                let isChecked = false;
-                $('.permission-checkbox').each(function() {
-                    // Pastikan string permission name sesuai persis dengan di database
-                    if ($(this).data('name') === 'Manajemen Program Kerja' && $(this).is(':checked')) {
-                        isChecked = true;
-                    }
+                // Cari checkbox permission 'Manajemen Program Kerja'
+                // Kita gunakan filter attribute selector karena ID permission dinamis
+                const programKerjaCheckbox = $('.permission-checkbox').filter(function() {
+                    return $(this).data('name') === 'Manajemen Program Kerja';
                 });
 
-                if (isChecked) {
-                    $('#workProgramOptions').slideDown();
+                const optionsContainer = $('#workProgramOptions');
+
+                if (programKerjaCheckbox.is(':checked')) {
+                    optionsContainer.slideDown();
+                    $('#work_categories').prop('required', true);
                 } else {
-                    $('#workProgramOptions').slideUp();
+                    optionsContainer.slideUp();
+                    $('#work_categories').prop('required', false);
+                    // Kita TIDAK mereset value di sini agar data edit tidak hilang jika user tak sengaja uncheck
                 }
             }
 
             // Jalankan saat checkbox berubah
-            $('.permission-checkbox').on('change', toggleWorkProgramOptions);
+            $(document).on('change', '.permission-checkbox', function() {
+                if($(this).data('name') === 'Manajemen Program Kerja') {
+                    toggleWorkProgramOptions();
+                }
+            });
             
-            // Jalankan saat halaman dimuat untuk mengecek state awal
+            // Jalankan SEGERA saat halaman dimuat untuk menampilkan state awal
             toggleWorkProgramOptions();
         });
     </script>

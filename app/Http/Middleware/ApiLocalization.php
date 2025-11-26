@@ -17,7 +17,7 @@ class ApiLocalization
     public function handle(Request $request, Closure $next)
     {
         //check header requirst and determine the language
-        $local = $request->header('lang') ? $request->header('lang') : "en";
+        $local = $request->header('lang') ? $request->header('lang') : "id";
         //set laravel localization
         app()->setLocale($local);
         return $next($request);

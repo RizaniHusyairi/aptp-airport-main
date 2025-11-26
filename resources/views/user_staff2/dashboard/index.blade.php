@@ -311,7 +311,7 @@
                             </div>
                             <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
                             
-                                @if(Auth::user()->hasPermissionTo('Verifikasi Program Kerja'))
+                                @if(Auth::user()->hasPermission('Verifikasi Program Kerja'))
                                     <h6 class="text-muted font-semibold">Tugas Perlu Verifikasi</h6>
                                     <h6 class="font-extrabold mb-0">{{ number_format($data['tasks_awaiting_verification']) }} <span class="text-sm ">Tugas</span></h6>
 

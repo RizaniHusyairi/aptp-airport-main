@@ -38,4 +38,14 @@ class WorkProgram extends Model
 
         return round(($verifiedTasks / $totalTasks) * 100);
     }
+
+    
+    /**
+     * Relasi: Program Kerja dibuat oleh satu User (Creator).
+     * Asumsi: Kolom foreign key di database adalah 'user_id'
+     */
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }

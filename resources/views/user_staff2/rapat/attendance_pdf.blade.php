@@ -64,6 +64,12 @@
             margin-top: 60px;
             text-decoration: underline;
             font-weight: bold;
+            font-size: 12px;
+        }
+        /* CSS UNTUK NIP */
+        .footer-signature .nip {
+            margin-top: 2px;
+            font-size: 11px;
         }
     </style>
 </head>
@@ -142,6 +148,8 @@
             <p>Samarinda, {{ $meeting->date->translatedFormat('d F Y') }}</p>
             <p>Mengetahui,</p>
             <div class="name">{{ $meeting->organizer }}</div>
+            {{-- Menampilkan NIP --}}
+            <div class="nip">NIP. {{ $meeting->organizer_nip ?? '-' }}</div>
         </div>
     </div>
 </body>

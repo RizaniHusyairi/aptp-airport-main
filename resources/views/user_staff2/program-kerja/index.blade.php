@@ -48,6 +48,7 @@
                     <thead>
                         <tr>
                             <th style="width: 40%;">Nama Program</th>
+                            <th>Kategori</th>
                             <th style="width: 30%;">Progres Penyelesaian</th>
                             <th>Tanggal Dibuat</th>
                             <th>Aksi</th>
@@ -58,6 +59,10 @@
                         <tr>
                             <td>{{ $program->name }}</td>
                             <td>
+                                <span class="badge bg-light-secondary text-dark">{{ $program->category }}</span>
+                            </td>
+                            <td>
+
                                 @php $progress = $program->progress_percentage; @endphp
                                 <div class="progress">
                                     <div class="progress-bar progress-bar-striped progress-bar-animated @if($progress == 100) bg-success @else bg-primary @endif"

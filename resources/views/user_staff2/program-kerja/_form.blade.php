@@ -10,11 +10,20 @@
         <label for="category" class="form-label">Kategori Program <span class="text-danger">*</span></label>
         <select class="form-select @error('category') is-invalid @enderror" id="category" name="category" required>
             <option value="" selected disabled>Pilih Kategori...</option>
+            
+            {{-- Loop variabel $categories yang dikirim dari Controller (sudah difilter) --}}
             @foreach ($categories as $cat)
                 <option value="{{ $cat }}" @selected(old('category', $workProgram->category ?? '') == $cat)>{{ $cat }}</option>
             @endforeach
         </select>
         @error('category')<div class="invalid-feedback">{{ $message }}</div>@enderror
+        
+        {{-- Tambahan info jika list kosong --}}
+        @if(count($categories) == 0)
+            <small class="text-danger d-block mt-1">
+                <i class="bi bi-exclamation-circle"></i> Akun Anda belum memiliki hak akses kategori apapun. Hubungi Admin.
+            </small>
+        @endif
     </div>
 
     <div class="col-12 mb-3">

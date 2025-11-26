@@ -13,9 +13,8 @@ use Illuminate\Support\Facades\Auth;
 
 class WorkProgramController extends Controller
 {
-
-    // Daftar kategori statis (sama seperti di RoleController)
-    private $workCategories = [
+    // Daftar semua kategori master (untuk Admin/Superuser)
+    private $allCategories = [
         'Alat-alat Besar',
         'Fasilitas Sisi Udara',
         'Fasilitas Sisi Darat',
@@ -27,63 +26,101 @@ class WorkProgramController extends Controller
     ];
 
     /**
-     * Menampilkan daftar semua program kerja.
+     * Helper: Mendapatkan kategori yang diizinkan untuk User yang sedang login.
+     */
+    private function getAllowedCategories($user)
+    {
+        // 1. Jika Admin, kembalikan semua kategori
+        if ($user->is_admin) {
+            return $this->allCategories;
+        }
+
+        // 2. Ambil kategori dari Role yang dimiliki user
+        $allowedCategories = [];
+        
+        // Kita load role beserta workCategories-nya untuk efisiensi
+        // Asumsi: Anda belum membuat relasi hasMany di model Role ke RoleWorkCategory, 
+        // jadi kita query manual dulu seperti di kode lama Anda.
+        foreach ($user->roles as $role) {
+            $cats = RoleWorkCategory::where('role_id', $role->id)
+                                    ->pluck('category_name')
+                                    ->toArray();
+            $allowedCategories = array_merge($allowedCategories, $cats);
+        }
+
+        // Hapus duplikat
+        return array_unique($allowedCategories);
+    }
+
+    /**
+     * Menampilkan daftar program kerja (Difilter sesuai hak akses).
      */
     public function index()
     {
         $user = Auth::user();
-        $query = WorkProgram::with('tasks')->latest();
+        $query = WorkProgram::with(['tasks', 'creator'])->latest(); // Eager load creator jika ada relasinya
 
-        
-        // Mari kita cek kategori yang dimiliki user melalui role-nya
-        $userCategories = [];
-        foreach ($user->roles as $role) {
-            $categories = RoleWorkCategory::where('role_id', $role->id)->pluck('category_name')->toArray();
-            $userCategories = array_merge($userCategories, $categories);
+        $allowedCategories = $this->getAllowedCategories($user);
+
+        // Jika user bukan admin dan punya batasan kategori
+        if (!$user->is_admin) {
+            if (!empty($allowedCategories)) {
+                $query->whereIn('category', $allowedCategories);
+            } else {
+                // Jika tidak punya kategori sama sekali, jangan tampilkan apa-apa
+                // Kecuali mungkin dia Staff Administrasi umum (opsional, sesuaikan kebijakan)
+                $query->whereRaw('1 = 0'); 
+            }
         }
-        $userCategories = array_unique($userCategories);
-
-        // Jika user memiliki kategori spesifik, filter query
-        if (!empty($userCategories)) {
-            $query->whereIn('category', $userCategories);
-        } 
-        
 
         $programs = $query->get();
         return view('user_staff2.program-kerja.index', compact('programs'));
     }
 
     /**
-     * Menampilkan formulir untuk membuat program kerja baru.
+     * Menampilkan form tambah. Dropdown kategori difilter.
      */
     public function create()
     {
-        // Kirim daftar kategori ke view untuk dropdown
-        return view('user_staff2.program-kerja.create', ['categories' => $this->workCategories]);
+        $user = Auth::user();
+        $allowedCategories = $this->getAllowedCategories($user);
+
+        // Jika user tidak punya akses ke kategori apapun
+        if (empty($allowedCategories) && !$user->is_admin) {
+            return redirect()->route('staff.work-programs.index')
+                ->with('error', 'Anda tidak memiliki akses kategori untuk membuat program kerja. Hubungi Admin.');
+        }
+
+        return view('user_staff2.program-kerja.create', ['categories' => $allowedCategories]);
     }
 
     /**
-     * Menyimpan program kerja baru beserta tugas-tugasnya.
+     * Menyimpan data. Validasi kategori wajib dilakukan di sini (Backend Validation).
      */
     public function store(Request $request)
     {
-        // === PERUBAHAN VALIDASI DI SINI ===
+        $user = Auth::user();
+        $allowedCategories = $this->getAllowedCategories($user);
+
         $validated = $request->validate([
             'name' => 'required|string|max:255',
+            'category' => ['required', 'string', Rule::in($allowedCategories)],
             'tasks' => 'required|array|min:1',
-            'tasks.*.description' => 'required|string|max:255', // Validasi field 'description' di dalam array tasks
+            'tasks.*.description' => 'required|string|max:255',
         ], [
-            // Tambahkan pesan custom jika perlu
-             'tasks.*.description.required' => 'Deskripsi untuk setiap tugas wajib diisi.',
-             'tasks.min' => 'Minimal harus ada satu tugas.'
+            'category.in' => 'Anda tidak memiliki hak akses untuk membuat program kerja di kategori ini.',
+            'tasks.*.description.required' => 'Deskripsi tugas wajib diisi.',
         ]);
 
         DB::beginTransaction();
         try {
-            $program = WorkProgram::create(['name' => $validated['name']]);
+            $program = WorkProgram::create([
+                'name' => $validated['name'],
+                'category' => $validated['category'],
+                'user_id' => Auth::id(), // SIMPAN ID PEMBUAT DI SINI
+            ]);
 
             $tasksData = [];
-            // Loop melalui data tasks yang sudah divalidasi
             foreach ($validated['tasks'] as $taskItem) {
                 if (!empty(trim($taskItem['description']))) {
                     $tasksData[] = ['description' => $taskItem['description']];
@@ -93,8 +130,8 @@ class WorkProgramController extends Controller
             if (!empty($tasksData)) {
                 $program->tasks()->createMany($tasksData);
             } else {
-                 DB::rollBack();
-                 return back()->withInput()->withErrors(['tasks' => 'Minimal harus ada satu tugas yang valid.']);
+                DB::rollBack();
+                return back()->withInput()->withErrors(['tasks' => 'Minimal harus ada satu tugas valid.']);
             }
 
             DB::commit();
@@ -102,101 +139,126 @@ class WorkProgramController extends Controller
 
         } catch (\Exception $e) {
             DB::rollBack();
-            return back()->with('error', 'Gagal menyimpan program kerja: ' . $e->getMessage())->withInput();
+            return back()->with('error', 'Gagal menyimpan: ' . $e->getMessage())->withInput();
         }
     }
 
     /**
-     * Menampilkan detail program kerja dan tugas-tugasnya.
+     * Menampilkan detail. Pastikan user berhak melihat detail ini.
      */
-public function show(WorkProgram $workProgram)
+    public function show(WorkProgram $workProgram)
     {
-        // Eager load tasks beserta relasi verifier-nya
+        $user = Auth::user();
+        $allowedCategories = $this->getAllowedCategories($user);
+
+        // Security Check: Apakah user punya akses ke kategori program ini?
+        if (!$user->is_admin && !in_array($workProgram->category, $allowedCategories)) {
+            abort(403, 'Anda tidak memiliki akses ke kategori program kerja ini.');
+        }
+
         $workProgram->load(['tasks.verifier']);
         return view('user_staff2.program-kerja.show', compact('workProgram'));
     }
 
     /**
-     * Menampilkan formulir untuk mengedit program kerja.
+     * Form edit. Filter kategori jika ingin diubah.
      */
     public function edit(WorkProgram $workProgram)
     {
+        $user = Auth::user();
+        $allowedCategories = $this->getAllowedCategories($user);
+
+        // Security Check
+        if (!$user->is_admin && !in_array($workProgram->category, $allowedCategories)) {
+            abort(403, 'Anda tidak berhak mengedit program kerja ini.');
+        }
+
         $workProgram->load('tasks');
-        return view('user_staff2.program-kerja.edit', compact('workProgram'));
+        return view('user_staff2.program-kerja.edit', [
+            'workProgram' => $workProgram,
+            'categories' => $allowedCategories // Kirim hanya kategori yang diizinkan
+        ]);
     }
 
     /**
-     * Memperbarui program kerja dan tugas-tugasnya.
+     * Update data. Validasi kategori lagi.
      */
     public function update(Request $request, WorkProgram $workProgram)
     {
-         $validated = $request->validate([
+        $user = Auth::user();
+        $allowedCategories = $this->getAllowedCategories($user);
+
+        // Security Check Awal
+        if (!$user->is_admin && !in_array($workProgram->category, $allowedCategories)) {
+            abort(403);
+        }
+
+        $validated = $request->validate([
             'name' => 'required|string|max:255',
+            'category' => ['required', 'string', Rule::in($allowedCategories)], // Validasi kategori baru
             'tasks' => 'required|array|min:1',
-            'tasks.*.id' => 'nullable|exists:tasks,id', // Untuk tugas yang sudah ada
+            'tasks.*.id' => 'nullable|exists:tasks,id',
             'tasks.*.description' => 'required|string|max:255',
-        ], [
-             'tasks.*.description.required' => 'Deskripsi untuk setiap tugas wajib diisi.',
-             'tasks.min' => 'Minimal harus ada satu tugas.'
         ]);
 
         DB::beginTransaction();
         try {
-            $workProgram->update(['name' => $validated['name']]);
+            $workProgram->update([
+                'name' => $validated['name'],
+                'category' => $validated['category']
+            ]);
 
+            // ... (Logika update tasks sama seperti sebelumnya) ...
             $existingTaskIds = $workProgram->tasks()->pluck('id')->toArray();
             $newTaskIds = [];
 
             foreach ($validated['tasks'] as $taskData) {
-                 if (!empty(trim($taskData['description']))) {
+                if (!empty(trim($taskData['description']))) {
                     if (isset($taskData['id']) && in_array($taskData['id'], $existingTaskIds)) {
-                        // Update tugas yang sudah ada
                         $task = Task::find($taskData['id']);
                         if ($task) {
                             $task->update(['description' => $taskData['description']]);
                             $newTaskIds[] = $task->id;
                         }
                     } else {
-                        // Tambah tugas baru
                         $newTask = $workProgram->tasks()->create(['description' => $taskData['description']]);
                         $newTaskIds[] = $newTask->id;
                     }
                 }
             }
 
-            // Hapus tugas yang tidak ada di form (sudah dihapus user)
             $tasksToDelete = array_diff($existingTaskIds, $newTaskIds);
             if (!empty($tasksToDelete)) {
                 Task::destroy($tasksToDelete);
             }
 
             DB::commit();
-            return redirect()->route('staff.work-programs.show', $workProgram->id)->with('success', 'Program kerja berhasil diperbarui.');
+            return redirect()->route('staff.work-programs.show', $workProgram->id)->with('success', 'Program kerja diperbarui.');
 
         } catch (\Exception $e) {
             DB::rollBack();
-            return back()->with('error', 'Gagal memperbarui program kerja: ' . $e->getMessage())->withInput();
+            return back()->with('error', 'Gagal update: ' . $e->getMessage());
         }
     }
 
-
-    /**
-     * Menghapus program kerja beserta tugas-tugasnya.
-     */
     public function destroy(WorkProgram $workProgram)
     {
+        $user = Auth::user();
+        $allowedCategories = $this->getAllowedCategories($user);
+
+        if (!$user->is_admin && !in_array($workProgram->category, $allowedCategories)) {
+            abort(403, 'Akses ditolak.');
+        }
+
         try {
-            // onDelete('cascade') di migrasi akan otomatis menghapus tasks
             $workProgram->delete();
-            return redirect()->route('staff.work-programs.index')->with('success', 'Program kerja berhasil dihapus.');
+            return redirect()->route('staff.work-programs.index')->with('success', 'Program kerja dihapus.');
         } catch (\Exception $e) {
-             return back()->with('error', 'Gagal menghapus program kerja: ' . $e->getMessage());
+            return back()->with('error', 'Gagal hapus: ' . $e->getMessage());
         }
     }
 
-    /**
-     * Staf mengajukan tugas untuk diverifikasi.
-     */
+    // ... method submitTaskForVerification dan verifyTask biarkan tetap seperti kode sebelumnya (sudah aman) ...
     public function submitTaskForVerification(Request $request, Task $task)
     {
         $validated = $request->validate([
@@ -206,38 +268,34 @@ public function show(WorkProgram $workProgram)
             'supporting_document_link.url' => 'Input harus berupa URL yang valid.',
         ]);
 
-        // Pastikan hanya tugas yang 'Belum Selesai' atau 'Revisi Diperlukan' yang bisa diajukan
         if (!in_array($task->status, ['Belum Selesai', 'Revisi Diperlukan'])) {
              return back()->with('error', 'Status tugas tidak valid untuk diajukan.');
         }
 
-        $previousStatus = $task->status;
         $task->status = 'Menunggu Verifikasi';
         $task->supporting_document_link = $validated['supporting_document_link'];
-        $task->verification_notes = null; // Hapus catatan lama jika ada
-        $task->verifier_id = null; // Hapus verifier lama jika ada
+        $task->verification_notes = null; 
+        $task->verifier_id = null; 
         $task->save();
-
-        // Catat Log (jika ada model log)
-        // $this->logTaskStatusChange($task, Auth::id(), $previousStatus, $task->status, $validated['supporting_document_link']);
 
         return back()->with('success', 'Tugas berhasil diajukan untuk verifikasi.');
     }
 
-    /**
-     * Kanit melakukan verifikasi tugas.
-     */
     public function verifyTask(Request $request, Task $task)
     {
         $user = Auth::user(); 
 
-        
-        // Pastikan user memiliki izin khusus untuk memverifikasi
-        // Sesuaikan nama permission dengan kolom di DB Anda
-        if (!$user || !$user->hasPermissionTo('Verifikasi Program Kerja')) { 
+        if (!$user || !$user->hasPermission('Verifikasi Program Kerja')) { 
              return back()->with('error', 'Anda tidak memiliki izin untuk melakukan verifikasi.');
         }
-        // === Akhir Perubahan ===
+
+        // TAMBAHAN KEAMANAN: Pastikan Verifikator juga punya hak atas kategori tugas ini
+        // Misal: Kanit Teknik tidak boleh verifikasi tugas kategori 'Keuangan'
+        $task->load('workProgram');
+        $allowedCategories = $this->getAllowedCategories($user);
+        if (!$user->is_admin && !in_array($task->workProgram->category, $allowedCategories)) {
+             return back()->with('error', 'Anda tidak berhak memverifikasi kategori tugas ini.');
+        }
 
         $validated = $request->validate([
             'verification_status' => ['required', Rule::in(['Diverifikasi', 'Revisi Diperlukan'])],
@@ -258,5 +316,4 @@ public function show(WorkProgram $workProgram)
 
         return back()->with('success', 'Verifikasi tugas berhasil disimpan.');
     }
-
 }
