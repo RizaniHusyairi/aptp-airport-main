@@ -24,13 +24,18 @@ class NataruEvent extends Model
         return $this->hasMany(NataruFlight::class);
     }
 
-    // Fungsi otomatis generate token saat event dibuat
+    // Relasi ke Event Pembanding (Self Join)
+    public function compareEvent()
+    {
+        return $this->belongsTo(NataruEvent::class, 'compare_event_id');
+    }
+
     protected static function boot()
     {
         parent::boot();
         static::creating(function ($event) {
             if (empty($event->public_token)) {
-                $event->public_token = Str::random(32); // Token acak 32 karakter
+                $event->public_token = Str::random(32);
             }
         });
     }

@@ -15,6 +15,10 @@ return new class extends Migration
             $table->date('end_date');   // Tanggal akhir posko
             $table->string('public_token')->unique(); // Token unik untuk link publik
             $table->boolean('is_active')->default(true); // Status aktif/tidak
+            $table->foreignId('compare_event_id')
+                  ->nullable()
+                  ->constrained('nataru_events')
+                  ->onDelete('set null');
             $table->text('description')->nullable();
             $table->timestamps();
         });

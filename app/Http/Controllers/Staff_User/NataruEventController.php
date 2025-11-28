@@ -9,26 +9,20 @@ use Illuminate\Support\Str;
 
 class NataruEventController extends Controller
 {
-    /**
-     * Menampilkan daftar event.
-     */
     public function index()
     {
-        $events = NataruEvent::latest()->get();
+        // Eager load compareEvent untuk optimasi query
+        $events = NataruEvent::with('compareEvent')->latest()->get();
         return view('user_staff2.nataru.event.index', compact('events'));
     }
 
-    /**
-     * Menampilkan form tambah event.
-     */
     public function create()
     {
-        return view('user_staff2.nataru.event.create');
+        // Ambil semua event untuk dijadikan pilihan pembanding
+        $events = NataruEvent::orderBy('start_date', 'desc')->get();
+        return view('user_staff2.nataru.event.create', compact('events'));
     }
 
-    /**
-     * Menyimpan event baru.
-     */
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -36,18 +30,19 @@ class NataruEventController extends Controller
             'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
             'description' => 'nullable|string',
+            'compare_event_id' => 'nullable|exists:nataru_events,id', // Validasi baru
         ], [
             'name.required' => 'Nama event wajib diisi.',
             'start_date.required' => 'Tanggal mulai wajib diisi.',
             'end_date.after_or_equal' => 'Tanggal selesai tidak boleh sebelum tanggal mulai.',
         ]);
 
-        // Token dibuat otomatis di Model (boot method)
         NataruEvent::create([
             'name' => $validated['name'],
             'start_date' => $validated['start_date'],
             'end_date' => $validated['end_date'],
             'description' => $validated['description'],
+            'compare_event_id' => $validated['compare_event_id'], // Simpan pembanding
             'is_active' => true, 
         ]);
 
@@ -55,16 +50,60 @@ class NataruEventController extends Controller
     }
 
     /**
-     * Menampilkan form edit.
+     * Menampilkan detail event, data penerbangan, dan statistik perbandingan.
      */
-    public function edit(NataruEvent $nataruEvent)
+    public function show(NataruEvent $nataruEvent)
     {
-        return view('user_staff2.nataru.event.edit', compact('nataruEvent'));
+        // 1. Load Data Penerbangan Event Ini
+        $nataruEvent->load(['flights' => function($query) {
+            $query->orderBy('flight_date', 'desc')->orderBy('flight_time', 'desc');
+        }, 'compareEvent']); 
+        
+        // 2. Hitung Statistik Saat Ini
+        $currentStats = [
+            'total_flights' => $nataruEvent->flights->count(),
+            'total_pax' => $nataruEvent->flights->sum('pax_total'),
+            'total_cargo' => $nataruEvent->flights->sum('cargo'),
+            'avg_lf' => $nataruEvent->flights->avg('load_factor') ?? 0, // Hitung Rata-rata Load Factor
+        ];
+
+        // 3. Hitung Perbandingan (Jika ada event pembanding)
+        $comparison = null;
+        if ($nataruEvent->compare_event_id) {
+            // Kita query langsung ke database untuk event pembanding agar lebih ringan (tidak load model objects)
+            $compareQuery = $nataruEvent->compareEvent->flights();
+            
+            $compStats = [
+                'flights' => $compareQuery->count(),
+                'pax' => $compareQuery->sum('pax_total'),
+                'cargo' => $compareQuery->sum('cargo'),
+                'lf' => $compareQuery->avg('load_factor') ?? 0,
+            ];
+
+            // Hitung Selisih (Current - Compare)
+            $comparison = [
+                'flights' => $currentStats['total_flights'] - $compStats['flights'],
+                'pax' => $currentStats['total_pax'] - $compStats['pax'],
+                'cargo' => $currentStats['total_cargo'] - $compStats['cargo'],
+                'lf' => $currentStats['avg_lf'] - $compStats['lf'],
+            ];
+        }
+
+        // Kita kirim variable $summary (untuk kompatibilitas kode view sebelumnya jika ada) 
+        // tapi disarankan pakai $currentStats di view baru
+        return view('user_staff2.nataru.event.show', compact('nataruEvent', 'currentStats', 'comparison'));
     }
 
-    /**
-     * Update event.
-     */
+    public function edit(NataruEvent $nataruEvent)
+    {
+        // Ambil semua event KECUALI dirinya sendiri (untuk menghindari circular reference)
+        $events = NataruEvent::where('id', '!=', $nataruEvent->id)
+                             ->orderBy('start_date', 'desc')
+                             ->get();
+                             
+        return view('user_staff2.nataru.event.edit', compact('nataruEvent', 'events'));
+    }
+
     public function update(Request $request, NataruEvent $nataruEvent)
     {
         $validated = $request->validate([
@@ -72,7 +111,8 @@ class NataruEventController extends Controller
             'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
             'description' => 'nullable|string',
-            'is_active' => 'boolean', // Tambahan untuk update status aktif
+            'is_active' => 'boolean',
+            'compare_event_id' => 'nullable|exists:nataru_events,id|not_in:'.$nataruEvent->id, 
         ]);
 
         $nataruEvent->update($validated);
@@ -80,9 +120,6 @@ class NataruEventController extends Controller
         return redirect()->route('staff.nataru-events.index')->with('success', 'Event berhasil diperbarui.');
     }
 
-    /**
-     * Hapus event.
-     */
     public function destroy(NataruEvent $nataruEvent)
     {
         try {
@@ -91,25 +128,5 @@ class NataruEventController extends Controller
         } catch (\Exception $e) {
             return back()->with('error', 'Gagal menghapus event. Pastikan tidak ada data penerbangan terkait.');
         }
-    }
-
-    /**
-     * Menampilkan detail event dan data penerbangan di dalamnya.
-     */
-    public function show(NataruEvent $nataruEvent)
-    {
-        // Eager load flights urut berdasarkan tanggal dan jam terbaru
-        $nataruEvent->load(['flights' => function($query) {
-            $query->orderBy('flight_date', 'desc')->orderBy('flight_time', 'desc');
-        }]);
-        
-        // Hitung ringkasan sederhana untuk ditampilkan di atas
-        $summary = [
-            'total_flights' => $nataruEvent->flights->count(),
-            'total_pax' => $nataruEvent->flights->sum('pax_total'),
-            'total_cargo' => $nataruEvent->flights->sum('cargo'),
-        ];
-
-        return view('user_staff2.nataru.event.show', compact('nataruEvent', 'summary'));
     }
 }

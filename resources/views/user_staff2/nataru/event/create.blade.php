@@ -30,10 +30,19 @@
                         <label class="form-label">Nama Event <span class="text-danger">*</span></label>
                         <input type="text" name="name" class="form-control" placeholder="Contoh: Posko Nataru 2024/2025" required>
                     </div>
+                    
+                    {{-- INPUT DATA PEMBANDING BARU --}}
                     <div class="col-md-6 mb-3">
-                        <label class="form-label">Deskripsi (Opsional)</label>
-                        <input type="text" name="description" class="form-control" placeholder="Keterangan tambahan...">
+                        <label class="form-label">Event Pembanding (Tahun Lalu)</label>
+                        <select name="compare_event_id" class="form-select">
+                            <option value="">-- Pilih Event --</option>
+                            @foreach($events as $event)
+                                <option value="{{ $event->id }}">{{ $event->name }} ({{ $event->start_date->format('Y') }})</option>
+                            @endforeach
+                        </select>
+                        <small class="text-muted">Pilih event tahun lalu untuk menampilkan grafik perbandingan otomatis.</small>
                     </div>
+
                     <div class="col-md-6 mb-3">
                         <label class="form-label">Tanggal Mulai <span class="text-danger">*</span></label>
                         <input type="date" name="start_date" class="form-control" required>
@@ -41,6 +50,10 @@
                     <div class="col-md-6 mb-3">
                         <label class="form-label">Tanggal Selesai <span class="text-danger">*</span></label>
                         <input type="date" name="end_date" class="form-control" required>
+                    </div>
+                    <div class="col-12 mb-3">
+                        <label class="form-label">Deskripsi (Opsional)</label>
+                        <textarea name="description" class="form-control" rows="3"></textarea>
                     </div>
                 </div>
                 <div class="d-flex justify-content-end mt-3">

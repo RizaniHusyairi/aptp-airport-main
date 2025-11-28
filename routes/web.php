@@ -51,7 +51,8 @@ use App\Http\Controllers\{
     WorkProgramController,
     AirTrafficLogController,
     MeetingController,
-    PublicMeetingController
+    PublicMeetingController,
+    PublicNataruController
 };
 
 Auth::routes();
@@ -439,8 +440,14 @@ Route::post('api/ai/generate-trip-plan', [LandingPageController::class, 'generat
 // routes/api.php
 Route::get('/api/routes/domestic', [LandingPageController::class, 'getDomesticRoutesData']);
 
-Route::get('/posko/input/{token}', [App\Http\Controllers\PublicNataruController::class, 'showForm'])->name('public.nataru.form');
-Route::post('/posko/input/{token}', [App\Http\Controllers\PublicNataruController::class, 'store'])->name('public.nataru.store');
+Route::get('/posko/input/{token}', [PublicNataruController::class, 'showForm'])->name('public.nataru.form');
+Route::post('/posko/input/{token}', [PublicNataruController::class, 'store'])->name('public.nataru.store');
+
+// === ROUTE BARU UNTUK TV DISPLAY ===
+Route::get('/posko/tv/{token}', [PublicNataruController::class, 'tvDashboard'])->name('public.nataru.tv');
+
+// === TAMBAHKAN INI: API Chart untuk TV ===
+Route::get('/posko/tv/{token}/chart', [PublicNataruController::class, 'getTvChartData'])->name('public.nataru.chart');
 
 Route::get('/keberangkatan', [LandingPageController::class, 'keberangkatan'])->name('keberangkatan');
 Route::get('/kedatangan', [LandingPageController::class, 'kedatangan'])->name('kedatangan');

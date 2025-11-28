@@ -24,6 +24,20 @@
                             <option value="0" {{ !$nataruEvent->is_active ? 'selected' : '' }}>Selesai (Tutup Input)</option>
                         </select>
                     </div>
+                    
+                    {{-- INPUT PEMBANDING (EDIT) --}}
+                    <div class="col-md-12 mb-3">
+                        <label class="form-label">Event Pembanding</label>
+                        <select name="compare_event_id" class="form-select">
+                            <option value="">-- Tidak Ada --</option>
+                            @foreach($events as $ev)
+                                <option value="{{ $ev->id }}" {{ $nataruEvent->compare_event_id == $ev->id ? 'selected' : '' }}>
+                                    {{ $ev->name }} ({{ $ev->start_date->format('Y') }})
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
                     <div class="col-md-6 mb-3">
                         <label class="form-label">Tanggal Mulai</label>
                         <input type="date" name="start_date" class="form-control" value="{{ $nataruEvent->start_date->format('Y-m-d') }}" required>

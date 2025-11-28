@@ -40,6 +40,7 @@ class DatabaseSeeder extends Seeder
             EvergreenInformationSeeder::class,
             
             ExtendAdvanceSettingSeeder::class,
+            NataruEventSeeder::class
 
         ]);
     }
