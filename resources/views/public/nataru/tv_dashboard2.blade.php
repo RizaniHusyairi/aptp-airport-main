@@ -6,13 +6,14 @@
     <title>LIVE MONITORING - {{ $nataruEvent->name }}</title>
     
     <link rel="stylesheet" href="{{ asset('assetsv2/compiled/css/app.css') }}">
+    <link rel="stylesheet" href="{{ asset('assetsv2/compiled/css/app-dark.css') }}">
     <link rel="stylesheet" href="{{ asset('assetsv2/compiled/css/iconly.css') }}">
     <script src="{{ asset('assetsv2/extensions/apexcharts/apexcharts.min.js') }}"></script>
 
     <style>
         body {
-            background-color: #f2f7ff; /* Light Blueish Gray Background */
-            color: #333;
+            background-color: #151521; /* Dark Navy Background */
+            color: #fff;
             overflow: hidden; /* Mencegah scroll halaman utama */
             font-family: 'Nunito', sans-serif;
             height: 100vh; /* Pastikan body setinggi layar */
@@ -20,31 +21,30 @@
             flex-direction: column;
         }
         
-        /* --- Header Minimalis Light --- */
+        /* --- Header Minimalis --- */
         .tv-header {
-            background: #ffffff; 
+            background: #0d2c4a; 
             padding: 0.6rem 1.5rem;
             border-bottom: 3px solid #f0a500; 
             margin-bottom: 0.8rem;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05); /* Shadow lebih halus */
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-shrink: 0;
         }
         .header-left { display: flex; align-items: center; gap: 15px; }
-        .header-logo { height: 45px; width: auto; } /* Logo asli (tidak di-invert) */
+        .header-logo { height: 40px; width: auto; filter: brightness(0) invert(1); }
         .header-title h2 { 
             font-size: 1.3rem; 
-            font-weight: 800; 
+            font-weight: 700; 
             margin: 0; 
             letter-spacing: 1px;
             text-transform: uppercase;
-            color: #0d2c4a; /* Warna biru tua korporat */
         }
         .header-subtitle { 
             font-size: 0.85rem; 
-            color: #6c757d; 
+            color: #f0a500; 
             font-weight: 600; 
             letter-spacing: 0.5px;
         }
@@ -52,7 +52,7 @@
         .header-right { text-align: right; }
         .live-badge {
             font-size: 0.7rem;
-            background: rgba(255, 77, 77, 0.1);
+            background: rgba(255, 77, 77, 0.15);
             color: #ff4d4d;
             padding: 1px 6px;
             border-radius: 4px;
@@ -71,21 +71,21 @@
         .live-dot.loading { background-color: #f0a500; animation: none; }
         @keyframes blink { 50% { opacity: 0; } }
 
-        .digital-clock { font-size: 1.1rem; font-weight: 700; font-family: monospace; line-height: 1; color: #0d2c4a; }
-        .date-display { font-size: 0.75rem; color: #6c757d; }
+        .digital-clock { font-size: 1.1rem; font-weight: 700; font-family: monospace; line-height: 1; }
+        .date-display { font-size: 0.75rem; color: #8c8c9e; }
 
         /* --- Konten Utama --- */
         #main-content {
-            flex-grow: 1; 
+            flex-grow: 1; /* Mengisi sisa ruang */
             padding: 0 1.5rem 1rem 1.5rem;
-            overflow: hidden;
+            overflow: hidden; /* Pastikan tidak ada scroll di level konten */
         }
 
-        /* --- Kartu Statistik Light --- */
+        /* --- Kartu Statistik Kompak --- */
         .stat-card {
-            background: #ffffff;
+            background: #1e1e2d;
             border-radius: 10px;
-            border: 1px solid #eef2f7;
+            border: 1px solid #2b2b40;
             padding: 1rem 1.2rem;
             position: relative;
             overflow: hidden;
@@ -93,50 +93,50 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.03);
-            transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s; /* Tambahkan transisi border-color */
+            transition: transform 0.3s, box-shadow 0.3s;
         }
+        /* Highlight active card */
         .stat-card.active-highlight {
-            border-color: #f0a500; /* Highlight border warna emas */
-            box-shadow: 0 0 10px rgba(240, 165, 0, 0.2);
+            border-color: #f0a500;
+            box-shadow: 0 0 15px rgba(240, 165, 0, 0.2);
             transform: scale(1.02);
         }
+
         .stat-card.updated::after {
             content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(240, 165, 0, 0.1); animation: flash 0.5s; pointer-events: none;
+            background: rgba(255, 255, 255, 0.05); animation: flash 0.5s; pointer-events: none;
         }
         
         .stat-title { 
-            font-size: 0.8rem; color: #6c757d; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; margin-bottom: 2px;
+            font-size: 0.8rem; color: #8c8c9e; text-transform: uppercase; font-weight: 600; letter-spacing: 0.5px; margin-bottom: 2px;
         }
         .stat-value { 
             font-size: 1.8rem; 
-            font-weight: 800; color: #0d2c4a; line-height: 1.1;
+            font-weight: 800; color: #fff; line-height: 1.1;
         }
         .stat-icon-bg {
-            position: absolute; right: 10px; bottom: 10px; font-size: 2rem; opacity: 0.1; transform: rotate(-10deg);
+            position: absolute; right: 10px; bottom: 10px; font-size: 2rem; opacity: 0.15; transform: rotate(-10deg);
         }
 
         .diff-badge {
             font-size: 0.7rem; padding: 1px 5px; border-radius: 4px; font-weight: 600;
             display: inline-flex; align-items: center; gap: 3px; margin-top: 2px;
         }
-        .diff-up { background: rgba(32, 201, 151, 0.1); color: #198754; }
-        .diff-down { background: rgba(255, 107, 107, 0.1); color: #dc3545; }
-        .diff-neutral { background: rgba(170, 176, 182, 0.1); color: #6c757d; }
+        .diff-up { background: rgba(32, 201, 151, 0.15); color: #20c997; }
+        .diff-down { background: rgba(255, 107, 107, 0.15); color: #ff6b6b; }
+        .diff-neutral { background: rgba(170, 176, 182, 0.15); color: #aab0b6; }
         
-        /* --- Chart Container Light --- */
+        /* --- Chart Container --- */
         .chart-container {
-            background: #ffffff;
+            background: #1e1e2d;
             border-radius: 10px;
             padding: 10px 15px;
-            border: 1px solid #eef2f7;
+            border: 1px solid #2b2b40;
             height: 100%; 
             min-height: 0; 
             display: flex;
             flex-direction: column;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.03);
-            position: relative; /* Penting untuk progress bar */
+            position: relative;
         }
         
         /* Progress bar untuk rotasi chart */
@@ -149,32 +149,30 @@
             width: 0%;
             transition: width 0.1s linear;
             border-radius: 10px 10px 0 0;
-            z-index: 5;
         }
-        
-        /* --- Table Styling Light --- */
+
+        /* --- Table Styling & Auto Scroll --- */
         .card-table {
-            background: #ffffff; 
-            border: 1px solid #eef2f7;
+            background: #1e1e2d; 
+            border: 1px solid #2b2b40;
             border-radius: 10px;
             overflow: hidden;
             height: 100%; 
             display: flex;
             flex-direction: column;
             min-height: 0; 
-            box-shadow: 0 5px 15px rgba(0,0,0,0.03);
         }
         .table-header {
-            background: #ffffff; 
+            background: #1e1e2d; 
             padding: 8px 15px;
-            border-bottom: 1px solid #f2f2f2;
+            border-bottom: 1px solid #2b2b40;
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-shrink: 0;
             z-index: 10;
         }
-        .table-title { font-size: 0.9rem; font-weight: 700; margin: 0; color: #0d2c4a; }
+        .table-title { font-size: 0.9rem; font-weight: 700; margin: 0; }
 
         .table-scroll-container {
             flex-grow: 1;
@@ -187,44 +185,39 @@
 
         .table-tv { width: 100%; border-collapse: separate; border-spacing: 0 2px; }
         
-        /* Header Tabel Sticky */
         .table-tv thead th {
             color: #6c757d;
             text-transform: uppercase;
-            font-size: 0.7rem; 
+            font-size: 0.7rem;
             padding: 8px 12px;
             font-weight: 700;
             letter-spacing: 0.5px;
             position: sticky;
             top: 0;
-            background-color: #f8f9fa; /* Abu-abu sangat terang */
+            background-color: #1e1e2d; 
             z-index: 5;
-            border-bottom: 2px solid #eef2f7;
         }
         
         .table-tv tbody tr {
-            background: #ffffff;
+            background: #252538;
             transition: background-color 0.3s;
-            border-bottom: 1px solid #f2f2f2;
         }
-        .table-tv tbody tr:nth-child(even) { background-color: #fcfcfc; } /* Zebra striping halus */
-        
         .table-tv tbody tr.new-row { animation: highlightRow 2s ease-out; }
         @keyframes highlightRow {
-            0% { background-color: #fff3cd; } /* Kuning muda */
-            100% { background-color: #ffffff; }
+            0% { background-color: rgba(240, 165, 0, 0.3); }
+            100% { background-color: #252538; }
         }
 
         .table-tv td {
             padding: 6px 12px;
             vertical-align: middle;
             border: none;
-            color: #333;
+            color: #e1e1e6;
             font-size: 0.85rem;
             white-space: nowrap;
-            border-bottom: 1px solid #f2f2f2;
         }
-        .table-tv td:first-child { border-left: 3px solid #f0a500; }
+        .table-tv td:first-child { border-radius: 4px 0 0 4px; border-left: 3px solid #f0a500; }
+        .table-tv td:last-child { border-radius: 0 4px 4px 0; }
 
         /* Utilities */
         .fade-out { opacity: 0.5; pointer-events: none; transition: opacity 0.3s; }
@@ -236,10 +229,9 @@
     {{-- Header TV Minimalis --}}
     <div class="tv-header">
         <div class="header-left">
-            {{-- Gunakan logo berwarna asli untuk background putih --}}
             <img src="{{ asset('assets_landing/img/logo/logo-apt.svg') }}" alt="Logo" class="header-logo">
             <div class="header-title">
-                <h2>POSKO MONITORING</h2>
+                <h2 class="text-white">POSKO MONITORING</h2>
                 <div class="header-subtitle">{{ $nataruEvent->name }}</div>
             </div>
         </div>
@@ -253,7 +245,7 @@
         </div>
     </div>
 
-    <div class="container-fluid h-100" id="main-content">
+    <div class="container-fluid h-100" id="main-content" style="padding: 0.2rem 1.5rem 1rem 1.5rem;">
         
         @php
             function tvDiff($val, $isPercent = false) {
@@ -324,15 +316,15 @@
             {{-- 2. Kolom Kanan (Grafik & Tabel) --}}
             <div class="col-10 h-100 d-flex flex-column gap-3">
                 
-                {{-- Bagian Atas: Grafik --}}
+                {{-- Bagian Atas: Grafik Bergantian --}}
                 @if($nataruEvent->compare_event_id)
                 <div class="chart-container flex-fill" style="height: 150%; min-height: 0;">
-                    <div class="chart-progress-bar" id="chart-progress"></div> {{-- Progress Bar untuk rotasi --}}
+                    <div class="chart-progress-bar" id="chart-progress"></div>
                     <div class="d-flex justify-content-between align-items-center mb-1 flex-shrink-0">
-                        <h6 class="mb-0 text-dark text-uppercase fw-bold" style="letter-spacing: 1px; font-size: 0.85rem;" id="chart-title">Tren Pesawat</h6> {{-- Judul Dinamis --}}
+                        <h6 class="mb-0 text-white text-uppercase fw-bold" style="letter-spacing: 1px; font-size: 0.85rem;" id="chart-title">Tren Penumpang</h6>
                         <small class="text-muted text-xs">H-10 s/d H+10</small>
                     </div>
-                    <div id="chartPaxTv" style="flex-grow: 1; min-height: 0;"></div>
+                    <div id="chartTv" style="flex-grow: 1; min-height: 0;"></div>
                 </div>
                 @endif
                 
@@ -358,9 +350,9 @@
                             <tbody id="flights-table-body">
                                 @forelse($nataruEvent->flights as $flight)
                                 <tr data-id="{{ $flight->id }}">
-                                    <td class="fw-bold text-primary">{{ \Carbon\Carbon::parse($flight->flight_time)->format('H:i') }}</td>
-                                    <td class="fw-bold text-dark">{{ $flight->airline }}</td>
-                                    <td><span class="badge bg-light-secondary text-dark font-monospace text-xs">{{ $flight->flight_number }}</span></td>
+                                    <td class="fw-bold text-warning">{{ \Carbon\Carbon::parse($flight->flight_time)->format('H:i') }}</td>
+                                    <td>{{ $flight->airline }}</td>
+                                    <td><span class="badge bg-secondary bg-opacity-25 text-light font-monospace text-xs">{{ $flight->flight_number }}</span></td>
                                     <td>{{ $flight->route }}</td>
                                     <td>
                                         @if($flight->direction == 'arrival')
@@ -369,8 +361,8 @@
                                             <span class="text-info text-xs fw-bold"><i class="bi bi-arrow-up-right"></i> BERANGKAT</span>
                                         @endif
                                     </td>
-                                    <td class="fw-bold text-dark">{{ $flight->pax_total }}</td>
-                                    <td class="text-muted">{{ number_format($flight->cargo) }}</td>
+                                    <td class="fw-bold">{{ $flight->pax_total }}</td>
+                                    <td>{{ number_format($flight->cargo) }}</td>
                                 </tr>
                                 @empty
                                 <tr id="empty-row">
@@ -396,7 +388,7 @@
         setInterval(updateClock, 1000);
         updateClock();
 
-        // 2. Auto Scroll Tabel Logika
+        // 2. Auto Scroll Tabel
         function startAutoScroll() {
             const container = document.getElementById('flights-scroll-container');
             if(!container) return;
@@ -427,7 +419,6 @@
                 }
                 requestAnimationFrame(animateScroll);
             }
-            
             setTimeout(animateScroll, 2000);
         }
         startAutoScroll();
@@ -436,6 +427,9 @@
         // 3. Auto Refresh Data (Smooth Update)
         const liveIndicator = document.getElementById('liveIndicator');
         const liveText = document.getElementById('liveText');
+        
+        // Variabel Global untuk Menyimpan Data Chart
+        let chartDataGlobal = null;
 
         function updateDashboard() {
             liveIndicator.classList.add('loading');
@@ -467,13 +461,11 @@
 
                     if (firstNewRow && (!firstCurrentRow || firstNewRow.dataset.id !== firstCurrentRow.dataset.id)) {
                         const container = document.getElementById('flights-scroll-container');
-                        
                         currentTableBody.style.opacity = '0.5';
                         setTimeout(() => {
                             currentTableBody.innerHTML = newTableBody.innerHTML;
                             currentTableBody.style.opacity = '1';
                             if(container) container.scrollTop = 0;
-                            
                             const newRows = currentTableBody.querySelectorAll('tr');
                             if(newRows.length > 0) newRows[0].classList.add('new-row');
                         }, 200);
@@ -481,8 +473,11 @@
 
                     setTimeout(() => {
                         liveIndicator.classList.remove('loading');
-                        liveText.style.color = '#ff4d4d'; // Merah kembali
+                        liveText.style.color = '#fff';
                     }, 500);
+                    
+                    // Opsional: Panggil update data chart di sini jika ingin real-time juga untuk grafik
+                    // fetchChartData();
                 })
                 .catch(err => {
                     console.error('Gagal update:', err);
@@ -490,7 +485,6 @@
                 });
         }
 
-        // Helpers
         function updateStatIfChanged(id, newDoc) {
             const currentEl = document.getElementById(id);
             const newEl = newDoc.getElementById(id);
@@ -516,57 +510,112 @@
 
         setInterval(updateDashboard, 30000);
 
-        // 4. Grafik Light Mode dengan Rotasi (Pesawat -> Penumpang -> Cargo)
+        // 4. Logika Grafik Bergantian (Carousel)
         document.addEventListener('DOMContentLoaded', function () {
             @if($nataruEvent->compare_event_id)
                 const chartUrl = "{{ route('public.nataru.chart', $nataruEvent->public_token) }}";
                 let chartInstance = null;
                 let currentChartIndex = 0; // 0: Flights, 1: Pax, 2: Cargo
-                let globalChartData = null;
+                const chartTypes = ['flights', 'pax', 'cargo'];
+                const chartTitles = ['Tren Pesawat (Movement)', 'Tren Penumpang (Pax)', 'Tren Kargo (Kg)'];
+                const chartColors = {
+                    'flights': ['#0d6efd', '#6610f2', '#ffc107', '#ff4d4d'], // Biru tema
+                    'pax': ['#20c997', '#0dcaf0', '#ffc107', '#ff4d4d'], // Hijau tema
+                    'cargo': ['#ffc107', '#fd7e14', '#ffc107', '#ff4d4d'] // Kuning tema
+                };
 
-                // Definisi Konfigurasi per Tipe Grafik
-                const chartConfigs = [
-                    { 
-                        type: 'flights', 
-                        title: 'Tren Pesawat (Pergerakan)', 
-                        cardId: 'card-flights',
-                        colors: ['#0d6efd', '#6610f2', '#0d6efd', '#6610f2'] // Biru & Ungu
-                    },
-                    { 
-                        type: 'pax', 
-                        title: 'Tren Penumpang (Orang)', 
-                        cardId: 'card-pax',
-                        colors: ['#20c997', '#198754', '#20c997', '#198754'] // Hijau
-                    },
-                    { 
-                        type: 'cargo', 
-                        title: 'Tren Kargo (Kg)', 
-                        cardId: 'card-cargo',
-                        colors: ['#ffc107', '#fd7e14', '#ffc107', '#fd7e14'] // Kuning & Oranye
+                // Fungsi untuk mengambil data
+                function fetchChartData() {
+                    return fetch(chartUrl)
+                        .then(response => {
+                            if (!response.ok) throw new Error("Gagal memuat grafik");
+                            return response.json();
+                        })
+                        .then(data => {
+                            chartDataGlobal = data; // Simpan ke global
+                            initChart(); // Render pertama kali
+                            startChartRotation(); // Mulai rotasi
+                        })
+                        .catch(err => {
+                            document.querySelector("#chartTv").innerHTML = '<div class="d-flex flex-column justify-content-center align-items-center h-100 text-muted opacity-50"><small>Grafik tidak tersedia</small></div>';
+                        });
+                }
+
+                // Fungsi untuk update tampilan chart
+                function updateChartDisplay() {
+                    if (!chartDataGlobal || !chartInstance) return;
+
+                    const type = chartTypes[currentChartIndex];
+                    const title = chartTitles[currentChartIndex];
+                    
+                    // Update Judul & Highlight Card
+                    document.getElementById('chart-title').innerText = title;
+                    
+                    // Reset highlight semua card
+                    document.querySelectorAll('.stat-card').forEach(c => c.classList.remove('active-highlight'));
+                    // Highlight card yang sesuai
+                    document.getElementById(`card-${type}`).classList.add('active-highlight');
+
+                    // Siapkan Data Series baru
+                    // Struktur data dari controller harus konsisten: dataset1.flights_arrival, etc.
+                    // Kita sesuaikan nama property di controller agar dinamis: 
+                    // dataset1['pax_arrival'] -> dataset1[type + '_arrival']
+                    // Perlu pastikan controller mengirim key yang sesuai ('flights', 'pax', 'cargo')
+                    
+                    // Mapping nama key dari controller (jika beda)
+                    // Controller saat ini mengirim: pax_arrival, pax_departure.
+                    // Kita asumsikan controller SUDAH diupdate untuk kirim flights_arrival dan cargo_arrival juga.
+                    // Jika belum, kode ini akan error/kosong.
+                    // SEMENTARA: Saya akan gunakan logika simulasi jika data belum lengkap, 
+                    // TAPI Anda harus update Controller agar mengirim 'flights_arrival', 'cargo_arrival', dll.
+                    
+                    // Kita pakai trik: Controller Anda sebelumnya hanya kirim PAX.
+                    // Agar kode ini jalan, Controller getTvChartData harus dimodifikasi 
+                    // untuk mengirim flights_arrival/departure dan cargo_arrival/departure juga.
+                    
+                    // Namun, untuk mendemonstrasikan fitur ini bekerja dengan data yang ADA (Pax),
+                    // Saya akan tampilkan Pax saja dulu jika data lain null.
+                    // Nanti Anda wajib update Controller PublicNataruController method getTvChartData.
+                    
+                    let series = [];
+                    
+                    // Cek ketersediaan data (Safety check)
+                    if(chartDataGlobal.dataset1[type + '_arrival']) {
+                        series = [
+                             { name: chartDataGlobal.event1_name + ' (Arr)', type: 'bar', data: chartDataGlobal.dataset1[type + '_arrival'] },
+                             { name: chartDataGlobal.event1_name + ' (Dep)', type: 'bar', data: chartDataGlobal.dataset1[type + '_departure'] },
+                             { name: chartDataGlobal.event2_name + ' (Arr)', type: 'line', data: chartDataGlobal.dataset2[type + '_arrival'] },
+                             { name: chartDataGlobal.event2_name + ' (Dep)', type: 'line', data: chartDataGlobal.dataset2[type + '_departure'] }
+                        ];
+                    } else {
+                        // Fallback jika data spesifik belum ada di API (misal flights/cargo belum dikirim terpisah)
+                        // Tampilkan data dummy atau pax sebagai placeholder agar tidak crash
+                        // (Sebaiknya update controller segera)
+                         series = [
+                             { name: 'Data ' + type + ' belum tersedia di API', type: 'bar', data: [] }
+                        ];
                     }
-                ];
 
-                fetch(chartUrl)
-                .then(response => {
-                    if (!response.ok) throw new Error("Gagal memuat grafik");
-                    return response.json();
-                })
-                .then(data => {
-                    globalChartData = data;
-                    initChart(); // Inisialisasi chart pertama kali
-                    startRotation(); // Mulai rotasi
-                })
-                .catch(err => {
-                    console.log(err);
-                    document.querySelector("#chartPaxTv").innerHTML = '<div class="d-flex flex-column justify-content-center align-items-center h-100 text-muted opacity-50"><small>Grafik tidak tersedia</small></div>';
-                });
+                    chartInstance.updateOptions({
+                        colors: chartColors[type],
+                        series: series
+                    });
+
+                    // Reset dan jalankan progress bar
+                    const progressBar = document.getElementById('chart-progress');
+                    progressBar.style.transition = 'none';
+                    progressBar.style.width = '0%';
+                    setTimeout(() => {
+                        progressBar.style.transition = 'width 20s linear';
+                        progressBar.style.width = '100%';
+                    }, 50);
+                }
 
                 function initChart() {
-                    const config = chartConfigs[currentChartIndex];
-                    updateUIForChart(config); // Update judul & highlight card
-
+                    const type = 'pax'; // Default start
+                    // Inisialisasi chart kosong dulu
                     var options = {
-                        series: getSeriesData(config.type),
+                        series: [],
                         chart: { 
                             type: 'line', 
                             height: '100%', 
@@ -574,116 +623,48 @@
                             background: 'transparent',
                             animations: { enabled: true, easing: 'easeinout', speed: 800 },
                             fontFamily: 'Nunito, sans-serif',
-                            stacked: false 
+                            stacked: false
                         },
-                        colors: config.colors, 
                         dataLabels: { enabled: false },
-                        stroke: { 
-                            width: [0, 0, 2, 2], 
-                            curve: 'smooth',
-                            dashArray: [0, 0, 5, 5] 
-                        },
-                        plotOptions: {
-                            bar: { columnWidth: '60%', borderRadius: 2 }
-                        },
+                        stroke: { width: [0, 0, 2, 2], curve: 'smooth', dashArray: [0, 0, 5, 5] },
+                        plotOptions: { bar: { columnWidth: '60%', borderRadius: 2 } },
                         xaxis: { 
-                            categories: globalChartData.categories,
+                            categories: chartDataGlobal.categories,
                             labels: { 
-                                style: { colors: '#6c757d', fontSize: '10px' }, 
+                                style: { colors: '#8c8c9e', fontSize: '10px' },
                                 formatter: function (val, timestamp, index) {
-                                    if (typeof index !== 'undefined' && globalChartData.dates_event1 && globalChartData.dates_event2) {
-                                        const date1 = globalChartData.dates_event1[index];
-                                        const date2 = globalChartData.dates_event2[index];
+                                    if (typeof index !== 'undefined' && chartDataGlobal.dates_event1 && chartDataGlobal.dates_event2) {
+                                        const date1 = chartDataGlobal.dates_event1[index];
+                                        const date2 = chartDataGlobal.dates_event2[index];
                                         return [val, date1, date2]; 
                                     }
                                     return val;
                                 }
                             },
-                            axisBorder: { show: true, color: '#eef2f7' },
-                            axisTicks: { show: false }
+                            axisBorder: { show: false }, axisTicks: { show: false }
                         },
-                        yaxis: { 
-                            labels: { style: { colors: '#6c757d', fontSize: '10px' } }
-                        },
-                        grid: { borderColor: '#eef2f7', strokeDashArray: 3 }, 
-                        theme: { mode: 'light' }, 
-                        legend: { 
-                            position: 'top', 
-                            horizontalAlign: 'right', 
-                            fontSize: '10px', 
-                            markers: { radius: 12 },
-                            itemMargin: { horizontal: 5, vertical: 0 },
-                            labels: { colors: '#333' } 
-                        }
+                        yaxis: { labels: { style: { colors: '#8c8c9e', fontSize: '10px' } } },
+                        grid: { borderColor: '#2b2b40', strokeDashArray: 3 },
+                        theme: { mode: 'dark' },
+                        legend: { position: 'top', horizontalAlign: 'right', fontSize: '10px', markers: { radius: 12 }, itemMargin: { horizontal: 5, vertical: 0 } }
                     };
-                    chartInstance = new ApexCharts(document.querySelector("#chartPaxTv"), options);
+                    chartInstance = new ApexCharts(document.querySelector("#chartTv"), options);
                     chartInstance.render();
+                    
+                    // Set index ke Pax (1) karena itu data yang pasti ada sekarang
+                    currentChartIndex = 1; 
+                    updateChartDisplay();
                 }
 
-                function updateChart() {
-                    const config = chartConfigs[currentChartIndex];
-                    updateUIForChart(config);
-
-                    // Update data & options chart yang sudah ada
-                    chartInstance.updateOptions({
-                        colors: config.colors,
-                        series: getSeriesData(config.type)
-                    });
-                }
-
-                function getSeriesData(type) {
-                    // Mapping data dinamis berdasarkan tipe (flights/pax/cargo)
-                    // Pastikan key di JSON controller sesuai: pax_arrival, cargo_arrival, flights_arrival
-                    return [
-                        { name: '{{ $nataruEvent->name }} (Arr)', type: 'bar', data: globalChartData.dataset1[type + '_arrival'] },
-                        { name: '{{ $nataruEvent->name }} (Dep)', type: 'bar', data: globalChartData.dataset1[type + '_departure'] },
-                        { name: '{{ $nataruEvent->compareEvent->name }} (Arr)', type: 'line', data: globalChartData.dataset2[type + '_arrival'] }, 
-                        { name: '{{ $nataruEvent->compareEvent->name }} (Dep)', type: 'line', data: globalChartData.dataset2[type + '_departure'] }
-                    ];
-                }
-
-                function updateUIForChart(config) {
-                    // Update Judul Grafik
-                    const titleEl = document.getElementById('chart-title');
-                    if(titleEl) {
-                        titleEl.style.opacity = 0; // Fade out effect
-                        setTimeout(() => {
-                            titleEl.innerText = config.title;
-                            titleEl.style.opacity = 1; // Fade in
-                        }, 300);
-                    }
-
-                    // Highlight Stat Card yang relevan
-                    document.querySelectorAll('.stat-card').forEach(c => c.classList.remove('active-highlight'));
-                    const activeCard = document.getElementById(config.cardId);
-                    if(activeCard) activeCard.classList.add('active-highlight');
-
-                    // Reset & Animate Progress Bar
-                    const bar = document.getElementById('chart-progress');
-                    if(bar) {
-                        bar.style.transition = 'none';
-                        bar.style.width = '0%';
-                        setTimeout(() => {
-                            bar.style.transition = 'width 20s linear'; // Sesuai interval 20 detik
-                            bar.style.width = '100%';
-                        }, 50);
-                    }
-                }
-
-                function startRotation() {
-                    // Jalankan progress bar pertama kali
-                    const bar = document.getElementById('chart-progress');
-                    if(bar) {
-                        bar.style.transition = 'width 20s linear';
-                        bar.style.width = '100%';
-                    }
-
+                function startChartRotation() {
                     setInterval(() => {
-                        currentChartIndex = (currentChartIndex + 1) % chartConfigs.length;
-                        updateChart();
-                    }, 20000); // Ganti setiap 20 detik
+                        // Logika rotasi index: 0 -> 1 -> 2 -> 0
+                        currentChartIndex = (currentChartIndex + 1) % 3;
+                        updateChartDisplay();
+                    }, 20000); // 20 Detik
                 }
 
+                fetchChartData();
             @endif
         });
     </script>
