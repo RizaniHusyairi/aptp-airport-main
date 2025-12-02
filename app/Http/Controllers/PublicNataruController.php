@@ -133,6 +133,9 @@ class PublicNataruController extends Controller
             'total_pax' => $nataruEvent->flights()->sum('pax_total'),
             'total_cargo' => $nataruEvent->flights()->sum('cargo'),
             'avg_lf' => $nataruEvent->flights()->avg('load_factor') ?? 0,
+            // Data Harga Tiket (Ambil max dari ticket_price_high dan min dari ticket_price_low)
+            'max_ticket' => $nataruEvent->flights()->max('ticket_price_high') ?? 0,
+            'min_ticket' => $nataruEvent->flights()->where('ticket_price_low', '>', 0)->min('ticket_price_low') ?? 0,
         ];
 
         // 3. Hitung Perbandingan
@@ -145,6 +148,9 @@ class PublicNataruController extends Controller
                 'pax' => $compareQuery->sum('pax_total'),
                 'cargo' => $compareQuery->sum('cargo'),
                 'lf' => $compareQuery->avg('load_factor') ?? 0,
+                // Perbandingan harga tiket (opsional, bisa di-skip jika tidak perlu diff badge untuk harga)
+                'max_ticket' => $compareQuery->max('ticket_price_high') ?? 0,
+                'min_ticket' => $compareQuery->where('ticket_price_low', '>', 0)->min('ticket_price_low') ?? 0,
             ];
 
             $comparison = [
@@ -152,6 +158,9 @@ class PublicNataruController extends Controller
                 'pax' => $currentStats['total_pax'] - $compStats['pax'],
                 'cargo' => $currentStats['total_cargo'] - $compStats['cargo'],
                 'lf' => $currentStats['avg_lf'] - $compStats['lf'],
+                // Diff harga (Current - Past)
+                'max_ticket' => $currentStats['max_ticket'] - $compStats['max_ticket'],
+                'min_ticket' => $currentStats['min_ticket'] - $compStats['min_ticket'],
             ];
         }
 

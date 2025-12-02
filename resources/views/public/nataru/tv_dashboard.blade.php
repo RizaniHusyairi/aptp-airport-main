@@ -48,8 +48,43 @@
             font-weight: 600; 
             letter-spacing: 0.5px;
         }
+
+        /* Info Tiket di Header (Kompak) */
+        .ticket-info-container {
+            display: flex;
+            gap: 15px; /* Gap diperkecil */
+            margin-right: 20px;
+            padding-right: 20px;
+            border-right: 1px solid #e0e0e0;
+        }
+        .ticket-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #f8f9fa;
+            padding: 4px 10px; /* Padding badge diperkecil */
+            border-radius: 6px; /* Radius diperkecil */
+            border: 1px solid #e9ecef;
+        }
+        .ticket-icon {
+            font-size: 1rem; /* Ikon diperkecil */
+            writing-mode: vertical-lr;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px; height: 28px; /* Ukuran diperkecil */
+            border-radius: 50%;
+            color: white;
+        }
+        .ticket-icon.high { background: linear-gradient(45deg, #17a2b8, #117a8b); }
+        .ticket-icon.low { background: linear-gradient(45deg, #6c757d, #495057); }
         
-        .header-right { text-align: right; }
+        .ticket-content { display: flex; flex-direction: column; }
+        .ticket-label { font-size: 0.6rem; text-transform: uppercase; color: #6c757d; font-weight: 700; }
+        .ticket-value { font-size: 0.9rem; font-weight: 800; color: #333; line-height: 1; } /* Value diperkecil */
+        
+        .header-right { text-align: right; display: flex; align-items: center; gap: 15px; }
+        
         .live-badge {
             font-size: 0.7rem;
             background: rgba(255, 77, 77, 0.1);
@@ -77,8 +112,8 @@
         /* --- Konten Utama --- */
         #main-content {
             flex-grow: 1; 
-            padding: 0 1.5rem 1rem 1.5rem;
-            overflow: hidden;
+            padding: 0.3rem 1.5rem 1rem 1.5rem;
+            overflow:hidden;
         }
 
         /* --- Kartu Statistik Light --- */
@@ -114,7 +149,7 @@
             font-weight: 800; color: #0d2c4a; line-height: 1.1;
         }
         .stat-icon-bg {
-            position: absolute; right: 10px; bottom: 10px; font-size: 2rem; opacity: 0.1; transform: rotate(-10deg);
+            position: absolute; right: 10px; bottom: 10px; font-size: 2rem; opacity: 0.5; transform: rotate(-10deg);
         }
 
         .diff-badge {
@@ -243,13 +278,33 @@
                 <div class="header-subtitle">{{ $nataruEvent->name }}</div>
             </div>
         </div>
+
         <div class="header-right">
-            <div class="live-badge">
-                <span class="live-dot" id="liveIndicator"></span> 
-                <span id="liveText">LIVE</span>
+            <div class="ticket-info-container">
+                <div class="ticket-badge">
+                    <div class="ticket-icon high"><i class="bi bi-graph-up-arrow"></i></div>
+                    <div class="ticket-content">
+                        <span class="ticket-label">Tiket Tertinggi</span>
+                        <span class="ticket-value" id="val-max-price">Rp {{ number_format($currentStats['max_ticket'] ?? 0) }}</span>
+                    </div>
+                </div>
+                <div class="ticket-badge">
+                    <div class="ticket-icon low"><i class="bi bi-graph-down-arrow"></i></div>
+                    <div class="ticket-content">
+                        <span class="ticket-label">Tiket Terendah</span>
+                        <span class="ticket-value" id="val-min-price">Rp {{ number_format($currentStats['min_ticket'] ?? 0) }}</span>
+                    </div>
+                </div>
             </div>
-            <div class="digital-clock" id="digital-clock">00:00:00</div>
-            <div class="date-display" id="current-date">Loading...</div>
+            <div class="clock-container">
+
+                <div class="live-badge">
+                    <span class="live-dot" id="liveIndicator"></span> 
+                    <span id="liveText">LIVE</span>
+                </div>
+                <div class="digital-clock" id="digital-clock">00:00:00</div>
+                <div class="date-display" id="current-date">Loading...</div>
+            </div>
         </div>
     </div>
 
@@ -611,9 +666,32 @@
                             position: 'top', 
                             horizontalAlign: 'right', 
                             fontSize: '10px', 
-                            markers: { radius: 12 },
+                            // markers: { radius: 12 },
+                            markers: { 
+                                width: 16, // Kita lebarkan sedikit agar garisnya terlihat panjang
+                                
+                                // --- BAGIAN KUNCI ---
+                                // Array height:
+                                // Index 0 & 1 (Bar): Tinggi 12px (kotak normal)
+                                // Index 2 & 3 (Line): Tinggi 3px (gepeng jadi terlihat seperti garis)
+                                height: [12, 12, 3, 3], 
+
+                                // Array radius:
+                                // Bar: Radius 2px (sedikit rounded)
+                                // Line: Radius 0px (sudut tajam)
+                                radius: [2, 2, 0, 0],
+
+                                // Array offsetY:
+                                // Karena garisnya tipis (3px), posisinya mungkin agak naik.
+                                // Kita turunkan 4px khusus untuk Line agar sejajar tengah dengan teks.
+                                offsetY: [0, 0, -1,-1 ], 
+                                // --------------------
+
+                                strokeWidth: 0, // Tidak perlu garis tepi
+                            },
                             itemMargin: { horizontal: 5, vertical: 0 },
                             labels: { colors: '#333' } 
+                            
                         }
                     };
                     chartInstance = new ApexCharts(document.querySelector("#chartPaxTv"), options);
