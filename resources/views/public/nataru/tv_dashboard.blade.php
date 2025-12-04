@@ -430,7 +430,7 @@
                                     <th>Maskapai</th>
                                     <th>No. Flight</th>
                                     <th>Rute</th>
-                                    <th>Arah</th>
+                                    <th>Status</th>
                                     <th>Pax</th>
                                     <th>Kargo</th>
                                 </tr>
