@@ -79,8 +79,9 @@
         <h1>BUKU CATATAN FASILITAS DAN KEGIATAN</h1>
         <h2>(FACILITY LOGBOOK)</h2>
         <p><strong>Bandara:</strong> BLU Kantor UPBU Kelas 1 A.P.T Pranoto</p>
-        <p><strong>Fasilitas:</strong> Fasilitas Bantu Pelayanan Bandar Udara</p>
-        <p><strong>Peralatan:</strong> {{ strtoupper($inventory->name) }}</p>
+        {{-- MENAMPILKAN KATEGORI DARI DATABASE --}}
+        <p><strong>Kategori:</strong> {{ $inventory->category ?? '-' }}</p> 
+        <p><strong>Peralatan:</strong> {{ $inventory->name }}</p>
         <p><strong>Bulan:</strong> {{ $periode }}</p>
     </div>
 

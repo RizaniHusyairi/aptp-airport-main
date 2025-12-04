@@ -51,6 +51,7 @@
                         <tr>
                             <th>Foto</th>
                             <th>Nama Alat</th>
+                            <th>Kategori</th> {{-- Kolom Baru --}}
                             <th>Kondisi</th>
                             <th>Laporan</th>
                             <th>Tanggal Input</th>
@@ -67,6 +68,7 @@
                                 </a>
                             </td>
                             <td>{{ $item->name }}</td>
+                            <td><span class="badge bg-light-primary">{{ $item->category }}</span></td> {{-- Data Baru --}}
                             <td>
                                 @php
                                     $statusClass = $item->status == 'Baik' ? 'bg-success' : 'bg-warning';

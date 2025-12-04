@@ -14,15 +14,61 @@ use Barryvdh\DomPDF\Facade\Pdf; // <-- Import PDF
 use App\Models\User; // <-- Pastikan User di-import
 use Illuminate\Support\Facades\Auth; // <-- Import Auth
 use App\Models\InventoryLogbook; // <-- Import model logbook
+use App\Models\RoleWorkCategory;
 
 class InventoryController extends Controller
 {
+
+    private $workCategories = [
+        'Alat-alat Besar',
+        'Fasilitas Sisi Udara',
+        'Fasilitas Sisi Darat',
+        'Elektronika Bandara',
+        'Listrik',
+        'Mekanikal',
+        'Fasilitas Keamanan Penerbangan',
+        'PKPPK'
+    ];
+
+    /**
+     * Helper: Mendapatkan kategori yang diizinkan untuk User.
+     */
+    private function getAllowedCategories($user)
+    {
+        if ($user->is_admin) {
+            return $this->workCategories;
+        }
+
+        $allowedCategories = [];
+        foreach ($user->roles as $role) {
+            $cats = RoleWorkCategory::where('role_id', $role->id)
+                                    ->pluck('category_name')
+                                    ->toArray();
+            $allowedCategories = array_merge($allowedCategories, $cats);
+        }
+
+        return array_unique($allowedCategories);
+    }
+
     /**
      * Menampilkan daftar semua item inventaris.
      */
     public function index()
     {
-        $inventories = Inventory::latest('input_date')->get();
+        $user = Auth::user();
+        $query = Inventory::latest('input_date');
+
+        $allowedCategories = $this->getAllowedCategories($user);
+
+        if (!$user->is_admin) {
+            if (!empty($allowedCategories)) {
+                $query->whereIn('category', $allowedCategories);
+            } else {
+                $query->whereRaw('1 = 0'); // Tidak ada akses
+            }
+        }
+
+        $inventories = $query->get();
         return view('user_staff2.inventaris.index', compact('inventories'));
     }
 
@@ -31,7 +77,14 @@ class InventoryController extends Controller
      */
     public function show(Inventory $inventory)
     {
-        // Eager load riwayat status DAN riwayat logbook
+        $user = Auth::user();
+        $allowedCategories = $this->getAllowedCategories($user);
+
+        // Security Check
+        if (!$user->is_admin && !in_array($inventory->category, $allowedCategories)) {
+            abort(403, 'Anda tidak memiliki akses ke kategori inventaris ini.');
+        }
+
         $inventory->load(['statusLogs.user', 'logbooks.user']);
         return view('user_staff2.inventaris.show', compact('inventory'));
     }
@@ -41,7 +94,15 @@ class InventoryController extends Controller
      */
     public function create()
     {
-        return view('user_staff2.inventaris.create');
+        $user = Auth::user();
+        $allowedCategories = $this->getAllowedCategories($user);
+
+        if (empty($allowedCategories) && !$user->is_admin) {
+            return redirect()->route('staff.inventories.index')
+                ->with('error', 'Anda tidak memiliki akses kategori untuk menambah inventaris.');
+        }
+
+        return view('user_staff2.inventaris.create', ['categories' => $allowedCategories]);
     }
 
     /**
@@ -49,29 +110,46 @@ class InventoryController extends Controller
      */
     public function store(Request $request)
     {
+        $user = Auth::user();
+        $allowedCategories = $this->getAllowedCategories($user);
+
         $validated = $request->validate([
             'name' => 'required|string|max:255',
+            'category' => ['required', 'string', Rule::in($allowedCategories)], // Validasi Kategori
             'input_date' => 'required|date',
             'photo' => 'required|image|mimes:jpeg,png,jpg,webp|max:2048',
+        ], [
+            'category.in' => 'Anda tidak memiliki hak akses untuk kategori ini.',
         ]);
 
         $photoPath = $request->file('photo')->store('inventories', 'public');
 
         Inventory::create([
             'name' => $validated['name'],
+            'category' => $validated['category'],
             'input_date' => $validated['input_date'],
             'photo_path' => $photoPath,
+            'status' => 'Baik' // Default status
         ]);
 
         return redirect()->route('staff.inventories.index')->with('success', 'Item inventaris berhasil ditambahkan.');
     }
-
     /**
      * Menampilkan formulir untuk mengedit item.
      */
     public function edit(Inventory $inventory)
     {
-        return view('user_staff2.inventaris.edit', compact('inventory'));
+        $user = Auth::user();
+        $allowedCategories = $this->getAllowedCategories($user);
+
+        if (!$user->is_admin && !in_array($inventory->category, $allowedCategories)) {
+            abort(403, 'Akses ditolak.');
+        }
+
+        return view('user_staff2.inventaris.edit', [
+            'inventory' => $inventory,
+            'categories' => $allowedCategories
+        ]);
     }
 
     /**
@@ -79,24 +157,32 @@ class InventoryController extends Controller
      */
     public function update(Request $request, Inventory $inventory)
     {
+        $user = Auth::user();
+        $allowedCategories = $this->getAllowedCategories($user);
+
+        // Security Check Awal
+        if (!$user->is_admin && !in_array($inventory->category, $allowedCategories)) {
+            abort(403);
+        }
+
         $validated = $request->validate([
             'name' => 'required|string|max:255',
+            'category' => ['required', 'string', Rule::in($allowedCategories)],
             'input_date' => 'required|date',
             'photo' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
         ]);
 
         $photoPath = $inventory->photo_path;
         if ($request->hasFile('photo')) {
-            // Hapus foto lama jika ada
             if ($inventory->photo_path) {
                 Storage::disk('public')->delete($inventory->photo_path);
             }
-            // Simpan foto baru
             $photoPath = $request->file('photo')->store('inventories', 'public');
         }
 
         $inventory->update([
             'name' => $validated['name'],
+            'category' => $validated['category'],
             'input_date' => $validated['input_date'],
             'photo_path' => $photoPath,
         ]);
@@ -104,12 +190,19 @@ class InventoryController extends Controller
         return redirect()->route('staff.inventories.index')->with('success', 'Item inventaris berhasil diperbarui.');
     }
 
+
     /**
      * Menghapus item inventaris dari database.
      */
     public function destroy(Inventory $inventory)
     {
-        // Hapus foto dari storage
+        $user = Auth::user();
+        $allowedCategories = $this->getAllowedCategories($user);
+
+        if (!$user->is_admin && !in_array($inventory->category, $allowedCategories)) {
+            abort(403, 'Akses ditolak.');
+        }
+
         if ($inventory->photo_path) {
             Storage::disk('public')->delete($inventory->photo_path);
         }
@@ -117,6 +210,7 @@ class InventoryController extends Controller
         $inventory->delete();
         return redirect()->route('staff.inventories.index')->with('success', 'Item inventaris berhasil dihapus.');
     }
+
 
     /**
      * === METHOD BARU: Memperbarui Status Kondisi ===
@@ -292,8 +386,12 @@ class InventoryController extends Controller
     /**
      * Mengekspor logbook inventaris ke PDF berdasarkan periode.
      */
+    /**
+     * Mengekspor logbook inventaris ke PDF berdasarkan periode.
+     */
     public function exportLogbookPdf(Request $request, Inventory $inventory)
     {
+        // 1. Validasi Input Periode (Format YYYY-MM dari input type="month")
         $validated = $request->validate([
             'month_year' => 'required|date_format:Y-m',
         ], [
@@ -307,23 +405,26 @@ class InventoryController extends Controller
             return back()->with('error', 'Format periode tidak valid.');
         }
 
+        // 2. Ambil Data Logbook
         $logbooks = $inventory->logbooks()
             ->whereYear('log_date', $period->year)
             ->whereMonth('log_date', $period->month)
-            ->with('user') // Eager load user
-            ->latest('log_date') // Urutkan berdasarkan tanggal
+            ->with('user') // Eager load user pencatat
+            ->latest('log_date')
             ->get();
 
         $periodeString = $period->translatedFormat('F Y');
 
+        // 3. Render View PDF
         $pdf = PDF::loadView('user_staff2.inventaris.logbook_pdf', [
             'inventory' => $inventory,
             'logbooks' => $logbooks,
             'periode' => $periodeString
         ]);
 
+        // 4. Set Ukuran Kertas & Download
         $pdf->setPaper('a4', 'portrait');
-
+        
         $fileName = 'Logbook-' . Str::slug($inventory->name) . '-' . $period->format('Y-m') . '.pdf';
         
         return $pdf->download($fileName);

@@ -394,8 +394,33 @@
                 {{-- Bagian Bawah: Tabel Auto Scroll --}}
                 <div class="card-table flex-fill" style="min-height: 0;">
                     <div class="table-header">
-                        <div class="table-title">Penerbangan Terakhir</div>
-                        <small class="text-muted text-xs"><i class="bi bi-circle-fill text-success me-1" style="font-size: 6px;"></i>Real-time</small>
+                        <div class="table-title"><i class="bi bi-clock-history me-2 text-primary"></i>Penerbangan Hari Ini</div> {{-- Judul Diubah --}}
+                    <span class="badge bg-success bg-opacity-10 text-success p-2 px-3" style="font-size: 0.75rem;">
+                        <i class="bi bi-calendar-check me-1"></i> 
+                        @php
+                            // Tentukan tanggal referensi (H-0). Asumsi Nataru: 25 Desember tahun start_date.
+                            // Anda bisa menyesuaikan logika ini jika referensi H-0 bukan 25 Des.
+                            $refDate = \Carbon\Carbon::create($nataruEvent->start_date->year, 12, 25);
+                            $today = \Carbon\Carbon::now();
+                            
+                            // Hitung selisih hari
+                            // diffInDays(target, false): 
+                            // Jika target > date (date sebelum H): hasil positif. (Misal 25 - 15 = 10) -> H-10
+                            // Jika target < date (date sesudah H): hasil negatif. (Misal 25 - 26 = -1) -> H+1
+                            // Kita kalikan -1 agar sesuai dengan logika controller sebelumnya
+                            $diff = $today->diffInDays($refDate, false) * -1;
+
+                            $label = "";
+                            if ($diff == 0) {
+                                $label = "Hari H";
+                            } elseif ($diff < 0) {
+                                $label = "H" . $diff; // H-10
+                            } else {
+                                $label = "H+" . $diff; // H+10
+                            }
+                        @endphp
+                        {{ $label }} ({{ $today->translatedFormat('d M') }})
+                    </span>
                     </div>
                     <div class="table-scroll-container" id="flights-scroll-container">
                         <table class="table-tv">
@@ -411,7 +436,7 @@
                                 </tr>
                             </thead>
                             <tbody id="flights-table-body">
-                                @forelse($nataruEvent->flights as $flight)
+                                @forelse($todaysFlights as $flight)
                                 <tr data-id="{{ $flight->id }}">
                                     <td class="fw-bold text-primary">{{ \Carbon\Carbon::parse($flight->flight_time)->format('H:i') }}</td>
                                     <td class="fw-bold text-dark">{{ $flight->airline }}</td>
@@ -585,19 +610,19 @@
                         type: 'flights', 
                         title: 'Tren Pesawat (Pergerakan)', 
                         cardId: 'card-flights',
-                        colors: ['#0d6efd', '#6610f2', '#0d6efd', '#6610f2'] // Biru & Ungu
+                        colors: ['#0d6efd', '#6610f2', '#BF124D', '#76153C'] // Biru & Ungu
                     },
                     { 
                         type: 'pax', 
                         title: 'Tren Penumpang (Orang)', 
                         cardId: 'card-pax',
-                        colors: ['#20c997', '#198754', '#20c997', '#198754'] // Hijau
+                        colors: ['#20c997', '#198754', '#C59560', '#E67E22'] // Hijau
                     },
                     { 
                         type: 'cargo', 
                         title: 'Tren Kargo (Kg)', 
                         cardId: 'card-cargo',
-                        colors: ['#ffc107', '#fd7e14', '#ffc107', '#fd7e14'] // Kuning & Oranye
+                        colors: ['#ffc107', '#fd7e14', '#E83C91', '#FF8FB7'] // Kuning & Oranye
                     }
                 ];
 
@@ -632,7 +657,7 @@
                             stacked: false 
                         },
                         colors: config.colors, 
-                        dataLabels: { enabled: false },
+                        dataLabels: { enabled: true },
                         stroke: { 
                             width: [0, 0, 2, 2], 
                             curve: 'smooth',

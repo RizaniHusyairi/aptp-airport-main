@@ -3,7 +3,19 @@
 @section('styles_admin')
     <link rel="stylesheet" href="{{ asset('assetsv2/extensions/datatables.net-bs5/css/dataTables.bootstrap5.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assetsv2/compiled/css/table-datatable-jquery.css') }}">
-
+    {{-- 1. Tambahkan CSS Choices.js --}}
+    <link rel="stylesheet" href="{{ asset('assetsv2/extensions/choices.js/public/assets/styles/choices.css') }}">
+    <style>
+        .choices__inner {
+            background-color: #fff;
+            border-radius: .25rem;
+            min-height: 44px;
+        }
+        .choices__list--multiple .choices__item {
+            background-color: #435ebe;
+            border-color: #435ebe;
+        }
+    </style>
 @endsection
 @section('content')
 <div class="page-heading">
@@ -29,7 +41,7 @@
             <h4>Edit Role: {{ $role->name }}</h4>
         </div>
         <div class="card-body">
-            <form action="{{ route('roles.update', $role->id) }}" method="POST">
+            <form action="{{ route('roles.update', $role->id) }}" method="POST" id="editRoleForm">
                 @csrf
                 @method('PUT')
                 <div class="row">
@@ -74,54 +86,55 @@
                             </div>
                         </div>
 
-                        {{-- === AREA KATEGORI PROGRAM KERJA (Hidden by Default) === --}}
+                        {{-- === AREA KATEGORI (Unified untuk Proker & Inventaris) === --}}
                         <div id="workProgramOptions" class="mt-4 p-4 border rounded" style="display: none; border-left: 5px solid #ffc107 !important;">
                             <h6 class="text-primary d-flex align-items-center">
-                                <i class="bi bi-diagram-3-fill me-2"></i> Konfigurasi Program Kerja
+                                <i class="bi bi-diagram-3-fill me-2"></i> Konfigurasi Kategori Tugas
                             </h6>
-                            <p class="text-muted small mb-3">
-                                Atur cakupan kerja untuk role <strong>{{ $role->name }}</strong>:
+                            <p class="small mb-3">
+                                Atur cakupan kerja (Program Kerja / Inventaris) untuk role <strong>{{ $role->name }}</strong>:
                             </p>
                             
-                            {{-- 1. Dropdown Multi-select untuk Kategori --}}
+                            {{-- Dropdown Multi-select --}}
                             <div class="form-group mb-3">
-                                <label for="work_categories" class="form-label fw-bold">Pilih Kategori Tugas</label>
-                                <select class="form-select" name="work_categories[]" id="work_categories" multiple style="height: 150px;">
+                                <label for="work_categories" class="form-label fw-bold">Pilih Kategori</label>
+                                <select class="choices form-select" name="work_categories[]" id="work_categories" multiple>
                                     @foreach($workCategories as $category)
                                         <option value="{{ $category }}" 
-                                            {{-- Cek apakah kategori ini ada di array $selectedCategories --}}
                                             {{ in_array($category, $selectedCategories) ? 'selected' : '' }}>
                                             {{ $category }}
                                         </option>
                                     @endforeach
                                 </select>
+                                <div id="category-error" class="text-danger small mt-1" style="display:none;">Harap pilih setidaknya satu kategori.</div>
                                 <small class="text-muted">
-                                    * Tahan tombol <strong>CTRL</strong> (Windows) atau <strong>Command</strong> (Mac) untuk memilih lebih dari satu.
+                                    * Klik pada kotak untuk memilih/mencari kategori.
                                 </small>
                             </div>
 
-                            <hr>
-
-                            {{-- 2. Opsi Verifikator --}}
-                            <div class="form-check form-switch">
-                                {{-- Cek apakah $canVerify bernilai true --}}
-                                <input class="form-check-input" type="checkbox" name="assign_verifier_permission" id="assignVerifierPermission" value="1" 
-                                    {{ $canVerify ? 'checked' : '' }}>
-                                <label class="form-check-label fw-bold" for="assignVerifierPermission">
-                                    Izinkan Verifikasi Program Kerja?
-                                </label>
-                                <small class="d-block text-muted mt-1">
-                                    Aktifkan jika role ini bertugas memverifikasi pekerjaan staf lain.
-                                </small>
+                            {{-- Wrapper Opsi Verifikator --}}
+                            <div id="verifierOptionContainer" style="display: none;">
+                                <hr>
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" name="assign_verifier_permission" id="assignVerifierPermission" value="1" 
+                                        {{ $canVerify ? 'checked' : '' }}>
+                                    <label class="form-check-label fw-bold" for="assignVerifierPermission">
+                                        Izinkan Verifikasi Program Kerja?
+                                    </label>
+                                    <small class="d-block mt-1">
+                                        Aktifkan jika role ini bertugas memverifikasi pekerjaan staf lain (Khusus Program Kerja).
+                                    </small>
+                                </div>
                             </div>
                         </div>
+                        {{-- === AKHIR AREA KATEGORI === --}}
 
                     </div>
                 </div>
                 <div class="row mt-4">
                     <div class="col-12 d-flex justify-content-end">
                         <a href="{{ route('roles.index') }}" class="btn btn-secondary me-2">Kembali</a>
-                        <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                        <button type="submit" class="btn btn-primary" id="submitButton">Simpan Perubahan</button>
                     </div>
                 </div>
             </form>
@@ -129,72 +142,91 @@
     </div>
 </section>
 @endsection
+
 @section('scripts_admin')
     <script src="{{ asset('assetsv2/extensions/jquery/jquery.min.js') }}"></script>
+    <script src="{{ asset('assetsv2/extensions/choices.js/public/assets/scripts/choices.js') }}"></script>
+
     <script>
         $(document).ready(function () {
-            $('#createRoleForm').on('submit', function (e) {
-                const roleName = $('#roleName').val().trim();
-                const permissionsChecked = $('input[name="permissions[]"]:checked').length;
+            let choicesInstance;
+            const element = document.querySelector('#work_categories');
+            if (element) {
+                choicesInstance = new Choices(element, {
+                    removeItemButton: true,
+                    placeholder: true,
+                    placeholderValue: 'Pilih Kategori...',
+                    searchPlaceholderValue: 'Cari kategori...',
+                    shouldSort: false,
+                });
+            }
 
-                if (!roleName) {
-                    e.preventDefault();
-                    $('#roleName').addClass('is-invalid');
-                    if (!$('#roleName').next('.invalid-feedback').length) {
-                        $('#roleName').after('<div class="invalid-feedback">Nama role wajib diisi.</div>');
+            // Logika Tampilkan/Sembunyikan
+            function toggleOptions() {
+                let isProkerChecked = false;
+                let isInventarisChecked = false;
+
+                $('.permission-checkbox').each(function() {
+                    const name = $(this).data('name');
+                    if (name === 'Manajemen Program Kerja' && $(this).is(':checked')) {
+                        isProkerChecked = true;
                     }
-                }
-
-                if (permissionsChecked === 0) {
-                    e.preventDefault();
-                    if (!$('.form-group .text-danger').length) {
-                        $('.form-group .row.mt-2').before('<div class="text-danger mb-2">Pilih setidaknya satu izin.</div>');
+                    if (name === 'Manajemen Inventaris' && $(this).is(':checked')) {
+                        isInventarisChecked = true;
                     }
-                }
-
-                if (roleName && permissionsChecked > 0) {
-                    $('#submitButton').find('.spinner-border').removeClass('d-none');
-                    $('#submitButton').prop('disabled', true);
-                }
-            });
-
-            $('#roleName').on('input', function () {
-                $(this).removeClass('is-invalid');
-                $(this).next('.invalid-feedback').remove();
-            });
-
-            $('input[name="permissions[]"]').on('change', function () {
-                $('.form-group .text-danger').remove();
-            });
-
-            function toggleWorkProgramOptions() {
-                // Cari checkbox permission 'Manajemen Program Kerja'
-                // Kita gunakan filter attribute selector karena ID permission dinamis
-                const programKerjaCheckbox = $('.permission-checkbox').filter(function() {
-                    return $(this).data('name') === 'Manajemen Program Kerja';
                 });
 
                 const optionsContainer = $('#workProgramOptions');
+                const verifierContainer = $('#verifierOptionContainer');
 
-                if (programKerjaCheckbox.is(':checked')) {
+                if (isProkerChecked || isInventarisChecked) {
                     optionsContainer.slideDown();
-                    $('#work_categories').prop('required', true);
                 } else {
                     optionsContainer.slideUp();
-                    $('#work_categories').prop('required', false);
-                    // Kita TIDAK mereset value di sini agar data edit tidak hilang jika user tak sengaja uncheck
+                }
+
+                // Verifikasi hanya relevan untuk Program Kerja
+                if (isProkerChecked) {
+                    verifierContainer.slideDown();
+                } else {
+                    verifierContainer.slideUp();
+                    // Opsional: uncheck jika disembunyikan agar tidak tersimpan tidak sengaja
+                    // $('#assignVerifierPermission').prop('checked', false); 
                 }
             }
 
-            // Jalankan saat checkbox berubah
-            $(document).on('change', '.permission-checkbox', function() {
-                if($(this).data('name') === 'Manajemen Program Kerja') {
-                    toggleWorkProgramOptions();
+            $(document).on('change', '.permission-checkbox', toggleOptions);
+            toggleOptions();
+
+            // Validasi Manual
+            $('#editRoleForm').on('submit', function(e) {
+                let isValid = true;
+                $('#category-error').hide();
+                
+                let needCategory = false;
+                $('.permission-checkbox').each(function() {
+                    const name = $(this).data('name');
+                    if ((name === 'Manajemen Program Kerja' || name === 'Manajemen Inventaris') && $(this).is(':checked')) {
+                        needCategory = true;
+                    }
+                });
+
+                if (needCategory) {
+                    const selectedValues = choicesInstance.getValue(true);
+                    if (selectedValues.length === 0) {
+                        e.preventDefault();
+                        $('#category-error').show();
+                        isValid = false;
+                        $('html, body').animate({
+                            scrollTop: $("#workProgramOptions").offset().top - 100
+                        }, 500);
+                    }
+                }
+                
+                if(isValid) {
+                    $('#submitButton').prop('disabled', true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Menyimpan...');
                 }
             });
-            
-            // Jalankan SEGERA saat halaman dimuat untuk menampilkan state awal
-            toggleWorkProgramOptions();
         });
     </script>
 @endsection

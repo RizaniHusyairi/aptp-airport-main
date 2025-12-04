@@ -122,10 +122,20 @@ class PublicNataruController extends Controller
     {
         $nataruEvent = NataruEvent::where('public_token', $token)->firstOrFail();
 
-        // 1. Load Data Penerbangan Event Ini (Limit 10 terbaru)
-        $nataruEvent->load(['flights' => function($query) {
-            $query->orderBy('flight_date', 'desc')->orderBy('flight_time', 'desc')->take(10);
-        }, 'compareEvent']); 
+        // 1. Load Data Penerbangan Event Ini (HANYA HARI INI)
+        // Kita gunakan relasi 'flights' tapi dengan kondisi tambahan
+        $todayDate = Carbon::today()->format('Y-m-d');
+
+        // Load data flights HARI INI untuk tabel (Limit bisa diperbesar atau dihapus jika pakai auto-scroll)
+        // Kita load terpisah agar tidak mengganggu perhitungan statistik total event
+        $todaysFlights = $nataruEvent->flights()
+                                     ->whereDate('flight_date', $todayDate)
+                                     ->orderBy('flight_time', 'desc')
+                                     ->get(); // Ambil semua data hari ini untuk di-scroll
+
+
+        // Load event pembanding untuk keperluan statistik
+        $nataruEvent->load('compareEvent'); 
         
         // 2. Hitung Statistik Saat Ini
         $currentStats = [
@@ -164,7 +174,7 @@ class PublicNataruController extends Controller
             ];
         }
 
-        return view('public.nataru.tv_dashboard', compact('nataruEvent', 'currentStats', 'comparison'));
+        return view('public.nataru.tv_dashboard', compact('nataruEvent', 'currentStats', 'comparison','todaysFlights'));
     }
 
     /**

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->enum('status', ['Baik', 'Pemeliharaan'])->default('Baik');
             $table->string('photo_path'); // Untuk Path Foto Alat
             $table->string('maintenance_report_link')->nullable();
+            $table->string('category')->nullable();
             $table->date('input_date'); // Untuk Tanggal Penginputan
             // Kolom untuk status kondisi alat
             

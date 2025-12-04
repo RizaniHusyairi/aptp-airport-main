@@ -5,6 +5,19 @@
         <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" value="{{ old('name', $inventory->name ?? '') }}" required>
         @error('name')<div class="invalid-feedback">{{ $message }}</div>@enderror
     </div>
+    
+    {{-- INPUT KATEGORI BARU --}}
+    <div class="col-md-6 mb-3">
+        <label for="category" class="form-label">Kategori Alat <span class="text-danger">*</span></label>
+        <select class="form-select @error('category') is-invalid @enderror" id="category" name="category" required>
+            <option value="" selected disabled>Pilih Kategori...</option>
+            @foreach ($categories as $cat)
+                <option value="{{ $cat }}" @selected(old('category', $inventory->category ?? '') == $cat)>{{ $cat }}</option>
+            @endforeach
+        </select>
+        @error('category')<div class="invalid-feedback">{{ $message }}</div>@enderror
+    </div>
+
     <div class="col-md-6 mb-3">
         <label for="input_date" class="form-label">Tanggal Penginputan <span class="text-danger">*</span></label>
         <input type="date" class="form-control @error('input_date') is-invalid @enderror" id="input_date" name="input_date" value="{{ old('input_date', isset($inventory) ? $inventory->input_date->format('Y-m-d') : now()->format('Y-m-d')) }}" required>
