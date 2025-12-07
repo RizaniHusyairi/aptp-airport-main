@@ -335,6 +335,7 @@ Route::group(["prefix" => 'dashboard'], function () {
             Route::post('staff/posko-nataru/store', [NataruController::class, 'store'])->name('staff.nataru.store');
             Route::delete('staff/posko-nataru/{id}', [NataruController::class, 'destroy'])->name('staff.nataru.destroy');
             Route::resource('staff/nataru-events', NataruEventController::class)->names('staff.nataru-events');
+            Route::get('staff/nataru-events/{nataruEvent}/export', [NataruEventController::class, 'exportExcel'])->name('staff.nataru-events.export');
 
             // Dashboard Monitoring Nataru
             Route::get('staff/nataru-dashboard', [DashboardNataruController::class, 'index'])->name('staff.nataru.dashboard');

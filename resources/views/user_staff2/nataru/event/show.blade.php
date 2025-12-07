@@ -60,15 +60,21 @@
                         <h6 class="text-muted mb-1">Link Input Data (Publik)</h6>
                         <small>Bagikan kepada petugas lapangan.</small>
                     </div>
-                    <div class="input-group" style="max-width: 500px;">
+                    <div class="input-group">
                         <input type="text" class="form-control" value="{{ route('public.nataru.form', $nataruEvent->public_token) }}" id="publicLink" readonly>
                         <button class="btn btn-primary" onclick="copyLink()">
                             <i class="bi bi-clipboard"></i> Salin
                         </button>
-                        <a href="{{ route('public.nataru.form', $nataruEvent->public_token) }}" target="_blank" class="btn btn-outline-secondary">
+                        <a href="{{ route('public.nataru.form', $nataruEvent->public_token) }}" target="_blank" class="btn btn-outline-secondary" title="Buka Form">
                             <i class="bi bi-box-arrow-up-right"></i>
                         </a>
-                        {{-- TOMBOL BARU UNTUK TV --}}
+                        
+                        {{-- TOMBOL EXPORT EXCEL BARU --}}
+                        <a href="{{ route('staff.nataru-events.export', $nataruEvent->id) }}" class="btn btn-success ms-2 text-white fw-bold" title="Download Excel">
+                            <i class="bi bi-file-earmark-excel"></i> Export Excel
+                        </a>
+
+                        {{-- TOMBOL TV --}}
                         <a href="{{ route('public.nataru.tv', $nataruEvent->public_token) }}" target="_blank" class="btn btn-warning text-dark fw-bold ms-2" title="Buka Tampilan TV">
                             <i class="bi bi-display"></i> Mode TV
                         </a>
