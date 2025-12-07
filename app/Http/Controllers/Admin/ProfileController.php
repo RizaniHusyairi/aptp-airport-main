@@ -41,7 +41,9 @@ class ProfileController extends Controller
                     'Manajemen Suku Cadang' => 'warning',
                     'Permintaan Suku Cadang' => 'warning',
                     'Manajemen Program Kerja' => 'light',
-                    "Manajemen Absensi Rapat" => 'secondary'
+                    "Manajemen Absensi Rapat" => 'secondary',
+                    "Verifikasi Program Kerja" => 'info',
+                    "Manajemen Posko Nataru" => 'danger',
                 ];
 
         // $lastFlights = Flight::latest()->take(5)->get();
