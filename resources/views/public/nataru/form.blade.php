@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Input Data Posko - {{ $event->name }}</title>
     
-    {{-- Menggunakan CSS dari template Mazer agar konsisten dan bagus --}}
     <link rel="stylesheet" href="{{ asset('assetsv2/compiled/css/app.css') }}">
     <link rel="stylesheet" href="{{ asset('assetsv2/compiled/css/app-dark.css') }}">
     <link rel="stylesheet" href="{{ asset('assetsv2/compiled/css/iconly.css') }}">
@@ -76,7 +75,7 @@
                     </div>
                 @endif
 
-                <form action="{{ route('public.nataru.store', $event->public_token) }}" method="POST">
+                <form action="{{ route('public.nataru.store', $event->public_token) }}" method="POST" id="nataruForm">
                     @csrf
                     
                     {{-- SEKSI 1: WAKTU & STATUS --}}
@@ -103,20 +102,31 @@
                     {{-- SEKSI 2: IDENTITAS PENERBANGAN --}}
                     <div class="form-section-title">2. Identitas Penerbangan</div>
                     <div class="row">
+                        {{-- === UPDATE INPUT MASKAPAI === --}}
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Maskapai (Airline) <span class="required-star">*</span></label>
-                            <input type="text" name="airline" class="form-control" placeholder="Contoh: Batik Air" value="{{ old('airline') }}" list="airlineOptions" required>
-                            <datalist id="airlineOptions">
-                                <option value="Batik Air">
-                                <option value="Lion Air">
-                                <option value="Citilink">
-                                <option value="Super Air Jet">
-                                <option value="Garuda Indonesia">
-                                <option value="Wings Air">
-                                <option value="Susi Air">
-                                <option value="Smart Aviation">
-                            </datalist>
+                            <select name="airline_select" id="airline_select" class="form-select" required>
+                                <option value="" selected disabled>-- Pilih Maskapai --</option>
+                                <option value="Batik Air" {{ old('airline_select') == 'Batik Air' ? 'selected' : '' }}>Batik Air</option>
+                                <option value="Garuda Indonesia" {{ old('airline_select') == 'Garuda Indonesia' ? 'selected' : '' }}>Garuda Indonesia</option>
+                                <option value="Citilink" {{ old('airline_select') == 'Citilink' ? 'selected' : '' }}>Citilink</option>
+                                <option value="Super Air Jet" {{ old('airline_select') == 'Super Air Jet' ? 'selected' : '' }}>Super Air Jet</option>
+                                <option value="Wings Air" {{ old('airline_select') == 'Wings Air' ? 'selected' : '' }}>Wings Air</option>
+                                <option value="Smart Aviation" {{ old('airline_select') == 'Smart Aviation' ? 'selected' : '' }}>Smart Aviation</option>
+                                
+                                <option value="Lainnya" {{ old('airline_select') == 'Lainnya' ? 'selected' : '' }}>Lainnya..</option>
+                            </select>
+                            
+                            {{-- Input Tambahan untuk Lainnya --}}
+                            <div id="other_airline_container" class="mt-2" style="display: none;">
+                                <input type="text" name="other_airline" id="other_airline" class="form-control" placeholder="Tulis nama maskapai..." value="{{ old('other_airline') }}">
+                            </div>
+                            
+                            {{-- Input Hidden yang akan dikirim ke server sebagai 'airline' --}}
+                            <input type="hidden" name="airline" id="airline_final" value="{{ old('airline') }}">
                         </div>
+                        {{-- ============================ --}}
+
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Nomor Penerbangan <span class="required-star">*</span></label>
                             <input type="text" name="flight_number" class="form-control" placeholder="Contoh: ID-6257" value="{{ old('flight_number') }}" required>
@@ -184,12 +194,14 @@
                     <div class="form-section-title">4. Data Ekonomi (Tiket)</div>
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label class="form-label">Harga Tiket Tertinggi (Rp)</label>
-                            <input type="number" name="ticket_price_high" class="form-control" placeholder="0" value="{{ old('ticket_price_high') }}">
+                            <label class="form-label">Harga Tiket Tertinggi</label>
+                            {{-- Ganti type="number" dengan "text" agar bisa format rupiah --}}
+                            <input type="text" name="ticket_price_high" id="ticket_price_high" class="form-control rupiah-input" placeholder="Rp 0" value="{{ old('ticket_price_high') }}">
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label class="form-label">Harga Tiket Terendah (Rp)</label>
-                            <input type="number" name="ticket_price_low" class="form-control" placeholder="0" value="{{ old('ticket_price_low') }}">
+                            <label class="form-label">Harga Tiket Terendah</label>
+                            {{-- Ganti type="number" dengan "text" agar bisa format rupiah --}}
+                            <input type="text" name="ticket_price_low" id="ticket_price_low" class="form-control rupiah-input" placeholder="Rp 0" value="{{ old('ticket_price_low') }}">
                         </div>
                     </div>
 
@@ -220,13 +232,44 @@
     </div>
 
     <script>
-        // Script Sederhana untuk Hitung Otomatis di Frontend
         document.addEventListener('DOMContentLoaded', function() {
+            // 1. Logika Dropdown Maskapai
+            const airlineSelect = document.getElementById('airline_select');
+            const otherAirlineContainer = document.getElementById('other_airline_container');
+            const otherAirlineInput = document.getElementById('other_airline');
+            const airlineFinalInput = document.getElementById('airline_final');
+
+            function handleAirlineChange() {
+                if (airlineSelect.value === 'Lainnya') {
+                    otherAirlineContainer.style.display = 'block';
+                    otherAirlineInput.setAttribute('required', 'required');
+                    airlineFinalInput.value = otherAirlineInput.value;
+                } else {
+                    otherAirlineContainer.style.display = 'none';
+                    otherAirlineInput.removeAttribute('required');
+                    airlineFinalInput.value = airlineSelect.value;
+                }
+            }
+
+            // Event saat dropdown berubah
+            airlineSelect.addEventListener('change', handleAirlineChange);
+
+            // Event saat input "Lainnya" diketik
+            otherAirlineInput.addEventListener('input', function() {
+                if (airlineSelect.value === 'Lainnya') {
+                    airlineFinalInput.value = this.value;
+                }
+            });
+
+            // Jalankan sekali saat load (untuk handle old input saat validasi gagal)
+            handleAirlineChange();
+
+
+            // 2. Logika Hitung Pax & LF (Yang sudah ada sebelumnya)
             const adultInput = document.getElementById('pax_adult');
             const childInput = document.getElementById('pax_child');
             const infantInput = document.getElementById('pax_infant');
             const totalDisplay = document.getElementById('total_pax_display');
-            
             const seatCapInput = document.getElementById('seat_capacity');
             const lfPreview = document.getElementById('lf_preview');
 
@@ -235,12 +278,9 @@
                 const child = parseInt(childInput.value) || 0;
                 const infant = parseInt(infantInput.value) || 0;
                 
-                // Hitung Total
                 const total = adult + child + infant;
                 totalDisplay.value = total;
 
-                // Hitung Load Factor (Pax duduk / Kapasitas)
-                // Infant biasanya dipangku, jadi yang dihitung Adult + Child
                 const seatsOccupied = adult + child;
                 const capacity = parseInt(seatCapInput.value) || 0;
 
@@ -252,9 +292,55 @@
                 }
             }
 
-            // Pasang event listener
             [adultInput, childInput, infantInput, seatCapInput].forEach(input => {
                 input.addEventListener('input', calculate);
+            });
+            
+            // Hitung awal
+            calculate();
+
+            // 3. Logika Format Rupiah
+            const rupiahInputs = document.querySelectorAll('.rupiah-input');
+
+            // Fungsi Format Rupiah
+            function formatRupiah(angka, prefix) {
+                var number_string = angka.replace(/[^,\d]/g, '').toString(),
+                    split = number_string.split(','),
+                    sisa = split[0].length % 3,
+                    rupiah = split[0].substr(0, sisa),
+                    ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+                if (ribuan) {
+                    separator = sisa ? '.' : '';
+                    rupiah += separator + ribuan.join('.');
+                }
+
+                rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+                return prefix == undefined ? rupiah : (rupiah ? 'Rp ' + rupiah : '');
+            }
+
+            // Pasang event listener untuk input rupiah
+            rupiahInputs.forEach(input => {
+                // Saat diketik
+                input.addEventListener('keyup', function(e) {
+                    this.value = formatRupiah(this.value, 'Rp');
+                });
+                
+                // Format awal jika ada old input
+                if(input.value) {
+                    input.value = formatRupiah(input.value, 'Rp');
+                }
+            });
+
+            // Bersihkan format rupiah sebelum submit agar data bersih (integer/decimal)
+            const form = document.getElementById('nataruForm');
+            form.addEventListener('submit', function() {
+                rupiahInputs.forEach(input => {
+                    // Hapus karakter non-digit (termasuk "Rp", titik, spasi)
+                    // Sisakan koma jika ingin support desimal, lalu ganti jadi titik
+                    // Di sini kita asumsikan harga bulat (integer)
+                    input.value = input.value.replace(/[^0-9]/g, '');
+                });
             });
         });
     </script>

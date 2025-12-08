@@ -59,6 +59,8 @@
                             @enderror
                             <div class="row mt-2">
                                 @foreach ($permissions as $permission)
+                                    @if ($permission->permission_name !== 'Verifikasi Program Kerja')
+                                        
                                     <div class="col-lg-6 col-md-6 col-sm-12 mb-2">
                                         <div class="form-check">
                                             <input class="form-check-input permission-checkbox" type="checkbox"
@@ -72,6 +74,7 @@
                                             </label>
                                         </div>
                                     </div>
+                                    @endif
                                 @endforeach
                             </div>
                         </div>

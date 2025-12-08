@@ -41,10 +41,13 @@ class RoleController extends Controller
 
     public function create(Request $request)
     {
-        $permissions = Permission::all(['id', 'permission_name']);
+        // PERUBAHAN: Filter permission agar 'Verifikasi Program Kerja' tidak muncul di list utama
+        $permissions = Permission::where('permission_name', '!=', 'Verifikasi Program Kerja')
+                                ->get(['id', 'permission_name']);
+                                
         return view('admin2.roles.create', [
             'permissions' => $permissions,
-            'workCategories' => $this->workCategories // Kirim daftar kategori
+            'workCategories' => $this->workCategories 
         ]);
     }
 
@@ -106,15 +109,18 @@ class RoleController extends Controller
     public function edit($id)
     {
         $role = Role::with('permissions')->findOrFail($id);
-        $permissions = Permission::all();
+        
+        // Filter permission
+        $permissions = Permission::where('permission_name', '!=', 'Verifikasi Program Kerja')->get();
+        
         $isCoreRole = in_array($role->name, $this->coreRoles);
         
-        // Ambil kategori yang sudah tersimpan untuk role ini
         $selectedCategories = RoleWorkCategory::where('role_id', $role->id)->pluck('category_name')->toArray();
-        $canVerify = RoleWorkCategory::where('role_id', $role->id)->where('can_verify', true)->exists();
-// === PERBAIKAN DI SINI: Ambil ID permission yang dimiliki role ===
+        
+        // Cek manual apakah role punya permission verifikasi
+        $canVerify = $role->permissions->where('permission_name', 'Verifikasi Program Kerja')->isNotEmpty();
+        
         $rolePermissions = $role->permissions->pluck('id')->toArray();
-
 
         return view('admin2.roles.edit', [
             'role' => $role,

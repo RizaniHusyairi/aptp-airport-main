@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\NataruEvent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use App\Exports\NataruFlightExport; // Import Class Export
+use Maatwebsite\Excel\Facades\Excel; // Import Facade Excel
 
 class NataruEventController extends Controller
 {
@@ -128,5 +130,12 @@ class NataruEventController extends Controller
         } catch (\Exception $e) {
             return back()->with('error', 'Gagal menghapus event. Pastikan tidak ada data penerbangan terkait.');
         }
+    }
+
+    public function exportExcel(NataruEvent $nataruEvent)
+    {
+        $fileName = 'Data_Posko_' . Str::slug($nataruEvent->name) . '_' . date('Y-m-d_His') . '.xlsx';
+        
+        return Excel::download(new NataruFlightExport($nataruEvent->id), $fileName);
     }
 }

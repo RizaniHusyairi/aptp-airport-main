@@ -8,19 +8,27 @@
 @php
     $colorMap = [
                     'Manajemen Tenant' => 'primary',
-                    'Manajemen Sewa Lahan' => 'success',
+                    'Manajemen Sewa' => 'success',
                     'Manajemen Perijinan Usaha' => 'warning',
                     'Manajemen Pengiklanan' => 'info',
                     'Manajemen Field Trip' => 'secondary',
                     'Manajemen Berita' => 'danger',
-                    'Manajemen Laporan Keuangan' => 'dark',
-                    'Manajemen Slider' => 'light',
+                    'Manajemen Kinerja Keuangan' => 'dark',
+                    'Manajemen Perijinan Kerja' => 'light',
                     'Manajemen Ajuan Informasi Publik' => 'primary',
                     'Manajemen Lalu Lintas Angkutan Udara' => 'danger',
                     'Manajemen Regulasi' => 'success',
                     'Manajemen Lelang' => 'info',
                     'Manajemen Pengaduan' => 'secondary',
                     'Manajemen Slot Charter' => 'warning',
+                    'Manajemen Extend Advance' => 'primary',
+                    'Manajemen Inventaris' => 'secondary',
+                    'Manajemen Suku Cadang' => 'warning',
+                    'Permintaan Suku Cadang' => 'warning',
+                    'Manajemen Program Kerja' => 'light',
+                    "Manajemen Absensi Rapat" => 'secondary',
+                    "Verifikasi Program Kerja" => 'info',
+                    "Manajemen Posko Nataru" => 'danger',
                 ];
 @endphp
 
