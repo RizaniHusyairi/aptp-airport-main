@@ -122,7 +122,7 @@
                             <input type="text" name="flight_number" class="form-control" placeholder="Contoh: ID-6257" value="{{ old('flight_number') }}" required>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label class="form-label">Arah (Direction) <span class="required-star">*</span></label>
+                            <label class="form-label">Status <span class="required-star">*</span></label>
                             <select name="direction" class="form-select" required>
                                 <option value="" selected disabled>-- Pilih Arah --</option>
                                 <option value="arrival" {{ old('direction') == 'arrival' ? 'selected' : '' }}>Arrival (Kedatangan)</option>

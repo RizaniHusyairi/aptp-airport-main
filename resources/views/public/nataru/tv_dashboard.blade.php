@@ -395,32 +395,32 @@
                 <div class="card-table flex-fill" style="min-height: 0;">
                     <div class="table-header">
                         <div class="table-title"><i class="bi bi-clock-history me-2 text-primary"></i>Penerbangan Hari Ini</div> {{-- Judul Diubah --}}
-                    <span class="badge bg-success bg-opacity-10 text-success p-2 px-3" style="font-size: 0.75rem;">
-                        <i class="bi bi-calendar-check me-1"></i> 
-                        @php
-                            // Tentukan tanggal referensi (H-0). Asumsi Nataru: 25 Desember tahun start_date.
-                            // Anda bisa menyesuaikan logika ini jika referensi H-0 bukan 25 Des.
-                            $refDate = \Carbon\Carbon::create($nataruEvent->start_date->year, 12, 25);
-                            $today = \Carbon\Carbon::now();
-                            
-                            // Hitung selisih hari
-                            // diffInDays(target, false): 
-                            // Jika target > date (date sebelum H): hasil positif. (Misal 25 - 15 = 10) -> H-10
-                            // Jika target < date (date sesudah H): hasil negatif. (Misal 25 - 26 = -1) -> H+1
-                            // Kita kalikan -1 agar sesuai dengan logika controller sebelumnya
-                            $diff = $today->diffInDays($refDate, false) * -1;
+                        <span class="badge bg-success bg-opacity-10 text-success p-2 px-3" style="font-size: 0.75rem;">
+                            <i class="bi bi-calendar-check me-1"></i> 
+                            @php
+                                // Tentukan tanggal referensi (H-0). Asumsi Nataru: 25 Desember tahun start_date.
+                                // Anda bisa menyesuaikan logika ini jika referensi H-0 bukan 25 Des.
+                                $refDate = \Carbon\Carbon::create($nataruEvent->start_date->year, 12, 25);
+                                $today = \Carbon\Carbon::now();
+                                
+                                // Hitung selisih hari
+                                // diffInDays(target, false): 
+                                // Jika target > date (date sebelum H): hasil positif. (Misal 25 - 15 = 10) -> H-10
+                                // Jika target < date (date sesudah H): hasil negatif. (Misal 25 - 26 = -1) -> H+1
+                                // Kita kalikan -1 agar sesuai dengan logika controller sebelumnya
+                                $diff = $today->diffInDays($refDate, false) * -1;
 
-                            $label = "";
-                            if ($diff == 0) {
-                                $label = "Hari H";
-                            } elseif ($diff < 0) {
-                                $label = "H" . $diff; // H-10
-                            } else {
-                                $label = "H+" . $diff; // H+10
-                            }
-                        @endphp
-                        {{ $label }} ({{ $today->translatedFormat('d M') }})
-                    </span>
+                                $label = "";
+                                if ($diff == 0) {
+                                    $label = "Hari H";
+                                } elseif ($diff < 0) {
+                                    $label = "H" . $diff; // H-10
+                                } else {
+                                    $label = "H+" . $diff; // H+10
+                                }
+                            @endphp
+                            {{ $label }} ({{ $today->translatedFormat('d M') }})
+                        </span>
                     </div>
                     <div class="table-scroll-container" id="flights-scroll-container">
                         <table class="table-tv">
@@ -461,7 +461,6 @@
                         </table>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
