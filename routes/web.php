@@ -447,7 +447,6 @@ Route::post('/posko/input/{token}', [PublicNataruController::class, 'store'])->n
 // === ROUTE BARU UNTUK TV DISPLAY ===
 Route::get('/posko/tv/{token}', [PublicNataruController::class, 'tvDashboard'])->name('public.nataru.tv');
 
-// === TAMBAHKAN INI: API Chart untuk TV ===
 Route::get('/posko/tv/{token}/chart', [PublicNataruController::class, 'getTvChartData'])->name('public.nataru.chart');
 
 Route::get('/keberangkatan', [LandingPageController::class, 'keberangkatan'])->name('keberangkatan');

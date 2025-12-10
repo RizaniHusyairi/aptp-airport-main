@@ -381,11 +381,11 @@
                 
                 {{-- Bagian Atas: Grafik --}}
                 @if($nataruEvent->compare_event_id)
-                <div class="chart-container flex-fill" style="height: 150%; min-height: 0;">
+                <div class="chart-container flex-fill" style="height: 200%; min-height: 0;">
                     <div class="chart-progress-bar" id="chart-progress"></div> {{-- Progress Bar untuk rotasi --}}
                     <div class="d-flex justify-content-between align-items-center mb-1 flex-shrink-0">
                         <h6 class="mb-0 text-dark text-uppercase fw-bold" style="letter-spacing: 1px; font-size: 0.85rem;" id="chart-title">Tren Pesawat</h6> {{-- Judul Dinamis --}}
-                        <small class="text-muted text-xs">H-10 s/d H+10</small>
+                        
                     </div>
                     <div id="chartPaxTv" style="flex-grow: 1; min-height: 0;"></div>
                 </div>
@@ -532,6 +532,9 @@
                     updateStatIfChanged('val-cargo', doc);
                     updateStatIfChanged('val-lf', doc);
                     
+                    updateStatIfChanged('val-max-price', doc);
+                    updateStatIfChanged('val-min-price', doc);
+
                     updateContentIfChanged('diff-flights', doc);
                     updateContentIfChanged('diff-pax', doc);
                     updateContentIfChanged('diff-cargo', doc);
@@ -595,7 +598,7 @@
 
         setInterval(updateDashboard, 30000);
 
-        // 4. Grafik Light Mode dengan Rotasi (Pesawat -> Penumpang -> Cargo)
+        // 4. Grafik Light Mode dengan Auto Update Data & Rotasi
         document.addEventListener('DOMContentLoaded', function () {
             @if($nataruEvent->compare_event_id)
                 const chartUrl = "{{ route('public.nataru.chart', $nataruEvent->public_token) }}";
@@ -603,139 +606,130 @@
                 let currentChartIndex = 0; // 0: Flights, 1: Pax, 2: Cargo
                 let globalChartData = null;
 
-                // Definisi Konfigurasi per Tipe Grafik
+                // Definisi Konfigurasi (Tetap sama)
                 const chartConfigs = [
                     { 
-                        type: 'flights', 
-                        title: 'Tren Pesawat (Pergerakan)', 
-                        cardId: 'card-flights',
-                        colors: ['#0d6efd', '#6610f2', '#BF124D', '#76153C'] // Biru & Ungu
+                        type: 'flights', title: 'Tren Pesawat (Pergerakan)', cardId: 'card-flights',
+                        colors: ['#0d6efd', '#6610f2', '#BF124D', '#76153C'] 
                     },
                     { 
-                        type: 'pax', 
-                        title: 'Tren Penumpang (Orang)', 
-                        cardId: 'card-pax',
-                        colors: ['#20c997', '#198754', '#C59560', '#E67E22'] // Hijau
+                        type: 'pax', title: 'Tren Penumpang (Orang)', cardId: 'card-pax',
+                        colors: ['#20c997', '#198754', '#C59560', '#E67E22'] 
                     },
                     { 
-                        type: 'cargo', 
-                        title: 'Tren Kargo (Kg)', 
-                        cardId: 'card-cargo',
-                        colors: ['#ffc107', '#fd7e14', '#E83C91', '#FF8FB7'] // Kuning & Oranye
+                        type: 'cargo', title: 'Tren Kargo (Kg)', cardId: 'card-cargo',
+                        colors: ['#ffc107', '#fd7e14', '#E83C91', '#FF8FB7'] 
                     }
                 ];
 
-                fetch(chartUrl)
-                .then(response => {
-                    if (!response.ok) throw new Error("Gagal memuat grafik");
-                    return response.json();
-                })
-                .then(data => {
-                    globalChartData = data;
-                    initChart(); // Inisialisasi chart pertama kali
-                    startRotation(); // Mulai rotasi
-                })
-                .catch(err => {
-                    console.log(err);
-                    document.querySelector("#chartPaxTv").innerHTML = '<div class="d-flex flex-column justify-content-center align-items-center h-100 text-muted opacity-50"><small>Grafik tidak tersedia</small></div>';
-                });
+                // --- FUNGSI BARU: Load Data Secara Berkala ---
+                function loadChartData() {
+                    fetch(chartUrl)
+                    .then(response => {
+                        if (!response.ok) throw new Error("Gagal memuat grafik");
+                        return response.json();
+                    })
+                    .then(data => {
+                        globalChartData = data; // Simpan data terbaru ke variabel global
+                        const rangeLabelEl = document.getElementById('chart-range-label');
+                        if(rangeLabelEl && data.range_label) {
+                            rangeLabelEl.innerText = data.range_label;
+                        }
+                        if (!chartInstance) {
+                            // Jika chart belum ada, buat baru
+                            initChart();
+                            startRotation();
+                        } else {
+                            // Jika chart sudah ada, update datanya langsung tanpa menunggu rotasi
+                            // Ini agar grafik berubah real-time saat data masuk
+                            const config = chartConfigs[currentChartIndex];
+                            chartInstance.updateSeries(getSeriesData(config.type));
+                        }
+                    })
+                    .catch(err => {
+                        console.log(err);
+                        if(!chartInstance) {
+                             document.querySelector("#chartPaxTv").innerHTML = '<div class="d-flex flex-column justify-content-center align-items-center h-100 text-muted opacity-50"><small>Grafik tidak tersedia</small></div>';
+                        }
+                    });
+                }
+
+                // Panggil pertama kali
+                loadChartData();
+
+                // Panggil setiap 30 detik (Sinkron dengan refresh dashboard)
+                setInterval(loadChartData, 30000); 
+
+                // ---------------------------------------------
 
                 function initChart() {
                     const config = chartConfigs[currentChartIndex];
-                    updateUIForChart(config); // Update judul & highlight card
+                    updateUIForChart(config);
 
                     var options = {
                         series: getSeriesData(config.type),
                         chart: { 
-                            type: 'line', 
-                            height: '100%', 
-                            toolbar: {show: false}, 
-                            background: 'transparent',
-                            animations: { enabled: true, easing: 'easeinout', speed: 800 },
-                            fontFamily: 'Nunito, sans-serif',
-                            stacked: false 
+                            type: 'line', height: '100%', toolbar: {show: false}, 
+                            background: 'transparent', animations: { enabled: true, easing: 'easeinout', speed: 800 },
+                            fontFamily: 'Nunito, sans-serif', stacked: false 
                         },
                         colors: config.colors, 
                         dataLabels: { enabled: true },
-                        stroke: { 
-                            width: [0, 0, 2, 2], 
-                            curve: 'smooth',
-                            dashArray: [0, 0, 5, 5] 
-                        },
-                        plotOptions: {
-                            bar: { columnWidth: '60%', borderRadius: 2 }
-                        },
+                        stroke: { width: [0, 0, 2, 2], curve: 'smooth', dashArray: [0, 0, 5, 5] },
+                        plotOptions: { bar: { columnWidth: '60%', borderRadius: 2 } },
                         xaxis: { 
-                            categories: globalChartData.categories,
+                            categories: globalChartData.categories, // Menggunakan data global
                             labels: { 
                                 style: { colors: '#6c757d', fontSize: '10px' }, 
                                 formatter: function (val, timestamp, index) {
+                                    // Pastikan data tanggal tersedia
+                                    console.log(globalChartData);
                                     if (typeof index !== 'undefined' && globalChartData.dates_event1 && globalChartData.dates_event2) {
-                                        const date1 = globalChartData.dates_event1[index];
-                                        const date2 = globalChartData.dates_event2[index];
+                                        const date1 = globalChartData.dates_event1[index]; // Tanggal Event Sekarang
+                                        const date2 = globalChartData.dates_event2[index]; // Tanggal Event Pembanding
+                                        
+                                        // Return dalam bentuk Array String untuk membuat baris baru (multi-line)
+                                        // Baris 1: H-xx
+                                        // Baris 2: Tanggal Event 1
+                                        // Baris 3: Tanggal Event 2
                                         return [val, date1, date2]; 
                                     }
                                     return val;
-                                }
+                                },
+                                
                             },
                             axisBorder: { show: true, color: '#eef2f7' },
                             axisTicks: { show: false }
                         },
-                        yaxis: { 
-                            labels: { style: { colors: '#6c757d', fontSize: '10px' } }
-                        },
-                        grid: { borderColor: '#eef2f7', strokeDashArray: 3 }, 
+                        yaxis: { labels: { style: { colors: '#6c757d', fontSize: '10px' } } },
+                        grid: { 
+                            borderColor: '#eef2f7', 
+                            strokeDashArray: 3, 
+                        }, 
                         theme: { mode: 'light' }, 
                         legend: { 
-                            position: 'top', 
-                            horizontalAlign: 'right', 
-                            fontSize: '10px', 
-                            // markers: { radius: 12 },
-                            markers: { 
-                                width: 16, // Kita lebarkan sedikit agar garisnya terlihat panjang
-                                
-                                // --- BAGIAN KUNCI ---
-                                // Array height:
-                                // Index 0 & 1 (Bar): Tinggi 12px (kotak normal)
-                                // Index 2 & 3 (Line): Tinggi 3px (gepeng jadi terlihat seperti garis)
-                                height: [12, 12, 3, 3], 
-
-                                // Array radius:
-                                // Bar: Radius 2px (sedikit rounded)
-                                // Line: Radius 0px (sudut tajam)
-                                radius: [2, 2, 0, 0],
-
-                                // Array offsetY:
-                                // Karena garisnya tipis (3px), posisinya mungkin agak naik.
-                                // Kita turunkan 4px khusus untuk Line agar sejajar tengah dengan teks.
-                                offsetY: [0, 0, -1,-1 ], 
-                                // --------------------
-
-                                strokeWidth: 0, // Tidak perlu garis tepi
-                            },
+                            position: 'top', horizontalAlign: 'right', fontSize: '10px', 
+                            markers: { width: 16, height: [12, 12, 3, 3], radius: [2, 2, 0, 0], offsetY: [0, 0, -1,-1 ], strokeWidth: 0 },
                             itemMargin: { horizontal: 5, vertical: 0 },
                             labels: { colors: '#333' } 
-                            
                         }
                     };
                     chartInstance = new ApexCharts(document.querySelector("#chartPaxTv"), options);
                     chartInstance.render();
                 }
 
-                function updateChart() {
+                // Fungsi Rotasi Tampilan (Hanya mengganti dataset & warna)
+                function updateChartRotation() {
                     const config = chartConfigs[currentChartIndex];
                     updateUIForChart(config);
 
-                    // Update data & options chart yang sudah ada
                     chartInstance.updateOptions({
                         colors: config.colors,
-                        series: getSeriesData(config.type)
+                        series: getSeriesData(config.type) // Mengambil data terbaru dari globalChartData
                     });
                 }
 
                 function getSeriesData(type) {
-                    // Mapping data dinamis berdasarkan tipe (flights/pax/cargo)
-                    // Pastikan key di JSON controller sesuai: pax_arrival, cargo_arrival, flights_arrival
                     return [
                         { name: '{{ $nataruEvent->name }} (Arr)', type: 'bar', data: globalChartData.dataset1[type + '_arrival'] },
                         { name: '{{ $nataruEvent->name }} (Dep)', type: 'bar', data: globalChartData.dataset1[type + '_departure'] },
@@ -745,47 +739,43 @@
                 }
 
                 function updateUIForChart(config) {
-                    // Update Judul Grafik
                     const titleEl = document.getElementById('chart-title');
                     if(titleEl) {
-                        titleEl.style.opacity = 0; // Fade out effect
+                        titleEl.style.opacity = 0;
                         setTimeout(() => {
                             titleEl.innerText = config.title;
-                            titleEl.style.opacity = 1; // Fade in
+                            titleEl.style.opacity = 1;
                         }, 300);
                     }
-
-                    // Highlight Stat Card yang relevan
                     document.querySelectorAll('.stat-card').forEach(c => c.classList.remove('active-highlight'));
                     const activeCard = document.getElementById(config.cardId);
                     if(activeCard) activeCard.classList.add('active-highlight');
 
-                    // Reset & Animate Progress Bar
+                    // Reset Progress Bar
                     const bar = document.getElementById('chart-progress');
                     if(bar) {
                         bar.style.transition = 'none';
                         bar.style.width = '0%';
                         setTimeout(() => {
-                            bar.style.transition = 'width 20s linear'; // Sesuai interval 20 detik
+                            bar.style.transition = 'width 20s linear';
                             bar.style.width = '100%';
                         }, 50);
                     }
                 }
 
                 function startRotation() {
-                    // Jalankan progress bar pertama kali
                     const bar = document.getElementById('chart-progress');
                     if(bar) {
                         bar.style.transition = 'width 20s linear';
                         bar.style.width = '100%';
                     }
-
+                    
+                    // Interval untuk ROTASI tampilan (ganti jenis grafik)
                     setInterval(() => {
                         currentChartIndex = (currentChartIndex + 1) % chartConfigs.length;
-                        updateChart();
-                    }, 20000); // Ganti setiap 20 detik
+                        updateChartRotation();
+                    }, 20000); 
                 }
-
             @endif
         });
     </script>

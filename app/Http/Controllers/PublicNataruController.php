@@ -179,34 +179,71 @@ class PublicNataruController extends Controller
 
     /**
      * API Endpoint untuk data grafik di TV (Real-time & Publik).
-     * Mengembalikan data H-10 s/d H+10 beserta tanggal riilnya.
+     * H-0 Dinamis berdasarkan Mean (Rata-rata/Tengah) dari durasi event.
      */
     public function getTvChartData($token)
     {
-        // 1. Cari Event Utama berdasarkan Token
+        // 1. Cari Event Utama
         $event1 = NataruEvent::where('public_token', $token)->firstOrFail();
 
-        // 2. Validasi: Harus ada event pembanding
+        // 2. Validasi Event Pembanding
         if (!$event1->compare_event_id) {
             return response()->json([
-                'error' => 'No comparison event selected for this event.',
+                'error' => 'No comparison event selected.',
                 'status' => 'error'
             ], 404);
         }
 
-        // 3. Ambil Event Pembanding
         $event2 = $event1->compareEvent;
 
-        // 4. Tentukan Tanggal Referensi (H-0 / Hari Raya)
-        $refDate1 = Carbon::create($event1->start_date->year, 12, 25);
-        $refDate2 = Carbon::create($event2->start_date->year, 12, 25);
-
-        // 5. Generate Data H-10 s/d H+10
-        $labels = [];       // Array label sumbu X (H-10, H-9...)
-        $dates1 = [];       // Array tanggal riil Event 1
-        $dates2 = [];       // Array tanggal riil Event 2
+        // 3. Hitung H-0 (Ref Date) Dinamis untuk Event 1
+        $start1 = Carbon::parse($event1->start_date)->startOfDay();
+        $end1   = Carbon::parse($event1->end_date)->startOfDay();
         
-        for ($i = -10; $i <= 10; $i++) {
+        // Hitung selisih hari. Contoh: 18 Des ke 4 Jan = 17 hari (diff).
+        // Kita pakai ceil (pembulatan atas) bagi 2. 
+        // 17 / 2 = 8.5 -> dibulatkan jadi 9.
+        // Start (18) + 9 hari = Tanggal 27 Des (Ini jadi H-0).
+        // Cek: 18 Des adalah H-9. 4 Jan adalah H+8. (Sesuai request).
+        $diff1 = $start1->diffInDays($end1);
+        $offset1 = ceil($diff1 / 2); 
+        
+        $refDate1 = $start1->copy()->addDays($offset1);
+
+        // 4. Hitung H-0 (Ref Date) Dinamis untuk Event 2 (Agar perbandingan Apple-to-Apple)
+        // Kita lakukan hal yang sama untuk event pembanding agar titik tengahnya ketemu titik tengah event utama.
+        $start2 = Carbon::parse($event2->start_date)->startOfDay();
+        $end2   = Carbon::parse($event2->end_date)->startOfDay();
+        $diff2  = $start2->diffInDays($end2);
+        $offset2 = ceil($diff2 / 2);
+        
+        $refDate2 = $start2->copy()->addDays($offset2);
+
+
+        // 5. Tentukan Range Loop (Start Index s/d End Index)
+        // Kita hitung berdasarkan Event 1
+        // Gunakan false pada diffInDays untuk mendapatkan nilai positif/negatif
+        // Logic default carbon: date->diffInDays(now, false). Jika date di masa lalu = negatif.
+        // Kita ingin: RefDate - Date.
+        // Jika Date < Ref, hasil harus negatif (H-).
+        
+        // Rumus manual agar aman:
+        // Index = Date - RefDate
+        $startIndex = $start1->diffInDays($refDate1) * -1; // Karena start pasti sebelum ref, kita kalikan -1
+        $endIndex   = $end1->diffInDays($refDate1); // Ini akan positif jika end setelah ref. (Note: diffInDays return absolute, kita perlu cek manual)
+        
+        // Pastikan end index positif (karena end date > ref date)
+        if ($end1->lessThan($refDate1)) {
+            $endIndex = $endIndex * -1;
+        }
+
+        // 6. Generate Loop
+        $labels = [];      
+        $dates1 = [];     
+        $dates2 = [];      
+        
+        for ($i = $startIndex; $i <= $endIndex; $i++) {
+            // Label H
             if ($i == 0) {
                 $label = "H";
             } elseif ($i < 0) {
@@ -216,19 +253,22 @@ class PublicNataruController extends Controller
             }
             $labels[] = $label;
 
+            // Tanggal Riil untuk Tooltip
             $dates1[] = $refDate1->copy()->addDays($i)->translatedFormat('d M Y');
             $dates2[] = $refDate2->copy()->addDays($i)->translatedFormat('d M Y');
         }
 
-        // 6. Ambil Data Statistik Harian dari Database
+        // 7. Ambil Data Statistik
         $data1 = $this->getEventDailyStats($event1, $refDate1);
         $data2 = $this->getEventDailyStats($event2, $refDate2);
 
-        // 7. Format Response JSON
+        // 8. Return JSON
         return response()->json([
             'status' => 'success',
             'event1_name' => $event1->name,
             'event2_name' => $event2->name,
+            // Kirim info range untuk ditampilkan di UI (misal: "H-9 s/d H+8")
+            'range_label' => $labels[0] . ' s/d ' . end($labels), 
             'categories' => $labels,
             'dates_event1' => $dates1,
             'dates_event2' => $dates2,
