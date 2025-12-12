@@ -136,18 +136,7 @@
 @section('scripts_admin')
     <script src="{{ asset('../assetsv2/compiled/js/tambah-pengajuan-fieldTrip.js') }}"></script>
     <script>
-        document.getElementById('fieldtrip_type').addEventListener('change', function() {
-            const additionalDocs = document.getElementById('fieldtrip_more');
-            if (this.value === 'Lainnya') {
-                additionalDocs.parentElement.style.display = 'block';
-                document.getElementById('fieldtrip_more').setAttribute('required', 'required');
-            } else {
-                additionalDocs.parentElement.style.display = 'none';
-                document.getElementById('fieldtrip_more').removeAttribute('required');
-            }
-        });
+        
 
-        // Trigger change on page load to handle edit mode
-        document.getElementById('fieldtrip_type').dispatchEvent(new Event('change'));
     </script>
 @endsection
