@@ -106,7 +106,7 @@
                                     
                                     @endif
                                     <a href="{{ route('keuangan.edit', $finance->id) }}" class="btn btn-sm btn-warning btn-tooltip text-white" data-bs-toggle="tooltip" title="Edit"><i class="bi bi-pencil"></i></a>
-                                    <button class="btn btn-sm btn-danger btn-hapus btn-tooltip" data-id="{{ $finance->id }}" data-bs-toggle="tooltip" title="Hapus"><i class="bi bi-trash"></i></button>
+                                    <button class="btn btn-sm btn-danger btn-hapus btn-tooltip" data-id="{{ route("keuangan.destroy",$finance->id) }}" data-bs-toggle="tooltip" title="Hapus"><i class="bi bi-trash"></i></button>
                                 </td>
                             </tr>
                             @empty

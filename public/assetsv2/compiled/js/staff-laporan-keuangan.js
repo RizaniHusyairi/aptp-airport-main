@@ -82,7 +82,7 @@ $(document).ready(function() {
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
-                    url: `/staff/keuangan/${id}`,
+                    url: `${id}`,
                     type: 'POST',
                     data: {
                         '_method': 'DELETE',
