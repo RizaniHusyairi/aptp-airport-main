@@ -47,6 +47,20 @@ class WorkPermitController extends Controller
             'description' => 'required|string',
             'docs' => 'required|array|min:1',
             'docs.*' => 'required|file|mimes:pdf,jpg,png|max:2048',
+        ],[
+            'work_type.required' => 'Jenis pekerjaan wajib diisi.',
+            'location.required' => 'Lokasi pekerjaan wajib diisi.',
+            'start_date.required' => 'Tanggal mulai pelaksanaan wajib diisi.',
+            'start_date.date' => 'Format tanggal mulai tidak valid.',
+            'end_date.required' => 'Tanggal selesai pelaksanaan wajib diisi.',
+            'end_date.date' => 'Format tanggal selesai tidak valid.',
+            'end_date.after_or_equal' => 'Tanggal selesai tidak boleh sebelum tanggal mulai.',
+            'description.required' => 'Deskripsi pekerjaan wajib diisi.',
+            'docs.required' => 'Dokumen pendukung wajib diunggah.',
+            'docs.min' => 'Minimal harus mengunggah satu dokumen.',
+            'docs.*.required' => 'File dokumen rusak atau tidak terbaca.',
+            'docs.*.mimes' => 'Format dokumen harus: PDF, JPG, atau PNG.',
+            'docs.*.max' => 'Ukuran setiap dokumen maksimal 2MB.',
         ]);
 
         $documentPaths = [];
@@ -65,7 +79,7 @@ class WorkPermitController extends Controller
             'end_date' => $validated['end_date'],
             'description' => $validated['description'],
             'documents' => $documentPaths,
-            'status' => 'Diajukan',
+            'submission_status' => 'Diajukan',
         ]);
 
         return redirect()->route('kerja.userindex')->with('success', 'Pengajuan Izin Kerja berhasil dikirim.');
@@ -90,20 +104,24 @@ class WorkPermitController extends Controller
     {
 
         $validated = $request->validate([
-            'status' => 'required|in:Disetujui,Ditolak,Revisi Diperlukan',
-            'staff_notes' => 'required_if:status,Ditolak,Revisi Diperlukan|nullable|string',
-            'reply_document_path' => 'required_if:status,Disetujui|nullable|url',
+            'submission_status' => 'required|in:Disetujui,Ditolak,Revisi Diperlukan',
+            'staff_notes' => 'required_if:submission_status,Ditolak,Revisi Diperlukan|nullable|string',
+            'reply_document_path' => 'required_if:submission_status,Disetujui|nullable|url',
         ], [
-            'staff_notes.required_if' => 'Catatan wajib diisi jika status Ditolak atau Minta Revisi.',
+            'submission_status.required' => 'Status pengajuan wajib dipilih.',
+            'submission_status.in' => 'Pilihan status tidak valid.',
+            
+            'staff_notes.required_if' => 'Catatan wajib diisi jika status Ditolak atau Revisi.',
+            
             'reply_document_path.required_if' => 'Tautan surat balasan wajib diisi jika status Disetujui.',
-            'reply_document_path.url' => 'Input harus berupa tautan (URL) yang valid.',
+            'reply_document_path.url' => 'Input surat balasan harus berupa tautan (URL) yang valid.',
         ]);
         
-        $workPermit->status = $validated['status'];
+        $workPermit->submission_status = $validated['submission_status'];
         $workPermit->staff_notes = $validated['staff_notes'];
         
         
-        if ($validated['status'] === 'Disetujui') {
+        if ($validated['submission_status'] === 'Disetujui') {
             $workPermit->reply_document_path = $validated['reply_document_path'];
         } else {
             // Kosongkan link jika statusnya bukan disetujui

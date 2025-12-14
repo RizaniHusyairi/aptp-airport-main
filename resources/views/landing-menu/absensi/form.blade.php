@@ -93,27 +93,53 @@
 
                 <form id="attendanceForm" action="{{ route('public.absensi.store', $meeting->slug) }}" method="POST">
                     @csrf
+                    
+                    {{-- 1. INPUT NAMA --}}
                     <div class="mb-3">
                         <label for="name" class="form-label">Nama Lengkap <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="name" name="name" placeholder="Nama Peserta" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="department" class="form-label">Instansi / Unit Kerja <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="department" name="department" placeholder="Contoh: Dinas Perhubungan / Bag. Keuangan" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="phone" class="form-label">Nomor HP (WhatsApp) <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="phone" name="phone" placeholder="08..." required>
+                        <input type="text" 
+                            class="form-control" 
+                            id="name" 
+                            name="name" 
+                            placeholder="Nama Peserta" 
+                            {{-- Logika: Jika ada input lama (old), pakai itu. Jika tidak, cek login. Jika login, ambil nama user. --}}
+                            value="{{ old('name', Auth::check() ? Auth::user()->name : '') }}" 
+                            required>
                     </div>
 
-                    {{-- === INPUT TANDA TANGAN DIGITAL === --}}
+                    {{-- 2. INPUT INSTANSI / UNIT KERJA --}}
+                    <div class="mb-3">
+                        <label for="department" class="form-label">Instansi / Unit Kerja <span class="text-danger">*</span></label>
+                        {{-- Bonus: Saya tambahkan logika otomatis mengambil Role pertama sebagai Unit Kerja (misal: Staff Teknik) --}}
+                        <input type="text" 
+                            class="form-control" 
+                            id="department" 
+                            name="department" 
+                            placeholder="Contoh: Dinas Perhubungan / Bag. Keuangan" 
+                            value="{{ old('department', (Auth::check() && Auth::user()->roles->isNotEmpty()) ? Auth::user()->roles->first()->name : '') }}"
+                            required>
+                    </div>
+
+                    {{-- 3. INPUT NOMOR HP --}}
+                    <div class="mb-3">
+                        <label for="phone" class="form-label">Nomor HP (WhatsApp) <span class="text-danger">*</span></label>
+                        <input type="text" 
+                            class="form-control" 
+                            id="phone" 
+                            name="phone" 
+                            placeholder="08..." 
+                            {{-- Logika: Ambil no hp dari database user jika login --}}
+                            value="{{ old('phone', Auth::check() ? Auth::user()->phone : '') }}" 
+                            required>
+                    </div>
+
+                    {{-- === INPUT TANDA TANGAN DIGITAL (Biarkan tetap sama) === --}}
                     <div class="mb-4">
                         <label class="form-label">Tanda Tangan <span class="text-danger">*</span></label>
                         <div class="signature-wrapper">
                             <span class="signature-placeholder">Tanda tangan di sini</span>
                             <canvas id="signature-pad" class="signature-pad"></canvas>
                         </div>
-                        {{-- Input tersembunyi untuk menyimpan data Base64 --}}
                         <input type="hidden" name="signature" id="signature-input">
                         
                         <button type="button" class="btn btn-sm btn-outline-secondary" id="clear-signature">
@@ -128,7 +154,6 @@
                         <button type="submit" class="btn btn-primary btn-lg">Hadir & Simpan</button>
                     </div>
                 </form>
-                
                 <div class="text-center mt-3 text-muted small">
                     Pastikan data yang Anda isi sudah benar.
                 </div>

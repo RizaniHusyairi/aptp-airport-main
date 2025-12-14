@@ -49,7 +49,7 @@
                     </div>
 
                     <!-- Detail Pekerjaan -->
-                    <div class="detail-section">
+                    <div class="detail-section mt-4">
                         <h6>Detail Pekerjaan:</h6>
                         <ul class="detail-list">
                             <li><strong>Jenis Pekerjaan:</strong> {{ $workPermit->work_type }}</li>
@@ -57,6 +57,18 @@
                             <li><strong>Jadwal:</strong> {{ \Carbon\Carbon::parse($workPermit->start_date)->translatedFormat('d M Y, H:i') }} s/d {{ \Carbon\Carbon::parse($workPermit->end_date)->translatedFormat('d M Y, H:i') }}</li>
                         </ul>
                         <p class="mt-3"><strong>Deskripsi:</strong><br>{{ $workPermit->description }}</p>
+                    </div>
+                    <div class="detail-section mt-4">
+                        <h6>Status:</h6>
+                        @php
+                            $statusClass = match($workPermit->submission_status) {
+                                'Disetujui' => 'bg-success',
+                                'Ditolak' => 'bg-danger',
+                                'Revisi Diperlukan' => 'bg-warning',
+                                default => 'bg-info',
+                            };
+                        @endphp
+                        <span class="badge {{ $statusClass }}">{{ $workPermit->submission_status }}</span>
                     </div>
 
                     <!-- Daftar Pekerja & Peralatan -->
@@ -76,10 +88,10 @@
                     <div class="detail-section">
                         <h6>Dokumen Pendukung:</h6>
                         @forelse($workPermit->documents as $docPath)
-                            <a href="{{ Storage::url($docPath) }}" target="_blank" class="document-link">
-                                <i class="bi bi-file-earmark-pdf-fill"></i>
-                                <span>{{ basename($docPath) }}</span>
-                            </a>
+                        <a href="{{ asset('uploads/documents/work_permits/' . basename($docPath)) }} " target="_blank" class="btn btn-info w-100">
+                                
+                            <i class="bi bi-file-earmark-arrow-down-fill me-2"></i> Lihat Dokumen Pengajuan
+                        </a>
                         @empty
                             <p class="text-muted">Tidak ada dokumen terlampir.</p>
                         @endforelse
@@ -88,8 +100,8 @@
                     {{-- Tampilkan catatan staff jika ada (untuk Pengaju) --}}
                     @notstaff
                         {{-- Tampilkan Surat Balasan jika Disetujui --}}
-                        @if($workPermit->status == 'Disetujui' && $workPermit->reply_document_path)
-                        <div class="detail-section">
+                        @if($workPermit->submission_status == 'Disetujui' && $workPermit->reply_document_path)
+                        <div class="detail-section mt-4">
                             <h6>Surat Balasan:</h6>
                             <a href="{{ $workPermit->reply_document_path }}" target="_blank" class="document-link success">
                                 <i class="bi bi-file-earmark-check-fill"></i>
@@ -99,10 +111,10 @@
                         @endif
 
                         {{-- Tampilkan Catatan Staff jika Ditolak/Revisi --}}
-                        @if(in_array($workPermit->status, ['Ditolak', 'Revisi Diperlukan']) && $workPermit->staff_notes)
-                        <div class="detail-section">
+                        @if(in_array($workPermit->submission_status, ['Ditolak', 'Revisi Diperlukan']) && $workPermit->staff_notes)
+                        <div class="detail-section mt-4">
                             <h6>Catatan dari Staff:</h6>
-                            <div class="alert alert-light-{{ $workPermit->status == 'Ditolak' ? 'danger' : 'warning' }} mb-0">
+                            <div class="alert alert-light-{{ $workPermit->submission_status == 'Ditolak' ? 'danger' : 'warning' }} mb-0">
                                 <p class="mb-0">{{ $workPermit->staff_notes }}</p>
                             </div>
                         </div>
@@ -111,18 +123,18 @@
 
                     {{-- Form Tindakan hanya untuk Staff --}}
                     @staff
-                    <div class="detail-section">
+                    <div class="detail-section mt-4">
                         <h6>Tindakan</h6>
                         <form action="{{ route('kerja.updateStatus', $workPermit->id) }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             @method('PATCH')
                             <div class="form-group">
                                 <label for="status" class="form-label">Ubah Status</label>
-                                <select name="status" id="status" class="form-select">
-                                    <option value="Diajukan" @selected($workPermit->status == 'Diajukan')>Diajukan</option>
-                                    <option value="Disetujui" @selected($workPermit->status == 'Disetujui')>Setujui</option>
-                                    <option value="Ditolak" @selected($workPermit->status == 'Ditolak')>Tolak</option>
-                                    <option value="Revisi Diperlukan" @selected($workPermit->status == 'Revisi Diperlukan')>Minta Revisi</option>
+                                <select name="submission_status" id="status" class="form-select">
+                                    <option value="Diajukan" @selected($workPermit->submission_status == 'Diajukan')>Diajukan</option>
+                                    <option value="Disetujui" @selected($workPermit->submission_status == 'Disetujui')>Setujui</option>
+                                    <option value="Ditolak" @selected($workPermit->submission_status == 'Ditolak')>Tolak</option>
+                                    <option value="Revisi Diperlukan" @selected($workPermit->submission_status == 'Revisi Diperlukan')>Minta Revisi</option>
                                 </select>
                             </div>
 

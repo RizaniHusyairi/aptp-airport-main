@@ -119,7 +119,17 @@ class InventoryController extends Controller
             'input_date' => 'required|date',
             'photo' => 'required|image|mimes:jpeg,png,jpg,webp|max:2048',
         ], [
+            'name.required' => 'Nama barang wajib diisi.',
+            'name.max' => 'Nama barang maksimal 255 karakter.',
+            'category.required' => 'Kategori wajib dipilih.',
             'category.in' => 'Anda tidak memiliki hak akses untuk kategori ini.',
+            'input_date.required' => 'Tanggal masuk wajib diisi.',
+            'input_date.date' => 'Format tanggal tidak valid.',
+            'photo.required' => 'Foto barang wajib diupload.',
+            'photo.image' => 'File yang diupload harus berupa gambar.',
+            'photo.mimes' => 'Format foto harus: jpeg, png, jpg, atau webp.',
+            'photo.max' => 'Ukuran foto maksimal 2MB.',
+
         ]);
 
         $photoPath = $request->file('photo')->store('inventories', 'public');
@@ -170,6 +180,14 @@ class InventoryController extends Controller
             'category' => ['required', 'string', Rule::in($allowedCategories)],
             'input_date' => 'required|date',
             'photo' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+        ],[
+            'name.required' => 'Nama barang wajib diisi.',
+            'category.required' => 'Kategori wajib dipilih.',
+            'category.in' => 'Kategori tidak valid atau akses ditolak.',
+            'input_date.required' => 'Tanggal masuk wajib diisi.',
+            'photo.image' => 'File yang diupload harus berupa gambar.',
+            'photo.mimes' => 'Format foto harus: jpeg, png, jpg, atau webp.',
+            'photo.max' => 'Ukuran foto maksimal 2MB.',
         ]);
 
         $photoPath = $inventory->photo_path;

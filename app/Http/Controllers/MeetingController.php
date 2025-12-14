@@ -132,6 +132,7 @@ class MeetingController extends Controller
      */
     public function update(Request $request, Meeting $meeting)
     {
+        // Tambahkan pesan custom bahasa Indonesia di parameter ke-3
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'date' => 'required|date',
@@ -155,7 +156,6 @@ class MeetingController extends Controller
             'location' => $validated['location'],
             'organizer' => $validated['organizer'],
             'organizer_nip' => $validated['organizer_nip'],
-            // Slug tidak diupdate agar link yang sudah dibagikan tidak mati
         ]);
 
         return redirect()->route('staff.meetings.index')->with('success', 'Data rapat berhasil diperbarui.');

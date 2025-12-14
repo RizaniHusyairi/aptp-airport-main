@@ -65,6 +65,9 @@
                     <div class="input-group input-group-sm mb-3">
                         <input type="text" class="form-control" value="{{ $publicUrl }}" id="meetingLink" readonly>
                         <button class="btn btn-primary" onclick="copyLink()"><i class="bi bi-clipboard"></i></button>
+                        <a href="{{ $publicUrl }}" target="_blank" class="btn btn-outline-secondary" title="Buka Form">
+                            <i class="bi bi-box-arrow-up-right"></i>
+                        </a>
                     </div>
 
                     <hr>

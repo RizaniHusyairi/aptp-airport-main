@@ -275,7 +275,7 @@
                                             break;
                                         case 'assigned':
                                             $toUserName = $metaUsers[$meta['to_user_id']] ?? 'N/A';
-                                            $message = "Ditugaskan kepada <strong>" . e($toUserName) . "</strong>";
+                                            $message = "Menunggu Diverifikasi oleh <strong>" . e($toUserName) . "</strong>";
                                             break;
                                         case 'verification_requested':
                                             $message = "Proses verifikasi dimulai dengan " . e($meta['queue_size'] ?? 0) . " pejabat.";

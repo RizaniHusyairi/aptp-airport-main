@@ -61,14 +61,14 @@
                             <td>{{ $permit->created_at->translatedFormat('d M Y') }}</td>
                             <td>
                                 @php
-                                    $statusClass = match($permit->status) {
+                                    $statusClass = match($permit->submission_status) {
                                         'Disetujui' => 'bg-success',
                                         'Ditolak' => 'bg-danger',
                                         'Revisi Diperlukan' => 'bg-warning',
                                         default => 'bg-info',
                                     };
                                 @endphp
-                                <span class="badge {{ $statusClass }}">{{ $permit->status }}</span>
+                                <span class="badge {{ $statusClass }}">{{ $permit->submission_status }}</span>
                             </td>
                             <td>
                                 @notstaff
@@ -77,7 +77,7 @@
                                     <a href="{{ route('kerja.userShow', $permit->id) }}" class="btn btn-sm btn-info text-white me-1">Lihat</a>
                                     
                                     {{-- Tombol Hapus hanya muncul jika statusnya belum final --}}
-                                    @if(!in_array($permit->status, ['Disetujui', 'Ditolak']))
+                                    @if(!in_array($permit->submission_status, ['Disetujui', 'Ditolak']))
                                         <form action="{{ route('kerja.destroy', $permit->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus pengajuan ini?')">
                                             @csrf
                                             @method('DELETE')

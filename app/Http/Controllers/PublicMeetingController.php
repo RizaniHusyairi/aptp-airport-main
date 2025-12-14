@@ -17,6 +17,7 @@ class PublicMeetingController extends Controller
     {
         $meeting = Meeting::where('slug', $slug)->firstOrFail();
 
+
         // Cek apakah rapat masih aktif
         if (!$meeting->is_active) {
             return view('landing-menu.absensi.closed', compact('meeting'));
@@ -47,18 +48,17 @@ class PublicMeetingController extends Controller
         ], [
             'name.required' => 'Nama lengkap wajib diisi.',
             'department.required' => 'Instansi/Unit Kerja wajib diisi.',
-            'phone.required' => 'Nomor HP wajib diisi.', // Tambahkan pesan error
-            'signature.required' => 'Tanda tangan wajib diisi.',
+            'phone.required' => 'Nomor HP wajib diisi.',
+            'phone.max' => 'Nomor HP terlalu panjang.',
+            'signature.required' => 'Tanda tangan wajib diisi. Silakan tanda tangan pada kotak yang tersedia.',
         ]);
 
-        // Cek duplikasi
         $exists = Attendance::where('meeting_id', $meeting->id)
-                            ->where('name', $validated['name'])
-                            ->where('department', $validated['department'])
+                            ->where('phone', $validated['phone']) 
                             ->exists();
 
         if ($exists) {
-            return back()->with('error', 'Anda sudah terdaftar dalam absensi rapat ini.');
+            return back()->with('error', 'Nomor HP ini sudah terdaftar dalam absensi rapat ini.');
         }
 
         // === PROSES PENYIMPANAN TANDA TANGAN ===
