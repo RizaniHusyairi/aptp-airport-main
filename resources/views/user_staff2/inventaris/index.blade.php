@@ -11,8 +11,8 @@
     <div class="page-title">
         <div class="row">
             <div class="col-12 col-md-6 order-md-1 order-last">
-                <h3>Manajemen Inventaris</h3>
-                <p class="text-subtitle text-muted">Kelola daftar peralatan inventaris bandara.</p>
+                <h3>Manajemen Peralatan</h3>
+                <p class="text-subtitle text-muted">Kelola daftar peralatan bandara.</p>
             </div>
             <div class="col-12 col-md-6 order-md-2 order-first">
                 <x-breadcrumb2 :items="[
@@ -26,7 +26,7 @@
 <section class="section">
     <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
-            <h5 class="card-title mb-0">Daftar Inventaris</h5>
+            <h5 class="card-title mb-0">Daftar Peralatan</h5>
             <a href="{{ route('staff.inventories.create') }}" class="btn btn-primary"><i class="bi bi-plus-circle me-2"></i> Tambah Item</a>
         </div>
         <div class="card-body">
