@@ -145,12 +145,12 @@
                             <small class="text-muted">Gunakan kode bandara (misal: SUB-AAP)</small>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label class="form-label">Tipe Pesawat</label>
-                            <input type="text" name="aircraft_type" class="form-control" placeholder="Contoh: A320, B737-800" value="{{ old('aircraft_type') }}">
+                            <label class="form-label">Tipe Pesawat <span class="required-star">*</span></label>
+                            <input type="text" name="aircraft_type" class="form-control" placeholder="Contoh: A320, B737-800" value="{{ old('aircraft_type') }}" required>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label class="form-label">Registrasi Pesawat (PK)</label>
-                            <input type="text" name="aircraft_registration" class="form-control" placeholder="Contoh: PK-LUI" value="{{ old('aircraft_registration') }}">
+                            <label class="form-label">Registrasi Pesawat (PK) <span class="required-star">*</span> </label>
+                            <input type="text" name="aircraft_registration" class="form-control" placeholder="Contoh: PK-LUI" value="{{ old('aircraft_registration') }}" required>
                         </div>
                     </div>
 

@@ -69,8 +69,8 @@
                         <div class="col-md-4">
                             <label for="sort_order" class="form-label small fw-bold">Urutkan Tanggal</label>
                             <select name="sort_order" class="form-select form-select-sm">
-                                <option value="desc" {{ request('sort_order') == 'desc' ? 'selected' : '' }}>Terbaru (Z-A)</option>
-                                <option value="asc" {{ request('sort_order') == 'asc' ? 'selected' : '' }}>Terlama (A-Z)</option>
+                                <option value="desc" {{ request('sort_order') == 'desc' ? 'selected' : '' }}>Terbaru</option>
+                                <option value="asc" {{ request('sort_order') == 'asc' ? 'selected' : '' }}>Terlama</option>
                             </select>
                         </div>
 

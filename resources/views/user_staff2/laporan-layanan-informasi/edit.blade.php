@@ -1,4 +1,3 @@
-{{-- resources/views/user_staff2/informasi-setiap-saat/edit.blade.php --}}
 @extends('layouts-V2.master-layouts-v2')
 @section('title', 'Edit laporan layanan informasi')
 

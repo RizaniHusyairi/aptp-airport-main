@@ -1,4 +1,3 @@
-{{-- resources/views/user_staff2/laporan-layanan-informasi/_form.blade.php --}}
 <div class="row">
     <div class="col-12 mb-3">
         <label for="title" class="form-label">Judul Laporan <span class="text-danger">*</span></label>
