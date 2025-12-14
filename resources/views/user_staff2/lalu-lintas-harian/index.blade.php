@@ -9,13 +9,14 @@
 @section('content')
 <div class="page-heading">
     <div class="page-title">
+        {{-- ... (Judul Halaman Tetap Sama) ... --}}
         <div class="row">
             <div class="col-12 col-md-6 order-md-1 order-last">
                 <h3>Data LLAU Harian</h3>
                 <p class="text-subtitle text-muted">Kelola data lalu lintas udara harian.</p>
             </div>
             <div class="col-12 col-md-6 order-md-2 order-first">
-                <x-breadcrumb2 :items="[
+                 <x-breadcrumb2 :items="[
                     ['label' => 'Dashboard', 'url' => route('root')],
                     ['label' => 'Data LLAU', 'active' => true]
                 ]" />
@@ -23,14 +24,14 @@
         </div>
     </div>
 </div>
+
 <section class="section">
     <div class="card">
-        {{-- === PERUBAHAN DI SINI: Memperbarui Card Header === --}}
         <div class="card-header d-flex flex-wrap justify-content-between align-items-center gap-2">
             <h5 class="card-title mb-0">Daftar Data LLAU</h5>
             
             <div class="d-flex flex-wrap gap-2">
-                <!-- FORM EKSPOR PDF BARU -->
+                {{-- Form Export PDF (Tetap Sama) --}}
                 <form action="{{ route('staff.air-traffic.exportPdf') }}" method="GET" class="d-flex gap-2">
                     <input type="month" name="month_year" class="form-control form-control-sm" value="{{ now()->format('Y-m') }}" required>
                     <button type="submit" class="btn btn-secondary btn-sm flex-shrink-0">
@@ -38,13 +39,12 @@
                     </button>
                 </form>
                 
-                <!-- Tombol Tambah Data -->
+                {{-- Tombol Tambah (Tetap Sama) --}}
                 <a href="{{ route('staff.air-traffic.create') }}" class="btn btn-primary btn-sm flex-shrink-0">
-                    <i class="bi bi-plus-circle me-2"></i> Tambah Data Harian
+                    <i class="bi bi-plus-circle me-2"></i> Tambah Data
                 </a>
             </div>
         </div>
-        
         
         <div class="card-body">
             @if(session('success'))
@@ -53,12 +53,43 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
             @endif
-            @if(session('error')) {{-- Menambahkan notifikasi error untuk filter --}}
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                {{ session('error') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+
+            {{-- === FITUR BARU: FILTER & SORTING === --}}
+            <div class="p-3 rounded mb-3 border">
+                <form action="{{ route('staff.air-traffic.index') }}" method="GET">
+                    <div class="row g-2 align-items-end">
+                        {{-- 1. Filter Bulan --}}
+                        <div class="col-md-4">
+                            <label for="filter_month" class="form-label small fw-bold">Filter Bulan</label>
+                            <input type="month" class="form-control form-control-sm" name="filter_month" 
+                                   value="{{ request('filter_month') }}">
+                        </div>
+
+                        {{-- 2. Sort Order --}}
+                        <div class="col-md-4">
+                            <label for="sort_order" class="form-label small fw-bold">Urutkan Tanggal</label>
+                            <select name="sort_order" class="form-select form-select-sm">
+                                <option value="desc" {{ request('sort_order') == 'desc' ? 'selected' : '' }}>Terbaru (Z-A)</option>
+                                <option value="asc" {{ request('sort_order') == 'asc' ? 'selected' : '' }}>Terlama (A-Z)</option>
+                            </select>
+                        </div>
+
+                        {{-- 3. Tombol Aksi --}}
+                        <div class="col-md-4 d-flex gap-2">
+                            <button type="submit" class="btn btn-info btn-sm text-white w-100">
+                                <i class="bi bi-search"></i> Terapkan
+                            </button>
+                            @if(request()->has('filter_month') || request()->has('sort_order'))
+                                <a href="{{ route('staff.air-traffic.index') }}" class="btn btn-secondary btn-sm w-100">
+                                    <i class="bi bi-arrow-counterclockwise"></i> Reset
+                                </a>
+                            @endif
+                        </div>
+                    </div>
+                </form>
             </div>
-            @endif
+            {{-- === END FITUR BARU === --}}
+
             <div class="table-responsive">
                 <table class="table table-striped" id="table-lalulintas">
                     <thead>
@@ -74,11 +105,15 @@
                     <tbody>
                         @forelse ($traffics as $traffic)
                         <tr>
-                            <td>{{ $traffic->date->translatedFormat('d M Y') }}</td>
-                            <td>{{ number_format($traffic->aircraft_arrival) }} / {{ number_format($traffic->aircraft_departure) }}</td>
-                            <td>{{ number_format($traffic->passenger_arrival) }} / {{ number_format($traffic->passenger_departure) }}</td>
-                            <td>{{ number_format($traffic->baggage_arrival) }} / {{ number_format($traffic->baggage_departure) }}</td>
-                            <td>{{ number_format($traffic->cargo_arrival) }} / {{ number_format($traffic->cargo_departure) }}</td>
+                            <td>
+                                {{ $traffic->date->translatedFormat('d M Y') }}
+                                {{-- Badge kecil untuk hari --}}
+                                <br><small class="text-muted">{{ $traffic->date->translatedFormat('l') }}</small>
+                            </td>
+                            <td>{{ number_format($traffic->aircraft_arrival, 0, ',', '.') }} / {{ number_format($traffic->aircraft_departure, 0, ',', '.') }}</td>
+                            <td>{{ number_format($traffic->passenger_arrival, 0, ',', '.') }} / {{ number_format($traffic->passenger_departure, 0, ',', '.') }}</td>
+                            <td>{{ number_format($traffic->baggage_arrival, 0, ',', '.') }} / {{ number_format($traffic->baggage_departure, 0, ',', '.') }}</td>
+                            <td>{{ number_format($traffic->cargo_arrival, 0, ',', '.') }} / {{ number_format($traffic->cargo_departure, 0, ',', '.') }}</td>
                             <td>
                                 <div class="d-flex gap-2">
                                     <a href="{{ route('staff.air-traffic.edit', $traffic->id) }}" class="btn btn-warning btn-sm"><i class="bi bi-pencil-square"></i></a>
