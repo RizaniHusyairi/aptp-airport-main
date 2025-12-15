@@ -91,6 +91,17 @@ class PersuratanController extends Controller
                 }
             }],
             
+        ],[
+            'letter_type.required'       => 'Jenis surat wajib dipilih.',
+            'letter_date.required'       => 'Tanggal surat wajib diisi.',
+            'letter_date.date'           => 'Format tanggal surat tidak valid.',
+            'recipient_address.required' => 'Alamat tujuan surat wajib diisi.',
+            'subject.required'           => 'Perihal surat wajib diisi.',
+            'final_approver_id.required' => 'Pejabat penandatangan akhir wajib dipilih.',
+            'final_approver_id.exists'   => 'Pejabat yang dipilih tidak valid.',
+            'attachments.required'       => 'Wajib menyertakan minimal satu tautan dokumen.',
+            'attachments.min'            => 'Wajib menyertakan minimal satu tautan dokumen.',
+            'attachments.*.url'          => 'Format tautan tidak valid (harus diawali http:// atau https://).',
         ]);
 
         // Pecah textarea menjadi array URL (satu per baris), trim & buang baris kosong/duplikat
