@@ -30,7 +30,7 @@ $(document).ready(function() {
         const tanggal = data[0] || '';
         const jenis = data[1] || '';
         const sumber = data[2] || '';
-        
+
         const tahun = tanggal.split(' ')[1];
 
         // Cek filter
@@ -58,7 +58,7 @@ $(document).ready(function() {
             const nomor = $(this).find('.nomor').text();
             const deskripsi = $(this).find('.deskripsi').text();
             const jumlah = $(this).find('.jumlah').text();
-            
+
             modalTableBody.append(`<tr><td>${nomor}</td><td>${deskripsi}</td><td>${jumlah}</td></tr>`);
         });
 
@@ -82,7 +82,7 @@ $(document).ready(function() {
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
-                    url: `/staff/keuangan/${id}`,
+                    url: `${id}`,
                     type: 'POST',
                     data: {
                         '_method': 'DELETE',
