@@ -61,6 +61,33 @@
 </div>
 
 <section class="section">
+    @if(session('success'))
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="bi bi-check-circle-fill me-2"></i> {{ session('success') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    @endif
+
+    {{-- Alert Error --}}
+    @if(session('error'))
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="bi bi-exclamation-triangle-fill me-2"></i> {{ session('error') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    @endif
+
+    {{-- Alert Validasi (Misal form reject/revisi kosong) --}}
+    @if ($errors->any())
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong class="d-block mb-1">Terjadi kesalahan input:</strong>
+        <ul class="mb-0 ps-3">
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    @endif
     {{-- Bar aksi kontekstual --}}
     <div class="card mb-3">
         <div class="card-body d-flex flex-wrap gap-2 justify-content-between align-items-center">
@@ -96,7 +123,7 @@
                     </button>
                 @endif
                 {{-- Aksi pembuat saat revisi --}}
-                
+
 
             </div>
         </div>
@@ -322,29 +349,35 @@
 {{-- ===         MODAL BARU DITAMBAHKAN           === --}}
 {{-- ================================================ --}}
 <!-- Modal Final Approve -->
-<div class="modal fade" id="modalFinalApprove" tabindex="-1" aria-labelledby="modalFinalApproveLabel" aria-hidden="true">
+<div class="modal fade" id="modalFinalApprove" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog">
     <form class="modal-content" method="POST" action="{{ route('persuratan.final.approve', $surat) }}">
         @csrf
         <div class="modal-header">
-            <h5 class="modal-title" id="modalFinalApproveLabel">Persetujuan Final</h5>
+            <h5 class="modal-title" id="modalFinalApproveLabel">Konfirmasi TTE</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <div class="modal-body">
-            <p>Anda akan menyetujui surat ini secara final. Silakan unggah tautan ke dokumen yang telah ditandatangani.</p>
+        <div class="modal-body text-center">
             <div class="mb-3">
-                <label for="signed_document_link" class="form-label">Link Dokumen Bertanda Tangan <span class="text-danger">*</span></label>
-                <input type="url" class="form-control" name="signed_document_link" id="signed_document_link" placeholder="https://drive.google.com/..." required>
+                <i class="bi bi-qr-code-scan text-primary" style="font-size: 3rem;"></i>
             </div>
+            <h5>Generate Tanda Tangan Elektronik?</h5>
+            <p class="text-muted">
+                Sistem akan secara otomatis membuat <strong>Lembar Pengesahan QR Code</strong> atas nama Anda.
+                <br><br>
+                Pastikan Anda telah memeriksa seluruh isi dokumen sebelum melanjutkan.
+            </p>
+            {{-- Tidak ada input manual lagi --}}
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">Batal</button>
-            <button type="submit" class="btn btn-success">Setujui dan Simpan</button>
+            <button type="submit" class="btn btn-success">
+                <i class="bi bi-pen-fill me-2"></i> Ya, Tanda Tangani
+            </button>
         </div>
     </form>
   </div>
 </div>
-
 
 
 {{-- Modal Tolak --}}
