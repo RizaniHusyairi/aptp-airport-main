@@ -39,22 +39,22 @@
                 </a>
             </li>
             @foreach ($permissionRoutes as $permissionName => $data)
-            
+
             @if ($user->hasPermission($permissionName))
             @if($permissionName == 'Manajemen Posko Nataru')
             <li class="sidebar-item has-sub {{ Route::is('staff.nataru.*') ? 'active' : '' }}">
                 <a href="#" class='sidebar-link'>
                     <i class="bi bi-airplane-engines"></i>
-                    <span>Posko Nataru</span>
+                    <span>Menu Posko</span>
                 </a>
                 <ul class="submenu {{ Route::is('staff.nataru.*') ? 'active' : '' }}">
                     <li class="submenu-item {{ Route::is('staff.nataru.dashboard') ? 'active' : '' }}">
                         <a href="{{ route('staff.nataru.dashboard') }}">Dashboard & Grafik</a>
                     </li>
                     <li class="submenu-item {{ Route::is('staff.nataru-events.index') ? 'active' : '' }}">
-                        <a href="{{ route('staff.nataru-events.index') }}">Manajemen Event</a>
+                        <a href="{{ route('staff.nataru-events.index') }}">Manajemen Posko</a>
                     </li>
-                    
+
                 </ul>
             </li>
             @else
@@ -65,13 +65,13 @@
                         <span>{{ $data['label'] }}</span>
                     </a>
                 </li>
-                
+
                 @endif
 
             @endif
             @endforeach
 
-            
+
         </ul>
     </div>
 </div>

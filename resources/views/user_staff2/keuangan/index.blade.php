@@ -17,7 +17,7 @@
                                         ['label' => 'Menu', 'url' => route('staff.dashboard.index')],
                                         ['label' => 'Laporan Keuangan', 'active' => true]
                                     ]" />
-                
+
             </div>
         </div>
     </div>
@@ -91,10 +91,10 @@
                                 <td>{{ $finance->note ?? '-' }}</td>
                                 <td>
                                     @if($finance->flow_type == 'budget')
-                                    
+
                                     <button class="btn btn-sm btn-info btn-lihat-pengeluaran text-white btn-tooltip" data-bs-toggle="tooltip" title="Lihat Belanja"><i class="bi bi-eye"></i></button>
                                     @foreach($finance->budgetExpenses as $expense)
-                                    
+
                                     <div  class="expense d-none" data-id="{{ $expense->id }}">
                                         <span class="nomor">{{ $loop->iteration }}</span>
                                         <span class="deskripsi">{{ $expense->description }}</span>
@@ -102,17 +102,18 @@
 
                                     </div>
                                     @endforeach
-                                    
-                                    
+
+
                                     @endif
                                     <a href="{{ route('keuangan.edit', $finance->id) }}" class="btn btn-sm btn-warning btn-tooltip text-white" data-bs-toggle="tooltip" title="Edit"><i class="bi bi-pencil"></i></a>
-                                    <button class="btn btn-sm btn-danger btn-hapus btn-tooltip" data-id="{{ route("keuangan.destroy",$finance->id) }}" data-bs-toggle="tooltip" title="Hapus"><i class="bi bi-trash"></i></button>
+
+                                    <button class="btn btn-sm btn-danger btn-hapus btn-tooltip" data-id="{{ route('keuangan.destroy',$finance->id) }}" data-bs-toggle="tooltip" title="Hapus"><i class="bi bi-trash"></i></button>
                                 </td>
                             </tr>
                             @empty
-                          
+
                             @endforelse
-                            
+
                         </tbody>
                     </table>
                 </div>
@@ -129,7 +130,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <p><strong>Periode:</strong> <span id="modal-periode">-</span></p> 
+                <p><strong>Periode:</strong> <span id="modal-periode">-</span></p>
                 <p><strong>Total Anggaran:</strong> <span id="modal-total-anggaran">-</span></p>
                 <hr>
                 <div class="table-responsive">
