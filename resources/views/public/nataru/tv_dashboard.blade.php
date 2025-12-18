@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LIVE MONITORING - {{ $nataruEvent->name }}</title>
-    
+
     <link rel="stylesheet" href="{{ asset('assetsv2/compiled/css/app.css') }}">
     <link rel="stylesheet" href="{{ asset('assetsv2/compiled/css/iconly.css') }}">
     <script src="{{ asset('assetsv2/extensions/apexcharts/apexcharts.min.js') }}"></script>
@@ -19,12 +19,12 @@
             display: flex;
             flex-direction: column;
         }
-        
+
         /* --- Header Minimalis Light --- */
         .tv-header {
-            background: #ffffff; 
+            background: #ffffff;
             padding: 0.6rem 1.5rem;
-            border-bottom: 3px solid #f0a500; 
+            border-bottom: 3px solid #f0a500;
             margin-bottom: 0.8rem;
             box-shadow: 0 4px 12px rgba(0,0,0,0.05); /* Shadow lebih halus */
             display: flex;
@@ -34,18 +34,18 @@
         }
         .header-left { display: flex; align-items: center; gap: 15px; }
         .header-logo { height: 45px; width: auto; } /* Logo asli (tidak di-invert) */
-        .header-title h2 { 
-            font-size: 1.3rem; 
-            font-weight: 800; 
-            margin: 0; 
+        .header-title h2 {
+            font-size: 1.3rem;
+            font-weight: 800;
+            margin: 0;
             letter-spacing: 1px;
             text-transform: uppercase;
             color: #0d2c4a; /* Warna biru tua korporat */
         }
-        .header-subtitle { 
-            font-size: 0.85rem; 
-            color: #6c757d; 
-            font-weight: 600; 
+        .header-subtitle {
+            font-size: 0.85rem;
+            color: #6c757d;
+            font-weight: 600;
             letter-spacing: 0.5px;
         }
 
@@ -78,13 +78,13 @@
         }
         .ticket-icon.high { background: linear-gradient(45deg, #17a2b8, #117a8b); }
         .ticket-icon.low { background: linear-gradient(45deg, #6c757d, #495057); }
-        
+
         .ticket-content { display: flex; flex-direction: column; }
         .ticket-label { font-size: 0.6rem; text-transform: uppercase; color: #6c757d; font-weight: 700; }
         .ticket-value { font-size: 0.9rem; font-weight: 800; color: #333; line-height: 1; } /* Value diperkecil */
-        
+
         .header-right { text-align: right; display: flex; align-items: center; gap: 15px; }
-        
+
         .live-badge {
             font-size: 0.7rem;
             background: rgba(255, 77, 77, 0.1);
@@ -111,7 +111,7 @@
 
         /* --- Konten Utama --- */
         #main-content {
-            flex-grow: 1; 
+            flex-grow: 1;
             padding: 0.3rem 1.5rem 1rem 1.5rem;
             overflow:hidden;
         }
@@ -140,12 +140,12 @@
             content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(240, 165, 0, 0.1); animation: flash 0.5s; pointer-events: none;
         }
-        
-        .stat-title { 
+
+        .stat-title {
             font-size: 0.8rem; color: #6c757d; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; margin-bottom: 2px;
         }
-        .stat-value { 
-            font-size: 1.8rem; 
+        .stat-value {
+            font-size: 1.8rem;
             font-weight: 800; color: #0d2c4a; line-height: 1.1;
         }
         .stat-icon-bg {
@@ -159,21 +159,21 @@
         .diff-up { background: rgba(32, 201, 151, 0.1); color: #198754; }
         .diff-down { background: rgba(255, 107, 107, 0.1); color: #dc3545; }
         .diff-neutral { background: rgba(170, 176, 182, 0.1); color: #6c757d; }
-        
+
         /* --- Chart Container Light --- */
         .chart-container {
             background: #ffffff;
             border-radius: 10px;
             padding: 10px 15px;
             border: 1px solid #eef2f7;
-            height: 100%; 
-            min-height: 0; 
+            height: 100%;
+            min-height: 0;
             display: flex;
             flex-direction: column;
             box-shadow: 0 5px 15px rgba(0,0,0,0.03);
             position: relative; /* Penting untuk progress bar */
         }
-        
+
         /* Progress bar untuk rotasi chart */
         .chart-progress-bar {
             position: absolute;
@@ -186,21 +186,21 @@
             border-radius: 10px 10px 0 0;
             z-index: 5;
         }
-        
+
         /* --- Table Styling Light --- */
         .card-table {
-            background: #ffffff; 
+            background: #ffffff;
             border: 1px solid #eef2f7;
             border-radius: 10px;
             overflow: hidden;
-            height: 100%; 
+            height: 100%;
             display: flex;
             flex-direction: column;
-            min-height: 0; 
+            min-height: 0;
             box-shadow: 0 5px 15px rgba(0,0,0,0.03);
         }
         .table-header {
-            background: #ffffff; 
+            background: #ffffff;
             padding: 8px 15px;
             border-bottom: 1px solid #f2f2f2;
             display: flex;
@@ -213,20 +213,20 @@
 
         .table-scroll-container {
             flex-grow: 1;
-            overflow-y: hidden; 
-            position: relative; 
-            scrollbar-width: none; 
-            -ms-overflow-style: none; 
+            overflow-y: hidden;
+            position: relative;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
         }
         .table-scroll-container::-webkit-scrollbar { display: none; }
 
         .table-tv { width: 100%; border-collapse: separate; border-spacing: 0 2px; }
-        
+
         /* Header Tabel Sticky */
         .table-tv thead th {
             color: #6c757d;
             text-transform: uppercase;
-            font-size: 0.7rem; 
+            font-size: 0.7rem;
             padding: 8px 12px;
             font-weight: 700;
             letter-spacing: 0.5px;
@@ -236,14 +236,14 @@
             z-index: 5;
             border-bottom: 2px solid #eef2f7;
         }
-        
+
         .table-tv tbody tr {
             background: #ffffff;
             transition: background-color 0.3s;
             border-bottom: 1px solid #f2f2f2;
         }
         .table-tv tbody tr:nth-child(even) { background-color: #fcfcfc; } /* Zebra striping halus */
-        
+
         .table-tv tbody tr.new-row { animation: highlightRow 2s ease-out; }
         @keyframes highlightRow {
             0% { background-color: #fff3cd; } /* Kuning muda */
@@ -299,7 +299,7 @@
             <div class="clock-container">
 
                 <div class="live-badge">
-                    <span class="live-dot" id="liveIndicator"></span> 
+                    <span class="live-dot" id="liveIndicator"></span>
                     <span id="liveText">LIVE</span>
                 </div>
                 <div class="digital-clock" id="digital-clock">00:00:00</div>
@@ -309,7 +309,7 @@
     </div>
 
     <div class="container-fluid h-100" id="main-content">
-        
+
         @php
             function tvDiff($val, $isPercent = false) {
                 if ($val > 0) {
@@ -324,7 +324,7 @@
 
         {{-- Layout Grid Baru --}}
         <div class="row h-100 g-3">
-            
+
             {{-- 1. Kolom Kiri (Statistik) --}}
             <div class="col-2 h-100 d-flex flex-column gap-3">
                 <!-- Flight -->
@@ -333,8 +333,8 @@
                     <div class="d-flex align-items-baseline gap-2">
                         <div class="stat-value" id="val-flights">{{ number_format($currentStats['total_flights']) }}</div>
                     </div>
-                    @if($comparison) 
-                        <div id="diff-flights">{!! tvDiff($comparison['flights']) !!} <small class="text-muted ms-1" style="font-size: 0.7rem">vs lalu</small></div> 
+                    @if($comparison)
+                        <div id="diff-flights">{!! tvDiff($comparison['flights']) !!} <small class="text-muted ms-1" style="font-size: 0.7rem">vs lalu</small></div>
                     @endif
                     <div class="stat-icon-bg text-primary"><i class="bi bi-airplane-engines"></i></div>
                 </div>
@@ -345,8 +345,8 @@
                     <div class="d-flex align-items-baseline gap-2">
                         <div class="stat-value" id="val-pax">{{ number_format($currentStats['total_pax']) }}</div>
                     </div>
-                    @if($comparison) 
-                        <div id="diff-pax">{!! tvDiff($comparison['pax']) !!} <small class="text-muted ms-1" style="font-size: 0.7rem">vs lalu</small></div> 
+                    @if($comparison)
+                        <div id="diff-pax">{!! tvDiff($comparison['pax']) !!} <small class="text-muted ms-1" style="font-size: 0.7rem">vs lalu</small></div>
                     @endif
                     <div class="stat-icon-bg text-success"><i class="bi bi-people-fill"></i></div>
                 </div>
@@ -357,8 +357,8 @@
                     <div class="d-flex align-items-baseline gap-2">
                         <div class="stat-value" id="val-cargo">{{ number_format($currentStats['total_cargo']) }}</div>
                     </div>
-                    @if($comparison) 
-                        <div id="diff-cargo">{!! tvDiff($comparison['cargo']) !!} <small class="text-muted ms-1" style="font-size: 0.7rem">vs lalu</small></div> 
+                    @if($comparison)
+                        <div id="diff-cargo">{!! tvDiff($comparison['cargo']) !!} <small class="text-muted ms-1" style="font-size: 0.7rem">vs lalu</small></div>
                     @endif
                     <div class="stat-icon-bg text-warning"><i class="bi bi-box-seam-fill"></i></div>
                 </div>
@@ -369,8 +369,8 @@
                     <div class="d-flex align-items-baseline gap-2">
                         <div class="stat-value" id="val-lf">{{ number_format($currentStats['avg_lf'], 1) }}%</div>
                     </div>
-                    @if($comparison) 
-                        <div id="diff-lf">{!! tvDiff($comparison['lf'], true) !!} <small class="text-muted ms-1" style="font-size: 0.7rem">vs lalu</small></div> 
+                    @if($comparison)
+                        <div id="diff-lf">{!! tvDiff($comparison['lf'], true) !!} <small class="text-muted ms-1" style="font-size: 0.7rem">vs lalu</small></div>
                     @endif
                     <div class="stat-icon-bg text-danger"><i class="bi bi-pie-chart-fill"></i></div>
                 </div>
@@ -378,47 +378,54 @@
 
             {{-- 2. Kolom Kanan (Grafik & Tabel) --}}
             <div class="col-10 h-100 d-flex flex-column gap-3">
-                
+
                 {{-- Bagian Atas: Grafik --}}
                 @if($nataruEvent->compare_event_id)
                 <div class="chart-container flex-fill" style="height: 200%; min-height: 0;">
                     <div class="chart-progress-bar" id="chart-progress"></div> {{-- Progress Bar untuk rotasi --}}
                     <div class="d-flex justify-content-between align-items-center mb-1 flex-shrink-0">
                         <h6 class="mb-0 text-dark text-uppercase fw-bold" style="letter-spacing: 1px; font-size: 0.85rem;" id="chart-title">Tren Pesawat</h6> {{-- Judul Dinamis --}}
-                        
+
                     </div>
                     <div id="chartPaxTv" style="flex-grow: 1; min-height: 0;"></div>
                 </div>
                 @endif
-                
+
                 {{-- Bagian Bawah: Tabel Auto Scroll --}}
                 <div class="card-table flex-fill" style="min-height: 0;">
                     <div class="table-header">
                         <div class="table-title"><i class="bi bi-clock-history me-2 text-primary"></i>Penerbangan Hari Ini</div> {{-- Judul Diubah --}}
                         <span class="badge bg-success bg-opacity-10 text-success p-2 px-3" style="font-size: 0.75rem;">
-                            <i class="bi bi-calendar-check me-1"></i> 
+                            <i class="bi bi-calendar-check me-1"></i>
                             @php
-                                // Tentukan tanggal referensi (H-0). Asumsi Nataru: 25 Desember tahun start_date.
-                                // Anda bisa menyesuaikan logika ini jika referensi H-0 bukan 25 Des.
-                                $refDate = \Carbon\Carbon::create($nataruEvent->start_date->year, 12, 25);
-                                $today = \Carbon\Carbon::now();
-                                
-                                // Hitung selisih hari
-                                // diffInDays(target, false): 
-                                // Jika target > date (date sebelum H): hasil positif. (Misal 25 - 15 = 10) -> H-10
-                                // Jika target < date (date sesudah H): hasil negatif. (Misal 25 - 26 = -1) -> H+1
-                                // Kita kalikan -1 agar sesuai dengan logika controller sebelumnya
-                                $diff = $today->diffInDays($refDate, false) * -1;
+                            // 1. Ambil Start & End Date (Reset waktu ke 00:00:00 agar akurat)
+                            $start = \Carbon\Carbon::parse($nataruEvent->start_date)->startOfDay();
+                            $end   = \Carbon\Carbon::parse($nataruEvent->end_date)->startOfDay();
 
-                                $label = "";
-                                if ($diff == 0) {
-                                    $label = "Hari H";
-                                } elseif ($diff < 0) {
-                                    $label = "H" . $diff; // H-10
-                                } else {
-                                    $label = "H+" . $diff; // H+10
-                                }
-                            @endphp
+                            // 2. Hitung Titik Tengah (Mean) sebagai H-0
+                            // (LOGIKA INI DISAMAKAN DENGAN CONTROLLER)
+                            $diffTotal = $start->diffInDays($end);
+                            $offset = ceil($diffTotal / 2);
+                            $refDate = $start->copy()->addDays($offset);
+
+                            // 3. Hitung Selisih Hari Ini dengan H-0
+                            $today = \Carbon\Carbon::now()->startOfDay();
+
+                            // Logika:
+                            // diffInDays(target, false): Bernilai positif jika target (Ref) ada di masa depan.
+                            // Contoh: Hari ini tgl 18, H-0 tgl 27. Maka diff = 9.
+                            // Kita ingin formatnya H-9 (Negatif). Maka dikali -1.
+                            $diff = $today->diffInDays($refDate, false) * -1;
+
+                            $label = "";
+                            if ($diff == 0) {
+                                $label = "Hari H";
+                            } elseif ($diff < 0) {
+                                $label = "H" . $diff;
+                            } else {
+                                $label = "H+" . $diff;
+                            }
+                        @endphp
                             {{ $label }} ({{ $today->translatedFormat('d M') }})
                         </span>
                     </div>
@@ -488,7 +495,7 @@
             function animateScroll() {
                 if(container.scrollHeight <= container.clientHeight) {
                     requestAnimationFrame(animateScroll);
-                    return; 
+                    return;
                 }
 
                 if (!isPaused) {
@@ -506,7 +513,7 @@
                 }
                 requestAnimationFrame(animateScroll);
             }
-            
+
             setTimeout(animateScroll, 2000);
         }
         startAutoScroll();
@@ -531,7 +538,7 @@
                     updateStatIfChanged('val-pax', doc);
                     updateStatIfChanged('val-cargo', doc);
                     updateStatIfChanged('val-lf', doc);
-                    
+
                     updateStatIfChanged('val-max-price', doc);
                     updateStatIfChanged('val-min-price', doc);
 
@@ -543,19 +550,19 @@
                     // Update Tabel
                     const newTableBody = doc.getElementById('flights-table-body');
                     const currentTableBody = document.getElementById('flights-table-body');
-                    
+
                     const firstNewRow = newTableBody.querySelector('tr');
                     const firstCurrentRow = currentTableBody.querySelector('tr');
 
                     if (firstNewRow && (!firstCurrentRow || firstNewRow.dataset.id !== firstCurrentRow.dataset.id)) {
                         const container = document.getElementById('flights-scroll-container');
-                        
+
                         currentTableBody.style.opacity = '0.5';
                         setTimeout(() => {
                             currentTableBody.innerHTML = newTableBody.innerHTML;
                             currentTableBody.style.opacity = '1';
                             if(container) container.scrollTop = 0;
-                            
+
                             const newRows = currentTableBody.querySelectorAll('tr');
                             if(newRows.length > 0) newRows[0].classList.add('new-row');
                         }, 200);
@@ -587,7 +594,7 @@
                 setTimeout(() => { currentEl.style.color = ''; }, 1000);
             }
         }
-        
+
         function updateContentIfChanged(id, newDoc) {
              const currentEl = document.getElementById(id);
              const newEl = newDoc.getElementById(id);
@@ -608,17 +615,17 @@
 
                 // Definisi Konfigurasi (Tetap sama)
                 const chartConfigs = [
-                    { 
+                    {
                         type: 'flights', title: 'Tren Pesawat (Pergerakan)', cardId: 'card-flights',
-                        colors: ['#0d6efd', '#6610f2', '#BF124D', '#76153C'] 
+                        colors: ['#0d6efd', '#6610f2', '#BF124D', '#76153C']
                     },
-                    { 
+                    {
                         type: 'pax', title: 'Tren Penumpang (Orang)', cardId: 'card-pax',
-                        colors: ['#20c997', '#198754', '#C59560', '#E67E22'] 
+                        colors: ['#20c997', '#198754', '#C59560', '#E67E22']
                     },
-                    { 
+                    {
                         type: 'cargo', title: 'Tren Kargo (Kg)', cardId: 'card-cargo',
-                        colors: ['#ffc107', '#fd7e14', '#E83C91', '#FF8FB7'] 
+                        colors: ['#ffc107', '#fd7e14', '#E83C91', '#FF8FB7']
                     }
                 ];
 
@@ -658,7 +665,7 @@
                 loadChartData();
 
                 // Panggil setiap 30 detik (Sinkron dengan refresh dashboard)
-                setInterval(loadChartData, 30000); 
+                setInterval(loadChartData, 30000);
 
                 // ---------------------------------------------
 
@@ -668,50 +675,50 @@
 
                     var options = {
                         series: getSeriesData(config.type),
-                        chart: { 
-                            type: 'line', height: '100%', toolbar: {show: false}, 
+                        chart: {
+                            type: 'line', height: '100%', toolbar: {show: false},
                             background: 'transparent', animations: { enabled: true, easing: 'easeinout', speed: 800 },
-                            fontFamily: 'Nunito, sans-serif', stacked: false 
+                            fontFamily: 'Nunito, sans-serif', stacked: false
                         },
-                        colors: config.colors, 
+                        colors: config.colors,
                         dataLabels: { enabled: true },
                         stroke: { width: [0, 0, 2, 2], curve: 'smooth', dashArray: [0, 0, 5, 5] },
                         plotOptions: { bar: { columnWidth: '60%', borderRadius: 2 } },
-                        xaxis: { 
+                        xaxis: {
                             categories: globalChartData.categories, // Menggunakan data global
-                            labels: { 
-                                style: { colors: '#6c757d', fontSize: '10px' }, 
+                            labels: {
+                                style: { colors: '#6c757d', fontSize: '10px' },
                                 formatter: function (val, timestamp, index) {
                                     // Pastikan data tanggal tersedia
                                     console.log(globalChartData);
                                     if (typeof index !== 'undefined' && globalChartData.dates_event1 && globalChartData.dates_event2) {
                                         const date1 = globalChartData.dates_event1[index]; // Tanggal Event Sekarang
                                         const date2 = globalChartData.dates_event2[index]; // Tanggal Event Pembanding
-                                        
+
                                         // Return dalam bentuk Array String untuk membuat baris baru (multi-line)
                                         // Baris 1: H-xx
                                         // Baris 2: Tanggal Event 1
                                         // Baris 3: Tanggal Event 2
-                                        return [val, date1, date2]; 
+                                        return [val, date1, date2];
                                     }
                                     return val;
                                 },
-                                
+
                             },
                             axisBorder: { show: true, color: '#eef2f7' },
                             axisTicks: { show: false }
                         },
                         yaxis: { labels: { style: { colors: '#6c757d', fontSize: '10px' } } },
-                        grid: { 
-                            borderColor: '#eef2f7', 
-                            strokeDashArray: 3, 
-                        }, 
-                        theme: { mode: 'light' }, 
-                        legend: { 
-                            position: 'top', horizontalAlign: 'right', fontSize: '10px', 
+                        grid: {
+                            borderColor: '#eef2f7',
+                            strokeDashArray: 3,
+                        },
+                        theme: { mode: 'light' },
+                        legend: {
+                            position: 'top', horizontalAlign: 'right', fontSize: '10px',
                             markers: { width: 16, height: [12, 12, 3, 3], radius: [2, 2, 0, 0], offsetY: [0, 0, -1,-1 ], strokeWidth: 0 },
                             itemMargin: { horizontal: 5, vertical: 0 },
-                            labels: { colors: '#333' } 
+                            labels: { colors: '#333' }
                         }
                     };
                     chartInstance = new ApexCharts(document.querySelector("#chartPaxTv"), options);
@@ -733,7 +740,7 @@
                     return [
                         { name: '{{ $nataruEvent->name }} (Arr)', type: 'bar', data: globalChartData.dataset1[type + '_arrival'] },
                         { name: '{{ $nataruEvent->name }} (Dep)', type: 'bar', data: globalChartData.dataset1[type + '_departure'] },
-                        { name: '{{ $nataruEvent->compareEvent->name }} (Arr)', type: 'line', data: globalChartData.dataset2[type + '_arrival'] }, 
+                        { name: '{{ $nataruEvent->compareEvent->name }} (Arr)', type: 'line', data: globalChartData.dataset2[type + '_arrival'] },
                         { name: '{{ $nataruEvent->compareEvent->name }} (Dep)', type: 'line', data: globalChartData.dataset2[type + '_departure'] }
                     ];
                 }
@@ -769,12 +776,12 @@
                         bar.style.transition = 'width 20s linear';
                         bar.style.width = '100%';
                     }
-                    
+
                     // Interval untuk ROTASI tampilan (ganti jenis grafik)
                     setInterval(() => {
                         currentChartIndex = (currentChartIndex + 1) % chartConfigs.length;
                         updateChartRotation();
-                    }, 20000); 
+                    }, 20000);
                 }
             @endif
         });

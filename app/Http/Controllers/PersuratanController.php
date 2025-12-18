@@ -51,7 +51,7 @@ class PersuratanController extends Controller
     public function create()
     {
         $staffs = User::where('is_staff', true)->orderBy('name')->get();
-        
+
         // Ambil HANYA role pejabat yang bisa menjadi penandatangan final
         $approverRoles = Role::whereIn('name', [
             'Kepala Bandara',
@@ -90,7 +90,7 @@ class PersuratanController extends Controller
                     $fail('Hanya tautan drive.google.com atau docs.google.com yang diizinkan.');
                 }
             }],
-            
+
         ],[
             'letter_type.required'       => 'Jenis surat wajib dipilih.',
             'letter_date.required'       => 'Tanggal surat wajib diisi.',
@@ -110,12 +110,12 @@ class PersuratanController extends Controller
         ->filter()
         ->unique()
         ->values();
-        
+
 
         DB::beginTransaction();
         try {
-            
-            
+
+
 
             // buat surat (tanpa verifiers, tanpa title)
             $letter = persuratan::create([
@@ -184,7 +184,7 @@ class PersuratanController extends Controller
         $metaUserIds = $surat->events->pluck('meta')->flatMap(function ($meta) {
             return [$meta['to_user_id'] ?? null, $meta['by'] ?? null];
         })->filter()->unique()->values();
-        
+
         // Ambil data user dari ID yang terkumpul dan format sebagai [id => name]
         $metaUsers = User::whereIn('id', $metaUserIds)->pluck('name', 'id');
 
@@ -353,7 +353,7 @@ class PersuratanController extends Controller
                 ->all();
 
             $surat->status = 'Verifikasi Tambahan';
-            
+
             // kembalikan assignment
             $next = $surat->verifications()->where('status','Menunggu')->orderBy('order')->first();
             if ($next) {
@@ -433,8 +433,8 @@ class PersuratanController extends Controller
         DB::beginTransaction();
         try {
             // (opsional) catat event
-            if (class_exists(\App\Models\SuratEvent::class)) {
-                \App\Models\SuratEvent::create([
+            if (class_exists(Surat_event::class)) {
+                Surat_event::create([
                     'persuratan_id' => $surat->id,
                     'actor_user_id' => Auth::id(),
                     'event_type'    => 'deleted',

@@ -45,7 +45,7 @@
             <li class="sidebar-item has-sub {{ Route::is('staff.nataru.*') ? 'active' : '' }}">
                 <a href="#" class='sidebar-link'>
                     <i class="bi bi-airplane-engines"></i>
-                    <span>Menu Posko</span>
+                    <span>Posko</span>
                 </a>
                 <ul class="submenu {{ Route::is('staff.nataru.*') ? 'active' : '' }}">
                     <li class="submenu-item {{ Route::is('staff.nataru.dashboard') ? 'active' : '' }}">

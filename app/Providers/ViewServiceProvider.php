@@ -10,7 +10,7 @@ use Illuminate\Support\ServiceProvider;
 
 class ViewServiceProvider extends ServiceProvider
 {
-    
+
     /**
      * Bootstrap services.
      *
@@ -41,21 +41,21 @@ class ViewServiceProvider extends ServiceProvider
                     'route' => route('layanan.show', $service->slug) // Menggunakan route dinamis yang baru
                 ];
             }
-            
+
             $menuItems = [
                 'header' => [
                     ['name' => 'Beranda', 'route' => route('home')],
-                    
+
                     ['name' => 'Informasi Publik', 'dropdown' => [
                         ['name' => 'Profil Bandara', 'route' => route('profilBandara')],
                         ['name' => 'Struktur Organisasi', 'route' => route('strukturOrganisasi')],
                         ['name' => 'Pejabat Bandara', 'route' => route('pejabatBandara')],
                         ['name' => 'Fasilitas Bandara' ,'route' => route('fasilitas')]
-                        
+
                         ],
 
                     ],
-                    
+
                     ['name' => 'PPID', 'dropdown' => [
                         [
                             'name' => 'Profil PPID BLU',
@@ -84,8 +84,8 @@ class ViewServiceProvider extends ServiceProvider
                         ['name' => 'Berita', 'route' => route('berita')],
                         ['name' => 'Kinerja Keuangan', 'route' => route('laporanKeuangan')],
                     ]],
-                    
-                    
+
+
                     ['name' => 'Regulasi','dropdown' =>[
                         ['name' => 'Surat Keputusan', 'route' => route('letters.utusan')],
                         ['name' => 'Surat Edaran', 'route' => route('letters.edaran')],
@@ -95,7 +95,7 @@ class ViewServiceProvider extends ServiceProvider
                     ['name' => 'Layanan', 'dropdown' => $serviceMenuItems]
                 ]
             ];
-            
+
             $view->with(compact( 'menuItems'));
         });
 
@@ -139,7 +139,8 @@ class ViewServiceProvider extends ServiceProvider
                 'Permintaan Suku Cadang' => ['route' => 'staff.spare-part-requests.index', 'icon' => 'bi bi-send-check', 'label' => 'Permintaan Suku Cadang'],
                 'Manajemen Absensi Rapat' => ['route' => 'staff.meetings.index', 'icon' => 'bi bi-calendar-event', 'label' => 'Absensi Rapat'],
                 'Manajemen Posko Nataru' => ['route' => 'staff.nataru.index', 'icon' => 'bi bi-airplane-engines', 'label' => 'Posko Nataru'],
-                
+                'Manajemen Sertifikat OJT' => ['route' => 'staff.ojt.index', 'icon' => 'bi bi-mortarboard', 'label' => 'Data OJT'],
+
             ];
 
             $view->with('permissionRoutes',$permissionRoutes);

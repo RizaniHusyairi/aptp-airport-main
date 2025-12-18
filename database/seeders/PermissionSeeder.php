@@ -32,8 +32,9 @@ class PermissionSeeder extends Seeder
             'Manajemen Program Kerja',
             'Manajemen Absensi Rapat',
             'Verifikasi Program Kerja',
-            'Manajemen Posko Nataru'
-            
+            'Manajemen Posko Nataru',
+            "Manajemen Sertifikat OJT"
+
         ];
 
         foreach ($permissions as $item) {
