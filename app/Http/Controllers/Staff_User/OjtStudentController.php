@@ -104,4 +104,113 @@ class OjtStudentController extends Controller
         $ojt->delete();
         return back()->with('success', 'Data berhasil dihapus');
     }
+
+    /**
+     * Menampilkan halaman edit.
+     */
+    public function edit(OjtStudent $ojt)
+    {
+        // Daftar Unit Kerja (Sama seperti create)
+        $units = [
+            'Kepegawaian', 'Tata Usaha', 'AAB', 'Keuangan', 'Jasa', 'Avsec',
+            'Bendahara', 'Bangland', 'AMC', 'Data & Informasi', 'Elband',
+            'Pengelola Informasi', 'BMN', 'Listrik', 'Humas', 'PKP-PK'
+        ];
+        $student = $ojt;
+        return view('user_staff2.ojt.edit', compact('student', 'units'));
+    }
+
+    /**
+     * Memperbarui data di database.
+     */
+    /**
+     * Memperbarui data di database.
+     */
+    public function update(Request $request, OjtStudent $ojt)
+    {
+        $student = $ojt;
+        // 1. Definisi Aturan (Rules)
+        $rules = [
+            'name'          => 'required|string|max:255',
+            'id_number'     => 'required|string|max:50',
+            'birth_place'   => 'required|string',
+            'birth_date'    => 'required|date',
+            'address'       => 'required|string',
+            'institution'   => 'required|string',
+            'major'         => 'required|string',
+            'duration'      => 'required|string',
+            'start_date'    => 'required|date',
+            'end_date'      => 'required|date',
+            'phone_number'  => 'required|string',
+            'supervisors'   => 'required|array|min:1',
+            'supervisors.*' => 'required|string',
+            'work_units'    => 'required|array|min:1',
+
+            // File saat update bersifat 'nullable' (boleh kosong)
+            'identity_card' => 'nullable|image|max:2048',
+            'photo'         => 'nullable|image|max:2048',
+        ];
+
+        // 2. Pesan Error Bahasa Indonesia
+        $messages = [
+            'required' => ':attribute wajib diisi.',
+            'string'   => ':attribute harus berupa teks.',
+            'date'     => 'Format tanggal tidak valid.',
+            'max'      => [
+                'string' => ':attribute maksimal :max karakter.',
+                'file'   => 'Ukuran file :attribute maksimal 2MB.', // 2048KB = 2MB
+            ],
+            'image'    => 'File :attribute harus berupa gambar (jpg, jpeg, png).',
+            'array'    => ':attribute harus berupa data list.',
+            'min'      => [
+                'array' => 'Minimal harus memilih satu :attribute.',
+            ],
+        ];
+
+        // 3. Nama Atribut Custom (Agar pesan error menyebut nama kolom dengan benar)
+        $attributes = [
+            'name'          => 'Nama Lengkap',
+            'id_number'     => 'Nomor KTP/Kartu Pelajar',
+            'birth_place'   => 'Tempat Lahir',
+            'birth_date'    => 'Tanggal Lahir',
+            'address'       => 'Alamat Lengkap',
+            'institution'   => 'Asal Sekolah/Kampus',
+            'major'         => 'Jurusan',
+            'duration'      => 'Lama OJT',
+            'start_date'    => 'Tanggal Mulai',
+            'end_date'      => 'Tanggal Selesai',
+            'phone_number'  => 'Nomor Handphone',
+            'supervisors'   => 'Nama Pembimbing',
+            'work_units'    => 'Unit Kerja',
+            'identity_card' => 'Scan KTP',
+            'photo'         => 'Pas Foto',
+        ];
+
+        // Eksekusi Validasi
+        $validated = $request->validate($rules, $messages, $attributes);
+
+        // Cek apakah ada file KTP baru diupload
+        if ($request->hasFile('identity_card')) {
+            // Hapus file lama jika ada
+            if ($student->identity_card_path) {
+                Storage::disk('public')->delete($student->identity_card_path);
+            }
+            // Simpan yang baru
+            $validated['identity_card_path'] = $request->file('identity_card')->store('ojt_docs/identity', 'public');
+        }
+
+        // Cek apakah ada Foto baru diupload
+        if ($request->hasFile('photo')) {
+            // Hapus file lama
+            if ($student->photo_path) {
+                Storage::disk('public')->delete($student->photo_path);
+            }
+            // Simpan yang baru
+            $validated['photo_path'] = $request->file('photo')->store('ojt_docs/photos', 'public');
+        }
+
+        $student->update($validated);
+
+        return redirect()->route('staff.ojt.index')->with('success', 'Data Mahasiswa OJT berhasil diperbarui.');
+    }
 }

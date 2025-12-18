@@ -115,10 +115,15 @@
                                     <a href="{{ route('staff.ojt.show', $student->id) }}" class="btn btn-sm btn-info text-white" title="Lihat Detail">
                                         <i class="bi bi-eye"></i>
                                     </a>
-                                    {{-- Tombol Cetak Sertifikat --}}
-                                    <a href="{{ route('staff.ojt.certificate', $student->id) }}" target="_blank" class="btn btn-sm btn-success" title="Cetak Sertifikat">
-                                        <i class="bi bi-printer"></i>
+
+                                    {{-- === TOMBOL EDIT BARU === --}}
+                                    <a href="{{ route('staff.ojt.edit', $student->id) }}" class="btn btn-sm btn-warning text-white" title="Edit Data">
+                                        <i class="bi bi-pencil-square"></i>
                                     </a>
+                                    {{-- Tombol Cetak Sertifikat --}}
+                                    {{-- <a href="{{ route('staff.ojt.certificate', $student->id) }}" target="_blank" class="btn btn-sm btn-success" title="Cetak Sertifikat">
+                                        <i class="bi bi-printer"></i>
+                                    </a> --}}
 
                                     {{-- Tombol Hapus --}}
                                     <form action="{{ route('staff.ojt.destroy', $student->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus data {{ $student->name }}? File foto dan KTP juga akan terhapus.')">

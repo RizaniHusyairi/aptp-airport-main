@@ -343,7 +343,6 @@ Route::group(["prefix" => 'dashboard'], function () {
             Route::get('staff/nataru-dashboard/data', [DashboardNataruController::class, 'getComparisonData'])->name('staff.nataru.dashboard.data');
 
             Route::resource('staff/ojt', OjtStudentController::class)
-                ->except(['edit', 'update']) // Tambahkan edit/update jika perlu nanti
                 ->names('staff.ojt');
 
             Route::get('staff/ojt/{student}/certificate', [OjtStudentController::class, 'exportCertificate'])
