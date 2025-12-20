@@ -120,61 +120,112 @@ class PublicNataruController extends Controller
      */
     public function tvDashboard($token)
     {
-        $nataruEvent = NataruEvent::where('public_token', $token)->firstOrFail();
-
-        // 1. Load Data Penerbangan Event Ini (HANYA HARI INI)
-        // Kita gunakan relasi 'flights' tapi dengan kondisi tambahan
+       $nataruEvent = NataruEvent::where('public_token', $token)->firstOrFail();
+        
+        // Setup Tanggal Hari Ini & Helper Carbon
         $todayDate = Carbon::today()->format('Y-m-d');
+        $today = Carbon::today();
 
-        // Load data flights HARI INI untuk tabel (Limit bisa diperbesar atau dihapus jika pakai auto-scroll)
-        // Kita load terpisah agar tidak mengganggu perhitungan statistik total event
+        // 1. Data Penerbangan Hari Ini (Untuk Tabel & Statistik)
         $todaysFlights = $nataruEvent->flights()
                                      ->whereDate('flight_date', $todayDate)
                                      ->orderBy('flight_time', 'desc')
-                                     ->get(); // Ambil semua data hari ini untuk di-scroll
+                                     ->get();
 
+        // 2. Hitung Statistik Arrival/Departure HARI INI
+        // Kita bisa hitung manual dari collection $todaysFlights agar hemat query
+        $dailyStats = [
+            'flights_arr' => $todaysFlights->where('direction', 'arrival')->count(),
+            'flights_dep' => $todaysFlights->where('direction', 'departure')->count(),
+            
+            'pax_arr'     => $todaysFlights->where('direction', 'arrival')->sum('pax_total'),
+            'pax_dep'     => $todaysFlights->where('direction', 'departure')->sum('pax_total'),
+            
+            'cargo_arr'   => $todaysFlights->where('direction', 'arrival')->sum('cargo'),
+            'cargo_dep'   => $todaysFlights->where('direction', 'departure')->sum('cargo'),
+            
+            // Comparison placeholders
+            'comp_flights_arr' => 0, 'comp_flights_dep' => 0,
+            'comp_pax_arr' => 0,     'comp_pax_dep' => 0,
+            'comp_cargo_arr' => 0,   'comp_cargo_dep' => 0,
 
-        // Load event pembanding untuk keperluan statistik
-        $nataruEvent->load('compareEvent'); 
-        
-        // 2. Hitung Statistik Saat Ini
+            'label_h' => 'Hari H',
+        ];
+
+        // 3. Logika Perbandingan (H-x yang sama)
+        if ($nataruEvent->compare_event_id) {
+            $event2 = $nataruEvent->compareEvent;
+            
+            // --- HITUNG LOGIKA H-x (Copy dari logic getTvChartData agar konsisten) ---
+            $start1 = Carbon::parse($nataruEvent->start_date)->startOfDay();
+            $end1   = Carbon::parse($nataruEvent->end_date)->startOfDay();
+            $refDate1 = $start1->copy()->addDays(ceil($start1->diffInDays($end1) / 2)); // Titik Tengah Event 1
+
+            $start2 = Carbon::parse($event2->start_date)->startOfDay();
+            $end2   = Carbon::parse($event2->end_date)->startOfDay();
+            $refDate2 = $start2->copy()->addDays(ceil($start2->diffInDays($end2) / 2)); // Titik Tengah Event 2
+
+            // Cari H-berapa hari ini?
+            // diffInDays(target, false): Positif jika target masa depan. Kita mau H-x itu negatif.
+            // Jadi: H-indeks = (HariIni - Ref)
+            // Note: diffInDays return absolute. Kita harus cek manual lessThan/greaterThan atau pakai floatDiffInDays
+            // Cara paling aman manual:
+            $diffDays = $today->diffInDays($refDate1);
+            if ($today->lessThan($refDate1)) {
+                $hIndex = $diffDays * -1;
+            } else {
+                $hIndex = $diffDays;
+            }
+
+            // Tentukan Tanggal Pembanding yang "H-indeks"-nya sama
+            $compDate = $refDate2->copy()->addDays($hIndex);
+
+            // Query Data Pembanding
+            $compFlights = $event2->flights()->whereDate('flight_date', $compDate->format('Y-m-d'))->get();
+            
+            // Isi Data Comparison
+            $dailyStats['comp_flights_arr'] = $compFlights->where('direction', 'arrival')->count();
+            $dailyStats['comp_flights_dep'] = $compFlights->where('direction', 'departure')->count();
+            
+            $dailyStats['comp_pax_arr'] = $compFlights->where('direction', 'arrival')->sum('pax_total');
+            $dailyStats['comp_pax_dep'] = $compFlights->where('direction', 'departure')->sum('pax_total');
+            
+            $dailyStats['comp_cargo_arr'] = $compFlights->where('direction', 'arrival')->sum('cargo');
+            $dailyStats['comp_cargo_dep'] = $compFlights->where('direction', 'departure')->sum('cargo');
+            
+            // Set Label H untuk ditampilkan
+            if ($hIndex == 0) $dailyStats['label_h'] = "Hari H";
+            elseif ($hIndex < 0) $dailyStats['label_h'] = "H" . $hIndex;
+            else $dailyStats['label_h'] = "H+" . $hIndex;
+        }
+
+        // ... (Kode Current Stats & Comparison Total Event tetap sama seperti sebelumnya) ...
+        // ... Pastikan variabel 'max_flight_data' dll yang tadi sudah ditambahkan tetap ada ...
+        // Ambil OBJECT penerbangan dengan harga tertinggi hari ini
+        $maxFlight = $nataruEvent->flights()->whereDate('flight_date', $todayDate)->orderBy('ticket_price_high', 'desc')->first();
+        $minFlight = $nataruEvent->flights()->whereDate('flight_date', $todayDate)->where('ticket_price_low', '>', 0)->orderBy('ticket_price_low', 'asc')->first();
+
         $currentStats = [
             'total_flights' => $nataruEvent->flights()->count(),
             'total_pax' => $nataruEvent->flights()->sum('pax_total'),
             'total_cargo' => $nataruEvent->flights()->sum('cargo'),
             'avg_lf' => $nataruEvent->flights()->avg('load_factor') ?? 0,
-            // Data Harga Tiket (Ambil max dari ticket_price_high dan min dari ticket_price_low)
-            'max_ticket' => $nataruEvent->flights()->max('ticket_price_high') ?? 0,
-            'min_ticket' => $nataruEvent->flights()->where('ticket_price_low', '>', 0)->min('ticket_price_low') ?? 0,
+            'max_flight_data' => $maxFlight, 
+            'min_flight_data' => $minFlight,
         ];
-
-        // 3. Hitung Perbandingan
+        
+        // Hitung Perbandingan Total Event (Kode Lama)
         $comparison = null;
         if ($nataruEvent->compare_event_id) {
-            $compareQuery = $nataruEvent->compareEvent->flights();
-            
-            $compStats = [
-                'flights' => $compareQuery->count(),
-                'pax' => $compareQuery->sum('pax_total'),
-                'cargo' => $compareQuery->sum('cargo'),
-                'lf' => $compareQuery->avg('load_factor') ?? 0,
-                // Perbandingan harga tiket (opsional, bisa di-skip jika tidak perlu diff badge untuk harga)
-                'max_ticket' => $compareQuery->max('ticket_price_high') ?? 0,
-                'min_ticket' => $compareQuery->where('ticket_price_low', '>', 0)->min('ticket_price_low') ?? 0,
-            ];
-
-            $comparison = [
-                'flights' => $currentStats['total_flights'] - $compStats['flights'],
-                'pax' => $currentStats['total_pax'] - $compStats['pax'],
-                'cargo' => $currentStats['total_cargo'] - $compStats['cargo'],
-                'lf' => $currentStats['avg_lf'] - $compStats['lf'],
-                // Diff harga (Current - Past)
-                'max_ticket' => $currentStats['max_ticket'] - $compStats['max_ticket'],
-                'min_ticket' => $currentStats['min_ticket'] - $compStats['min_ticket'],
-            ];
+             // ... (Copy logika comparison total event yang lama) ...
+             // Agar tidak kepanjangan, saya asumsikan kode ini masih ada sesuai instruksi sebelumnya
+             $compareQuery = $nataruEvent->compareEvent->flights();
+             $compStats = [ 'flights' => $compareQuery->count(), 'pax' => $compareQuery->sum('pax_total'), 'cargo' => $compareQuery->sum('cargo'), 'lf' => $compareQuery->avg('load_factor') ?? 0 ];
+             $comparison = [ 'flights' => $currentStats['total_flights'] - $compStats['flights'], 'pax' => $currentStats['total_pax'] - $compStats['pax'], 'cargo' => $currentStats['total_cargo'] - $compStats['cargo'], 'lf' => $currentStats['avg_lf'] - $compStats['lf'] ];
         }
 
-        return view('public.nataru.tv_dashboard', compact('nataruEvent', 'currentStats', 'comparison','todaysFlights'));
+        // Jangan lupa kirim $dailyStats ke view
+        return view('public.nataru.tv_dashboard', compact('nataruEvent', 'currentStats', 'comparison','todaysFlights', 'dailyStats'));
     }
 
     /**

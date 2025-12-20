@@ -10,6 +10,7 @@
     <script src="{{ asset('assetsv2/extensions/apexcharts/apexcharts.min.js') }}"></script>
 
     <style>
+
         body {
             background-color: #f2f7ff; /* Light Blueish Gray Background */
             color: #333;
@@ -52,36 +53,70 @@
         /* Info Tiket di Header (Kompak) */
         .ticket-info-container {
             display: flex;
-            gap: 15px; /* Gap diperkecil */
+            gap: 15px; 
             margin-right: 20px;
             padding-right: 20px;
             border-right: 1px solid #e0e0e0;
+            align-items: stretch;
         }
         .ticket-badge {
             display: flex;
             align-items: center;
-            gap: 8px;
-            background: #f8f9fa;
-            padding: 4px 10px; /* Padding badge diperkecil */
-            border-radius: 6px; /* Radius diperkecil */
+            gap: 10px;
+            background: #ffffff; /* Background putih bersih */
+            padding: 6px 12px;
+            border-radius: 8px;
             border: 1px solid #e9ecef;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.03); /* Soft shadow */
+            transition: all 0.3s;
+            min-width: 200px;
         }
         .ticket-icon {
-            font-size: 1rem; /* Ikon diperkecil */
-            writing-mode: vertical-lr;
+            font-size: 1.2rem;
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 28px; height: 28px; /* Ukuran diperkecil */
-            border-radius: 50%;
+            width: 36px; height: 36px;
+            border-radius: 8px; /* Kotak rounded */
             color: white;
+            flex-shrink: 0;
         }
-        .ticket-icon.high { background: linear-gradient(45deg, #17a2b8, #117a8b); }
-        .ticket-icon.low { background: linear-gradient(45deg, #6c757d, #495057); }
+        .ticket-icon.high { background: linear-gradient(135deg, #17a2b8, #117a8b); box-shadow: 0 4px 6px rgba(23, 162, 184, 0.3); }
+        .ticket-icon.low { background: linear-gradient(135deg, #20c997, #198754); box-shadow: 0 4px 6px rgba(32, 201, 151, 0.3); } /* Ubah warna Low jadi Hijau agar beda */
 
-        .ticket-content { display: flex; flex-direction: column; }
-        .ticket-label { font-size: 0.6rem; text-transform: uppercase; color: #6c757d; font-weight: 700; }
-        .ticket-value { font-size: 0.9rem; font-weight: 800; color: #333; line-height: 1; } /* Value diperkecil */
+        .ticket-content { display: flex; flex-direction: column; justify-content: center; }
+        .ticket-label { 
+            font-size: 0.65rem; 
+            text-transform: uppercase; 
+            color: #888; 
+            font-weight: 700; 
+            letter-spacing: 0.5px;
+            margin-bottom: 2px;
+        }
+        
+        .ticket-value { 
+            font-size: 1rem; 
+            font-weight: 800; 
+            color: #0d2c4a; 
+            line-height: 1.1; 
+        }
+
+        /* Desain Baru: Detail Maskapai & Rute */
+        .ticket-details {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-top: 3px;
+            font-size: 0.7rem;
+            white-space: nowrap;
+        }
+        .detail-pill {
+            padding: 1px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+        .airline-pill { background-color: #eef2f7; color: #0d2c4a; border: 1px solid #dee2e6; }
+        .route-pill { background-color: #fff3cd; color: #856404; border: 1px solid #ffeeba; }
 
         .header-right { text-align: right; display: flex; align-items: center; gap: 15px; }
 
@@ -264,6 +299,113 @@
         /* Utilities */
         .fade-out { opacity: 0.5; pointer-events: none; transition: opacity 0.3s; }
         .text-xs { font-size: 0.7rem; }
+
+        .daily-flight-card {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 8px 15px; /* Padding compact */
+            border: 1px solid #eef2f7;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            display: flex;
+            align-items: center;
+            
+            margin-bottom: 1rem;
+            height: 75px; /* Tinggi fix agar rapi */
+        }
+        .daily-label-box {
+            background: #0d2c4a;
+            color: #fff;
+            padding: 0 15px;
+            height: 100%;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin-right: 15px;
+            min-width: 90px;
+        }
+        .daily-label-h { font-size: 1.2rem; font-weight: 800; line-height: 1; }
+        .daily-label-sub { font-size: 0.6rem; text-transform: uppercase; opacity: 0.8; letter-spacing: 1px; }
+        .daily-stat-group {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            flex-grow: 1;
+            justify-content: space-around;
+        }
+
+        .daily-group {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-grow: 1;
+            padding: 0 15px;
+            gap: 15px;
+        }
+
+        .daily-group-divider {
+            width: 1px; height: 40px; background: #e0e0e0; margin: 0 5px;
+        }
+
+        /* Icon Utama per Group */
+        .group-icon {
+            width: 42px; height: 42px;
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.4rem;
+            color: white;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            flex-shrink: 0;
+        }
+        .group-icon .bi{
+                margin-bottom: 18px;
+                margin-right: 6px;
+        }
+
+        .bg-flight { background: linear-gradient(135deg, #0d6efd, #0a58ca); }
+        .bg-pax { background: linear-gradient(135deg, #198754, #157347); }
+        .bg-cargo { background: linear-gradient(135deg, #ffc107, #fd7e14); }
+
+        /* Detail Item (Arr/Dep) */
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-width: 80px;
+        }
+        .detail-label { 
+            font-size: 0.65rem; color: #6c757d; font-weight: 700; text-transform: uppercase; 
+            display: flex; align-items: center; gap: 4px;
+        }
+        .detail-value { font-size: 1.1rem; font-weight: 800; color: #333; line-height: 1.1; }
+        
+        /* Badge Perbandingan Kecil */
+        .comp-badge {
+            font-size: 0.65rem; padding: 1px 4px; border-radius: 3px; font-weight: 600; margin-left: 5px; vertical-align: middle;
+        }
+        .comp-up { background: rgba(25, 135, 84, 0.1); color: #198754; }
+        .comp-down { background: rgba(220, 53, 69, 0.1); color: #dc3545; }
+        .daily-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .daily-icon {
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.2rem;
+            color: white;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+        }
+        .daily-info { display: flex; flex-direction: column; }
+        .daily-title { font-size: 0.7rem; text-transform: uppercase; color: #6c757d; font-weight: 700; letter-spacing: 0.5px; }
+        .daily-val { font-size: 1.2rem; font-weight: 800; color: #333; line-height: 1; }
+        .daily-comp { font-size: 0.7rem; color: #999; font-weight: 600; }
+        
+        .icon-arr { background: linear-gradient(135deg, #198754, #20c997); }
+        .icon-dep { background: linear-gradient(135deg, #0d6efd, #0dcaf0); }
     </style>
 </head>
 <body>
@@ -284,15 +426,41 @@
                 <div class="ticket-badge">
                     <div class="ticket-icon high"><i class="bi bi-graph-up-arrow"></i></div>
                     <div class="ticket-content">
-                        <span class="ticket-label">Tiket Tertinggi</span>
-                        <span class="ticket-value" id="val-max-price">Rp {{ number_format($currentStats['max_ticket'] ?? 0) }}</span>
+                        <span class="ticket-label">Tiket Tertinggi (Hari ini)</span>
+                        <span class="ticket-value" id="val-max-price">
+                            Rp {{ number_format($currentStats['max_flight_data']->ticket_price_high ?? 0) }}
+                        </span>
+                        
+                        {{-- INFO MASKAPAI & RUTE --}}
+                        <div class="ticket-details">
+                            <span class="detail-pill airline-pill" id="val-max-airline">
+                                <i class="bi bi-airplane-fill me-1"></i>
+                                {{ $currentStats['max_flight_data']->airline ?? '-' }}
+                            </span>
+                            <span class="detail-pill route-pill" id="val-max-route">
+                                {{ $currentStats['max_flight_data']->route ?? '-' }}
+                            </span>
+                        </div>
                     </div>
                 </div>
                 <div class="ticket-badge">
-                    <div class="ticket-icon low"><i class="bi bi-graph-down-arrow"></i></div>
+                    <div class="ticket-icon low"><i class="bi bi-graph-down-arrow"></i></div> {{-- Ganti icon jadi tags --}}
                     <div class="ticket-content">
-                        <span class="ticket-label">Tiket Terendah</span>
-                        <span class="ticket-value" id="val-min-price">Rp {{ number_format($currentStats['min_ticket'] ?? 0) }}</span>
+                        <span class="ticket-label">Tiket Terendah (Hari ini)</span>
+                        <span class="ticket-value" id="val-min-price">
+                            Rp {{ number_format($currentStats['min_flight_data']->ticket_price_low ?? 0) }}
+                        </span>
+
+                        {{-- INFO MASKAPAI & RUTE --}}
+                        <div class="ticket-details">
+                            <span class="detail-pill airline-pill" id="val-min-airline">
+                                <i class="bi bi-airplane-fill me-1"></i>
+                                {{ $currentStats['min_flight_data']->airline ?? '-' }}
+                            </span>
+                            <span class="detail-pill route-pill" id="val-min-route">
+                                {{ $currentStats['min_flight_data']->route ?? '-' }}
+                            </span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -322,8 +490,138 @@
             }
         @endphp
 
+        {{-- BARU: Card Ringkasan Harian (Arr vs Dep) --}}
+        {{-- CARD RINGKASAN HARIAN (FULL INFO - DENGAN ID AUTO UPDATE) --}}
+        <div class="daily-flight-card flex-shrink-0">
+            
+            {{-- 1. Label Hari --}}
+            <div class="daily-label-box">
+                <span class="daily-label-h">{{ $dailyStats['label_h'] }}</span>
+                <span class="daily-label-sub">Harian</span>
+            </div>
+
+            {{-- 2. Group Pesawat --}}
+            <div class="daily-group">
+                <div class="group-icon bg-flight"><i class="bi bi-airplane-engines"></i></div>
+                
+                {{-- Arr Flight --}}
+                <div class="detail-item">
+                    <span class="detail-label"><i class="bi bi-arrow-down-left text-primary"></i> Datang</span>
+                    <div>
+                        {{-- TAMBAHAN ID: d-flight-arr --}}
+                        <span class="detail-value" id="d-flight-arr">{{ number_format($dailyStats['flights_arr']) }}</span>
+                        
+                        {{-- TAMBAHAN ID: d-flight-arr-diff (Container Badge) --}}
+                        <span id="d-flight-arr-diff">
+                            @if($nataruEvent->compare_event_id)
+                                @php $diff = $dailyStats['flights_arr'] - $dailyStats['comp_flights_arr']; @endphp
+                                <span class="comp-badge {{ $diff >= 0 ? 'comp-up' : 'comp-down' }}">
+                                    {{ $diff >= 0 ? '+' : '' }}{{ $diff }}
+                                </span>
+                            @endif
+                        </span>
+                    </div>
+                </div>
+
+                {{-- Dep Flight --}}
+                <div class="detail-item">
+                    <span class="detail-label"><i class="bi bi-arrow-up-right text-info"></i> Berangkat</span>
+                    <div>
+                        <span class="detail-value" id="d-flight-dep">{{ number_format($dailyStats['flights_dep']) }}</span>
+                        <span id="d-flight-dep-diff">
+                            @if($nataruEvent->compare_event_id)
+                                @php $diff = $dailyStats['flights_dep'] - $dailyStats['comp_flights_dep']; @endphp
+                                <span class="comp-badge {{ $diff >= 0 ? 'comp-up' : 'comp-down' }}">
+                                    {{ $diff >= 0 ? '+' : '' }}{{ $diff }}
+                                </span>
+                            @endif
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="daily-group-divider"></div>
+
+            {{-- 3. Group Penumpang --}}
+            <div class="daily-group">
+                <div class="group-icon bg-pax"><i class="bi bi-people-fill"></i></div>
+                
+                {{-- Arr Pax --}}
+                <div class="detail-item">
+                    <span class="detail-label"><i class="bi bi-arrow-down-left text-success"></i> Datang</span>
+                    <div>
+                        <span class="detail-value" id="d-pax-arr">{{ number_format($dailyStats['pax_arr']) }}</span>
+                        <span id="d-pax-arr-diff">
+                            @if($nataruEvent->compare_event_id)
+                                @php $diff = $dailyStats['pax_arr'] - $dailyStats['comp_pax_arr']; @endphp
+                                <span class="comp-badge {{ $diff >= 0 ? 'comp-up' : 'comp-down' }}">
+                                    {{ $diff >= 0 ? '+' : '' }}{{ $diff }}
+                                </span>
+                            @endif
+                        </span>
+                    </div>
+                </div>
+
+                {{-- Dep Pax --}}
+                <div class="detail-item">
+                    <span class="detail-label"><i class="bi bi-arrow-up-right text-success"></i> Berangkat</span>
+                    <div>
+                        <span class="detail-value" id="d-pax-dep">{{ number_format($dailyStats['pax_dep']) }}</span>
+                        <span id="d-pax-dep-diff">
+                            @if($nataruEvent->compare_event_id)
+                                @php $diff = $dailyStats['pax_dep'] - $dailyStats['comp_pax_dep']; @endphp
+                                <span class="comp-badge {{ $diff >= 0 ? 'comp-up' : 'comp-down' }}">
+                                    {{ $diff >= 0 ? '+' : '' }}{{ $diff }}
+                                </span>
+                            @endif
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="daily-group-divider"></div>
+
+            {{-- 4. Group Kargo --}}
+            <div class="daily-group">
+                <div class="group-icon bg-cargo"><i class="bi bi-box-seam-fill"></i></div>
+                
+                {{-- Arr Kargo --}}
+                <div class="detail-item">
+                    <span class="detail-label"><i class="bi bi-arrow-down-left text-warning"></i> Datang</span>
+                    <div>
+                        <span class="detail-value" id="d-cargo-arr">{{ number_format($dailyStats['cargo_arr']) }}</span>
+                        <span id="d-cargo-arr-diff">
+                            @if($nataruEvent->compare_event_id)
+                                @php $diff = $dailyStats['cargo_arr'] - $dailyStats['comp_cargo_arr']; @endphp
+                                <span class="comp-badge {{ $diff >= 0 ? 'comp-up' : 'comp-down' }}">
+                                    {{ $diff >= 0 ? '+' : '' }}{{ number_format($diff) }}
+                                </span>
+                            @endif
+                        </span>
+                    </div>
+                </div>
+
+                {{-- Dep Kargo --}}
+                <div class="detail-item">
+                    <span class="detail-label"><i class="bi bi-arrow-up-right text-warning"></i> Berangkat</span>
+                    <div>
+                        <span class="detail-value" id="d-cargo-dep">{{ number_format($dailyStats['cargo_dep']) }}</span>
+                        <span id="d-cargo-dep-diff">
+                            @if($nataruEvent->compare_event_id)
+                                @php $diff = $dailyStats['cargo_dep'] - $dailyStats['comp_cargo_dep']; @endphp
+                                <span class="comp-badge {{ $diff >= 0 ? 'comp-up' : 'comp-down' }}">
+                                    {{ $diff >= 0 ? '+' : '' }}{{ number_format($diff) }}
+                                </span>
+                            @endif
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
         {{-- Layout Grid Baru --}}
-        <div class="row h-100 g-3">
+        <div class="row flex-grow-1 g-3" style="min-height: 0; padding-bottom:10px;">
 
             {{-- 1. Kolom Kiri (Statistik) --}}
             <div class="col-2 h-100 d-flex flex-column gap-3">
@@ -542,10 +840,33 @@
                     updateStatIfChanged('val-max-price', doc);
                     updateStatIfChanged('val-min-price', doc);
 
+                    updateContentIfChanged('val-max-airline', doc);
+                    updateContentIfChanged('val-max-route', doc);
+                    
+                    updateContentIfChanged('val-min-airline', doc);
+                    updateContentIfChanged('val-min-route', doc);
+
                     updateContentIfChanged('diff-flights', doc);
                     updateContentIfChanged('diff-pax', doc);
                     updateContentIfChanged('diff-cargo', doc);
                     updateContentIfChanged('diff-lf', doc);
+
+                    // 1. Update Angka Utama (Value)
+                    updateStatIfChanged('d-flight-arr', doc);
+                    updateStatIfChanged('d-flight-dep', doc);
+                    updateStatIfChanged('d-pax-arr', doc);
+                    updateStatIfChanged('d-pax-dep', doc);
+                    updateStatIfChanged('d-cargo-arr', doc);
+                    updateStatIfChanged('d-cargo-dep', doc);
+
+                    // 2. Update Badge Perbandingan (Diff)
+                    // Pakai updateContent karena badge mengandung class warna & simbol (+/-)
+                    updateContentIfChanged('d-flight-arr-diff', doc);
+                    updateContentIfChanged('d-flight-dep-diff', doc);
+                    updateContentIfChanged('d-pax-arr-diff', doc);
+                    updateContentIfChanged('d-pax-dep-diff', doc);
+                    updateContentIfChanged('d-cargo-arr-diff', doc);
+                    updateContentIfChanged('d-cargo-dep-diff', doc);
 
                     // Update Tabel
                     const newTableBody = doc.getElementById('flights-table-body');
@@ -654,7 +975,6 @@
                         }
                     })
                     .catch(err => {
-                        console.log(err);
                         if(!chartInstance) {
                              document.querySelector("#chartPaxTv").innerHTML = '<div class="d-flex flex-column justify-content-center align-items-center h-100 text-muted opacity-50"><small>Grafik tidak tersedia</small></div>';
                         }
@@ -690,7 +1010,6 @@
                                 style: { colors: '#6c757d', fontSize: '10px' },
                                 formatter: function (val, timestamp, index) {
                                     // Pastikan data tanggal tersedia
-                                    console.log(globalChartData);
                                     if (typeof index !== 'undefined' && globalChartData.dates_event1 && globalChartData.dates_event2) {
                                         const date1 = globalChartData.dates_event1[index]; // Tanggal Event Sekarang
                                         const date2 = globalChartData.dates_event2[index]; // Tanggal Event Pembanding

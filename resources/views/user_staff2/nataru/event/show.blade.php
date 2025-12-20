@@ -279,11 +279,17 @@
                                 </span>
                             </td>
                             <td>
-                                <form action="{{ route('staff.nataru.destroy', $flight->id) }}" method="POST" onsubmit="return confirm('Hapus data penerbangan ini?')">
-                                    @csrf @method('DELETE')
-                                    <input type="hidden" name="redirect_to_event" value="{{ $nataruEvent->id }}">
-                                    <button class="btn btn-sm btn-danger" title="Hapus Data"><i class="bi bi-trash"></i></button>
-                                </form>
+                                <div class="d-flex gap-2">
+                                    {{-- Tombol Edit --}}
+                                    <a href="{{ route('nataru.flight.edit', $flight->id) }}" class="btn btn-sm btn-warning" title="Edit Data">
+                                        <i class="bi bi-pencil-square"></i> Edit
+                                    </a>
+                                    <form action="{{ route('staff.nataru.destroy', $flight->id) }}" method="POST" onsubmit="return confirm('Hapus data penerbangan ini?')">
+                                        @csrf @method('DELETE')
+                                        <input type="hidden" name="redirect_to_event" value="{{ $nataruEvent->id }}">
+                                        <button class="btn btn-sm btn-danger" title="Hapus Data"><i class="bi bi-trash"></i></button>
+                                    </form>
+                                </div>
                             </td>
                         </tr>
                         @endforeach

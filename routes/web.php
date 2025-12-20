@@ -338,10 +338,18 @@ Route::group(["prefix" => 'dashboard'], function () {
             Route::resource('staff/nataru-events', NataruEventController::class)->names('staff.nataru-events');
             Route::get('staff/nataru-events/{nataruEvent}/export', [NataruEventController::class, 'exportExcel'])->name('staff.nataru-events.export');
 
+            Route::get('staff/nataru/flight/{id}/edit', [NataruEventController::class, 'editFlight'])
+                ->name('nataru.flight.edit');
+
+            Route::put('staff/nataru/flight/{id}', [NataruEventController::class, 'updateFlight'])
+                ->name('nataru.flight.update');
+
             // Dashboard Monitoring Nataru
             Route::get('staff/nataru-dashboard', [DashboardNataruController::class, 'index'])->name('staff.nataru.dashboard');
             Route::get('staff/nataru-dashboard/data', [DashboardNataruController::class, 'getComparisonData'])->name('staff.nataru.dashboard.data');
 
+
+            
             Route::resource('staff/ojt', OjtStudentController::class)
                 ->names('staff.ojt');
 

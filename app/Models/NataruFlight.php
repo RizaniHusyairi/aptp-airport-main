@@ -27,4 +27,10 @@ class NataruFlight extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function nataruEvent()
+    {
+        // Asumsi nama foreign key di database adalah 'nataru_event_id'
+        return $this->belongsTo(NataruEvent::class, 'nataru_event_id');
+    }
 }
