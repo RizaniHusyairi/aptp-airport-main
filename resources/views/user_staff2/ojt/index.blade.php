@@ -45,10 +45,6 @@
         <div class="card-header d-flex justify-content-between align-items-center">
             <h5 class="card-title mb-0">Daftar Peserta OJT</h5>
 
-            {{-- Tombol Mengarah ke Formulir Create --}}
-            <a href="{{ route('staff.ojt.create') }}" class="btn btn-primary">
-                <i class="bi bi-plus-circle me-2"></i> Tambah Data
-            </a>
         </div>
         {{-- ======================================================== --}}
 
@@ -116,10 +112,6 @@
                                         <i class="bi bi-eye"></i>
                                     </a>
 
-                                    {{-- === TOMBOL EDIT BARU === --}}
-                                    <a href="{{ route('staff.ojt.edit', $student->id) }}" class="btn btn-sm btn-warning text-white" title="Edit Data">
-                                        <i class="bi bi-pencil-square"></i>
-                                    </a>
                                     {{-- Tombol Cetak Sertifikat --}}
                                     {{-- <a href="{{ route('staff.ojt.certificate', $student->id) }}" target="_blank" class="btn btn-sm btn-success" title="Cetak Sertifikat">
                                         <i class="bi bi-printer"></i>

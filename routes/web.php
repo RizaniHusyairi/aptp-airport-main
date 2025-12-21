@@ -53,7 +53,8 @@ use App\Http\Controllers\{
     AirTrafficLogController,
     MeetingController,
     PublicMeetingController,
-    PublicNataruController
+    PublicNataruController,
+    OjtApplicationController
 };
 
 Auth::routes();
@@ -89,6 +90,14 @@ Route::group(["prefix" => 'dashboard'], function () {
 
         });
 
+        // Route Pengajuan OJT (User)
+        Route::get('/pengajuan-ojt', [OjtApplicationController::class, 'index'])->name('user.ojt.index');
+        Route::get('/pengajuan-ojt/baru', [OjtApplicationController::class, 'create'])->name('user.ojt.create');
+        Route::post('/pengajuan-ojt', [OjtApplicationController::class, 'store'])->name('user.ojt.store');
+
+        // ... route user ojt lainnya ...
+        Route::get('/pengajuan-ojt/{id}', [OjtApplicationController::class, 'show'])->name('user.ojt.show');
+        
         // Perijinan User Routes
         Route::get('/perijinan', [PerijinanUsahaController::class, 'indexUser'])->name('perijinan.index');
         Route::get('/perijinan/create', [PerijinanUsahaController::class, 'create'])->name('perijinan.create');
@@ -347,6 +356,12 @@ Route::group(["prefix" => 'dashboard'], function () {
 
             Route::get('staff/ojt/{student}/certificate', [OjtStudentController::class, 'exportCertificate'])
                 ->name('staff.ojt.certificate');
+
+            Route::put('staff/ojt/{student}/grades', [App\Http\Controllers\Staff_User\OjtStudentController::class, 'updateGrades'])
+                ->name('staff.ojt.updateGrades');
+
+            Route::put('staff/ojt/{student}/finalize', [App\Http\Controllers\Staff_User\OjtStudentController::class, 'finalize'])
+                ->name('staff.ojt.finalize');
 
 
         });

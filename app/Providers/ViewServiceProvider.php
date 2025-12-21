@@ -111,7 +111,8 @@ class ViewServiceProvider extends ServiceProvider
                 'Ajukan Extend Advance' => ['route' => 'extend-advance.index', 'icon' => 'bi bi-clock-history', 'label' => 'Ajukan Extend Advance'],
                 'Ajukan Perijinan Kerja' => ['route' => 'kerja.userindex', 'icon' => 'bi bi-person-workspace', 'label' => 'Ajukan Perizinan Kerja'],
                 'Ajukan Informasi Publik' => ['route' => 'informasiPublik.index', 'icon' => 'bi bi-info-circle', 'label' => 'Ajukan Informasi Publik'],
-            ];
+                'Ajukan Sertifikat OJT' => ['route' => 'user.ojt.index', 'icon' => 'bi bi-award', 'label' => 'Ajukan Sertifikat OJT'],
+            ];  
             $view->with('userRoutes', $userRoutes);
         });
 
