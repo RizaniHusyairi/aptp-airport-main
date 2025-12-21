@@ -395,9 +395,8 @@
                             
                             {{-- Opsi Upload Manual (Jika Tanda Tangan Basah) --}}
                             <div class="mb-3">
-                                <label class="form-label small">Upload Scan Sertifikat (Opsional)</label>
-                                <input type="file" name="signed_file" class="form-control form-control-sm">
-                                <div class="form-text x-small">Jika kosong, peserta akan mendownload sertifikat digital (QR Code).</div>
+                                <label class="form-label small">Upload Scan Sertifikat</label>
+                                <input type="file" name="signed_file" class="form-control form-control-sm" required>
                             </div>
 
                             <button type="submit" class="btn btn-success w-100">
