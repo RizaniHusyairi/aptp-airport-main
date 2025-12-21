@@ -213,4 +213,82 @@ class OjtStudentController extends Controller
 
         return redirect()->route('staff.ojt.index')->with('success', 'Data Mahasiswa OJT berhasil diperbarui.');
     }
+
+    public function updateGrades(Request $request, OjtStudent $student)
+    {
+        // 1. Validasi input array
+        $request->validate([
+            'types' => 'required|array',       // <-- Input Baru (Kategori)
+            'components' => 'required|array',
+            'scores' => 'required|array',
+            'scores.*' => 'numeric|min:0|max:100',
+        ]);
+
+        $grades = [];
+        $totalScore = 0;
+        $count = 0;
+
+        // 2. Looping data
+        foreach ($request->components as $index => $component) {
+            // Pastikan data komponen dan nilai ada di index tersebut
+            if (!empty($component) && isset($request->scores[$index])) {
+
+                $score = $request->scores[$index];
+                $type = $request->types[$index] ?? 'Umum'; // Default 'Umum' jika kosong
+
+                // 3. Simpan struktur data baru
+                $grades[] = [
+                    'type' => $type,           // Simpan Tipe (Hard Skill/Soft Skill)
+                    'component' => $component, // Simpan Komponen
+                    'score' => $score          // Simpan Nilai
+                ];
+
+                $totalScore += $score;
+                $count++;
+            }
+        }
+
+        // 4. Hitung Rata-rata & Predikat
+        $average = $count > 0 ? $totalScore / $count : 0;
+
+        if ($average >= 90) {
+            $letter = 'A'; $predicate = 'Sangat Memuaskan';
+        } elseif ($average >= 80) {
+            $letter = 'B'; $predicate = 'Baik';
+        } elseif ($average >= 70) {
+            $letter = 'C'; $predicate = 'Cukup';
+        } else {
+            $letter = 'D'; $predicate = 'Kurang';
+        }
+
+        $student->update([
+            'grades' => $grades,
+            'average_score' => $average,
+            'letter_grade' => $letter,
+            'predicate' => $predicate
+        ]);
+
+        return back()->with('success', 'Penilaian berhasil disimpan. Predikat: ' . $predicate);
+    }
+
+    // Method untuk Staff memfinalisasi pengajuan
+    public function finalize(Request $request, OjtStudent $student)
+    {
+        // Opsi 1: Staff upload file manual yang sudah ditandatangani
+        if ($request->hasFile('signed_file')) {
+            $path = $request->file('signed_file')->store('ojt_docs/certificates', 'public');
+            $student->update([
+                'status' => 'Selesai',
+                'final_certificate_path' => $path
+            ]);
+        } 
+        // Opsi 2: Staff hanya approve (Sertifikat digenerate sistem by QR Code)
+        else {
+             $student->update([
+                'status' => 'Selesai'
+            ]);
+        }
+
+        return back()->with('success', 'Status pengajuan diubah menjadi Selesai.');
+    }
 }

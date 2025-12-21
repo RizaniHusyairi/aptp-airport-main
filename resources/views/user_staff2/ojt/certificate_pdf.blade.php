@@ -55,7 +55,7 @@
         }
 
         .student-name {
-            font-size: 26px;
+            font-size: 28px;
             font-weight: bold;
             margin: 20px 0 30px 0;
             text-decoration: underline;
@@ -170,7 +170,7 @@
         <div class="student-name">{{ $student->name }}</div>
 
         <div class="content-text long-text">
-            dari {{ $student->institution }} Jurusan {{ $student->major }} Telah Menyelesaikan Program <strong>On the Job Training (OJT)</strong> pada Kantor UPBU Kelas I A.P.T. Pranoto Samarinda selama <strong>{{ $student->duration }}</strong> mulai dari <strong>{{ $student->start_date->translatedFormat('d F Y') }}</strong> s/d <strong>{{ $student->end_date->translatedFormat('d F Y') }}</strong> dengan BAIK.
+            dari {{ $student->institution }} Jurusan {{ $student->major }} Telah Menyelesaikan Program <strong>On the Job Training (OJT)</strong> pada Kantor UPBU Kelas I A.P.T. Pranoto Samarinda selama <strong>{{ $student->duration }}</strong> mulai dari <strong>{{ $student->start_date->translatedFormat('d F Y') }}</strong> s/d <strong>{{ $student->end_date->translatedFormat('d F Y') }}</strong> dengan predikat <strong>{{ $student->predicate }}</strong>.
         </div>
 
     </div>

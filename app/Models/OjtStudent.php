@@ -17,5 +17,11 @@ class OjtStudent extends Model
         'end_date'   => 'date',
         'supervisors' => 'array', // Otomatis jadi array PHP
         'work_units'  => 'array', // Otomatis jadi array PHP
+        'grades' => 'array', // Tambahkan ini
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

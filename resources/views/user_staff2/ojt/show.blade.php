@@ -74,11 +74,26 @@
                     ['label' => 'Detail', 'active' => true]
                 ]" />
             </div>
+            <div class="col-12">
+                @if(session('success'))
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ session('success') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                @endif
+                @if(session('error'))
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    {{ session('error') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                @endif
+
+            </div>
         </div>
     </div>
 </div>
 
-<section class="section">
+<section class="section">   
     <div class="row">
         {{-- KOLOM KIRI: Foto & Identitas Utama --}}
         <div class="col-md-4">
@@ -230,7 +245,259 @@
 
                 </div>
             </div>
+            <div class="card shadow-sm mt-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0 text-primary"><i class="bi bi-journal-check me-2"></i>Penilaian OJT</h5>
+                    @if($student->average_score)
+                        <span class="badge bg-success fs-6">
+                            Nilai Akhir: {{ $student->letter_grade }} ({{ number_format($student->average_score, 2) }})
+                        </span>
+                    @endif
+                </div>
+                <div class="card-body">
+                    <form action="{{ route('staff.ojt.updateGrades', $student->id) }}" method="POST">
+                        @csrf
+                        @method('PUT')
+
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover" id="grading-table">
+                                <thead class="table text-center align-middle">
+                                    <tr>
+                                        <th style="width: 5%">No</th>
+                                        <th style="width: 25%">Kategori / Tipe <br><small class="fw-normal">(Hard Skill/Soft Skill)</small></th>
+                                        <th>Komponen Penilaian</th>
+                                        <th style="width: 15%">Nilai (0-100)</th>
+                                        <th style="width: 5%">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="grading-body">
+                                    @php
+                                        // Template Default (Jika data kosong)
+                                        $defaults = [
+                                            ['type' => 'Hard Skill', 'comp' => 'Kemampuan Mendesign Program'],
+                                            ['type' => 'Hard Skill', 'comp' => 'Kemampuan Melaksanakan Magang'],
+                                            ['type' => 'Hard Skill', 'comp' => 'Laporan & Presentasi'],
+                                            ['type' => 'Soft Skill', 'comp' => 'Integritas'],
+                                            ['type' => 'Soft Skill', 'comp' => 'Tanggung Jawab'],
+                                            ['type' => 'Soft Skill', 'comp' => 'Kerja Keras'],
+                                            ['type' => 'Soft Skill', 'comp' => 'Kreativitas']
+                                        ];
+
+                                        $currentGrades = $student->grades ?? [];
+                                    @endphp
+
+                                    {{-- Datalist untuk Autocomplete Kategori --}}
+                                    <datalist id="categoryOptions">
+                                        <option value="Hard Skill">
+                                        <option value="Soft Skill">
+                                        <option value="Bidang Kompetensi FSD">
+                                        <option value="Bidang Kompetensi FSU">
+                                    </datalist>
+
+                                    @if(count($currentGrades) > 0)
+                                        {{-- TAMPILKAN DATA DARI DATABASE --}}
+                                        @foreach($currentGrades as $index => $grade)
+                                            <tr>
+                                                <td class="text-center">{{ $loop->iteration }}</td>
+                                                <td>
+                                                    <input type="text" name="types[]" class="form-control fw-bold"
+                                                        list="categoryOptions"
+                                                        value="{{ $grade['type'] ?? 'Umum' }}"
+                                                        placeholder="Tipe..." required>
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="components[]" class="form-control"
+                                                        value="{{ $grade['component'] }}"
+                                                        placeholder="Nama komponen..." required>
+                                                </td>
+                                                <td>
+                                                    <input type="number" name="scores[]" class="form-control text-center score-input fw-bold"
+                                                        value="{{ $grade['score'] }}" min="0" max="100" required>
+                                                </td>
+                                                <td class="text-center">
+                                                    <button type="button" class="btn btn-danger btn-sm remove-row"><i class="bi bi-trash"></i></button>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    @else
+                                        {{-- TAMPILKAN TEMPLATE DEFAULT --}}
+                                        @foreach($defaults as $index => $item)
+                                            <tr>
+                                                <td class="text-center">{{ $index + 1 }}</td>
+                                                <td>
+                                                    <input type="text" name="types[]" class="form-control fw-bold text-primary"
+                                                        list="categoryOptions"
+                                                        value="{{ $item['type'] }}" required>
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="components[]" class="form-control"
+                                                        value="{{ $item['comp'] }}" required>
+                                                </td>
+                                                <td>
+                                                    <input type="number" name="scores[]" class="form-control text-center score-input fw-bold"
+                                                        value="0" min="0" max="100" required>
+                                                </td>
+                                                <td class="text-center">
+                                                    <button type="button" class="btn btn-danger btn-sm remove-row"><i class="bi bi-trash"></i></button>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    @endif
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="5">
+                                            <button type="button" class="btn btn-outline-primary btn-sm" id="add-grade-row">
+                                                <i class="bi bi-plus-circle"></i> Tambah Baris Penilaian
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr class="fw-bold">
+                                        <td colspan="3" class="text-end">Rata-Rata Akhir:</td>
+                                        <td class="text-center fs-5" id="live-average">0</td>
+                                        <td></td>
+                                    </tr>
+                                    <tr class="fw-bold">
+                                        <td colspan="3" class="text-end">Predikat:</td>
+                                        <td class="text-center text-primary" id="live-predicate">-</td>
+                                        <td></td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+
+                        <div class="d-flex justify-content-end gap-2 mt-3">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-save"></i> Simpan Penilaian
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            {{-- Panel Aksi Staff --}}
+            <div class="card shadow-sm mb-3">
+                <div class="card-header bg-primary text-white">
+                    <h6 class="mb-0 text-white"><i class="bi bi-gear-fill me-2"></i>Aksi Verifikator</h6>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="small text-muted">Status Saat Ini:</label>
+                        <h5 class="fw-bold">{{ $student->status }}</h5>
+                    </div>
+
+                    @if($student->status != 'Selesai')
+                        <hr>
+                        <p class="small">Jika penilaian sudah lengkap, silakan finalisasi pengajuan ini agar sertifikat dapat diunduh oleh peserta.</p>
+                        
+                        <form action="{{ route('staff.ojt.finalize', $student->id) }}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            @method('PUT')
+                            
+                            {{-- Opsi Upload Manual (Jika Tanda Tangan Basah) --}}
+                            <div class="mb-3">
+                                <label class="form-label small">Upload Scan Sertifikat (Opsional)</label>
+                                <input type="file" name="signed_file" class="form-control form-control-sm">
+                                <div class="form-text x-small">Jika kosong, peserta akan mendownload sertifikat digital (QR Code).</div>
+                            </div>
+
+                            <button type="submit" class="btn btn-success w-100">
+                                <i class="bi bi-check-circle-fill me-2"></i> Setujui & Selesai
+                            </button>
+                        </form>
+                    @else
+                        <div class="alert alert-success py-2 small">
+                            <i class="bi bi-check-circle me-1"></i> Pengajuan telah selesai.
+                        </div>
+                    @endif
+                </div>
+            </div>
         </div>
+
     </div>
 </section>
+
+
+@endsection
+
+@section('scripts_admin')
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const tableBody = document.getElementById('grading-body');
+        const liveAverage = document.getElementById('live-average');
+        const livePredicate = document.getElementById('live-predicate');
+        const btnAdd = document.getElementById('add-grade-row');
+
+        // Fungsi Hitung Rata-rata
+        function calculateAverage() {
+            let total = 0;
+            let count = 0;
+            document.querySelectorAll('.score-input').forEach(input => {
+                let val = parseFloat(input.value);
+                if (!isNaN(val)) {
+                    total += val;
+                    count++;
+                }
+            });
+
+            let avg = count > 0 ? (total / count).toFixed(2) : 0;
+            liveAverage.textContent = avg;
+
+            let pred = '-';
+            if (avg >= 90) pred = 'A (Sangat Baik)';
+            else if (avg >= 80) pred = 'B (Baik)';
+            else if (avg >= 75) pred = 'C (Cukup)';
+            else if (avg > 0) pred = 'D (Kurang)';
+
+            livePredicate.textContent = pred;
+        }
+
+        // Event Input Nilai (Live Calculation)
+        tableBody.addEventListener('input', function(e) {
+            if (e.target.classList.contains('score-input')) {
+                calculateAverage();
+            }
+        });
+
+        // Event Tambah Baris Baru
+        btnAdd.addEventListener('click', function() {
+            let rowCount = tableBody.rows.length + 1;
+            let tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td class="text-center bg-light">${rowCount}</td>
+                <td>
+                    <input type="text" name="types[]" class="form-control fw-bold text-primary"
+                           list="categoryOptions" placeholder="Tipe..." required>
+                </td>
+                <td>
+                    <input type="text" name="components[]" class="form-control" placeholder="Nama Komponen..." required>
+                </td>
+                <td>
+                    <input type="number" name="scores[]" class="form-control text-center score-input fw-bold"
+                           value="0" min="0" max="100" required>
+                </td>
+                <td class="text-center">
+                    <button type="button" class="btn btn-danger btn-sm remove-row"><i class="bi bi-trash"></i></button>
+                </td>
+            `;
+            tableBody.appendChild(tr);
+            calculateAverage(); // Recalculate just in case
+        });
+
+        // Event Hapus Baris
+        tableBody.addEventListener('click', function(e) {
+            if (e.target.closest('.remove-row')) {
+                e.target.closest('tr').remove();
+                // Re-numbering rows (Optional but good for UX)
+                Array.from(tableBody.rows).forEach((row, index) => {
+                    row.cells[0].innerText = index + 1;
+                });
+                calculateAverage();
+            }
+        });
+
+        // Hitung saat load pertama kali
+        calculateAverage();
+    });
+</script>
 @endsection
