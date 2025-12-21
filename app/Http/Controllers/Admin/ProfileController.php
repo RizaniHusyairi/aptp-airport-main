@@ -44,6 +44,7 @@ class ProfileController extends Controller
                     "Manajemen Absensi Rapat" => 'secondary',
                     "Verifikasi Program Kerja" => 'info',
                     "Manajemen Posko Nataru" => 'danger',
+                    "Manajemen Sertifikat OJT" => 'light',
                 ];
 
         // $lastFlights = Flight::latest()->take(5)->get();
