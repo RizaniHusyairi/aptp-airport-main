@@ -319,11 +319,10 @@
             height: 100%;
             border-radius: 8px;
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
             margin-right: 15px;
-            min-width: 90px;
+            min-width: 70px; /* Lebar dikecilkan sedikit karena isinya cuma H-X */
         }
         .daily-label-h { font-size: 1.2rem; font-weight: 800; line-height: 1; }
         .daily-label-sub { font-size: 0.6rem; text-transform: uppercase; opacity: 0.8; letter-spacing: 1px; }
@@ -494,11 +493,17 @@
         {{-- CARD RINGKASAN HARIAN (FULL INFO - DENGAN ID AUTO UPDATE) --}}
         <div class="daily-flight-card flex-shrink-0">
             
-            {{-- 1. Label Hari --}}
+            {{-- 1. Label Hari (H-X) --}}
             <div class="daily-label-box">
                 <span class="daily-label-h">{{ $dailyStats['label_h'] }}</span>
-                <span class="daily-label-sub">Harian</span>
             </div>
+
+            {{-- 2. TEKS JUDUL BARU (Disisipkan Disini) --}}
+            <div class="d-flex flex-column justify-content-center me-4 ps-3 border-start" style="height: 45px;">
+                <span class="text-muted text-uppercase fw-bold" style="font-size: 0.65rem; letter-spacing: 1px; line-height: 1;">Ringkasan</span>
+                <span class="text-dark fw-bolder" style="font-size: 0.95rem; line-height: 1.1;">DATA PENERBANGAN<br>HARI INI</span>
+            </div>
+            {{-- ---------------------------------------- --}}
 
             {{-- 2. Group Pesawat --}}
             <div class="daily-group">
