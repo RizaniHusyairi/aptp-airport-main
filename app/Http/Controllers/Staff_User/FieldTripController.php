@@ -16,7 +16,8 @@ class FieldTripController extends Controller
             'fieldtrip_name' => 'required|string|max:255',
             'description'   => 'required|string',
             'fieldtrip_type'   => 'required|string',
-            'documents'     => 'required|file|mimes:pdf|max:2048',
+            'documents' => 'required', // Hapus validasi single file disini, kita cek di bawah
+            'documents.*' => 'file|mimes:pdf,doc,docx|max:2048', // Validasi tiap item dalam array
         ], [
             'fieldtrip_name.required' => 'Nama Fieldtrip wajib diisi.',
             'fieldtrip_name.string'   => 'Nama Fieldtrip harus berupa teks.',
@@ -34,18 +35,26 @@ class FieldTripController extends Controller
             'documents.max'          => 'Ukuran dokumen maksimal 2MB.',
 
         ]);
+        $documentPaths = [];
 
-        // Simpan file
-        $file = $request->file('documents');
-        $filename = time() . '_' . $file->getClientOriginalName();
-        $filePath = $file->storeAs('documents/fieldtrip', $filename, 'public');
+        // Cek apakah ada file yang diupload
+    if ($request->hasFile('documents')) {
+        // Loop setiap file
+        foreach ($request->file('documents') as $file) {
+            $filename = time() . '_' . $file->getClientOriginalName();
+            // Simpan file dan masukkan path-nya ke array
+            $path = $file->storeAs('documents/fieldtrip', $filename, 'public');
+            $documentPaths[] = $path; 
+        }
+    }
 
         // Simpan data license
         $fieldtrip = FieldTrip::create([
             'fieldtrip_name' => $request->fieldtrip_name,
             'fieldtrip_type'   => $request->fieldtrip_type,
             'description'   => $request->description,
-            'documents'     => $filePath,
+            'documents'     => $documentPath,
+
         ]);
 
         // Simpan ke pivot fieldtrip_user
@@ -67,9 +76,12 @@ class FieldTripController extends Controller
         $fieldtrip = FieldTrip::findOrFail($id);
 
         // Hapus file dokumen jika ada
-        $documentPath = public_path('uploads/' . $fieldtrip->documents);
-        if (file_exists($documentPath)) {
-            unlink($documentPath);
+        if ($fieldtrip->documents) {
+            foreach ($fieldtrip->documents as $path) {
+                if (Storage::disk('public')->exists($path)) {
+                    Storage::disk('public')->delete($path);
+                }
+            }
         }
 
         // Hapus relasi user jika menggunakan pivot

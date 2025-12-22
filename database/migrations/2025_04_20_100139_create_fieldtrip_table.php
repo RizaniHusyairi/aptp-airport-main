@@ -13,7 +13,7 @@ return new class extends Migration
             $table->string('fieldtrip_name');
             $table->text('description');
             $table->string('fieldtrip_type');
-            $table->string('documents'); 
+            $table->json('documents'); 
             $table->enum('submission_status', ['Diajukan', 'Disetujui', 'Ditolak', 'Revisi Diperlukan'])->default('Diajukan');
             $table->text('staff_notes')->nullable();
             $table->string('reply_document_path')->nullable(); // Untuk link Google Drive
