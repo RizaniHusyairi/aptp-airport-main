@@ -18,8 +18,8 @@ class NataruEventSeeder extends Seeder
         $event = NataruEvent::firstOrCreate(
             ['name' => 'Posko Nataru 2024/2025'],
             [
-                'start_date' => '2024-12-19', // Sesuaikan dengan tanggal awal data di CSV
-                'end_date' => '2025-01-06',   // Sesuaikan dengan tanggal akhir data di CSV
+                'start_date' => '2024-12-18', // Sesuaikan dengan tanggal awal data di CSV
+                'end_date' => '2025-01-05',   // Sesuaikan dengan tanggal akhir data di CSV
                 'description' => 'Data Real Posko Nataru 2024/2025 (Imported from CSV)',
                 'is_active' => true,
             ]
@@ -151,99 +151,5 @@ class NataruEventSeeder extends Seeder
         fclose($file);
     }
 
-    /**
-     * Fungsi helper untuk generate penerbangan harian
-     */
-    private function generateFlightsForEvent($event)
-    {
-        $startDate = Carbon::parse($event->start_date);
-        $endDate = Carbon::parse($event->end_date);
-        
-        // Loop dari hari pertama sampai terakhir
-        for ($date = $startDate->copy(); $date->lte($endDate); $date->addDay()) {
-            
-            // Tentukan jumlah penerbangan per hari (acak antara 10 - 20 flight)
-            // Kita buat tahun 2024 sedikit lebih ramai dari 2023 untuk simulasi pertumbuhan
-            $flightCount = rand(10, 20);
-            if ($event->name == 'Posko Nataru 2024/2025') {
-                $flightCount += rand(2, 5); 
-            }
-
-            for ($i = 0; $i < $flightCount; $i++) {
-                $this->createOneFlight($event->id, $date->copy());
-            }
-        }
-    }
-
-    private function createOneFlight($eventId, $date)
-    {
-        $airlines = [
-            ['code' => 'ID', 'name' => 'Batik Air', 'type' => 'A320', 'cap' => 150],
-            ['code' => 'JT', 'name' => 'Lion Air', 'type' => 'B737-900', 'cap' => 200],
-            ['code' => 'QG', 'name' => 'Citilink', 'type' => 'A320', 'cap' => 180],
-            ['code' => 'IU', 'name' => 'Super Air Jet', 'type' => 'A320', 'cap' => 180],
-            ['code' => 'IW', 'name' => 'Wings Air', 'type' => 'ATR-72', 'cap' => 72],
-            ['code' => 'SI', 'name' => 'Susi Air', 'type' => 'Cessna', 'cap' => 12], // Perintis
-        ];
-
-        $routes = ['CGK', 'SUB', 'YIA', 'BPN', 'BEJ', 'MHU']; // Asumsi AAP adalah homebase
-
-        $airline = $airlines[array_rand($airlines)];
-        $route = $routes[array_rand($routes)];
-        $direction = rand(0, 1) ? 'arrival' : 'departure';
-        
-        // Tentukan Route String (From-To)
-        $routeString = ($direction == 'departure') ? "AAP-$route" : "$route-AAP";
-        
-        // Status penerbangan
-        $status = ($airline['name'] == 'Susi Air') ? 'Perintis' : 'Berjadwal';
-
-        // Generate Pax (Penumpang)
-        // Random occupancy antara 70% - 100%
-        $occupancy = rand(70, 100) / 100;
-        $totalPax = round($airline['cap'] * $occupancy);
-        
-        // Pecah pax (Dewasa, Anak, Bayi)
-        $paxInfant = rand(0, 3);
-        $paxChild = rand(0, 10);
-        $paxAdult = $totalPax - $paxChild; // Infant tidak mengurangi seat biasanya, tapi utk simplifikasi kita anggap totalPax = kursi terisi + infant
-
-        // Generate Cargo & Bagasi
-        $cargo = rand(0, 500); // kg
-        $baggage = $totalPax * rand(10, 15); // kg
-
-        // Harga Tiket (Randomize sekitar 1jt - 2jt)
-        $priceHigh = rand(1500000, 2500000);
-        $priceLow = $priceHigh - rand(200000, 500000);
-
-        NataruFlight::create([
-            'nataru_event_id' => $eventId,
-            'flight_date' => $date->format('Y-m-d'),
-            'flight_time' => sprintf("%02d:%02d", rand(6, 21), rand(0, 59)), // Jam 06:00 - 21:59
-            'airline' => $airline['name'],
-            'flight_number' => $airline['code'] . '-' . rand(1000, 9999),
-            'aircraft_type' => $airline['type'],
-            'aircraft_registration' => 'PK-' . strtoupper(\Illuminate\Support\Str::random(3)),
-            'direction' => $direction,
-            'route' => $routeString,
-            'status_flight' => $status,
-            
-            'pax_adult' => $paxAdult,
-            'pax_child' => $paxChild,
-            'pax_infant' => $paxInfant,
-            'pax_total' => ($paxAdult + $paxChild + $paxInfant),
-            
-            'cargo' => $cargo,
-            'baggage' => $baggage,
-            'load_factor' => ($occupancy * 100), // Dalam persen
-
-            'ticket_price_high' => $priceHigh,
-            'ticket_price_low' => $priceLow,
-
-            'officer_name' => 'System Seeder',
-            'remarks' => 'Data Dummy',
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
-    }
+    
 }

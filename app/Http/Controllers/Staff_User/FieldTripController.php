@@ -53,7 +53,7 @@ class FieldTripController extends Controller
             'fieldtrip_name' => $request->fieldtrip_name,
             'fieldtrip_type'   => $request->fieldtrip_type,
             'description'   => $request->description,
-            'documents'     => $documentPath,
+            'documents'     => $documentPaths,
 
         ]);
 

@@ -357,6 +357,9 @@ Route::group(["prefix" => 'dashboard'], function () {
             Route::get('staff/nataru-dashboard', [DashboardNataruController::class, 'index'])->name('staff.nataru.dashboard');
             Route::get('staff/nataru-dashboard/data', [DashboardNataruController::class, 'getComparisonData'])->name('staff.nataru.dashboard.data');
 
+            Route::get('/nataru-events/{id}/export-pdf', [NataruEventController::class, 'exportPdf'])
+                ->name('staff.nataru-events.export-pdf');
+
 
             
             Route::resource('staff/ojt', OjtStudentController::class)

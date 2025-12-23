@@ -42,61 +42,89 @@
                                     <table class="table table-striped" id="table-FieldTrip">
                                         <thead>
                                             <tr>
-                                                <th>Nama File Pengajuan</th>
-                                                <th>Dibuat</th>
+                                                <th>Nama Field Trip</th>
+                                                <th>Tanggal Pengajuan</th>
                                                 <th>Status</th>
                                                 @staff
-                                                <th>Pemilik</th>
+                                                <th>Pengaju</th>
                                                 @endstaff
                                                 <th>Aksi</th>
                                             </tr>
+                                            
                                         </thead>
-                                        @notadmin
-                                        @notstaff
                                         <tbody>
                                                     
-                                                @forelse ($fieldtrips as $index => $fieldtrip)
-                                                    <tr data-id="{{ $index + 1 }}">
-                                                        <td>{{ $fieldtrip->documents ? preg_replace('/^\d+_/', '', basename($fieldtrip->documents)) : '-' }}</td>
-                                                        <td>{{ $fieldtrip->created_at->format('d M Y H:i') }}</td>
-                                                        <td>
-                                                            @php
+                                                @forelse ($fieldtrips as $fieldtrip)
+                                                <tr>
+                                                    {{-- 1. Nama Field Trip --}}
+                                                    <td>
+                                                        <div class="fw-bold">{{ $fieldtrip->fieldtrip_name }}</div>
+                                                        <small class="text-muted">{{ Str::limit($fieldtrip->fieldtrip_type, 30) }}</small>
+                                                    </td>
+
+                                                    {{-- 2. Tanggal Pengajuan --}}
+                                                    <td>
+                                                        {{ $fieldtrip->created_at->format('d M Y') }}
+                                                        <div class="small text-muted">{{ $fieldtrip->created_at->format('H:i') }}</div>
+                                                    </td>
+
+                                                    {{-- 3. Status --}}
+                                                    <td>
+                                                        @php
                                                             $status = $fieldtrip->submission_status;
                                                             $badgeClass = match($status) {
                                                                 'Disetujui' => 'bg-success',
-                                                                'Ditolak' => 'bg-danger',
+                                                                'Ditolak'   => 'bg-danger',
                                                                 'Revisi Diperlukan' => 'bg-warning',
-                                                                default => 'bg-info',
+                                                                default     => 'bg-info', // Diajukan
                                                             };
-                                                            @endphp
-                                                            <span class="badge {{ $badgeClass }}">{{ ucfirst($status) }}</span>
-                                                        </td>                          
-                                                        <td>
-                                                            <div class="d-flex">
-                                                                @if ($fieldtrip->documents)
-                                                                <a href="{{ route('fieldtrip.userShow', $fieldtrip->id) }}" class="me-1 btn btn-sm btn-info text-white btn-tooltip" data-bs-toggle="tooltip" title="Lihat Detail"><i class="bi bi-eye"></i></a>
-                                                                    
-                                                                    
-                                                                    @if ($fieldtrip->submission_status == 'Diajukan')
-                                                                    <form action="{{ route('fieldtrip.destroy', $fieldtrip->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus pengajuan ini?')">
-                                                                        @csrf
-                                                                        @method('DELETE')
-                                                                        <button type="submit" class="btn btn-danger btn-sm text-white btn-tooltip" data-bs-toggle="tooltip" title="Hapus Pengajuan"><i class="bi bi-trash"></i></button>
-                                                                    </form>
-                                                                    @endif
-                                                                @else
-                                                                <span class="text-muted">Tidak ada berkas</span>
-                                                                @endif
-                                                            
+                                                        @endphp
+                                                        <span class="badge {{ $badgeClass }}">{{ ucfirst($status) }}</span>
+                                                    </td>
+
+                                                    {{-- 4. Nama Pengaju --}}
+                                                    @staff
+                                                    <td>
+                                                        <div class="d-flex align-items-center">
+                                                            <div class="avatar avatar-sm me-2">
+                                                                <img src="{{ $fieldtrip->users->first()->avatar_url ?? asset('assetsv2/compiled/jpg/1.jpg') }}" alt="Avatar">
                                                             </div>
-                                                        </td>
-                                                    </tr>
-                                                    @empty
-                                                    
+                                                            <span>{{ $fieldtrip->users->first()->name ?? 'Tanpa Nama' }}</span>
+                                                        </div>
+                                                    </td>
+                                                    @endstaff
+                                                    {{-- 5. Aksi --}}
+                                                    <td>
+                                                        <div class="d-flex gap-2">
+                                                            {{-- Tombol Detail (Untuk Semua) --}}
+                                                            @php
+                                                                // Tentukan route detail berdasarkan role
+                                                                $detailRoute = auth()->user()->is_staff 
+                                                                    ? route('fieldtrip.show', $fieldtrip->id) 
+                                                                    : route('fieldtrip.userShow', $fieldtrip->id);
+                                                            @endphp
+                                                            
+                                                            <a href="{{ $detailRoute }}" class="btn btn-sm btn-info text-white" title="Lihat Detail">
+                                                                <i class="bi bi-eye"></i>
+                                                            </a>
+
+                                                            {{-- Tombol Hapus (Hanya untuk User Pengaju jika status masih Diajukan) --}}
+                                                            @if(!auth()->user()->is_staff && $fieldtrip->submission_status == 'Diajukan')
+                                                                <form action="{{ route('fieldtrip.destroy', $fieldtrip->id) }}" method="POST" onsubmit="return confirm('Yakin ingin membatalkan pengajuan ini?')">
+                                                                    @csrf
+                                                                    @method('DELETE')
+                                                                    <button type="submit" class="btn btn-sm btn-danger" title="Hapus Pengajuan">
+                                                                        <i class="bi bi-trash"></i>
+                                                                    </button>
+                                                                </form>
+                                                            @endif
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                @empty
+                                                {{-- Data Kosong handled by Datatable usually, but safe to leave empty here --}}
                                                 @endforelse
                                         </tbody>
-                                                @endnotstaff
-                                            @endnotadmin
                                             @staff
                                         <tbody>
                                                     @forelse ($fieldtrips as $index => $fieldtrip)

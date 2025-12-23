@@ -1,7 +1,29 @@
 @extends('layouts-V2.master-layouts-v2')
 @section('title', 'Detail Field Trip')
 @section('styles_admin')
-    
+    <style>
+    .doc-preview-item {
+        display: inline-flex;
+        align-items: center;
+        padding: 8px 12px;
+        border: 1px solid #dee2e6;
+        border-radius: 6px;
+        margin-right: 8px;
+        margin-bottom: 8px;
+        text-decoration: none;
+        color: #435ebe;
+        transition: all 0.2s;
+    }
+    .doc-preview-item:hover {
+        border-color: #435ebe;
+        color: #25396f;
+    }
+    .doc-preview-item i {
+        font-size: 1.2rem;
+        margin-right: 8px;
+        margin-bottom: 17px;
+    }
+</style>
 @endsection
 @section('content')
 
@@ -83,10 +105,39 @@
                         <p>{{ $fieldtrip->description }}</p>
                     </div>
                     @if ($fieldtrip->documents)
-                        <div class="col-md-6">
-                            <h6>Dokumen Terlampir</h6>
-                            <a href="{{ asset('uploads/documents/fieldtrip/' . basename($fieldtrip->documents)) }}" class="btn btn-sm btn-primary" id="lihat-dokumen" data-bs-toggle="tooltip" title="Lihat Dokumen"><i class="bi bi-file-earmark-pdf"></i> {{ basename($fieldtrip->documents) }}</a>
-                        </div>
+                        {{-- === BAGIAN MENAMPILKAN BANYAK DOKUMEN === --}}
+                    <div class="col-12">
+                        <h6 class="mb-3">Dokumen Terlampir</h6>
+                        
+                        @if ($fieldtrip->documents)
+                            <div class="d-flex flex-wrap">
+                                {{-- Cek apakah data berupa Array (Multiple Files) --}}
+                                @if(is_array($fieldtrip->documents))
+                                    @foreach($fieldtrip->documents as $doc)
+                                        <a href="{{ asset('uploads/' . $doc) }}" target="_blank" class="doc-preview-item" data-bs-toggle="tooltip" title="Klik untuk melihat">
+                                            @if(Str::endsWith($doc, '.pdf'))
+                                                <i class="bi bi-file-earmark-pdf text-danger"></i>
+                                            @elseif(Str::endsWith($doc, ['.doc', '.docx']))
+                                                <i class="bi bi-file-earmark-word text-primary"></i>
+                                            @else
+                                                <i class="bi bi-file-earmark-text"></i>
+                                            @endif
+                                            <span>{{ basename($doc) }}</span>
+                                        </a>
+                                    @endforeach
+
+                                {{-- Fallback jika data masih string (Single File lama) --}}
+                                @elseif(is_string($fieldtrip->documents))
+                                    <a href="{{ asset('uploads/' . $fieldtrip->documents) }}" target="_blank" class="doc-preview-item">
+                                        <i class="bi bi-file-earmark-text"></i>
+                                        <span>{{ basename($fieldtrip->documents) }}</span>
+                                    </a>
+                                @endif
+                            </div>
+                        @else
+                            <p class="text-muted fst-italic">Tidak ada dokumen yang diunggah.</p>
+                        @endif
+                    </div>
                     @else
                         <div class="col-md-6">
                             <h6>Tidak Ada Dokumen</h6>

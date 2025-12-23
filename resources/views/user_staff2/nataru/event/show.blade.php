@@ -74,6 +74,11 @@
                             <i class="bi bi-file-earmark-excel"></i> Export Excel
                         </a>
 
+                        {{-- TOMBOL EXPORT PDF BARU --}}
+                        <a href="{{ route('staff.nataru-events.export-pdf', $nataruEvent->id) }}" class="btn btn-danger ms-2 text-white fw-bold" title="Download Laporan PDF">
+                            <i class="bi bi-file-earmark-pdf-fill"></i> Export PDF
+                        </a>
+
                         {{-- TOMBOL TV --}}
                         <a href="{{ route('public.nataru.tv', $nataruEvent->public_token) }}" target="_blank" class="btn btn-warning text-dark fw-bold ms-2" title="Buka Tampilan TV">
                             <i class="bi bi-display"></i> Mode TV

@@ -9,6 +9,10 @@ use Illuminate\Support\Str;
 use App\Exports\NataruFlightExport; // Import Class Export
 use Maatwebsite\Excel\Facades\Excel; // Import Facade Excel
 use App\Models\NataruFlight;
+use Barryvdh\DomPDF\Facade\Pdf; // Import PDF
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Http;
+
 
 class NataruEventController extends Controller
 {
@@ -275,5 +279,303 @@ class NataruEventController extends Controller
 
         return redirect()->route('staff.nataru-events.show', $flight->nataru_event_id)
                          ->with('success', 'Data penerbangan '.$validated['flight_number'].' berhasil diperbarui.');
+    }
+    public function exportPdf($id)
+    {
+        $nataruEvent = NataruEvent::with(['flights', 'compareEvent.flights'])->findOrFail($id);
+        
+        // --- 1. SETUP DATA UTAMA & PERBANDINGAN ---
+        $currentStats = [
+            'flights' => $nataruEvent->flights->count(),
+            'pax' => $nataruEvent->flights->sum('pax_total'),
+            'cargo' => $nataruEvent->flights->sum('cargo'),
+            'lf' => $nataruEvent->flights->avg('load_factor') ?? 0,
+        ];
+
+        $compStats = ['flights' => 0, 'pax' => 0, 'cargo' => 0, 'lf' => 0];
+        
+        if ($nataruEvent->compareEvent) {
+            $compQuery = $nataruEvent->compareEvent->flights;
+            $compStats = [
+                'flights' => $compQuery->count(),
+                'pax' => $compQuery->sum('pax_total'),
+                'cargo' => $compQuery->sum('cargo'),
+                'lf' => $compQuery->avg('load_factor') ?? 0,
+            ];
+        }
+
+        $comparison = [
+            'flights' => $currentStats['flights'] - $compStats['flights'],
+            'pax' => $currentStats['pax'] - $compStats['pax'],
+            'cargo' => $currentStats['cargo'] - $compStats['cargo'],
+            'lf' => $currentStats['lf'] - $compStats['lf'],
+        ];
+
+        // --- 2. SETUP DATA HARIAN (TABLE & CHARTS) ---
+        // Logika alignment H-x (Copy dari logic getTvChartData)
+        $start1 = Carbon::parse($nataruEvent->start_date)->startOfDay();
+        $end1   = Carbon::parse($nataruEvent->end_date)->startOfDay();
+        $offset1 = ceil($start1->diffInDays($end1) / 2); 
+        $refDate1 = $start1->copy()->addDays($offset1);
+
+        // Tentukan range H- yang akan ditampilkan
+        $startIndex = $start1->diffInDays($refDate1) * -1;
+        $endIndex   = $end1->diffInDays($refDate1);
+        if ($end1->lessThan($refDate1)) $endIndex = $endIndex * -1;
+
+        // Siapkan Array untuk Looping
+        $dailyReport = [];
+        
+        // Array Data untuk Grafik
+        $chartLabels = [];
+
+       // Pesawat
+        $flightsArr1 = []; $flightsDep1 = [];
+        $flightsArr2 = []; $flightsDep2 = [];
+        
+        // Penumpang
+        $paxArr1 = []; $paxDep1 = [];
+        $paxArr2 = []; $paxDep2 = [];
+        
+        // Kargo
+        $cargoArr1 = []; $cargoDep1 = [];
+        $cargoArr2 = []; $cargoDep2 = [];
+
+        // Pre-fetch flights grouping by date untuk performa
+        $flights1Group = $nataruEvent->flights->groupBy(function($val) {
+            return Carbon::parse($val->flight_date)->format('Y-m-d');
+        });
+        
+        $flights2Group = collect([]);
+        $refDate2 = null;
+        
+        if($nataruEvent->compareEvent) {
+            $flights2Group = $nataruEvent->compareEvent->flights->groupBy(function($val) {
+                return Carbon::parse($val->flight_date)->format('Y-m-d');
+            });
+            
+            $start2 = Carbon::parse($nataruEvent->compareEvent->start_date)->startOfDay();
+            $end2   = Carbon::parse($nataruEvent->compareEvent->end_date)->startOfDay();
+            $offset2 = ceil($start2->diffInDays($end2) / 2);
+            $refDate2 = $start2->copy()->addDays($offset2);
+        }
+
+        for ($i = $startIndex; $i <= $endIndex; $i++) {
+            // Label H
+            if ($i == 0) $hLabel = "Hari H";
+            elseif ($i < 0) $hLabel = "H" . $i; 
+            else $hLabel = "H+" . $i;
+
+            $chartLabels[] = $hLabel; // Label Sumbu X
+
+            // Tanggal Real
+            $date1 = $refDate1->copy()->addDays($i);
+            $dateStr1 = $date1->format('Y-m-d');
+            
+            $date2 = $refDate2 ? $refDate2->copy()->addDays($i) : null;
+            $dateStr2 = $date2 ? $date2->format('Y-m-d') : null;
+
+            // Ambil Data Harian
+            $dayFlight1 = $flights1Group->get($dateStr1);
+            $dayFlight2 = $dateStr2 ? $flights2Group->get($dateStr2) : null;
+
+            // --- PEMECAHAN DATA EVENT 1 (TAHUN INI) ---
+            if ($dayFlight1) {
+                $flightsArr1[] = $dayFlight1->where('direction', 'arrival')->count();
+                $flightsDep1[] = $dayFlight1->where('direction', 'departure')->count();
+                
+                $paxArr1[] = $dayFlight1->where('direction', 'arrival')->sum('pax_total');
+                $paxDep1[] = $dayFlight1->where('direction', 'departure')->sum('pax_total');
+                
+                $cargoArr1[] = $dayFlight1->where('direction', 'arrival')->sum('cargo');
+                $cargoDep1[] = $dayFlight1->where('direction', 'departure')->sum('cargo');
+            } else {
+                // Isi 0 jika tidak ada data
+                $flightsArr1[] = 0; $flightsDep1[] = 0;
+                $paxArr1[] = 0; $paxDep1[] = 0;
+                $cargoArr1[] = 0; $cargoDep1[] = 0;
+            }
+
+            // --- PEMECAHAN DATA EVENT 2 (TAHUN LALU) ---
+            if ($dayFlight2) {
+                $flightsArr2[] = $dayFlight2->where('direction', 'arrival')->count();
+                $flightsDep2[] = $dayFlight2->where('direction', 'departure')->count();
+                
+                $paxArr2[] = $dayFlight2->where('direction', 'arrival')->sum('pax_total');
+                $paxDep2[] = $dayFlight2->where('direction', 'departure')->sum('pax_total');
+                
+                $cargoArr2[] = $dayFlight2->where('direction', 'arrival')->sum('cargo');
+                $cargoDep2[] = $dayFlight2->where('direction', 'departure')->sum('cargo');
+            } else {
+                $flightsArr2[] = 0; $flightsDep2[] = 0;
+                $paxArr2[] = 0; $paxDep2[] = 0;
+                $cargoArr2[] = 0; $cargoDep2[] = 0;
+            }
+
+            // Hitung Stats Harian
+            $stats1 = [
+                'flights' => $dayFlight1 ? $dayFlight1->count() : 0,
+                'pax' => $dayFlight1 ? $dayFlight1->sum('pax_total') : 0,
+                'cargo' => $dayFlight1 ? $dayFlight1->sum('cargo') : 0,
+            ];
+            $stats2 = [
+                'flights' => $dayFlight2 ? $dayFlight2->count() : 0,
+                'pax' => $dayFlight2 ? $dayFlight2->sum('pax_total') : 0,
+                'cargo' => $dayFlight2 ? $dayFlight2->sum('cargo') : 0,
+            ];
+
+            // Masukkan ke Array Table
+            $dailyReport[] = [
+                'label' => $hLabel,
+                'date1' => $date1->translatedFormat('d M Y'),
+                'date2' => $date2 ? $date2->translatedFormat('d M Y') : '-',
+                'stats1' => $stats1,
+                'stats2' => $stats2
+            ];
+
+            // Masukkan ke Array Chart
+            $dataPax1[] = $stats1['pax']; $dataPax2[] = $stats2['pax'];
+            $dataFlight1[] = $stats1['flights']; $dataFlight2[] = $stats2['flights'];
+            $dataCargo1[] = $stats1['cargo']; $dataCargo2[] = $stats2['cargo'];
+        }
+
+        // --- 3. GENERATE QUICKCHART URLS ---
+
+        // >>> TAMBAHKAN KODE DEBUG DISINI <<<
+        // dd([
+        //     'Labels (Sumbu X)' => $chartLabels,
+        //     'Data Arr Tahun Ini (Total Data: ' . count($flightsArr1) . ')' => $flightsArr1,
+        //     'Data Dep Tahun Ini' => $flightsDep1,
+        // ]);
+
+        $chartImages = [
+            'pax' => $this->generateComparisonChart(
+                'Penumpang', $chartLabels, 
+                $paxArr1, $paxDep1, $paxArr2, $paxDep2, 
+                $nataruEvent->name
+            ),
+            'flight' => $this->generateComparisonChart(
+                'Pesawat', $chartLabels, 
+                $flightsArr1, $flightsDep1, $flightsArr2, $flightsDep2, 
+                $nataruEvent->name
+            ),
+            'cargo' => $this->generateComparisonChart(
+                'Kargo', $chartLabels, 
+                $cargoArr1, $cargoDep1, $cargoArr2, $cargoDep2, 
+                $nataruEvent->name
+            ),
+        ];
+        // --- TAMBAHAN UNTUK POIN 4: AMBIL SELURUH DATA PENERBANGAN ---
+        $allFlights = $nataruEvent->flights()
+                        ->orderBy('flight_date', 'asc') // Urutkan tanggal
+                        ->orderBy('flight_time', 'asc') // Urutkan jam
+                        ->get();
+
+        // --- 4. RENDER PDF ---
+        $pdf = Pdf::loadView('user_staff2.nataru.report.pdf_export', compact(
+            'nataruEvent', 'currentStats', 'compStats', 'comparison', 'dailyReport', 'chartImages','allFlights'
+        ));
+
+        // Set kertas A4 Landscape agar grafik & tabel muat lega
+        $pdf->setPaper('a4', 'landscape');
+
+        // --- PERBAIKAN UTAMA: IZINKAN GAMBAR REMOTE ---
+        $pdf->setOption([
+            'isRemoteEnabled' => true, 
+            'isHtml5ParserEnabled' => true
+        ]);
+        // ----------------------------------------------
+
+        $cleanName = \Illuminate\Support\Str::slug($nataruEvent->name);
+
+        return $pdf->download('Laporan_Posko_'.$cleanName.'.pdf');
+    }
+
+    /**
+     * Helper Chart FINAL: POST Only (Tanpa Fallback URL)
+     * Memaksa penggunaan Base64. Jika gagal, tampilkan pesan error di gambar.
+     */
+    private function generateComparisonChart($title, $labels, $arr1, $dep1, $arr2, $dep2, $eventName)
+    {
+        $config = [
+            'type' => 'bar', 
+            'data' => [
+                'labels' => $labels,
+                'datasets' => [
+                    [
+                        'type' => 'bar', 'label' => 'Tahun ini (Arr)',
+                        'backgroundColor' => '#0d6efd', 'borderColor' => '#0d6efd', 'borderWidth' => 1,
+                        'data' => $arr1, 'xAxisID' => 'sumbu-x-utama',
+                        'categoryPercentage' => 0.6, 'barPercentage' => 0.9,
+                    ],
+                    [
+                        'type' => 'bar', 'label' => 'Tahun ini (Dep)',
+                        'backgroundColor' => '#0dcaf0', 'borderColor' => '#0dcaf0', 'borderWidth' => 1,
+                        'data' => $dep1, 'xAxisID' => 'sumbu-x-utama',
+                        'categoryPercentage' => 0.6, 'barPercentage' => 0.9,
+                    ],
+                    [
+                        'type' => 'bar', 'label' => 'Tahun Lalu (Arr)',
+                        'backgroundColor' => '#dc3545', 'borderColor' => '#dc3545', 'borderWidth' => 1,
+                        'data' => $arr2, 'xAxisID' => 'sumbu-x-utama',
+                    ],
+                    [
+                        'type' => 'bar', 'label' => 'Tahun Lalu (Dep)',
+                        'backgroundColor' => '#fd7e14', 'borderColor' => '#fd7e14', 'borderWidth' => 1,
+                        'data' => $dep2, 'xAxisID' => 'sumbu-x-utama',
+                    ]
+                ]
+            ],
+            'options' => [
+                'title' => [ 'display' => true, 'text' => 'Grafik ' . $title, 'fontSize' => 14 ],
+                'legend' => [ 'position' => 'bottom', 'labels' => ['fontSize' => 9, 'boxWidth' => 10] ],
+                'scales' => [
+                    'xAxes' => [[
+                        'id' => 'sumbu-x-utama', 'offset' => true, 'stacked' => false,
+                        'gridLines' => [ 'display' => false, 'drawBorder' => true, 'offsetGridLines' => true ],
+                        'ticks' => [ 'autoSkip' => true, 'maxRotation' => 0, 'fontSize' => 9 ]
+                    ]],
+                    'yAxes' => [[ 'ticks' => ['beginAtZero' => true, 'fontSize' => 9] ]]
+                ]
+            ]
+        ];
+
+        try {
+            // KIRIM REQUEST POST
+            $response = Http::withOptions([
+                'verify' => false, // Bypass SSL (Wajib di Localhost/XAMPP)
+                'timeout' => 30,   // Perpanjang timeout jadi 30 detik
+            ])->post('https://quickchart.io/chart', [
+                'chart' => $config,
+                'width' => 600,
+                'height' => 300,
+                'backgroundColor' => 'white',
+            ]);
+
+            // CEK RESPONSE
+            if ($response->successful()) {
+                $imageData = $response->body();
+                
+                // Validasi: Jika response diawali '{', itu teks JSON error, bukan gambar
+                if (substr(trim($imageData), 0, 1) === '{') {
+                    // Coba ambil pesan error dari JSON
+                    $errMsg = 'QuickChart_JSON_Error';
+                    return 'https://placehold.co/600x300?text=' . $errMsg;
+                }
+
+                return 'data:image/png;base64,' . base64_encode($imageData);
+            } else {
+                // Jika status bukan 200 OK (misal 400 atau 500)
+                $status = $response->status();
+                \Illuminate\Support\Facades\Log::error('QuickChart Error: ' . $response->body());
+                return 'https://placehold.co/600x300?text=HTTP+Error+' . $status;
+            }
+
+        } catch (\Exception $e) {
+            // Jika koneksi gagal total (Timeout / DNS)
+            $msg = substr($e->getMessage(), 0, 20); // Ambil potongan pesan error
+            \Illuminate\Support\Facades\Log::error('QuickChart Exception: ' . $e->getMessage());
+            return 'https://placehold.co/600x300?text=Koneksi+Gagal:+' . urlencode($msg);
+        }
     }
 }

@@ -8,7 +8,6 @@
         border-radius: 10px;
         padding: 30px;
         text-align: center;
-        background-color: #f8f9fa;
         cursor: pointer;
         transition: all 0.3s ease;
         position: relative;
@@ -42,7 +41,6 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        background: #fff;
         border: 1px solid #dee2e6;
         padding: 10px 15px;
         border-radius: 8px;
@@ -59,6 +57,9 @@
     .file-icon {
         font-size: 1.5rem;
         color: #dc3545; /* Warna icon PDF */
+        margin-bottom: 25px;
+        
+        margin-right: 10px;
     }
 
     .file-name {
@@ -200,7 +201,7 @@
                         <label class="form-label">Dokumen yang Diperlukan <span class="text-danger">*</span></label>
     
                         {{-- Input File Tersembunyi (Hidden) --}}
-                        <input type="file" class="d-none" id="documents" name="documents" accept=".pdf,.doc,.docx">
+                        <input type="file" class="d-none" id="documents" name="documents[]" multiple accept=".pdf,.doc,.docx">
                         
                         {{-- Area Drag & Drop Visual --}}
                         <div class="upload-area" id="drop-zone">
@@ -280,8 +281,7 @@
             // Karena di controller kamu cuma terima 1 file (single upload),
             // kita reset dulu setiap kali ada file baru masuk.
             // Jika ingin multiple, hapus baris: dataTransfer = new DataTransfer();
-            dataTransfer = new DataTransfer(); 
-            fileListContainer.innerHTML = ''; // Kosongkan tampilan lama
+            
 
             if (files.length > 0) {
                 // Ambil file pertama saja (karena logic controller single file)
