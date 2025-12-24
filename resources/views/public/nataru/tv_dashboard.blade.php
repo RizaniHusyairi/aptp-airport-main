@@ -516,15 +516,7 @@
                         {{-- TAMBAHAN ID: d-flight-arr --}}
                         <span class="detail-value" id="d-flight-arr">{{ number_format($dailyStats['flights_arr']) }}</span>
                         
-                        {{-- TAMBAHAN ID: d-flight-arr-diff (Container Badge) --}}
-                        <span id="d-flight-arr-diff">
-                            @if($nataruEvent->compare_event_id)
-                                @php $diff = $dailyStats['flights_arr'] - $dailyStats['comp_flights_arr']; @endphp
-                                <span class="comp-badge {{ $diff >= 0 ? 'comp-up' : 'comp-down' }}">
-                                    {{ $diff >= 0 ? '+' : '' }}{{ $diff }}
-                                </span>
-                            @endif
-                        </span>
+                        
                     </div>
                 </div>
 
@@ -533,14 +525,7 @@
                     <span class="detail-label"><i class="bi bi-arrow-up-right text-info"></i> Berangkat</span>
                     <div>
                         <span class="detail-value" id="d-flight-dep">{{ number_format($dailyStats['flights_dep']) }}</span>
-                        <span id="d-flight-dep-diff">
-                            @if($nataruEvent->compare_event_id)
-                                @php $diff = $dailyStats['flights_dep'] - $dailyStats['comp_flights_dep']; @endphp
-                                <span class="comp-badge {{ $diff >= 0 ? 'comp-up' : 'comp-down' }}">
-                                    {{ $diff >= 0 ? '+' : '' }}{{ $diff }}
-                                </span>
-                            @endif
-                        </span>
+                        
                     </div>
                 </div>
             </div>
@@ -556,14 +541,7 @@
                     <span class="detail-label"><i class="bi bi-arrow-down-left text-success"></i> Datang</span>
                     <div>
                         <span class="detail-value" id="d-pax-arr">{{ number_format($dailyStats['pax_arr']) }}</span>
-                        <span id="d-pax-arr-diff">
-                            @if($nataruEvent->compare_event_id)
-                                @php $diff = $dailyStats['pax_arr'] - $dailyStats['comp_pax_arr']; @endphp
-                                <span class="comp-badge {{ $diff >= 0 ? 'comp-up' : 'comp-down' }}">
-                                    {{ $diff >= 0 ? '+' : '' }}{{ $diff }}
-                                </span>
-                            @endif
-                        </span>
+                        
                     </div>
                 </div>
 
@@ -572,14 +550,7 @@
                     <span class="detail-label"><i class="bi bi-arrow-up-right text-success"></i> Berangkat</span>
                     <div>
                         <span class="detail-value" id="d-pax-dep">{{ number_format($dailyStats['pax_dep']) }}</span>
-                        <span id="d-pax-dep-diff">
-                            @if($nataruEvent->compare_event_id)
-                                @php $diff = $dailyStats['pax_dep'] - $dailyStats['comp_pax_dep']; @endphp
-                                <span class="comp-badge {{ $diff >= 0 ? 'comp-up' : 'comp-down' }}">
-                                    {{ $diff >= 0 ? '+' : '' }}{{ $diff }}
-                                </span>
-                            @endif
-                        </span>
+                        
                     </div>
                 </div>
             </div>
@@ -595,14 +566,14 @@
                     <span class="detail-label"><i class="bi bi-arrow-down-left text-warning"></i> Datang</span>
                     <div>
                         <span class="detail-value" id="d-cargo-arr">{{ number_format($dailyStats['cargo_arr']) }}</span>
-                        <span id="d-cargo-arr-diff">
+                        {{-- <span id="d-cargo-arr-diff">
                             @if($nataruEvent->compare_event_id)
                                 @php $diff = $dailyStats['cargo_arr'] - $dailyStats['comp_cargo_arr']; @endphp
                                 <span class="comp-badge {{ $diff >= 0 ? 'comp-up' : 'comp-down' }}">
                                     {{ $diff >= 0 ? '+' : '' }}{{ number_format($diff) }}
                                 </span>
                             @endif
-                        </span>
+                        </span> --}}
                     </div>
                 </div>
 
@@ -611,14 +582,14 @@
                     <span class="detail-label"><i class="bi bi-arrow-up-right text-warning"></i> Berangkat</span>
                     <div>
                         <span class="detail-value" id="d-cargo-dep">{{ number_format($dailyStats['cargo_dep']) }}</span>
-                        <span id="d-cargo-dep-diff">
+                        {{-- <span id="d-cargo-dep-diff">
                             @if($nataruEvent->compare_event_id)
                                 @php $diff = $dailyStats['cargo_dep'] - $dailyStats['comp_cargo_dep']; @endphp
                                 <span class="comp-badge {{ $diff >= 0 ? 'comp-up' : 'comp-down' }}">
                                     {{ $diff >= 0 ? '+' : '' }}{{ number_format($diff) }}
                                 </span>
                             @endif
-                        </span>
+                        </span> --}}
                     </div>
                 </div>
             </div>
@@ -947,11 +918,11 @@
                     },
                     {
                         type: 'pax', title: 'Tren Penumpang (Orang)', cardId: 'card-pax',
-                        colors: ['#20c997', '#198754', '#C59560', '#E67E22']
+                        colors: ['#0d6efd', '#6610f2', '#BF124D', '#76153C']
                     },
                     {
                         type: 'cargo', title: 'Tren Kargo (Kg)', cardId: 'card-cargo',
-                        colors: ['#ffc107', '#fd7e14', '#E83C91', '#FF8FB7']
+                        colors: ['#0d6efd', '#6610f2', '#BF124D', '#76153C']
                     }
                 ];
 
