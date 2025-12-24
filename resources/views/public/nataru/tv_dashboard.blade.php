@@ -942,21 +942,39 @@
                             bar: { 
                                 columnWidth: '70%',
                                 borderRadius: 2,
-                                dataLabels: {
-                                    position: 'top',       // Posisi di ujung atas
-                                    orientation: 'vertical',
+                                dataLabels: {     
+                                    position: 'bottom',
+                                    //  Posisi di ujung atas
+                                    // orientation: 'vertical',
                                 }
                             } 
                         },
                         dataLabels: { 
                             enabled: true,
+                            offsetY: -150,
                              // Geser ke bawah sedikit agar masuk ke dalam batang (karena vertikal butuh ruang ke bawah)
                                         // ATAU gunakan minus (-) jika ingin melayang di atas batang
                             style: {
                                 fontSize: '10px',
                                  
                             },
-                            hideOverflowingLabels: false
+                            hideOverflowingLabels: false,
+                            // --- BAGIAN UTAMA TRIK ZIG-ZAG ---
+                            formatter: function (val, opts) {
+                                const index = opts.seriesIndex; // 0, 1, 2, 3
+                                let label = [];
+
+                                // Batang 1 (index 0): Tidak ada enter -> Posisi Paling Tinggi (-60)
+                                // Batang 2 (index 1): 1 enter -> Turun sedikit
+                                // Batang 3 (index 2): 2 enter -> Turun lagi
+                                // Batang 4 (index 3): 3 enter -> Paling bawah (dekat sumbu X)
+                                for (let i = 0; i < index; i++) {
+                                    label.push(""); 
+                                    label.push(""); 
+                                }
+                                label.push(val);
+                                return label;
+                            }
                             // Hapus 'rotate: -90' di sini, karena sudah dihandle oleh orientation: 'vertical' di atas
                         },
                         xaxis: {
