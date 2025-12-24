@@ -421,48 +421,7 @@
         </div>
 
         <div class="header-right">
-            <div class="ticket-info-container">
-                <div class="ticket-badge">
-                    <div class="ticket-icon high"><i class="bi bi-graph-up-arrow"></i></div>
-                    <div class="ticket-content">
-                        <span class="ticket-label">Tiket Tertinggi (Hari ini)</span>
-                        <span class="ticket-value" id="val-max-price">
-                            Rp {{ number_format($currentStats['max_flight_data']->ticket_price_high ?? 0) }}
-                        </span>
-                        
-                        {{-- INFO MASKAPAI & RUTE --}}
-                        <div class="ticket-details">
-                            <span class="detail-pill airline-pill" id="val-max-airline">
-                                <i class="bi bi-airplane-fill me-1"></i>
-                                {{ $currentStats['max_flight_data']->airline ?? '-' }}
-                            </span>
-                            <span class="detail-pill route-pill" id="val-max-route">
-                                {{ $currentStats['max_flight_data']->route ?? '-' }}
-                            </span>
-                        </div>
-                    </div>
-                </div>
-                <div class="ticket-badge">
-                    <div class="ticket-icon low"><i class="bi bi-graph-down-arrow"></i></div> {{-- Ganti icon jadi tags --}}
-                    <div class="ticket-content">
-                        <span class="ticket-label">Tiket Terendah (Hari ini)</span>
-                        <span class="ticket-value" id="val-min-price">
-                            Rp {{ number_format($currentStats['min_flight_data']->ticket_price_low ?? 0) }}
-                        </span>
-
-                        {{-- INFO MASKAPAI & RUTE --}}
-                        <div class="ticket-details">
-                            <span class="detail-pill airline-pill" id="val-min-airline">
-                                <i class="bi bi-airplane-fill me-1"></i>
-                                {{ $currentStats['min_flight_data']->airline ?? '-' }}
-                            </span>
-                            <span class="detail-pill route-pill" id="val-min-route">
-                                {{ $currentStats['min_flight_data']->route ?? '-' }}
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            
             <div class="clock-container">
 
                 <div class="live-badge">
@@ -607,9 +566,8 @@
                     <div class="d-flex align-items-baseline gap-2">
                         <div class="stat-value" id="val-flights">{{ number_format($currentStats['total_flights']) }}</div>
                     </div>
-                    @if($comparison)
-                        {{-- <div id="diff-flights">{!! tvDiff($comparison['flights']) !!} <small class="text-muted ms-1" style="font-size: 0.7rem">vs lalu</small></div> --}}
-                    @endif
+                    <div id="diff-pax"><small class="ms-1" style="font-size: 0.8rem">Dari H-9 s/d Hari ini</small></div>
+
                     <div class="stat-icon-bg text-primary"><i class="bi bi-airplane-engines"></i></div>
                 </div>
 
@@ -619,9 +577,9 @@
                     <div class="d-flex align-items-baseline gap-2">
                         <div class="stat-value" id="val-pax">{{ number_format($currentStats['total_pax']) }}</div>
                     </div>
-                    @if($comparison)
-                        {{-- <div id="diff-pax">{!! tvDiff($comparison['pax']) !!} <small class="text-muted ms-1" style="font-size: 0.7rem">vs lalu</small></div> --}}
-                    @endif
+                    
+                        <div id="diff-pax"><small class="ms-1" style="font-size: 0.8rem">Dari H-9 s/d Hari ini</small></div>
+                    
                     <div class="stat-icon-bg text-success"><i class="bi bi-people-fill"></i></div>
                 </div>
 
@@ -631,9 +589,7 @@
                     <div class="d-flex align-items-baseline gap-2">
                         <div class="stat-value" id="val-cargo">{{ number_format($currentStats['total_cargo']) }}</div>
                     </div>
-                    @if($comparison)
-                        {{-- <div id="diff-cargo">{!! tvDiff($comparison['cargo']) !!} <small class="text-muted ms-1" style="font-size: 0.7rem">vs lalu</small></div> --}}
-                    @endif
+                    <div id="diff-pax"><small class="ms-1" style="font-size: 0.8rem">Dari H-9 s/d Hari ini</small></div>
                     <div class="stat-icon-bg text-warning"><i class="bi bi-box-seam-fill"></i></div>
                 </div>
 
@@ -643,9 +599,7 @@
                     <div class="d-flex align-items-baseline gap-2">
                         <div class="stat-value" id="val-lf">{{ number_format($currentStats['avg_lf'], 1) }}%</div>
                     </div>
-                    @if($comparison)
-                        {{-- <div id="diff-lf">{!! tvDiff($comparison['lf'], true) !!} <small class="text-muted ms-1" style="font-size: 0.7rem">vs lalu</small></div> --}}
-                    @endif
+                    <div id="diff-pax"><small class="ms-1" style="font-size: 0.8rem">Dari H-9 s/d Hari ini</small></div>
                     <div class="stat-icon-bg text-danger"><i class="bi bi-pie-chart-fill"></i></div>
                 </div>
             </div>
@@ -977,13 +931,38 @@
                             fontFamily: 'Nunito, sans-serif', stacked: false
                         },
                         colors: config.colors,
-                        dataLabels: { enabled: true },
-                        stroke: { width: [0, 0, 2, 2], curve: 'smooth', dashArray: [0, 0, 5, 5] },
-                        plotOptions: { bar: { columnWidth: '60%', borderRadius: 2 } },
+                        
+                        stroke: { 
+                            show: true,
+                            width: 4,              // Lebar celah (makin besar angka, makin jauh jaraknya)
+                            colors: ['transparent']
+                        },
+                        // 1. UBAH DI SINI (PLOT OPTIONS)
+                        plotOptions: { 
+                            bar: { 
+                                columnWidth: '70%',
+                                borderRadius: 2,
+                                dataLabels: {
+                                    position: 'top',       // Posisi di ujung atas
+                                    orientation: 'vertical',
+                                }
+                            } 
+                        },
+                        dataLabels: { 
+                            enabled: true,
+                             // Geser ke bawah sedikit agar masuk ke dalam batang (karena vertikal butuh ruang ke bawah)
+                                        // ATAU gunakan minus (-) jika ingin melayang di atas batang
+                            style: {
+                                fontSize: '10px',
+                                 
+                            },
+                            hideOverflowingLabels: false
+                            // Hapus 'rotate: -90' di sini, karena sudah dihandle oleh orientation: 'vertical' di atas
+                        },
                         xaxis: {
                             categories: globalChartData.categories, // Menggunakan data global
                             labels: {
-                                style: { colors: '#6c757d', fontSize: '10px' },
+                                style: { colors: '#6c757d', fontSize: '12px' },
                                 formatter: function (val, timestamp, index) {
                                     // Pastikan data tanggal tersedia
                                     if (typeof index !== 'undefined' && globalChartData.dates_event1 && globalChartData.dates_event2) {
@@ -1000,18 +979,29 @@
                                 },
 
                             },
+                            tooltip: {
+                                enabled: false // Matikan tooltip axis agar tidak menutupi label bawah
+                            },
+                            crosshairs: {
+                                show: false // Matikan crosshair vertikal agar visual bersih
+                            },
                             axisBorder: { show: true, color: '#eef2f7' },
                             axisTicks: { show: false }
                         },
                         yaxis: { labels: { style: { colors: '#6c757d', fontSize: '10px' } } },
                         grid: {
                             borderColor: '#eef2f7',
-                            strokeDashArray: 3,
+                            strokeDashArray: 5,
+                            padding: {
+                                top: 30,
+                                left: 30,   // TAMBAHAN: Memberi napas di sisi kiri (untuk batang awal)
+                                right: 30, // Tambah padding atas untuk tempat angka
+                            }
                         },
                         theme: { mode: 'light' },
                         legend: {
                             position: 'top', horizontalAlign: 'right', fontSize: '10px',
-                            markers: { width: 16, height: [12, 12, 3, 3], radius: [2, 2, 0, 0], offsetY: [0, 0, -1,-1 ], strokeWidth: 0 },
+                            markers: { width: 16, radius: [2, 2, 2, 2], strokeWidth: 0 },
                             itemMargin: { horizontal: 5, vertical: 0 },
                             labels: { colors: '#333' }
                         }
@@ -1035,8 +1025,8 @@
                     return [
                         { name: '{{ $nataruEvent->name }} (Arr)', type: 'bar', data: globalChartData.dataset1[type + '_arrival'] },
                         { name: '{{ $nataruEvent->name }} (Dep)', type: 'bar', data: globalChartData.dataset1[type + '_departure'] },
-                        { name: '{{ $nataruEvent->compareEvent->name }} (Arr)', type: 'line', data: globalChartData.dataset2[type + '_arrival'] },
-                        { name: '{{ $nataruEvent->compareEvent->name }} (Dep)', type: 'line', data: globalChartData.dataset2[type + '_departure'] }
+                        { name: '{{ $nataruEvent->compareEvent->name }} (Arr)', type: 'bar', data: globalChartData.dataset2[type + '_arrival'] },
+                        { name: '{{ $nataruEvent->compareEvent->name }} (Dep)', type: 'bar', data: globalChartData.dataset2[type + '_departure'] }
                     ];
                 }
 
