@@ -155,27 +155,33 @@ class PublicNataruController extends Controller
         // 3. Logika Perbandingan (H-x yang sama)
         if ($nataruEvent->compare_event_id) {
             $event2 = $nataruEvent->compareEvent;
-            
-            // --- HITUNG LOGIKA H-x (Copy dari logic getTvChartData agar konsisten) ---
-            $start1 = Carbon::parse($nataruEvent->start_date)->startOfDay();
-            $end1   = Carbon::parse($nataruEvent->end_date)->startOfDay();
-            $refDate1 = $start1->copy()->addDays(ceil($start1->diffInDays($end1) / 2)); // Titik Tengah Event 1
+        
+        // --- UBAH BAGIAN INI (Hapus logika titik tengah lama) ---
+        
+        // OLD (Hapus/Komentari):
+        // $start1 = Carbon::parse($nataruEvent->start_date)->startOfDay();
+        // $end1   = Carbon::parse($nataruEvent->end_date)->startOfDay();
+        // $refDate1 = $start1->copy()->addDays(ceil($start1->diffInDays($end1) / 2)); 
 
-            $start2 = Carbon::parse($event2->start_date)->startOfDay();
-            $end2   = Carbon::parse($event2->end_date)->startOfDay();
-            $refDate2 = $start2->copy()->addDays(ceil($start2->diffInDays($end2) / 2)); // Titik Tengah Event 2
+        // NEW (Set H-0 ke 25 Desember 2025):
+        $refDate1 = Carbon::create(2025, 12, 25)->startOfDay(); 
 
-            // Cari H-berapa hari ini?
-            // diffInDays(target, false): Positif jika target masa depan. Kita mau H-x itu negatif.
-            // Jadi: H-indeks = (HariIni - Ref)
-            // Note: diffInDays return absolute. Kita harus cek manual lessThan/greaterThan atau pakai floatDiffInDays
-            // Cara paling aman manual:
-            $diffDays = $today->diffInDays($refDate1);
-            if ($today->lessThan($refDate1)) {
-                $hIndex = $diffDays * -1;
-            } else {
-                $hIndex = $diffDays;
-            }
+        // -------------------------------------------------------
+
+        // Untuk Event Pembanding (Event 2), kita asumsikan H-0 nya adalah
+        // tanggal 25 Desember pada tahun event tersebut berjalan.
+        // Kita ambil tahunnya dari start_date event pembanding.
+        $yearEvent2 = Carbon::parse($event2->start_date)->year;
+        $refDate2 = Carbon::create($yearEvent2, 12, 25)->startOfDay();
+
+        // Cari H-berapa hari ini?
+        // ... (Kode selanjutnya sama, tidak perlu diubah) ...
+        $diffDays = $today->diffInDays($refDate1);
+        if ($today->lessThan($refDate1)) {
+            $hIndex = $diffDays * -1;
+        } else {
+            $hIndex = $diffDays;
+        }
 
             // Tentukan Tanggal Pembanding yang "H-indeks"-nya sama
             $compDate = $refDate2->copy()->addDays($hIndex);
@@ -251,15 +257,8 @@ class PublicNataruController extends Controller
         $start1 = Carbon::parse($event1->start_date)->startOfDay();
         $end1   = Carbon::parse($event1->end_date)->startOfDay();
         
-        // Hitung selisih hari. Contoh: 18 Des ke 4 Jan = 17 hari (diff).
-        // Kita pakai ceil (pembulatan atas) bagi 2. 
-        // 17 / 2 = 8.5 -> dibulatkan jadi 9.
-        // Start (18) + 9 hari = Tanggal 27 Des (Ini jadi H-0).
-        // Cek: 18 Des adalah H-9. 4 Jan adalah H+8. (Sesuai request).
-        $diff1 = $start1->diffInDays($end1);
-        $offset1 = ceil($diff1 / 2); 
+        $refDate1 = Carbon::create(2025, 12, 25)->startOfDay();
         
-        $refDate1 = $start1->copy()->addDays($offset1);
 
         // 4. Hitung H-0 (Ref Date) Dinamis untuk Event 2 (Agar perbandingan Apple-to-Apple)
         // Kita lakukan hal yang sama untuk event pembanding agar titik tengahnya ketemu titik tengah event utama.
@@ -268,7 +267,7 @@ class PublicNataruController extends Controller
         $diff2  = $start2->diffInDays($end2);
         $offset2 = ceil($diff2 / 2);
         
-        $refDate2 = $start2->copy()->addDays($offset2);
+        $refDate2 = Carbon::create($start2->year, 12, 25)->startOfDay();
 
 
         // 5. Tentukan Range Loop (Start Index s/d End Index)

@@ -767,8 +767,6 @@
                     updateStatIfChanged('val-cargo', doc);
                     updateStatIfChanged('val-lf', doc);
 
-                    updateStatIfChanged('val-max-price', doc);
-                    updateStatIfChanged('val-min-price', doc);
 
                     updateContentIfChanged('val-max-airline', doc);
                     updateContentIfChanged('val-max-route', doc);
@@ -918,6 +916,8 @@
                 setInterval(loadChartData, 30000);
 
                 // ---------------------------------------------
+                let h7 = null;
+                let h1 = null;
 
                 function initChart() {
                     const config = chartConfigs[currentChartIndex];
@@ -934,7 +934,7 @@
                         
                         stroke: { 
                             show: true,
-                            width: 4,              // Lebar celah (makin besar angka, makin jauh jaraknya)
+                            width: 2,              // Lebar celah (makin besar angka, makin jauh jaraknya)
                             colors: ['transparent']
                         },
                         // 1. UBAH DI SINI (PLOT OPTIONS)
@@ -978,35 +978,98 @@
                             // Hapus 'rotate: -90' di sini, karena sudah dihandle oleh orientation: 'vertical' di atas
                         },
                         xaxis: {
-                            categories: globalChartData.categories, // Menggunakan data global
+                            type: 'category', 
+                            // categories: globalChartData.categories, // <--- HAPUS BARIS INI (Data kategori sudah ada di dalam Series)
+                            
                             labels: {
-                                style: { colors: '#6c757d', fontSize: '12px' },
-                                formatter: function (val, timestamp, index) {
-                                    // Pastikan data tanggal tersedia
-                                    if (typeof index !== 'undefined' && globalChartData.dates_event1 && globalChartData.dates_event2) {
-                                        const date1 = globalChartData.dates_event1[index]; // Tanggal Event Sekarang
-                                        const date2 = globalChartData.dates_event2[index]; // Tanggal Event Pembanding
-
-                                        // Return dalam bentuk Array String untuk membuat baris baru (multi-line)
-                                        // Baris 1: H-xx
-                                        // Baris 2: Tanggal Event 1
-                                        // Baris 3: Tanggal Event 2
-                                        return [val, date1, date2];
+                                style: { colors: '#6c757d', fontSize: '10px', fontFamily: 'Nunito, sans-serif', fontWeight: 600 },
+                                formatter: function (val) {
+                                    // Logika pencarian tanggal tetap sama, tapi sekarang 'val' dijamin string 'H-7' yang bersih
+                                    let realIndex = -1;
+                                    if (globalChartData && globalChartData.categories) {
+                                        realIndex = globalChartData.categories.indexOf(val);
+                                    }
+                                    if (realIndex !== -1 && globalChartData.dates_event1) {
+                                        return [val, globalChartData.dates_event1[realIndex], globalChartData.dates_event2[realIndex]];
                                     }
                                     return val;
-                                },
-
+                                }
                             },
-                            tooltip: {
-                                enabled: false // Matikan tooltip axis agar tidak menutupi label bawah
-                            },
-                            crosshairs: {
-                                show: false // Matikan crosshair vertikal agar visual bersih
-                            },
-                            axisBorder: { show: true, color: '#eef2f7' },
-                            axisTicks: { show: false }
+                            // ... config axisBorder, tooltip, dll ...
                         },
                         yaxis: { labels: { style: { colors: '#6c757d', fontSize: '10px' } } },
+
+                        annotations: {
+                            position: 'back',
+                            xaxis: [
+                                // 1. PERIODE ARUS MUDIK (H-7 s.d H-1)
+                                {
+                                    x: globalChartData.categories.indexOf("H-7")-50, 
+                                    x2: globalChartData.categories.indexOf("H-1") + 425,
+                                    fillColor: '#00E396', // Warna Hijau Muda
+                                    opacity: .1, // Transparansi (biar grafik tetap kelihatan)
+                                    label: {
+                                        borderColor: '#00E396',
+                                        style: {
+                                            fontSize: '10px',
+                                            color: '#fff',
+                                            background: '#00E396',
+                                        },
+                                         // Geser label ke atas
+                                        
+                                        text: 'ARUS MUDIK',
+                                        position: 'top', // Posisi di Atas
+                                        orientation: 'horizontal', // Teks Mendatar
+                                        offsetY: 0, // Tempel di paling atas
+                                        offsetX: 265 // Geser sedikit ke kanan agar tidak nempel garis start
+                                    }
+                                },
+
+                                // 2. PERIODE NATAL & TAHUN BARU (H s.d H+6)
+                                {
+                                    x: globalChartData.categories.indexOf("H")+470, 
+                                    x2: globalChartData.categories.indexOf("H+6") + 905,
+                                    fillColor: '#FEB019', // Warna Kuning/Emas
+                                    opacity: .1,
+                                    label: {
+                                        borderColor: '#FEB019',
+                                        style: {
+                                            fontSize: '10px',
+                                            color: '#fff',
+                                            background: '#FEB019',
+                                        },
+                                        offsetY: -10,
+                                        text: 'NATAL & TAHUN BARU',
+                                        position: 'top', // Posisi di Atas
+                                        orientation: 'horizontal', // Teks Mendatar
+                                        offsetY: 0, // Tempel di paling atas
+                                        offsetX: 227 // Geser sedikit ke kanan agar tidak nempel garis start
+                                    }
+                                },
+
+                                // 3. PERIODE ARUS BALIK (H+7 s.d Selesai)
+                                // Catatan: x2 dikosongkan atau diisi H terakhir agar sampai ujung
+                                {
+                                    x: globalChartData.categories.indexOf("H+7")+950, 
+                                    x2: globalChartData.categories.indexOf("H+11") + 2185,
+                                    fillColor: '#FF4560', // Warna Merah
+                                    opacity: 0.1,
+                                    label: {
+                                        borderColor: '#FF4560',
+                                        style: {
+                                            fontSize: '10px',
+                                            color: '#fff',
+                                            background: '#FF4560',
+                                        },
+                                        text: 'ARUS BALIK', // (Ganti jadi ARUS MUDIK jika memang itu yang diinginkan)
+                                        position: 'top', // Posisi di Atas
+                                        orientation: 'horizontal', // Teks Mendatar
+                                        offsetY: 0, // Tempel di paling atas
+                                        offsetX: 150 // Geser sedikit ke kanan agar tidak nempel garis start
+                                    }
+                                }
+                            ]
+                        },
                         grid: {
                             borderColor: '#eef2f7',
                             strokeDashArray: 5,
@@ -1040,11 +1103,42 @@
                 }
 
                 function getSeriesData(type) {
+
+                    // Helper untuk menggabungkan Kategori (H-xx) dengan Data Angka
+                    // Ini kuncinya: Kita 'lem' label H-nya langsung ke datanya.
+                    const mapToXY = (dataArray) => {
+                        return dataArray.map((val, index) => {
+                            // Pastikan categories tersedia
+                            if (globalChartData && globalChartData.categories) {
+                                return {
+                                    x: globalChartData.categories[index], // ID Kunci: 'H-7', 'H-6', dst
+                                    y: val
+                                };
+                            }
+                            return val;
+                        });
+                    };
                     return [
-                        { name: '{{ $nataruEvent->name }} (Arr)', type: 'bar', data: globalChartData.dataset1[type + '_arrival'] },
-                        { name: '{{ $nataruEvent->name }} (Dep)', type: 'bar', data: globalChartData.dataset1[type + '_departure'] },
-                        { name: '{{ $nataruEvent->compareEvent->name }} (Arr)', type: 'bar', data: globalChartData.dataset2[type + '_arrival'] },
-                        { name: '{{ $nataruEvent->compareEvent->name }} (Dep)', type: 'bar', data: globalChartData.dataset2[type + '_departure'] }
+                        { 
+                            name: '{{ $nataruEvent->name }} (Arr)', 
+                            type: 'bar', 
+                            data: mapToXY(globalChartData.dataset1[type + '_arrival']) // Gunakan fungsi helper tadi
+                        },
+                        { 
+                            name: '{{ $nataruEvent->name }} (Dep)', 
+                            type: 'bar', 
+                            data: mapToXY(globalChartData.dataset1[type + '_departure']) 
+                        },
+                        { 
+                            name: '{{ $nataruEvent->compareEvent->name }} (Arr)', 
+                            type: 'bar', 
+                            data: mapToXY(globalChartData.dataset2[type + '_arrival']) 
+                        },
+                        { 
+                            name: '{{ $nataruEvent->compareEvent->name }} (Dep)', 
+                            type: 'bar', 
+                            data: mapToXY(globalChartData.dataset2[type + '_departure']) 
+                        }
                     ];
                 }
 
