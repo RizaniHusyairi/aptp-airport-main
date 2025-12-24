@@ -637,7 +637,7 @@
                         <div class="stat-value" id="val-flights">{{ number_format($currentStats['total_flights']) }}</div>
                     </div>
                     @if($comparison)
-                        <div id="diff-flights">{!! tvDiff($comparison['flights']) !!} <small class="text-muted ms-1" style="font-size: 0.7rem">vs lalu</small></div>
+                        {{-- <div id="diff-flights">{!! tvDiff($comparison['flights']) !!} <small class="text-muted ms-1" style="font-size: 0.7rem">vs lalu</small></div> --}}
                     @endif
                     <div class="stat-icon-bg text-primary"><i class="bi bi-airplane-engines"></i></div>
                 </div>
@@ -649,7 +649,7 @@
                         <div class="stat-value" id="val-pax">{{ number_format($currentStats['total_pax']) }}</div>
                     </div>
                     @if($comparison)
-                        <div id="diff-pax">{!! tvDiff($comparison['pax']) !!} <small class="text-muted ms-1" style="font-size: 0.7rem">vs lalu</small></div>
+                        {{-- <div id="diff-pax">{!! tvDiff($comparison['pax']) !!} <small class="text-muted ms-1" style="font-size: 0.7rem">vs lalu</small></div> --}}
                     @endif
                     <div class="stat-icon-bg text-success"><i class="bi bi-people-fill"></i></div>
                 </div>
@@ -661,7 +661,7 @@
                         <div class="stat-value" id="val-cargo">{{ number_format($currentStats['total_cargo']) }}</div>
                     </div>
                     @if($comparison)
-                        <div id="diff-cargo">{!! tvDiff($comparison['cargo']) !!} <small class="text-muted ms-1" style="font-size: 0.7rem">vs lalu</small></div>
+                        {{-- <div id="diff-cargo">{!! tvDiff($comparison['cargo']) !!} <small class="text-muted ms-1" style="font-size: 0.7rem">vs lalu</small></div> --}}
                     @endif
                     <div class="stat-icon-bg text-warning"><i class="bi bi-box-seam-fill"></i></div>
                 </div>
@@ -673,7 +673,7 @@
                         <div class="stat-value" id="val-lf">{{ number_format($currentStats['avg_lf'], 1) }}%</div>
                     </div>
                     @if($comparison)
-                        <div id="diff-lf">{!! tvDiff($comparison['lf'], true) !!} <small class="text-muted ms-1" style="font-size: 0.7rem">vs lalu</small></div>
+                        {{-- <div id="diff-lf">{!! tvDiff($comparison['lf'], true) !!} <small class="text-muted ms-1" style="font-size: 0.7rem">vs lalu</small></div> --}}
                     @endif
                     <div class="stat-icon-bg text-danger"><i class="bi bi-pie-chart-fill"></i></div>
                 </div>
