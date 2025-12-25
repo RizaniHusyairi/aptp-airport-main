@@ -626,34 +626,38 @@
                         <span class="badge bg-success bg-opacity-10 text-success p-2 px-3" style="font-size: 0.75rem;">
                             <i class="bi bi-calendar-check me-1"></i>
                             @php
-                            // 1. Ambil Start & End Date (Reset waktu ke 00:00:00 agar akurat)
-                            $start = \Carbon\Carbon::parse($nataruEvent->start_date)->startOfDay();
-                            $end   = \Carbon\Carbon::parse($nataruEvent->end_date)->startOfDay();
+                                // 1. Tentukan Tanggal Referensi (Hari H) secara Manual
+                                // Format YYYY-MM-DD
+                                $refDate = \Carbon\Carbon::create(2025, 12, 25)->startOfDay();
 
-                            // 2. Hitung Titik Tengah (Mean) sebagai H-0
-                            // (LOGIKA INI DISAMAKAN DENGAN CONTROLLER)
-                            $diffTotal = $start->diffInDays($end);
-                            $offset = ceil($diffTotal / 2);
-                            $refDate = $start->copy()->addDays($offset);
+                                // 2. Hitung Selisih Hari Ini dengan H-0
+                                $today = \Carbon\Carbon::now()->startOfDay();
 
-                            // 3. Hitung Selisih Hari Ini dengan H-0
-                            $today = \Carbon\Carbon::now()->startOfDay();
+                                // Logika Perhitungan Selisih:
+                                // diffInDays(target, false):
+                                // - Jika $today < $refDate (Sebelum Natal), hasilnya negatif (contoh: -7).
+                                // - Jika $today > $refDate (Setelah Natal), hasilnya positif (contoh: +3).
+                                // Note: Parameter 'false' di fungsi diffInDays penting agar hasil +/- muncul otomatis.
+                                
+                                $diff = $today->diffInDays($refDate, false);
+                                
+                                // Namun, logika Carbon terbalik: (Target - Source).
+                                // Jika Target (25 Des) > Source (18 Des), hasilnya +7.
+                                // Kita ingin H-7. Maka hasilnya perlu dikali -1.
+                                $diff = $diff * -1;
 
-                            // Logika:
-                            // diffInDays(target, false): Bernilai positif jika target (Ref) ada di masa depan.
-                            // Contoh: Hari ini tgl 18, H-0 tgl 27. Maka diff = 9.
-                            // Kita ingin formatnya H-9 (Negatif). Maka dikali -1.
-                            $diff = $today->diffInDays($refDate, false) * -1;
-
-                            $label = "";
-                            if ($diff == 0) {
-                                $label = "Hari H";
-                            } elseif ($diff < 0) {
-                                $label = "H" . $diff;
-                            } else {
-                                $label = "H+" . $diff;
-                            }
-                        @endphp
+                                // 3. Tentukan Label
+                                $label = "";
+                                if ($diff == 0) {
+                                    $label = "Hari H";
+                                } elseif ($diff < 0) {
+                                    // Angka negatif sudah ada tanda minusnya, jadi langsung tempel
+                                    $label = "H" . $diff; 
+                                } else {
+                                    // Angka positif butuh tanda plus
+                                    $label = "H+" . $diff;
+                                }
+                            @endphp
                             {{ $label }} ({{ $today->translatedFormat('d M') }})
                         </span>
                     </div>
