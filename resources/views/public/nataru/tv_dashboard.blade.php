@@ -1104,8 +1104,6 @@
 
                 function getSeriesData(type) {
 
-                    // Helper untuk menggabungkan Kategori (H-xx) dengan Data Angka
-                    // Ini kuncinya: Kita 'lem' label H-nya langsung ke datanya.
                     const mapToXY = (dataArray) => {
                         return dataArray.map((val, index) => {
                             // Pastikan categories tersedia
