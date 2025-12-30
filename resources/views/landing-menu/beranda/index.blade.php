@@ -199,7 +199,7 @@
 
 
 <!-- ============================================ -->
-<!--   STATISTIK LALU LINTAS UDARA (DESAIN BARU)  -->
+<!--   STATISTIK LALU LINTAS UDARA                -->
 <!-- ============================================ -->
 <section id="traffic-stats" class="section-modern traffic-stats" data-detail-url="{{ route('lalulintas') }}">
     <div class="container" data-aos="fade-up">
