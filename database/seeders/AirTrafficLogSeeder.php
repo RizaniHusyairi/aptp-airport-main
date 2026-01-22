@@ -21,27 +21,21 @@ class AirTrafficLogSeeder extends Seeder
         
         for ($date = $startDate->copy(); $date->lte($endDate); $date->addDay()) {
             
-            // Buat data sedikit lebih tinggi di akhir pekan (Jumat, Sabtu, Minggu)
             $isWeekend = $date->isFriday() || $date->isSaturday() || $date->isSunday();
-            $multiplier = $isWeekend ? 1.4 : 1.0; // 40% lebih ramai di akhir pekan
+            $multiplier = $isWeekend ? 1.4 : 1.0; 
 
-            // 1. Pesawat (Base: 10-14 pergerakan)
             $aircraft_arrival = (int) (rand(10, 14) * $multiplier);
             $aircraft_departure = (int) (rand(10, 14) * $multiplier);
 
-            // 2. Penumpang (Base: 100-130 per pesawat)
             $passenger_arrival = (int) ($aircraft_arrival * rand(100, 130) + rand(-100, 100));
             $passenger_departure = (int) ($aircraft_departure * rand(100, 130) + rand(-100, 100));
             
-            // Pastikan tidak negatif
             if ($passenger_arrival < 0) $passenger_arrival = 0;
             if ($passenger_departure < 0) $passenger_departure = 0;
 
-            // 3. Bagasi (Base: 12-18kg per penumpang)
             $baggage_arrival = (int) ($passenger_arrival * rand(12, 18));
             $baggage_departure = (int) ($passenger_departure * rand(12, 18));
 
-            // 4. Kargo (Base: 5-15 ton per hari)
             $cargo_arrival = (int) (rand(5000, 15000) * $multiplier);
             $cargo_departure = (int) (rand(5000, 15000) * $multiplier);
 

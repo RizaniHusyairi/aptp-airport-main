@@ -8,9 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Ad extends Model
 {
     protected $guarded = [];
-    public function users()
+    
+    
+    public function user()
     {
-        return $this->belongsToMany(User::class)
-                    ->withTimestamps();
+        return $this->belongsTo(User::class);
     }
 }

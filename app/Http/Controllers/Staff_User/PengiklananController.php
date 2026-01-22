@@ -42,17 +42,13 @@ class PengiklananController extends Controller
 
         // Simpan data license
         $ad = Ad::create([
+            'user_id' => Auth::id(), // <--- Tambahkan ini
             'ad_name' => $request->ad_name,
             'ad_type'   => $request->ad_type,
             'description'   => $request->description,
             'documents'     => $filePath,
         ]);
 
-        // Simpan ke pivot ad_user
-        $ad->users()->attach(auth()->id(), [
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
 
         return redirect()->route('pengiklanan.index')->with('success', 'Pengajuan pengiklanan berhasil dikirim!');
     }
@@ -71,7 +67,6 @@ class PengiklananController extends Controller
             unlink($documentPath);
         }
 
-        $ad->users()->detach();
         $ad->delete();
 
         return redirect()->route('pengiklanan.index')->with('success', 'Pengajuan berhasil dihapus.');    }
@@ -86,13 +81,13 @@ class PengiklananController extends Controller
     /* ================== STAFF ROUTES ================== */
     public function index()
     {
-        $ads = Ad::with('users')->latest()->get();
+        $ads = Ad::with('user')->latest()->get();
         return view('user_staff2.pengiklanan.index', compact('ads'));     
     }
 
     public function show($id)
     {
-        $ad = Ad::with('users')->findOrFail($id);
+        $ad = Ad::with('user')->findOrFail($id);
         return view('user_staff2.pengiklanan.show', compact('ad'));
     }
 

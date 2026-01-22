@@ -57,13 +57,13 @@ class User extends Authenticatable implements HasMedia
         static::deleting(function ($user) {
             // Hapus semua data yang memiliki relasi one-to-many
             $user->workPermits()->delete();
+            $user->ads()->delete();
             // Anda bisa tambahkan relasi hasMany lainnya di sini
 
             // Lepaskan semua data dari relasi many-to-many
             $user->rentals()->detach();
             $user->tenants()->detach();
             $user->licenses()->detach();
-            $user->ads()->detach();
             $user->roles()->detach();
         });
     }
@@ -162,16 +162,9 @@ class User extends Authenticatable implements HasMedia
     
     public function ads()
     {
-        return $this->belongsToMany(Ad::class)
-                    ->withTimestamps();
+        return $this->hasMany(Ad::class);
     }
     
-    // public function submissionDocuments()
-    // {
-    //     return $this->belongsToMany(SubmissionDocument::class)
-    //                 ->withPivot('tenant_id', 'file_path')
-    //                 ->withTimestamps();
-    // }
 
     // Roles and Permissions
     public function roles()

@@ -168,11 +168,8 @@ class AirportApiService
                 $response = Http::timeout($this->timeout)->get($this->baseUrlCuaca);
 
                 if ($response->failed()) {
-                    Log::error('Failed to fetch weather data from BMKG', [
-                        'status' => $response->status(),
-                        'body' => $response->body()
-                    ]);
-                    return null;
+                    Log::error('Gagal mengambil data cuaca BMKG', ['status' => $response->status()]);
+                    return $this->getMockWeatherData(); // <--- PANGGIL DATA DUMMY
                 }
 
                 $data = $response->json();
@@ -180,6 +177,8 @@ class AirportApiService
                // Ambil cuaca saat ini berdasarkan waktu terdekat
                $currentTime = now()->setTimezone('Asia/Makassar');
                $weatherData = $data['data'][0]['cuaca'][0]; // Ambil data cuaca pertama untuk hari ini
+
+               if (!$weatherData) return $this->getMockWeatherData();
    
                foreach ($weatherData as $forecast) {
                    $forecastTime = \Carbon\Carbon::parse($forecast['local_datetime'], 'Asia/Makassar');
@@ -207,9 +206,28 @@ class AirportApiService
                    'local_datetime' => $weatherData[0]['local_datetime'],
                ];
            } catch (RequestException $e) {
-               Log::error('Failed to fetch weather data from BMKG: ' . $e->getMessage());
-               return null;
+               // Tangkap SEMUA error (termasuk cURL error 28 / Timeout / No Internet)
+               Log::warning('Mode Offline / Error BMKG: ' . $e->getMessage());
+                
+               // KEMBALIKAN DATA DUMMY AGAR WEBSITE TIDAK ERROR
+               return $this->getMockWeatherData();
            }
         });
+    }
+
+    /**
+     * Data Cuaca Palsu (Untuk Tampilan Saat Offline/Error)
+     */
+    private function getMockWeatherData()
+    {
+        return [
+            'temperature' => 30,
+            'weather_desc' => 'Cerah Berawan (Offline)',
+            'weather_icon' => 'https://ibnux.github.io/BMKG-importer/icon/cerah%20berawan.png', // Atau ganti path image lokal
+            'humidity' => 80,
+            'wind_speed' => 10,
+            'wind_direction' => 'SE',
+            'local_datetime' => now()->format('Y-m-d H:i:s'),
+        ];
     }
 }

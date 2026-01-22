@@ -10,6 +10,7 @@ return new class extends Migration
     {
         Schema::create('ads', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('ad_name');
             $table->text('description');
             $table->string('ad_type');

@@ -27,8 +27,8 @@ class ViewServiceProvider extends ServiceProvider
 
             // 3. Siapkan item menu statis yang ingin dipertahankan di atas
             $serviceMenuItems = [
-                ['name' => 'PAS', 'route' => 'https://aptpranoto.id/website/layanan/pas_orang.html', 'external' => true],
-                ['name' => 'TIM', 'route' => 'https://aptpranoto.id/website/layanan/tim.html', 'external' => true],
+                ['name' => 'PAS', 'route' => 'https://pas.aptpairport.id/website/layanan/pas_orang.html', 'external' => true],
+                ['name' => 'TIM', 'route' => 'https://pas.aptpairport.id/website/layanan/tim.html', 'external' => true],
             ];
 
             // 4. Loop hasil query dan ubah menjadi format array menu, lalu gabungkan

@@ -39,7 +39,7 @@
                 <div class="row align-items-center">
                     <div class="col-md-3 col-12 text-center mb-3 mb-md-0">
                         <div class="avatar avatar-xl me-3">
-                            <img src="{{ $ad->users->first()?->avatar_url }}" alt="Foto Profil {{ $ad->users->first()?->name }}">
+                            <img src="{{ $ad->user->avatar_url }}" alt="Foto Profil {{ $ad->user->name }}">
 
                            
                         </div>
@@ -48,11 +48,11 @@
                         <div class="row">
                             <div class="col-12">
                                 <h6>Nama</h6>
-                                <p>{{ $ad->users->first()?->name ?? '-' }}</p>
+                                <p>{{ $ad->user->name ?? '-' }}</p>
                             </div>
                             <div class="col-12">
                                 <h6>Email</h6>
-                                <p>{{ $ad->users->first()?->email ?? '-' }}</p>
+                                <p>{{ $ad->user->email ?? '-' }}</p>
                             </div>
                             <div class="col-12">
                                 <h6>Tanggal Pengajuan</h6>
