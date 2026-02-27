@@ -8,9 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class License extends Model
 {
     protected $guarded = [];
-    public function users()
+    public function user()
     {
-        return $this->belongsToMany(User::class)
-                    ->withTimestamps();
+        return $this->belongsTo(User::class);
     }
 }

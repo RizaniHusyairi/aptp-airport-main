@@ -63,7 +63,7 @@ class User extends Authenticatable implements HasMedia
             // Lepaskan semua data dari relasi many-to-many
             $user->rentals()->detach();
             $user->tenants()->detach();
-            $user->licenses()->detach();
+            $user->licenses()->delete();
             $user->roles()->detach();
         });
     }
@@ -152,8 +152,7 @@ class User extends Authenticatable implements HasMedia
 
     public function licenses()
     {
-        return $this->belongsToMany(License::class)
-                    ->withTimestamps();
+        return $this->hasMany(License::class);
     }
     public function tickets()
     {
