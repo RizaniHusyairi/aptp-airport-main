@@ -87,9 +87,9 @@
                                                     <td>
                                                         <div class="d-flex align-items-center">
                                                             <div class="avatar avatar-sm me-2">
-                                                                <img src="{{ $fieldtrip->users->first()->avatar_url ?? asset('assetsv2/compiled/jpg/1.jpg') }}" alt="Avatar">
+                                                                <img src="{{ $fieldtrip->user?->avatar_url ?? asset('assetsv2/compiled/jpg/1.jpg') }}" alt="Avatar">
                                                             </div>
-                                                            <span>{{ $fieldtrip->users->first()->name ?? 'Tanpa Nama' }}</span>
+                                                            <span>{{ $fieldtrip->user?->name ?? 'Tanpa Nama' }}</span>
                                                         </div>
                                                     </td>
                                                     @endstaff
@@ -144,9 +144,7 @@
                                                         <span class="badge {{ $badgeClass }}">{{ ucfirst($status) }}</span>
                                                         </td>
                                                         <td>
-                                                        @foreach ($fieldtrip->users as $user)
-                                                            <span class="badge bg-secondary">{{ $user->name }}</span>
-                                                        @endforeach
+                                                            <span class="badge bg-secondary">{{ $fieldtrip->user?->name }}</span>
                                                         </td>
                                                         <td>
                                                         <div class="row g-1">

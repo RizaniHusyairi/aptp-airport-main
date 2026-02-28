@@ -463,7 +463,21 @@ class LandingPageController extends Controller
 
 
     
-    public function profilBandara(){return view('landing-menu.informasi-publik.profil-bandara.index');}
+    public function profilBandara()
+    {
+        // Ambil pengaturan profil dari database
+        $settings = Setting::whereIn('key', [
+            'profile_sejarah',
+            'profile_status',
+            'profile_rute',
+            'profile_tugas',
+            'profile_fungsi',
+            'profile_visi',
+            'profile_misi',
+        ])->pluck('value', 'key');
+
+        return view('landing-menu.informasi-publik.profil-bandara.index', compact('settings'));
+    }
     public function strukturOrganisasi(){return view('landing-menu.informasi-publik.struktur-organisasi.index');}
     public function pejabatBandara(){return view('landing-menu.informasi-publik.pejabat.index');}
     public function profilPPID(){return view('landing-menu.informasi-publik.profile-ppid.index');}

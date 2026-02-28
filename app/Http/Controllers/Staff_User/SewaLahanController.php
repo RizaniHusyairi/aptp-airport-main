@@ -16,7 +16,8 @@ class SewaLahanController extends Controller
             'rental_name' => 'required|string|max:255',
             'description'   => 'required|string',
             'rental_type'   => 'required|string',
-            'documents'     => 'required|file|mimes:pdf|max:2048',
+            'documents'     => 'required|array',
+            'documents.*'     => 'required|file|mimes:pdf|max:2048',
         ], [
             'rental_name.required' => 'Nama sewa wajib diisi.',
             'rental_name.string'   => 'Nama sewa harus berupa teks.',
@@ -29,29 +30,28 @@ class SewaLahanController extends Controller
             'rental_type.string'     => 'Jenis sewa tidak valid.',
             
             'documents.required'     => 'Dokumen pendukung wajib diunggah.',
-            'documents.file'         => 'File dokumen tidak valid.',
-            'documents.mimes'        => 'Dokumen harus berupa file dengan format: PDF',
-            'documents.max'          => 'Ukuran dokumen maksimal 2MB.',
+            'documents.array'        => 'Format dokumen tidak valid.',
+            'documents.*.file'         => 'File dokumen tidak valid.',
+            'documents.*.mimes'        => 'Dokumen harus berupa file dengan format: PDF',
+            'documents.*.max'          => 'Ukuran dokumen maksimal 2MB.',
 
         ]);
 
         // Simpan file
-        $file = $request->file('documents');
-        $filename = time() . '_' . $file->getClientOriginalName();
-        $filePath = $file->storeAs('documents/rental', $filename, 'public');
-
-        // Simpan data rental
+        $documentPaths = [];
+        if ($request->hasFile('documents')) {
+            foreach ($request->file('documents') as $file) {
+                $filename = time() . '_' . $file->getClientOriginalName();
+                $path = $file->storeAs('documents/rental', $filename, 'public');
+                $documentPaths[] = $path;
+            }
+        }
         $rental = Rental::create([
+            'user_id' => auth()->id(),
             'rental_name' => $request->rental_name,
             'rental_type'   => $request->rental_type,
             'description'   => $request->description,
-            'documents'     => $filePath,
-        ]);
-
-        // Simpan ke pivot rental_user
-        $rental->users()->attach(auth()->id(), [
-            'created_at' => now(),
-            'updated_at' => now(),
+            'documents'     => $documentPaths,
         ]);
 
         return redirect()->route('sewa.index')->with('success', 'Pengajuan sewa lahan berhasil dikirim!');
@@ -67,13 +67,18 @@ class SewaLahanController extends Controller
         $rental = Rental::findOrFail($id);
 
         // Hapus file dokumen jika ada
-        $documentPath = public_path('uploads/' . $rental->documents);
-        if (file_exists($documentPath)) {
-            unlink($documentPath);
+        if (is_array($rental->documents)) {
+            foreach ($rental->documents as $path) {
+                if (\Storage::disk('public')->exists($path)) {
+                    \Storage::disk('public')->delete($path);
+                }
+            }
+        } elseif (is_string($rental->documents)) {
+            // Fallback for older data format
+            if (\Storage::disk('public')->exists($rental->documents)) {
+                \Storage::disk('public')->delete($rental->documents);
+            }
         }
-
-        // Hapus relasi user jika menggunakan pivot
-        $rental->users()->detach();
 
         // Hapus rental
         $rental->delete();
@@ -91,13 +96,13 @@ class SewaLahanController extends Controller
     /* ================== STAFF ROUTES ================== */
     public function index()
     {
-        $rentals = Rental::with('users')->latest()->get();
+        $rentals = Rental::with('user')->latest()->get();
         return view('user_staff.sewa-lahan.index', compact('rentals'));     
     }
 
     public function show($id)
     {
-        $rental = Rental::with('users')->findOrFail($id);
+        $rental = Rental::with('user')->findOrFail($id);
         return view('user_staff.sewa-lahan.show', compact('rental'));
     }
 

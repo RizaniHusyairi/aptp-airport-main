@@ -8,11 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class Tenant extends Model
 {
     protected $guarded = [];
-    public function users()
+    public function user()
     {
-        return $this->belongsToMany(User::class)
-                    ->withTimestamps();
+        return $this->belongsTo(User::class);
     }
+    
+    protected $casts = [
+        'documents' => 'array',
+    ];
     // public function submissionDocuments()
     // {
     //     return $this->belongsToMany(SubmissionDocument::class, 'submission_document_user')

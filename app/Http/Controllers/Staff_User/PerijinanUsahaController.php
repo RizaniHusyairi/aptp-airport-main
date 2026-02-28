@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Auth;
 use App\Models\License;
+use Illuminate\Support\Facades\Storage;
 
 class PerijinanUsahaController extends Controller
 {
@@ -20,7 +21,8 @@ class PerijinanUsahaController extends Controller
             'license_name' => 'required|string|max:255',
             'description'   => 'required|string',
             'license_type'   => 'required|string',
-            'documents'     => 'required|file|mimes:pdf|max:2048',
+            'documents'     => 'required',
+            'documents.*'   => 'file|mimes:pdf,doc,docx|max:2048',
         ], [
             'license_name.required' => 'Nama perizinan usaha wajib diisi.',
             'license_name.string'   => 'Nama perizinan usaha harus berupa teks.',
@@ -33,35 +35,40 @@ class PerijinanUsahaController extends Controller
             'license_type.string'     => 'Jenis perizinan usaha tidak valid.',
             
             'documents.required'     => 'Dokumen pendukung wajib diunggah.',
-            'documents.file'         => 'File dokumen tidak valid.',
-            'documents.mimes'        => 'Dokumen harus berupa file dengan format: PDF',
-            'documents.max'          => 'Ukuran dokumen maksimal 2MB.',
+            'documents.*.file'         => 'File dokumen tidak valid.',
+            'documents.*.mimes'        => 'Dokumen harus berupa file dengan format: PDF, DOC, DOCX',
+            'documents.*.max'          => 'Ukuran dokumen maksimal 2MB.',
 
         ]);
 
-        if($request->licence_type === 'Lainnya') {
+        if($request->license_type === 'Lainnya') {
             // Tambahkan validasi khusus untuk sewa lainnya
             $request->validate([
                 'license_more' => 'required|string|max:150',
             ], [
-                'license_more.required' => 'Jenis sewa lainnya wajib diunggah.',
+                'license_more.required' => 'Jenis sewa lainnya wajib diisi.',
                 'license_more.max' => 'Jenis sewa maksimal 150 karakter.',
             ]);
         }
 
+        $documentPaths = [];
 
         // Simpan file
-        $file = $request->file('documents');
-        $filename = time() . '_' . $file->getClientOriginalName();
-        $filePath = $file->storeAs('documents/license', $filename, 'public');
+        if ($request->hasFile('documents')) {
+            foreach ($request->file('documents') as $file) {
+                $filename = time() . '_' . $file->getClientOriginalName();
+                $path = $file->storeAs('documents/license', $filename, 'public');
+                $documentPaths[] = $path; 
+            }
+        }
 
         // Simpan data license
         $license = License::create([
             'license_name' => $request->license_name,
-            'license_type'   => $request->license_type,
-            'license_more'   => $request->license_more ?? null,
-            'description'   => $request->description,
-            'documents'     => $filePath,
+            'license_type' => $request->license_type,
+            'license_more' => $request->license_more ?? null,
+            'description'  => $request->description,
+            'documents'   => $documentPaths,
         ]);
 
         // Simpan ke pivot license_user
@@ -86,9 +93,12 @@ class PerijinanUsahaController extends Controller
         $license = License::findOrFail($id);
 
         // Hapus file dokumen jika ada
-        $documentPath = public_path('uploads/' . $license->documents);
-        if (file_exists($documentPath)) {
-            unlink($documentPath);
+        if ($license->documents) {
+            foreach ($license->documents as $path) {
+                if (Storage::disk('public')->exists($path)) {
+                    Storage::disk('public')->delete($path);
+                }
+            }
         }
 
         // Hapus relasi user jika menggunakan pivot

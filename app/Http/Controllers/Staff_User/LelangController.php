@@ -32,7 +32,8 @@ class LelangController extends Controller
             'name' => 'required|string|max:255',
             'lelang_type' => 'required|string',
             'description' => 'required|string',
-            'documents' => 'required|file|mimes:pdf|max:2048',
+            'documents' => 'required|array',
+            'documents.*' => 'required|file|mimes:pdf|max:2048',
         ];
 
 
@@ -41,31 +42,34 @@ class LelangController extends Controller
             'lelang_type.required' => 'Jenis Lelang wajib dipilih.',
             'description.required' => 'Deskripsi wajib diisi.',
             'documents.required' => 'Dokumen wajib diunggah.',
-            'documents.mimes' => 'Dokumen harus berupa PDF.',
-            'documents.max' => 'Ukuran dokumen maksimal 2MB.',
+            'documents.array' => 'Format dokumen tidak valid.',
+            'documents.*.file' => 'File dokumen tidak valid.',
+            'documents.*.mimes' => 'Dokumen harus berupa PDF.',
+            'documents.*.max' => 'Ukuran dokumen maksimal 2MB.',
             
         ];
 
         $validated = $request->validate($rules, $messages);
 
-        $file = $request->file('documents');
-        $filename = time() . '_' . $file->getClientOriginalName();
-        $filePath = $file->storeAs('documents/lelang', $filename, 'public');
+        $documentPaths = [];
+        if ($request->hasFile('documents')) {
+            foreach ($request->file('documents') as $file) {
+                $filename = time() . '_' . $file->getClientOriginalName();
+                $path = $file->storeAs('documents/lelang', $filename, 'public');
+                $documentPaths[] = $path;
+            }
+        }
 
         $data = [
+            'user_id' => auth()->id(),
             'name' => $validated['name'],
             'lelang_type' => $validated['lelang_type'],
             'description' => $validated['description'],
-            'documents' => $filePath,
+            'documents' => $documentPaths,
       ];
 
 
         $lelang = Lelang::create($data);
-
-        $lelang->users()->attach(auth()->id(), [
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
 
         return redirect()->route('lelang.index')
             ->with('success', 'Pengajuan lelang/beauty contest berhasil dikirim!');
@@ -77,15 +81,22 @@ class LelangController extends Controller
     {
         $lelang = Lelang::findOrFail($id);
 
-        if ($lelang->documents && Storage::disk('public')->exists($lelang->documents)) {
-            Storage::disk('public')->delete($lelang->documents);
+        if (is_array($lelang->documents)) {
+            foreach ($lelang->documents as $path) {
+                if (\Storage::disk('public')->exists($path)) {
+                    \Storage::disk('public')->delete($path);
+                }
+            }
+        } elseif (is_string($lelang->documents)) {
+            if (\Storage::disk('public')->exists($lelang->documents)) {
+                \Storage::disk('public')->delete($lelang->documents);
+            }
         }
 
         if ($lelang->additional_documents && Storage::disk('public')->exists($lelang->additional_documents)) {
             Storage::disk('public')->delete($lelang->additional_documents);
         }
 
-        $lelang->users()->detach();
         $lelang->delete();
 
         return redirect()->route('lelang.index')
@@ -97,13 +108,13 @@ class LelangController extends Controller
     
     public function index()
     {
-        $lelangs = Lelang::with('users')->latest()->get();
+        $lelangs = Lelang::with('user')->latest()->get();
         return view('user_staff2.lelang.index', compact('lelangs'));     
     }
 
     public function show($id)
     {
-        $lelang = Lelang::with('users')->findOrFail($id);
+        $lelang = Lelang::with('user')->findOrFail($id);
         return view('user_staff2.lelang.show', compact('lelang'));
     }
     public function updateStatus(Request $request, Lelang $lelang)

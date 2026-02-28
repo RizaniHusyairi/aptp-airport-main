@@ -48,19 +48,14 @@ class FieldTripController extends Controller
         }
     }
 
-        // Simpan data license
+        // Simpan data fieldtrip
         $fieldtrip = FieldTrip::create([
+            'user_id' => auth()->id(),
             'fieldtrip_name' => $request->fieldtrip_name,
             'fieldtrip_type'   => $request->fieldtrip_type,
             'description'   => $request->description,
             'documents'     => $documentPaths,
 
-        ]);
-
-        // Simpan ke pivot fieldtrip_user
-        $fieldtrip->users()->attach(auth()->id(), [
-            'created_at' => now(),
-            'updated_at' => now(),
         ]);
 
         return redirect()->route('fieldtrip.index')->with('success', 'Pengajuan fieldtrip berhasil dikirim!');
@@ -84,8 +79,7 @@ class FieldTripController extends Controller
             }
         }
 
-        // Hapus relasi user jika menggunakan pivot
-        $fieldtrip->users()->detach();
+
 
         // Hapus fieldtrip
         $fieldtrip->delete();
@@ -102,13 +96,13 @@ class FieldTripController extends Controller
     /* ================== STAFF ROUTES ================== */
     public function index()
     {
-        $fieldtrips = FieldTrip::with('users')->latest()->get();
+        $fieldtrips = FieldTrip::with('user')->latest()->get();
         return view('user_staff2.fieldtrip.index', compact('fieldtrips'));     
     }
 
     public function show($id)
     {
-        $fieldtrip = Fieldtrip::with('users')->findOrFail($id);
+        $fieldtrip = Fieldtrip::with('user')->findOrFail($id);
         return view('user_staff2.fieldtrip.show', compact('fieldtrip'));
     }
 

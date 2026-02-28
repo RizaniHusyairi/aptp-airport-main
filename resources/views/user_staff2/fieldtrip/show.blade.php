@@ -61,7 +61,7 @@
                 <div class="row align-items-center">
                     <div class="col-md-3 col-12 text-center mb-3 mb-md-0">
                         <div class="avatar avatar-xl me-3">
-                            <img src="{{ $fieldtrip->users->first()?->avatar_url }}" alt="Foto Profil {{ $fieldtrip->users->first()?->name }}">
+                            <img src="{{ $fieldtrip->user?->avatar_url }}" alt="Foto Profil {{ $fieldtrip->user?->name }}">
             
             
                         </div>
@@ -70,11 +70,11 @@
                         <div class="row">
                             <div class="col-12">
                                 <h6>Nama</h6>
-                                <p>{{ $fieldtrip->users->first()?->name ?? '-' }}</p>
+                                <p>{{ $fieldtrip->user?->name ?? '-' }}</p>
                             </div>
                             <div class="col-12">
                                 <h6>Email</h6>
-                                <p>{{ $fieldtrip->users->first()?->email ?? '-' }}</p>
+                                <p>{{ $fieldtrip->user?->email ?? '-' }}</p>
                             </div>
                             <div class="col-12">
                                 <h6>Tanggal Pengajuan</h6>

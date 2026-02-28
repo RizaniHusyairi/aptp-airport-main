@@ -52,6 +52,12 @@
                     <span>Fasilitas</span>
                 </a>
             </li>
+            <li class="sidebar-item {{ Route::is('admin.profile-bandara-settings.*') ? 'active' : '' }}">
+                <a href="{{ route('admin.profile-bandara-settings.index') }}" class='sidebar-link'>
+                    <i class="bi bi-file-earmark-person-fill"></i>
+                    <span>Teks Profil</span>
+                </a>
+            </li>
             <li class="sidebar-item {{ Route::is('slider.staffIndex') ? 'active' : '' }}">
                 <a href="{{ route('slider.staffIndex') }}" class='sidebar-link'>
                     <i class="bi bi-image"></i>

@@ -16,7 +16,8 @@ class TenantController extends Controller
             'business_name' => 'required|string|max:255',
             'business_type' => 'required|string|max:255',
             'description'   => 'required|string',
-            'documents'     => 'required|file|mimes:pdf|max:2048',
+            'documents'     => 'required|array',
+            'documents.*'     => 'required|file|mimes:pdf|max:2048',
             'rental_type'   => 'required|string',
         ], [
             'business_name.required' => 'Nama usaha wajib diisi.',
@@ -31,9 +32,10 @@ class TenantController extends Controller
             'description.string'     => 'Deskripsi harus berupa teks.',
 
             'documents.required'     => 'Dokumen pendukung wajib diunggah.',
-            'documents.file'         => 'File dokumen tidak valid.',
-            'documents.mimes'        => 'Dokumen harus berupa file dengan format: PDF',
-            'documents.max'          => 'Ukuran dokumen maksimal 2MB.',
+            'documents.array'        => 'Format dokumen tidak valid.',
+            'documents.*.file'         => 'File dokumen tidak valid.',
+            'documents.*.mimes'        => 'Dokumen harus berupa file dengan format: PDF',
+            'documents.*.max'          => 'Ukuran dokumen maksimal 2MB.',
 
             'rental_type.required'   => 'Jenis sewa wajib dipilih.',
             'rental_type.string'     => 'Jenis sewa tidak valid.',
@@ -51,24 +53,24 @@ class TenantController extends Controller
 
 
         // Simpan file
-        $file = $request->file('documents');
-        $filename = time() . '_' . $file->getClientOriginalName();
-        $filePath = $file->storeAs('documents/tenant', $filename, 'public');
+        $documentPaths = [];
+        if ($request->hasFile('documents')) {
+            foreach ($request->file('documents') as $file) {
+                $filename = time() . '_' . $file->getClientOriginalName();
+                $path = $file->storeAs('documents/tenant', $filename, 'public');
+                $documentPaths[] = $path;
+            }
+        }
 
         // Simpan data tenant
         $tenant = Tenant::create([
+            'user_id' => auth()->id(),
             'business_name' => $request->business_name,
             'business_type' => $request->business_type,
             'description'   => $request->description,
             'rental_type'   => $request->rental_type,
             'rental_more'   => $request->rental_more ?? null,
-            'documents'     => $filePath,
-        ]);
-
-        // Simpan ke pivot tenant_user
-        $tenant->users()->attach(auth()->id(), [
-            'created_at' => now(),
-            'updated_at' => now(),
+            'documents'     => $documentPaths,
         ]);
 
         return redirect()->route('tenant.index')->with('success', 'Pengajuan tenant berhasil dikirim!');
@@ -83,13 +85,20 @@ class TenantController extends Controller
         $tenant = Tenant::findOrFail($id);
 
         // Hapus file dokumen jika ada
-        $documentPath = public_path('uploads/' . $tenant->documents);
-        if (file_exists($documentPath)) {
-            unlink($documentPath);
+        if (is_array($tenant->documents)) {
+            foreach ($tenant->documents as $path) {
+                if (\Storage::disk('public')->exists($path)) {
+                    \Storage::disk('public')->delete($path);
+                }
+            }
+        } elseif (is_string($tenant->documents)) {
+            // Fallback for older data format
+            if (\Storage::disk('public')->exists($tenant->documents)) {
+                \Storage::disk('public')->delete($tenant->documents);
+            }
         }
     
-        // Hapus relasi user jika menggunakan pivot
-        $tenant->users()->detach();
+
     
         // Hapus tenant
         $tenant->delete();
@@ -106,12 +115,12 @@ class TenantController extends Controller
     /* ================== STAFF ROUTES ================== */
     public function index()
     {
-        $tenants = Tenant::with('users')->latest()->get();
+        $tenants = Tenant::with('user')->latest()->get();
         return view('user_staff2.tenant.index', compact('tenants'));     
     }
     public function show($id)
     {
-        $tenant = Tenant::with('users')->findOrFail($id);
+        $tenant = Tenant::with('user')->findOrFail($id);
         return view('user_staff2.tenant.show', compact('tenant'));
     }
 

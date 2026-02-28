@@ -180,13 +180,7 @@ class ServiceSeeder extends Seeder
                 "Scan KTP / Kartu Mahasiswa / Kartu Pelajar",
                 "Pas Foto Ukuran 4x6 (Latar Belakang Merah, Kemeja Putih)"
             ],
-            'steps' => [
-                "Mendaftar akun pengaju dan login",
-                "Mengisi formulir data diri, data akademik, dan data magang",
-                "Mengunggah dokumen persyaratan (KTP & Foto)",
-                "Menunggu verifikasi data dan input nilai oleh Staff",
-                "Mengunduh sertifikat digital pada dashboard jika status 'Selesai'"
-            ],
+            'steps' => ["Mendaftar akun pengaju dan login","Mengisi formulir data diri, data akademik, dan data magang","Mengunggah dokumen persyaratan (KTP & Foto)","Menunggu verifikasi data dan input nilai oleh Staff","Mengunduh sertifikat digital pada dashboard jika status 'Selesai'"],
             'submission_url' => 'pengajuan-ojt', // Sesuai dengan route 'user.ojt.index'
         ]);
         

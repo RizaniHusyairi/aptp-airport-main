@@ -10,9 +10,12 @@ class Lelang extends Model
     protected $guarded = [];
    
 
-    public function users()
+    public function user()
     {
-        return $this->belongsToMany(User::class, 'lelang_user')
-                   ->withTimestamps();
+        return $this->belongsTo(User::class);
     }
+    
+    protected $casts = [
+        'documents' => 'array',
+    ];
 }

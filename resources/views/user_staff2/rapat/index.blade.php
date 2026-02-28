@@ -53,7 +53,7 @@
                     <tbody>
                         @forelse ($meetings as $meeting)
                         <tr>
-                            <td>
+                            <td data-sort="{{ $meeting->date->format('Y-m-d') }} {{ $meeting->start_time }}">
                                 {{ $meeting->date->translatedFormat('d M Y') }}<br>
                                 <small class="text-muted">{{ \Carbon\Carbon::parse($meeting->start_time)->format('H:i') }} WITA</small>
                             </td>

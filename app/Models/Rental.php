@@ -11,11 +11,14 @@ class Rental extends Model
     
 
     
-    public function users()
+    public function user()
     {
-        return $this->belongsToMany(User::class, 'rental_user', 'rental_id', 'user_id')
-                    ->withTimestamps();
+        return $this->belongsTo(User::class);
     }
+
+    protected $casts = [
+        'documents' => 'array',
+    ];
     // public function submissionDocuments()
     // {
     //     return $this->belongsToMany(SubmissionDocument::class, 'submission_document_user')

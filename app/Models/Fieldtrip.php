@@ -12,9 +12,8 @@ class Fieldtrip extends Model
     protected $casts = [
         'documents' => 'array', // Otomatis konversi JSON <-> Array
     ];
-    public function users()
+    public function user()
     {
-        return $this->belongsToMany(User::class)
-                    ->withTimestamps();
+        return $this->belongsTo(User::class);
     }
 }

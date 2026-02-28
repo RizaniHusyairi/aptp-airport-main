@@ -1,7 +1,94 @@
 @extends('layouts-V2.master-layouts-v2')
 @section('title', 'Tambah Pengiklanan')
 @section('styles_admin')
+<style>
+    /* Styling Area Drag & Drop */
+    .upload-area {
+        border: 2px dashed #435ebe;
+        border-radius: 10px;
+        padding: 30px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+    }
 
+    .upload-area:hover, .upload-area.active {
+        background-color: #eef2ff;
+        border-color: #25396f;
+    }
+
+    .upload-area i {
+        font-size: 3rem;
+        color: #435ebe;
+        margin-bottom: 10px;
+    }
+
+    .upload-area p {
+        margin-bottom: 0;
+        color: #6c757d;
+    }
+
+    /* Styling List File Preview */
+    .file-preview-list {
+        margin-top: 15px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .file-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border: 1px solid #dee2e6;
+        padding: 10px 15px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .file-info {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        overflow: hidden;
+    }
+
+    .file-icon {
+        font-size: 1.5rem;
+        color: #dc3545; /* Warna icon PDF */
+        margin-bottom: 25px;
+        
+        margin-right: 10px;
+    }
+
+    .file-name {
+        font-weight: 500;
+        color: #435ebe;
+        text-decoration: none;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 200px;
+    }
+
+    .file-name:hover {
+        text-decoration: underline;
+    }
+
+    .btn-remove-file {
+        background: none;
+        border: none;
+        color: #dc3545;
+        cursor: pointer;
+        font-size: 1.2rem;
+        transition: color 0.2s;
+    }
+
+    .btn-remove-file:hover {
+        color: #a71d2a;
+    }
+</style>
 @endsection
 
 @section('content')
@@ -102,15 +189,26 @@
                         @enderror
                     </div>
                     <div class="col-12 mb-3">
-                        <label for="documents" class="form-label">dokumen yang Diperlukan</label>
-                        <input type="file" class="form-control @error('documents') is-invalid @enderror" id="documents" name="documents" multiple accept=".pdf,.doc,.docx" required>
-                        @error('documents')
-                        <div class="invalid-feedback">
-                            {{ $message }}
-                        </div>
-                        @enderror
+                        <label class="form-label">Dokumen yang Diperlukan <span class="text-danger">*</span></label>
+    
+                        {{-- Input File Tersembunyi (Hidden) --}}
+                        <input type="file" class="d-none" id="documents" name="documents[]" multiple accept=".pdf,.doc,.docx">
                         
-                        <small class="form-text text-muted">Unggah dokumen dalam format PDF, DOC, atau DOCX.</small>
+                        {{-- Area Drag & Drop Visual --}}
+                        <div class="upload-area" id="drop-zone">
+                            <i class="bi bi-cloud-arrow-up"></i>
+                            <p class="fw-bold">Seret & Lepas file di sini</p>
+                            <p class="small">atau klik untuk menjelajahi komputer</p>
+                            <p class="text-muted small mt-2">(Format: PDF, DOC, DOCX. Maks: 2MB per file)</p>
+                        </div>
+
+                        {{-- Pesan Error Validasi --}}
+                        @error('documents')
+                            <div class="text-danger small mt-1">{{ $message }}</div>
+                        @enderror
+
+                        {{-- Tempat Menampilkan Preview File --}}
+                        <div class="file-preview-list" id="file-list"></div>
                     </div>
                     <div class="col-12">
                         <button type="submit" class="btn btn-primary">Kirim Pengajuan</button>
@@ -124,5 +222,110 @@
 @endsection
 
 @section('scripts_admin')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const dropZone = document.getElementById('drop-zone');
+        const fileInput = document.getElementById('documents');
+        const fileListContainer = document.getElementById('file-list');
+        
+        let dataTransfer = new DataTransfer();
 
+        dropZone.addEventListener('click', () => fileInput.click());
+
+        fileInput.addEventListener('change', function() {
+            handleFiles(this.files);
+        });
+
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropZone.addEventListener(eventName, () => dropZone.classList.add('active'), false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, () => dropZone.classList.remove('active'), false);
+        });
+
+        dropZone.addEventListener('drop', function(e) {
+            let droppedFiles = e.dataTransfer.files;
+            handleFiles(droppedFiles);
+        });
+
+        function handleFiles(files) {
+            if (files.length > 0) {
+                Array.from(files).forEach(file => {
+                    const allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+                    if(!allowedTypes.includes(file.type)) {
+                        alert('Hanya file PDF, DOC, dan DOCX yang diperbolehkan.');
+                        return;
+                    }
+
+                    if(file.size > 2 * 1024 * 1024) {
+                        alert('Ukuran ' + file.name + ' terlalu besar (Maksimal 2MB).');
+                        return;
+                    }
+
+                    dataTransfer.items.add(file);
+                    addFilePreview(file);
+                });
+            }
+
+            fileInput.files = dataTransfer.files;
+        }
+
+        function addFilePreview(file) {
+            const fileURL = URL.createObjectURL(file);
+            
+            let iconClass = 'bi-file-earmark-text';
+            if(file.type === 'application/pdf') iconClass = 'bi-file-earmark-pdf text-danger';
+            else if(file.type.includes('word')) iconClass = 'bi-file-earmark-word text-primary';
+
+            const item = document.createElement('div');
+            item.className = 'file-item';
+            item.innerHTML = `
+                <div class="file-info">
+                    <i class="bi ${iconClass} file-icon"></i>
+                    <div>
+                        <a href="${fileURL}" target="_blank" class="file-name" title="Klik untuk Pratinjau">${file.name}</a>
+                        <div class="text-muted x-small">${(file.size / 1024).toFixed(1)} KB</div>
+                    </div>
+                </div>
+                <button type="button" class="btn-remove-file" title="Hapus File" data-name="${file.name}">
+                    <i class="bi bi-x-circle"></i>
+                </button>
+            `;
+
+            item.querySelector('.btn-remove-file').addEventListener('click', function(e) {
+                e.stopPropagation(); 
+                
+                const fileNameToRemove = this.getAttribute('data-name');
+                
+                const newDataTransfer = new DataTransfer();
+                Array.from(dataTransfer.files).forEach(f => {
+                    if (f.name !== fileNameToRemove) {
+                        newDataTransfer.items.add(f);
+                    }
+                });
+                
+                dataTransfer = newDataTransfer;
+                fileInput.files = dataTransfer.files;
+                
+                item.remove();
+            });
+
+            item.querySelector('a').addEventListener('click', function(e) {
+                e.stopPropagation(); 
+            });
+
+            fileListContainer.appendChild(item);
+        }
+    });
+</script>
 @endsection

@@ -8,6 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class License extends Model
 {
     protected $guarded = [];
+
+    protected $casts = [
+        'documents' => 'array',
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);

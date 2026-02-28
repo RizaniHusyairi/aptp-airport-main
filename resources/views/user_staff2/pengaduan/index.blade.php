@@ -48,7 +48,7 @@
                                                     <td>{{ $complaint->name }}</td>
                                                     <td>{{ $complaint->email }}</td>
                                                     <td>{{ $complaint->subject }}</td>
-                                                    <td>{{ $complaint->created_at?->translatedFormat('d M Y H:i') ?? '-' }}</td>
+                                                    <td data-sort="{{ $complaint->created_at?->format('Y-m-d H:i:s') ?? '' }}">{{ $complaint->created_at?->translatedFormat('d M Y H:i') ?? '-' }}</td>
                                                     <td><span class="badge bg-{{ $complaint->status == 'Selesai' ? 'success' : ($complaint->status == 'Diproses' ? 'primary' : 'warning') }}">{{ $complaint->status }}</span></td>
                                                     <td class="d-flex">
                                                         <button class="btn btn-sm btn-info me-1 change-status" data-bs-toggle="tooltip" title="Ubah Status" aria-label="Ubah status pengaduan {{ $complaint->name }}"><i class="bi bi-pencil"></i></button>

@@ -114,9 +114,7 @@
                                                         <span class="badge {{ $badgeClass }}">{{ ucfirst($status) }}</span>
                                                         </td>
                                                         <td>
-                                                        @foreach ($lelang->users as $user)
-                                                            <span class="badge bg-secondary">{{ $user->name }}</span>
-                                                        @endforeach
+                                                            <span class="badge bg-secondary">{{ $lelang->user?->name }}</span>
                                                         </td>
                                                         <td>
                                                         <div class="row g-1">

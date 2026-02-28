@@ -66,7 +66,8 @@ class SlotController extends Controller
             'bandaraAsal' => ['required', 'string', 'max:4', 'regex:/^[A-Z]{3,4}$/'],
             'bandaraTujuan' => ['required', 'string', 'max:4', 'regex:/^[A-Z]{3,4}$/'],
             'jenisPenerbangan' => ['required', 'in:penumpang,kargo,lainnya'],
-            'documents'     => ['required','file','mimes:pdf','max:2048'],
+            'documents'     => ['required','array'],
+            'documents.*'     => ['required','file','mimes:pdf','max:2048'],
         ], [
             'nomorRegistrasi.required' => 'Nomor registrasi pesawat wajib diisi.',
             'nomorRegistrasi.max' => 'Nomor registrasi maksimal 10 karakter.',
@@ -88,9 +89,10 @@ class SlotController extends Controller
             'jenisPenerbangan.required' => 'Jenis penerbangan wajib dipilih.',
             'jenisPenerbangan.in' => 'Jenis penerbangan tidak valid.',
             'documents.required'     => 'Dokumen pendukung wajib diunggah.',
-            'documents.file'         => 'File dokumen tidak valid.',
-            'documents.mimes'        => 'Dokumen harus berupa file dengan format: PDF',
-            'documents.max'          => 'Ukuran dokumen maksimal 2MB.',
+            'documents.array'        => 'Format dokumen tidak valid.',
+            'documents.*.file'         => 'File dokumen tidak valid.',
+            'documents.*.mimes'        => 'Dokumen harus berupa file dengan format: PDF',
+            'documents.*.max'          => 'Ukuran dokumen maksimal 2MB.',
         ]);
 
         
@@ -109,16 +111,18 @@ class SlotController extends Controller
 
 
         if ($validator->fails()) {
-            // Jika validasi gagal, kembalikan ke halaman sebelumnya dengan pesan error
-            // dan input yang sudah diisi sebelumnya
-            // dd($validator->errors());
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
         // Simpan file
-        $file = $request->file('documents');
-        $filename = time() . '_' . $file->getClientOriginalName();
-        $filePath = $file->storeAs('documents/slot', $filename, 'public');
+        $documentPaths = [];
+        if ($request->hasFile('documents')) {
+            foreach ($request->file('documents') as $file) {
+                $filename = time() . '_' . $file->getClientOriginalName();
+                $path = $file->storeAs('documents/slot', $filename, 'public');
+                $documentPaths[] = $path;
+            }
+        }
 
         
         // Buat pengajuan slot charter
@@ -132,14 +136,10 @@ class SlotController extends Controller
             'destination_airport' => $request->bandaraTujuan,
             'flight_type' => $request->jenisPenerbangan,
             'flight_more' => $request->jenislainnya ?? null,
-            'documents' => $filePath,
+            'documents' => $documentPaths,
         ]);
 
-        // Simpan ke pivot tenant_user
-        $slotCharter->users()->attach(auth()->id(), [
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
+
 
 
         return redirect()->route('slot.index')->with('success', 'Pengajuan slot charter berhasil dikirim. Menunggu verifikasi admin.');
@@ -154,11 +154,18 @@ class SlotController extends Controller
         $slot = slot::findOrFail($id);
 
         // Hapus file dokumen jika ada
-        if ($slot->documents && Storage::disk('public')->exists($slot->documents)) {
-            Storage::disk('public')->delete($slot->documents);
+        if (is_array($slot->documents)) {
+            foreach ($slot->documents as $path) {
+                if (\Storage::disk('public')->exists($path)) {
+                    \Storage::disk('public')->delete($path);
+                }
+            }
+        } elseif (is_string($slot->documents)) {
+            if (\Storage::disk('public')->exists($slot->documents)) {
+                \Storage::disk('public')->delete($slot->documents);
+            }
         }
-    // Hapus relasi user jika menggunakan pivot
-        $tenant->users()->detach();
+
         
         $slot->delete();
     

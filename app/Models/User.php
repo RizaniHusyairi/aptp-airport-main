@@ -84,7 +84,12 @@ class User extends Authenticatable implements HasMedia
 
     public function rentals()
     {
-        return $this->belongsToMany(Rental::class, 'rental_user', 'user_id', 'rental_id');
+        return $this->hasMany(Rental::class);
+    }
+
+    public function slots()
+    {
+        return $this->hasMany(Slot::class);
     }
 
     public function getCreatedAtAttribute($value)
@@ -147,7 +152,17 @@ class User extends Authenticatable implements HasMedia
 
     public function tenants()
     {
-        return $this->belongsToMany(Tenant::class);
+        return $this->hasMany(Tenant::class);
+    }
+
+    public function fieldtrips()
+    {
+        return $this->hasMany(Fieldtrip::class);
+    }
+
+    public function lelangs()
+    {
+        return $this->hasMany(Lelang::class);
     }
 
     public function licenses()

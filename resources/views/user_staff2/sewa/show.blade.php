@@ -39,7 +39,7 @@
                 <div class="row align-items-center">
                     <div class="col-md-3 col-12 text-center mb-3 mb-md-0">
                         <div class="avatar avatar-xl me-3">
-                            <img src="{{ $rental->users->first()?->avatar_url }}" alt="Foto Profil {{ $rental->users->first()?->name }}">
+                            <img src="{{ $rental->user?->avatar_url }}" alt="Foto Profil {{ $rental->user?->name }}">
 
                             
                         </div>
@@ -48,11 +48,11 @@
                         <div class="row">
                             <div class="col-12">
                                 <h6>Nama</h6>
-                                <p>{{ $rental->users->first()?->name ?? '-' }}</p>
+                                <p>{{ $rental->user?->name ?? '-' }}</p>
                             </div>
                             <div class="col-12">
                                 <h6>Email</h6>
-                                <p>{{ $rental->users->first()?->email ?? '-' }}</p>
+                                <p>{{ $rental->user?->email ?? '-' }}</p>
                             </div>
                             <div class="col-12">
                                 <h6>Tanggal Pengajuan</h6>
@@ -83,12 +83,38 @@
                         <p>{{ $rental->description }}</p>
                     </div>
                     @if ($rental->documents)
-                        <div class="col-md-6">
+                        <div class="col-md-12 mt-3">
                             <h6>Dokumen Terlampir</h6>
-                            <a href="{{ asset('uploads/documents/rental/' . basename($rental->documents)) }}" class="btn btn-sm btn-primary" id="lihat-dokumen" data-bs-toggle="tooltip" title="Lihat Dokumen"><i class="bi bi-file-earmark-pdf"></i> {{ basename($rental->documents) }}</a>
+                            <div class="d-flex flex-wrap gap-2">
+                            @if(is_array($rental->documents))
+                                @foreach($rental->documents as $docPath)
+                                    @php
+                                        $extension = pathinfo($docPath, PATHINFO_EXTENSION);
+                                        $iconClass = 'bi-file-earmark-text';
+                                        $btnClass = 'btn-primary';
+                                        
+                                        if(in_array(strtolower($extension), ['pdf'])) {
+                                            $iconClass = 'bi-file-earmark-pdf';
+                                            $btnClass = 'btn-danger';
+                                        } elseif(in_array(strtolower($extension), ['doc', 'docx'])) {
+                                            $iconClass = 'bi-file-earmark-word';
+                                            $btnClass = 'btn-primary';
+                                        }
+                                    @endphp
+                                    <a href="{{ asset('storage/' . $docPath) }}" class="btn btn-sm {{ $btnClass }}" target="_blank" data-bs-toggle="tooltip" title="Lihat Dokumen">
+                                        <i class="bi {{ $iconClass }}"></i> {{ preg_replace('/^\d+_/', '', basename($docPath)) }}
+                                    </a>
+                                @endforeach
+                            @elseif(is_string($rental->documents))
+                                {{-- Fallback if legacy data is just a string --}}
+                                <a href="{{ asset('uploads/documents/rental/' . basename($rental->documents)) }}" class="btn btn-sm btn-primary" id="lihat-dokumen" data-bs-toggle="tooltip" title="Lihat Dokumen">
+                                    <i class="bi bi-file-earmark-pdf"></i> {{ basename($rental->documents) }}
+                                </a>
+                            @endif
+                            </div>
                         </div>
                     @else
-                        <div class="col-md-6">
+                        <div class="col-md-12 mt-3">
                             <h6>Tidak Ada Dokumen</h6>
                         </div>
                     @endif

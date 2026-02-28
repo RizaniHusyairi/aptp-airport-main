@@ -105,7 +105,7 @@
                     <tbody>
                         @forelse ($traffics as $traffic)
                         <tr>
-                            <td>
+                            <td data-sort="{{ $traffic->date->format('Y-m-d') }}">
                                 {{ $traffic->date->translatedFormat('d M Y') }}
                                 {{-- Badge kecil untuk hari --}}
                                 <br><small class="text-muted">{{ $traffic->date->translatedFormat('l') }}</small>

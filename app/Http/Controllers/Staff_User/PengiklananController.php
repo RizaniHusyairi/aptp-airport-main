@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Auth;
 use App\Models\Ad;
+use Illuminate\Support\Facades\Storage;
 
 class PengiklananController extends Controller
 {
@@ -16,7 +17,8 @@ class PengiklananController extends Controller
             'ad_name' => 'required|string|max:255',
             'description'   => 'required|string',
             'ad_type'   => 'required|string',
-            'documents'     => 'required|file|mimes:pdf|max:2048',
+            'documents'     => 'required',
+            'documents.*'   => 'file|mimes:pdf,doc,docx|max:2048',
         ], [
             'ad_name.required' => 'Nama Pengiklanan wajib diisi.',
             'ad_name.string'   => 'Nama Pengiklanan harus berupa teks.',
@@ -29,16 +31,22 @@ class PengiklananController extends Controller
             'ad_type.string'     => 'Jenis Pengiklanan tidak valid.',
             
             'documents.required'     => 'Dokumen pendukung wajib diunggah.',
-            'documents.file'         => 'File dokumen tidak valid.',
-            'documents.mimes'        => 'Dokumen harus berupa file dengan format: PDF',
-            'documents.max'          => 'Ukuran dokumen maksimal 2MB.',
+            'documents.*.file'         => 'File dokumen tidak valid.',
+            'documents.*.mimes'        => 'Dokumen harus berupa file dengan format: PDF, DOC, DOCX',
+            'documents.*.max'          => 'Ukuran dokumen maksimal 2MB.',
 
         ]);
 
+        $documentPaths = [];
+
         // Simpan file
-        $file = $request->file('documents');
-        $filename = time() . '_' . $file->getClientOriginalName();
-        $filePath = $file->storeAs('documents/ads', $filename, 'public');
+        if ($request->hasFile('documents')) {
+            foreach ($request->file('documents') as $file) {
+                $filename = time() . '_' . $file->getClientOriginalName();
+                $path = $file->storeAs('documents/ads', $filename, 'public');
+                $documentPaths[] = $path; 
+            }
+        }
 
         // Simpan data license
         $ad = Ad::create([
@@ -46,7 +54,7 @@ class PengiklananController extends Controller
             'ad_name' => $request->ad_name,
             'ad_type'   => $request->ad_type,
             'description'   => $request->description,
-            'documents'     => $filePath,
+            'documents'     => $documentPaths,
         ]);
 
 
@@ -62,9 +70,12 @@ class PengiklananController extends Controller
     {
         $ad = Ad::findOrFail($id);
 
-        $documentPath = public_path('uploads/' . $ad->documents);
-        if (file_exists($documentPath)) {
-            unlink($documentPath);
+        if ($ad->documents) {
+            foreach ($ad->documents as $path) {
+                if (Storage::disk('public')->exists($path)) {
+                    Storage::disk('public')->delete($path);
+                }
+            }
         }
 
         $ad->delete();

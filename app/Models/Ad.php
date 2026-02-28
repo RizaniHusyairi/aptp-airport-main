@@ -9,7 +9,10 @@ class Ad extends Model
 {
     protected $guarded = [];
     
-    
+    protected $casts = [
+        'documents' => 'array',
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);

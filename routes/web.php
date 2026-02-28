@@ -15,7 +15,8 @@ use App\Http\Controllers\Admin\{
     InformationServiceReportController,
     InfoSlideController,
     PeriodicDocumentController,
-    PpidRegulationController
+    PpidRegulationController,
+    ProfileBandaraSettingController // <<< NEW CONTROLLER
 };
 use App\Http\Controllers\Staff_User\{
     ComplaintController,
@@ -437,6 +438,12 @@ Route::group(["prefix" => 'dashboard'], function () {
                 Route::get('/', [HeroSettingController::class, 'index'])->name('index');
                 // Rute untuk memproses penyimpanan
                 Route::post('/update', [HeroSettingController::class, 'update'])->name('update');
+            });
+
+            // === ROUTE BARU PENGATURAN PROFIL BANDARA ===
+            Route::prefix('profile-bandara-settings')->name('admin.profile-bandara-settings.')->group(function () {
+                Route::get('/', [ProfileBandaraSettingController::class, 'index'])->name('index');
+                Route::post('/update', [ProfileBandaraSettingController::class, 'update'])->name('update');
             });
 
         });
