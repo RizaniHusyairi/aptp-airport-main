@@ -80,7 +80,7 @@
                                         </div>
                                     </form>
                                     </td>
-                                    <td class="w-25">{{ $new->created_at->format('d M Y H:i') }}</td>
+                                    <td class="w-25" data-sort="{{ \Carbon\Carbon::parse($new->created_at)->timestamp }}">{{ $new->created_at->format('d M Y H:i') }}</td>
                                     <td>
                                         <a href="{{ route('berita.show', $new->slug) }}" class="btn btn-sm btn-warning me-1 text-white btn-tooltip" data-bs-toggle="tooltip" title="Edit"><i class="bi bi-pencil"></i></a>
                                             <form class="col" action="{{ route('berita.destroy', $new->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus berita ini?')">

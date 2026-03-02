@@ -63,7 +63,7 @@
                                                     {{ $item->status }}
                                                 </span>
                                                 </td>
-                                                 <td>{{ \Carbon\Carbon::parse($item->created_at)->format('d M Y - H:i') }}</td>
+                                                 <td data-sort="{{ \Carbon\Carbon::parse($item->created_at)->timestamp }}">{{ \Carbon\Carbon::parse($item->created_at)->format('d M Y - H:i') }}</td>
                                                 <td>
                                                     <div class="d-flex gap-1">
                                                         @staff  

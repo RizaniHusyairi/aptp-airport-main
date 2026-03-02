@@ -29,7 +29,6 @@ $(document).ready(function() {
             }
         },
         
-        order: [[1, 'desc']], // Urutkan berdasarkan kolom "Dibuat" (tanggal) secara menurun
         pageLength: 10, // Jumlah baris default per halaman
         lengthMenu: [5, 10, 25, 50], // Pilihan jumlah baris per halaman
     });
