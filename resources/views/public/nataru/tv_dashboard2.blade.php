@@ -630,11 +630,14 @@
                             $start = \Carbon\Carbon::parse($nataruEvent->start_date)->startOfDay();
                             $end   = \Carbon\Carbon::parse($nataruEvent->end_date)->startOfDay();
 
-                            // 2. Hitung Titik Tengah (Mean) sebagai H-0
-                            // (LOGIKA INI DISAMAKAN DENGAN CONTROLLER)
-                            $diffTotal = $start->diffInDays($end);
-                            $offset = ceil($diffTotal / 2);
-                            $refDate = $start->copy()->addDays($offset);
+                            // 2. Hitung Titik Tengah (Mean) sebagai H-0 jika peak_date tidak ada
+                            if ($nataruEvent->peak_date) {
+                                $refDate = \Carbon\Carbon::parse($nataruEvent->peak_date)->startOfDay();
+                            } else {
+                                $diffTotal = $start->diffInDays($end);
+                                $offset = ceil($diffTotal / 2);
+                                $refDate = $start->copy()->addDays($offset);
+                            }
 
                             // 3. Hitung Selisih Hari Ini dengan H-0
                             $today = \Carbon\Carbon::now()->startOfDay();

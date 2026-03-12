@@ -15,6 +15,7 @@ class NataruEvent extends Model
     protected $casts = [
         'start_date' => 'date',
         'end_date' => 'date',
+        'peak_date' => 'date',
         'is_active' => 'boolean',
     ];
 

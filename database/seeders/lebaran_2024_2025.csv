@@ -1,0 +1,426 @@
+Timestamp;Tanggal;Pesawat;Status;Jumlah Penumpang;Jumlah Cargo;Load Factor; Harga Tiket Tertinggi (Departure);Nama Petugas Posko;Status 2;Destination ( From - To);Kode Penerbangan; Harga Tiket Terendah (Departure)
+4/9/2025 11:50:36;09/04/2025;Smart Aviation;Departure;6;0;50; Rp-   ;ABDUL FATAH;Perintis;LPU-AAP;PK-SNG; Rp737.320 
+3/22/2025 13:53:17;22 March 2025;Smart Aviation;Departure;9;0;67;;ADITYA FATURRACHIM;Berjadwal;AAP-LPU;PK-SNV;
+3/30/2025 8:01:41;30 March 2025;Batik Air;Arrival;32;3048;20; Rp1.840.700 ;AGAM, NALDA;Berjadwal;CGK-AAP;ID6672; Rp-   
+3/30/2025 8:11:22;30 March 2025;Super Air Jet;Arrival;102;687;56; Rp-   ;AGAM, NALDA;Berjadwal;SUB-AAP;IU640; Rp-   
+3/30/2025 9:04:09;30 March 2025;Batik Air;Departure;151;245;96; Rp1.840.700 ;AGAM, NALDA;Berjadwal;AAP-CGK;ID6673; Rp-   
+3/30/2025 9:31:26;30 March 2025;Super Air Jet;Departure;190;2;99; Rp1.379.180 ;AGAM, NALDA;Berjadwal;AAP-YIA;IU659; Rp-   
+3/30/2025 9:32:39;30 March 2025;Citilink;Arrival;79;594;43; Rp-   ;AGAM, NALDA;Berjadwal;SUB-AAP;QG460; Rp-   
+3/30/2025 11:03:11;30 March 2025;Citilink;Departure;183;36;99; Rp1.518.515 ;AGAM, NALDA;Berjadwal;AAP-SUB;QG461; Rp-   
+3/30/2025 12:04:04;30 March 2025;Wing air;Arrival;72;1;95; Rp-   ;AGAM, NALDA;Berjadwal;BEJ-AAP;IW1485; Rp-   
+3/30/2025 12:05:14;30 March 2025;Super Air Jet;Arrival;154;230;83; Rp-   ;AGAM, NALDA;Tidak Berjadwal;SUB-AAP;IU642; Rp-   
+3/21/2025 13:12:46;21 March 2025;Citilink;Arrival;127;3686;56;;Agoes;Berjadwal;CGK-AAP;QG422;
+3/21/2025 13:22:20;21 March 2025;Super Air Jet;Arrival;180;1445;99;;Agoes;Berjadwal;SUB-AAP;IU642;
+3/21/2025 14:14:54;21 March 2025;Batik Air;Departure;182;0;97;;Agoes;Berjadwal;CGK-AAP;ID6257;
+3/21/2025 15:37:52;21 March 2025;Indonesia Army;Arrival;34;0;283;;Agoes;Tidak Berjadwal;CGK-AAP;A-7307;
+3/21/2025 13:16:34;21 March 2025;Smart Aviation;Arrival;11;0;100;;Ahmad;Berjadwal;DTD-AAP;PK SNT;
+3/21/2025 13:20:03;21 March 2025;Wing air;Departure;68;11;94;;Ahmad;Berjadwal;AAP-BEJ;IW1484;
+3/21/2025 13:52:19;21 March 2025;Super Air Jet;Departure;184;179;100;;Ahmad;Berjadwal;AAP-CGK;IU641;
+3/21/2025 15:24:53;21 March 2025;Super Air Jet;Departure;153;227;92;;Ahmad;Berjadwal;AAP-CGK;IU643;
+3/21/2025 15:40:49;21 March 2025;Indonesia Army;departure;34;0;92;;Ahmad;Berjadwal;DTD-AAP;PK-SNT;
+3/24/2025 8:15:54;24 March 2025;Super Air Jet;Arrival;178;576;98; Rp1.518.600 ;AILSA;Berjadwal;SUB-AAP;IU640; Rp1.518.600 
+3/24/2025 9:57:39;24 March 2025;Super Air Jet;Departure;181;5;100; Rp1.518.600 ;AILSA;Berjadwal;AAP-YIA;IU659; Rp1.584.500 
+3/24/2025 11:02:38;24 March 2025;Batik Air;Arrival;83;2367;56; Rp2.110.700 ;AILSA;Berjadwal;CGK-AAP;ID6256; Rp1.733.300 
+3/24/2025 11:56:22;24 March 2025;Wing air;Arrival;72;0;100; Rp1.418.700 ;AILSA;Berjadwal;BEJ-AAP;IW1485; Rp1.234.400 
+3/30/2025 14:54:06;30 March 2002;Wing air;Departure;60;12;82; Rp1.067.100 ;ALEX;Berjadwal;AAP-BAJ;IW1484; Rp-   
+3/26/2025 14:19:18;26 March 2025;Wing air;Departure;72;94;99%; Rp1.067.100 ;Alex;Berjadwal;AAP-BEJ;IW-1484;-
+3/26/2025 14:44:21;26 March 2025;Citilink;Arrival;136;2551;75%; Rp1.799.345 ;ALEX;Berjadwal;CGK-AAP;QG422;-
+3/26/2025 16:07:57;26 March 2025;Super Air Jet;Departure;185;163;100; Rp1.321.130 ;ALEX;Berjadwal;AAP-SUB;IU-641;-
+3/26/2025 17:21:50;26 March 2025;Citilink;Departure;181;206;100; Rp1.799.345 ;ALEX;Berjadwal;AAP-CGK;QG423;-
+3/30/2025 14:41:46;30 March 2025;Batik Air;Departure;154;8;96; Rp1.840.700 ;ALEX;Berjadwal;AAP-CGK;ID6257; Rp-   
+3/30/2025 14:48:10;30 March 2025;Citilink;Arrival;97;1608;52; Rp-   ;ALEX;Berjadwal;CGK-AAP;QG422; Rp-   
+3/30/2025 15:31:40;30 March 2025;Super Air Jet;Departure;183;0;100; Rp1.321.130 ;ALEX;Berjadwal;AAP-SUB;IU643; Rp-   
+4/2/2025 9:45:27;2 April 2025;Smart Aviation;Departure;1;0;8; Rp704.330 ;Alex;Perintis;AAP-RTU;PK-SNT; Rp704.330 
+4/2/2025 11:01:21;2 April 2025;Citilink;Arrival;121;32;67; Rp1.799.345 ;ALEX;Berjadwal;SUB-AAP;QG-460; Rp1.216.565 
+4/2/2025 11:45:05;2 April 2025;Citilink;Departure;182;32;99; Rp1.799.345 ;ALEX;Berjadwal;AAP-CGK;QG461; Rp1.216.565 
+4/4/2025 14:24:08;4 April 2025;Super Air Jet;Arrival;184;1453;99; Rp1.397.180 ;ALEX;Berjadwal;YIA-AAP;IU658; Rp1.046.180 
+4/4/2025 14:27:12;4 April 2025;Citilink;Arrival;121;1750;66; Rp1.799.345 ;ALEX;Berjadwal;CGK-AAP;QG422; Rp1.216.565 
+4/4/2025 17:08:11;4 April 2025;Batik Air;Arrival;137;228;85; Rp1.840.700 ;ALEX;Berjadwal;CGK-AAP;ID6676; Rp1.394.700 
+4/7/2025 13:16:28;07/04/2025;Super Air Jet;Arrival;182;27;100;;ALI;Berjadwal;SUB-AAP;IU 640;
+4/4/2025 10:03:12;4 April 2025;Super Air Jet;Departure;180;4;100; Rp1.397.180 ;ANANG;Berjadwal;AAP-YIA;IU659; Rp1.046.180 
+4/4/2025 10:04:54;4 April 2025;Wing air;Arrival;75;2;180; Rp1.067.100 ;ANANG;Berjadwal;BEJ-AAP;IW1485;-
+4/4/2025 11:18:55;4 April 2025;Smart Aviation;Departure;4;0;30,8;-;ANANG MASDARI;Perintis;AAP-DTD;PK SNT; Rp718.760 
+4/4/2025 12:01:05;4 April 2025;Batik Air;Arrival;118;1470;-; Rp1.840.700 ;ANANG MASDARI;Berjadwal;CGK-AAP;ID6257; Rp1.394.700 
+3/28/2025 12:48:18;28 March 2025;Smart Aviation;Departure;11;0;92; Rp740.960 ;Andhika, Ummu;Perintis;AAP-LPU;PK-SNG;
+3/28/2025 12:53:49;28 March 2025;Wing air;Arrival;72;3;96;;Andhika, Ummu;Berjadwal;BEJ-AAP;IW1485;
+3/28/2025 13:07:09;28 March 2025;Batik Air;Arrival;149;723;93;;Andhika, Ummu;Berjadwal;CGK-AAP;ID6256;
+3/28/2025 15:07:40;28 March 2025;Batik Air;Departure;155;44;98; Rp2.110.700 ;Andhika, Ummu;Berjadwal;AAP-CGK;ID6257; Rp1.733.300 
+3/28/2025 15:11:22;28 March 2025;Super Air Jet;Arrival;95;1339;51;;Andhika, Ummu;Berjadwal;YIA-AAP;IU658;
+3/28/2025 15:13:25;28 March 2025;Super Air Jet;Departure;182;8;100; Rp1.518.600 ;Andhika, Ummu;Berjadwal;AAP-SUB;IU643;
+3/28/2025 15:15:49;28 March 2025;Super Air Jet;Arrival;148;82;80;;Andhika, Ummu;Berjadwal;SUB-AAP;IU642;
+3/28/2025 15:18:44;28 March 2025;Super Air Jet;Departure;182;157;99; Rp1.518.600 ;Andhika, Ummu;Berjadwal;AAP-SUB;IU641;
+3/28/2025 15:20:39;28 March 2025;Citilink;Arrival;157;1027;86;;Andhika, Ummu;Berjadwal;CGK-AAP;QG422;
+3/28/2025 16:26:07;28 March 2025;Citilink;Departure;180;464;99; Rp1.799.345 ;Andhika, Ummu;Berjadwal;AAP-CGK;QG423;
+3/28/2025 16:51:31;28 March 2025;Smart Aviation;Arrival;6;0;50;;Andhika, Ummu;Perintis;DTD-AAP;PK-SNT;
+3/28/2025 17:39:46;28 March 2025;Batik Air;Arrival;132;1376;84;;Andhika, Ummu;Berjadwal;CGK-AAP;ID6676;
+3/28/2025 18:46:08;28 March 2025;Batik Air;Departure;156;205;98; Rp2.110.700 ;Andhika, Ummu;Berjadwal;AAP-CGK;ID6677; Rp1.733.300 
+3/28/2025 12:57:05;28 March 2025;Wing air;Departure;73;3;100; Rp1.418.700 ;Andhikaa, Ummu;Berjadwal;AAP-BEJ;IW1484; Rp1.234.400 
+4/11/2025 9:04:52;11/04/2025;Batik Air;Arrival;152;3205;96;;ANDI AMIRA AFIFAH;Berjadwal;CGK-AAP;ID 6672;
+4/11/2025 9:09:22;11/04/2025;Batik Air;Departure;126;538;80; Rp2.110.700 ;ANDI AMIRA AFIFAH;Berjadwal;AAP-CGK;ID 6673; Rp1.751.500 
+4/11/2025 11:11:14;11/04/2025;Smart Aviation;Departure;11;0;91; Rp718.760 ;ANDI AMIRA AFIFAH;Perintis;AAP-DTD;PK-SNT; Rp718.760 
+4/11/2025 12:03:36;11/04/2025;Smart Aviation;Departure;12;0;91;;ANDI AMIRAH AFIFAH;Perintis;AAP-LPU;PK-SNV;
+4/8/2025 9:09:48;08/04/2025;Batik Air;Arrival;147;1040;93; Rp1.840.700 ;andini;Berjadwal;CGK-AAP;ID6672; Rp1.751.500 
+4/8/2025 11:07:47;08/04/2025;Citilink;Departure;180;184;100; Rp1.518.515 ;andini;Berjadwal;AAP-SUB;QG461; Rp912.455 
+4/8/2025 11:42:00;08/04/2025;Batik Air;Departure;155;765;97; Rp1.840.700 ;andini;Berjadwal;AAP-CGK;ID 6673; Rp1.751.500 
+4/7/2025 13:07:08;07/04/2025;Citilink;Departure;183;9;100; Rp1.518.515 ;ANDITYAWARMAN;Berjadwal;AAP-SUB;QG 461; Rp912.455 
+4/7/2025 13:29:49;07/04/2025;Wing air;Departure;73;1;100; Rp1.067.100 ;ANDITYAWARMAN;Berjadwal;AAP-BEJ;IW 1484;
+4/7/2025 14:52:23;07/04/2025;Batik Air;Arrival;152;220;97;;ANDITYAWARMAN;Berjadwal;CGK-AAP;ID 6256;
+4/7/2025 15:04:48;07/04/2025;Smart Aviation;Departure;10;0;83; Rp740.960 ;ANDITYAWARMAN;Perintis;AAP-LPU;PK-SNT;
+4/7/2025 15:10:27;07/04/2025;Citilink;Arrival;180;152;99;;ANDITYAWARMAN;Berjadwal;CGK-AAP;QG 422;
+4/7/2025 15:52:13;07/04/2025;Citilink;Departure;185;25;99; Rp1.799.345 ;ANDITYAWARMAN;Berjadwal;AAP-CGK;QG 423; Rp1.112.945 
+4/7/2025 17:37:42;07/04/2025;Batik Air;Arrival;155;5;98;;ANDITYAWARMAN;Berjadwal;CGK-AAP;ID 6676;
+3/23/2025 15:25:05;23 March 0025;Super Air Jet;Departure;178;0;99; Rp1.518.600 ;Andra Hafi Aditya;Berjadwal;AAP-SUB;IU643;-
+3/23/2025 13:33:49;23 March 2025;Wing air;Departure;70;15;97; Rp1.418.700 ;Andra Hafi Aditya;Berjadwal;AAP-BEJ;IW1484; Rp1.234.400 
+3/23/2025 13:37:00;23 March 2025;Super Air Jet;Departure;183;252;102; Rp1.518.515 ;Andra Hafi Aditya;Berjadwal;AAP-SUB;IU641; Rp1.518.600 
+3/23/2025 13:40:09;23 March 2025;Batik Air;Departure;157;105;101; Rp2.110.700 ;Andra Hafi Aditya;Berjadwal;AAP-CGK;ID6257; Rp1.733.300 
+3/23/2025 15:29:30;23 March 2025;Super Air Jet;Arrival;150;2956;83;-;Andra Hafi Aditya;Berjadwal;YIA-AAP;IU658;-
+3/23/2025 15:35:58;23 March 2025;Citilink;Arrival;139;2538;77;-;Andra Hafi Aditya;Berjadwal;CGK-AAP;QG422;-
+3/23/2025 13:37:00;23 March 2025;Super Air Jet;Departure;178;0;98; Rp1.608.354 ;Andra Hafi Aditya;Berjadwal;AAP-SUB;IU659; Rp1.518.600 
+4/2/2025 10:39:24;2 April 2025;Super Air Jet;Departure;189;0;100; Rp1.321.300 ;ANDRE;Berjadwal;AAP-SUB;IU641; Rp875.100 
+4/2/2025 10:41:50;2 April 2025;Smart Aviation;Arrival;9;0;75; Rp740.960 ;ANDRE;Perintis;LPU-AAP;PK-SNG; Rp740.960 
+3/29/2025 13:04:34;29 March 2025;Wing air;Departure;72;19;99; Rp1.418.700 ;Andriani, Hariyanto, Aziz;Berjadwal;AAP-BEJ;IW-1484; Rp1.234.400 
+3/29/2025 13:09:04;29 March 2025;Super Air Jet;Departure;184;150;99; Rp1.321.200 ;Andriani, Hariyanto, Aziz;Berjadwal;AAP-SUB;IU-641; Rp1.321.200 
+3/29/2025 13:12:43;29 March 2025;Batik Air;Departure;159;0;99; Rp1.418.700 ;Andriani, Hariyanto, Aziz;Berjadwal;AAP-CGK;ID-6257; Rp1.234.400 
+3/29/2025 13:20:26;29 March 2025;Batik Air;Arrival;127;240;83;;Andriani, Hariyanto, Aziz;Berjadwal;CGK-AAP;ID-6256;
+3/29/2025 13:22:43;29 March 2025;Super Air Jet;Arrival;140;240;74;;Andriani, Hariyanto, Aziz;Berjadwal;SUB-AAP;IU-642;
+3/29/2025 13:32:36;29 March 2025;Super Air Jet;Arrival;130;977;72;;Andriani, Hariyanto, Aziz;Tidak Berjadwal;SUB-AAP;IU-2642;
+3/29/2025 13:34:40;29 March 2025;Super Air Jet;Arrival;74;2640;41;;Andriani, Hariyanto, Aziz;Berjadwal;YIA-AAP;IU-658;
+3/29/2025 13:35:55;29 March 2025;Wing air;Arrival;74;0;99;;Andriani, Hariyanto, Aziz;Berjadwal;BEJ-AAP;IW-1485;
+3/29/2025 14:23:39;29 March 2025;Citilink;Arrival;165;1642;88;;Andriani, Hariyanto, Aziz;Berjadwal;CGK-AAP;QG-422;
+3/29/2025 15:44:47;29 March 2025;Super Air Jet;Departure;180;0;99; Rp1.321.000 ;Andriani, Hariyanto, Aziz;Tidak Berjadwal;AAP-SUB;IU-2641; Rp1.321.000 
+3/29/2025 15:48:10;29 March 2025;Batik Air;Arrival;127;463;81;;Andriani, Hariyanto, Aziz;Berjadwal;CGK-AAP;ID-6676;
+3/29/2025 15:56:01;29 March 2025;Citilink;Departure;180;125;99; Rp1.799.345 ;Andriani, Hariyanto, Aziz;Berjadwal;AAP-CGK;QG-423; Rp1.799.345 
+3/29/2025 16:03:02;29 March 2025;Super Air Jet;Departure;180;0;100; Rp1.321.200 ;Andriani, Hariyanto, Aziz;Berjadwal;AAP-SUB;IU-643; Rp1.321.200 
+3/29/2025 17:58:45;29 March 2025;Batik Air;Departure;153;18;97; Rp2.110.700 ;Andriani, Hariyanto, Aziz;Berjadwal;AAP-CGK;ID-6677; Rp1.733.300 
+3/31/2025 10:37:27;31 March 2025;Citilink;Arrival;33;153;18;;ANISA W MANURUNG;Berjadwal;SUB-AAP;QG460;
+3/31/2025 11:39:42;31 March 2025;Citilink;Departure;181;26;100; Rp1.518.515 ;ANISA W MANURUNG;Berjadwal;AAP-SUB;QG461;
+4/7/2025 13:32:54;07/04/2025;Citilink;Arrival;183;225;100;;ARIF RAHMAN;Berjadwal;SUB-AAP;QG 460;
+4/7/2025 13:36:47;07/04/2025;Wing air;Arrival;0;0;0;;ARIF RAHMAN;Berjadwal;BEJ-AAP;IW 1485;
+4/7/2025 14:51:12;07/04/2025;Batik Air;Departure;157;32;100; Rp1.840.700 ;ARIF RAHMAN;Berjadwal;AAP-CGK;ID 6257;
+4/7/2025 14:55:37;07/04/2025;Super Air Jet;Arrival;185;2;100;;ARIF RAHMAN;Berjadwal;SUB-AAP;IU 642;
+4/7/2025 14:59:02;07/04/2025;Super Air Jet;Departure;185;8;100; Rp1.321.130 ;ARIF RAHMAN;Berjadwal;AAP SUB;IU 641;
+4/7/2025 15:07:20;07/04/2025;Super Air Jet;Arrival;183;162;100;;ARIF RAHMAN;Tidak Berjadwal;YIA-AAP;IU 658;
+4/7/2025 15:48:46;07/04/2025;Super Air Jet;Departure;183;0;100; Rp1.321.130 ;ARIF RAHMAN;Berjadwal;AAP-SUB;IU 643;
+07/04/2025;07/04/2025;Smart Aviation;Arrival;13;0;100;;ARIF RAHMAN;Berjadwal;LPU-AAP;PK-SNT;
+4/7/2025 17:40:18;07/04/2025;Batik Air;Departure;156;1;99; Rp1.840.700 ;ARIF RAHMAN;Berjadwal;AAP--CGK;ID 6677;
+4/6/2025 10:18:14;6 April 2025;Super Air Jet;Arrival;182;154;98;;Atala;Berjadwal;SUB-AAP;IU640;
+4/6/2025 11:37:21;06/04/2025;Citilink;Arrival;184;2477;100;;atala;Berjadwal;SUB-AAP;QG460;
+3/31/2025 12:14:22;31 March 2025;Smart Aviation;Departure;2;0;17; Rp718.760 ;AULIA;Perintis;AAP-DTD;PK SNT; Rp718.760 
+3/31/2025 14:44:06;31 March 2025;Super Air Jet;Arrival;124;81;69; Rp1.321.300 ;AULIA;Berjadwal;SUB-AAP;PK STT; Rp1.257.300 
+3/31/2025 16:23:49;31 March 2025;Citilink;Departure;184;207;102; Rp1.799.345 ;AULIA;Berjadwal;AAP-CGK;QG 423; Rp-   
+4/5/2025 14:28:00;5 April 2025;Wing air;Departure;76;1;-; Rp1.067.100 ;Batara;Berjadwal;AAP-BEJ;IW1484;-
+4/5/2025 14:36:40;5 April 2025;Citilink;Arrival;182;1.141;-; Rp1.799.345 ;Batara;Berjadwal;CGK-AAP;QG422; Rp1.216.565 
+4/5/2025 15:54:19;5 April 2025;Super Air Jet;Arrival;177;1658;-; Rp1.321.300 ;BATARA;Tidak Berjadwal;YIA-AAP;IU658; Rp875.100 
+4/5/2025 16:15:05;5 April 2025;Smart Aviation;Arrival;-;-;-; Rp-   ;BATARA;Tidak Berjadwal;BPN-AAP;PKSNT;-
+4/5/2025 16:31:37;5 April 2025;Batik Air;Arrival;149;1665;-; Rp1.840.700 ;BATARA;Berjadwal;CGK-AAP;ID6676; Rp1.394.700 
+4/5/2025 17:04:50;5 April 2025;Super Air Jet;Arrival;177;91;97; Rp-   ;BATARA;Berjadwal;SUB-AAP;IU642; Rp-   
+4/5/2025 17:06:48;5 April 2025;Super Air Jet;Departure;184;0;100; Rp1.321.300 ;BATARA;Berjadwal;AAP-SUB;IU643; Rp875.100 
+4/5/2025 17:08:42;5 April 2025;Citilink;Departure;86;102;99; Rp1.799.345 ;BATARA;Berjadwal;AAP-CGK;QG423; Rp1.216.565 
+4/3/2025 11:33:15;3 April 2025;Citilink;Arrival;178;614;98; Rp1.518.515 ;Budi Supangat & M. Alwan Z;Berjadwal;SUB-AAP;QG460;-
+4/3/2025 11:47:06;3 April 2025;Citilink;Departure;184;85;100; Rp1.518.515 ;Budi Supangat & M. Alwan Zuhdi;Berjadwal;AAP-SUB;QG461;-
+4/3/2025 8:35:53;3 April 2025;Smart Aviation;Departure;11;-;92; Rp704.330 ;Budi Supangat & M.Alwan Zuhdi;Perintis;AAP-RTU;PK-SNT;-
+3/26/2025 14:41:34;26 March 2025;Super Air Jet;Arrival;93;2243;51%; Rp1.379.180 ;BUNTU BATU;Berjadwal;YIA-AAP;IU658;-
+3/26/2025 16:18:52;26 March 2025;Super Air Jet;Arrival;157;400;87; Rp1.518.515 ;BUNTU BATU;Berjadwal;SUB-AAP;IU-462;-
+3/26/2025 17:18:17;26 March 2025;Super Air Jet;Departure;187;0;100; Rp1.321.130 ;BUNTU BATU;Berjadwal;AAP-SUB;IU643;-
+3/31/2025 14:47:15;31 March 2025;Smart Aviation;Arrival;9;0;75; Rp718.760 ;CHINDY;Perintis;DTD-AAP;PK SNT; Rp-   
+3/31/2025 14:49:23;31 March 2025;Super Air Jet;Departure;183;25;102; Rp1.321.300 ;CHINDY;Berjadwal;AAP-SUB;IU 643; Rp1.257.300 
+3/31/2025 16:45:31;31 March 2025;Batik Air;Arrival;59;1942;36; Rp1.840.700 ;CHINDY;Berjadwal;CGK-AAP;ID 6676; Rp1.483.700 
+3/31/2025 18:52:54;31 March 2025;Batik Air;Departure;161;68;99; Rp1.840.700 ;CHINDY;Berjadwal;AAP-CGK;ID6677; Rp1.257.700 
+3/24/2025 8:13:58;24 March 2025;Batik Air;Arrival;74;3674;46; Rp2.110.700 ;DIAH;Berjadwal;CGK-AAP;ID6672; Rp1.733.300 
+3/24/2025 9:56:10;24 March 2025;Batik Air;Departure;157;393;99; Rp2.110.700 ;DIAH;Berjadwal;AAP-CGK;ID6673; Rp1.733.300 
+3/24/2025 11:00:54;24 March 2025;Super Air Jet;Arrival;179;296;98; Rp1.518.600 ;DIAH;Berjadwal;SUB-AAP;IU642;-
+3/24/2025 11:27:26;24 March 2025;Smart Aviation;Departure;9;0;75; Rp714.920 ;DIAH;Perintis;AAP-DTD;PK-SNT; Rp714.920 
+3/22/2025 12:56:08;22 March 2025;Batik Air;Arrival;155;3133;97;;Dimas Adityarama;Berjadwal;CGK-AAP;ID6256;
+3/22/2025 13:01:56;22 March 2025;Super Air Jet;Arrival;180;397;100;;Dimas Adityarama;Berjadwal;SUB-AAP;IU642;
+3/22/2025 14:44:48;22 March 2025;Batik Air;Departure;155;38;97;;Dimas Adityarama;Berjadwal;AAP-CGK;ID6257;
+3/22/2025 14:48:05;22 March 2025;Super Air Jet;Departure;187;206;100;;Dimas Adityarama;Berjadwal;AAP-SUB;IU641;
+3/22/2025 15:53:25;22 March 2025;Super Air Jet;Arrival;179;2973;99;;Dimas Adityarama;Berjadwal;YIA-AAP;IU658;
+3/22/2025 15:56:19;22 March 2025;Citilink;Arrival;131;3837;70;;Dimas Adityarama;Berjadwal;CGK-AAP;QG422;
+3/22/2025 17:04:38;22 March 2025;Citilink;Departure;183;232;100;;Dimas Adityarama;Berjadwal;AAP-CGK;QG423;
+3/22/2025 17:07:34;22 March 2025;Smart Aviation;Arrival;0;0;0;;Dimas Adityarama;Perintis;BPN-AAP;PK-SNT;
+4/2/2025 13:51:57;2 April 2025;Smart Aviation;Departure;0;0;0; Rp704.330 ;EDY P & DIMAS ARDI P;Perintis;AAP - RTU;PK- SNT; Rp704.330 
+4/2/2025 13:59:16;2 April 2025;Wing air;Arrival;73;167;99;;EDY P & DIMAS ARDI P;Berjadwal;BEJ-AAP;IW1485;
+4/2/2025 14:05:11;2 April 2025;Wing air;Departure;73;1;97;;EDY P & DIMAS ARDI P;Berjadwal;AAP- BEJ;IW1484;
+4/2/2025 14:21:40;2 April 2025;Batik Air;Arrival;116;39;74; Rp1.321.300 ;EDY P & DIMAS ARDI P;Berjadwal;CGK-AAP;ID 6256; Rp875.100 
+4/2/2025 14:26:51;2 April 2025;Batik Air;Departure;150;0;95; Rp1.840.700 ;EDY P & DIMAS ARDI P;Berjadwal;AAP- CGK;ID6257; Rp1.305.200 
+4/2/2025 14:56:13;2 April 2025;Smart Aviation;Arrival;5;0;42;;EDY P & DIMAS ARDI P;Perintis;DTD-AAP;PK-SNT;
+4/2/2025 15:16:41;2 April 2025;Super Air Jet;Arrival;179;10;96;;EDY P & DIMAS ARDI P;Berjadwal;SUB-AAP;IU642;
+4/2/2025 15:20:09;2 April 2025;Super Air Jet;Departure;187;0;100; Rp1.321.300 ;EDY P & DIMAS ARDI P;Berjadwal;AAP - SUB;IU643; Rp875.100 
+4/2/2025 15:22:47;2 April 2025;Citilink;Arrival;150;668;83;;EDY P & DIMAS ARDI P;Berjadwal;CGK - AAP ;QG422;
+4/2/2025 16:18:40;2 April 2025;Citilink;Departure;182;19;99; Rp1.799.345 ;EDY P & DIMAS ARDI P;Berjadwal;AAP-CGK;QG423; Rp1.216.565 
+4/2/2025 13:44:41;2 April 2025;Smart Aviation;Departure;4;0;33; Rp740.960 ;EDY PURWANTO & DIMAS ARDI PAMUNGKAS;Perintis;AAP-LPU;PK - SNG; Rp740.960 
+3/23/2025 8:36:01;23 March 2025;Batik Air;Arrival;35;3104;21; Rp211.070 ;Eko;Berjadwal;CGK-AAP;ID 6672; Rp1.733.300 
+3/23/2025 9:29:09;23 March 2025;Batik Air;Departure;158;391;101; Rp2.110.700 ;EKO;Berjadwal;AAP-CGK;ID6673; Rp1.733.300 
+4/6/2025 11:32:43;06/04/2025;Super Air Jet;Departure;181;8;100; Rp1.321.300 ;Elfan;Berjadwal;AAP-SUB;IU659; Rp875.100 
+4/9/2025 12:29:14;09/04/2025;Super Air Jet;Arrival;182;290;101; Rp1.518.100 ;ema;Berjadwal;SUB-AAP;ID640;-
+4/9/2025 12:31:02;09/04/2025;Super Air Jet;Arrival;171;576;95; Rp1.518.200 ;ema;Berjadwal;SUB-AAP;IU642;-
+4/9/2025 12:36:08;09/04/2025;Batik Air;Departure;114;592;73; Rp2.110.700 ;ema;Berjadwal;AAP-CGK;ID6673; Rp1.751.500 
+4/9/2025 12:38:13;09/04/2025;Super Air Jet;Departure;180;3;100; Rp1.584.600 ;ema;Berjadwal;AAP-YIA;IU659;-
+4/9/2025 12:40:38;09/04/2025;Citilink;Arrival;182;2000;101; Rp1.518.100 ;ema;Berjadwal;SUB-AAP;QG460;-
+4/9/2025 13:12:57;09/04/2025;Wing air;Departure;66;4;92; Rp1.418.700 ;ema;Berjadwal;AAP-BEJ;IW1484;-
+4/9/2025 13:54:59;09/04/2025;Smart Aviation;Arrival;0;0;0;-;ema;Tidak Berjadwal;AAP-BPN;PK-SNt;-
+4/9/2025 17:06:05;09/04/2025;Super Air Jet;Arrival;183;2890;102; Rp1.518.100 ;ema;Berjadwal;SUB-AAP;IU658;-
+4/9/2025 17:09:27;09/04/2025;Batik Air;Arrival;156;281;100; Rp2.110.700 ;ema;Berjadwal;CGK-AAP;ID6676; Rp1.261.600 
+4/8/2025 8:52:25;08/04/2025;Super Air Jet;Arrival;181;884;97; Rp1.321.200 ;farisah;Berjadwal;SUB - AAP;IU 640; Rp1.321.200 
+4/8/2025 9:55:22;08/04/2025;Super Air Jet;Departure;182;38;99; Rp1.379.180 ;farisah;Berjadwal;AAP-YIA;IU659; Rp1.379.180 
+4/11/2025 12:52:02;11/04/2025;Wing air;Arrival;58;1;79;;FATMA SASKIA PUTRI;Berjadwal;BEJ - AAP;IW1485;
+4/11/2025 12:54:59;11/04/2025;Batik Air;Arrival;151;2919;95;;FATMA SASKIA PUTRI;Berjadwal;CGK - AAP;ID6256;
+4/11/2025 14:40:09;11/04/2025;Batik Air;Departure;130;0;82; Rp2.110.700 ;FATMA SASKIA PUTRI;Berjadwal;AAP - CGK;ID6257; Rp1.751.500 
+4/11/2025 14:43:01;11/04/2025;Super Air Jet;Arrival;188;2988;100; Rp1.584.600 ;FATMA SASKIA PUTRI;Berjadwal;YIA - AAP;IU658;-
+4/11/2025 14:59:14;11/04/2025;Smart Aviation;Arrival;12;0;100; Rp708.760 ;FATMA SASKIA PUTRI;Perintis;DTD - AAP;PK - SNT;
+4/11/2025 17:07:13;11/04/2025;Citilink;Departure;123;162;67; Rp1.799.345 ;FATMA SASKIA PUTRI;Berjadwal;AAP - CGK;QG423; Rp1.112.945 
+4/11/2025 17:37:38;11/04/2025;Super Air Jet;Arrival;179;163;99;;FATMA SASKIA PUTRI;Tidak Berjadwal;SUB - AAP;IU2642;
+4/11/2025 23:46:24;10/04/2025;Batik Air;Departure;91;32;58; Rp2.110.700 ;FATMA SASKIA PUTRI;Berjadwal;AAP - CGK;ID6677; Rp1.751.500 
+4/6/2025 14:56:40;06/04/2025;Wing air;Arrival;78;1;100;;FEBRIANUR;Berjadwal;BEJ-AAP;IW1485;
+4/6/2025 15:04:11;06/04/2025;Super Air Jet;Departure;184;12;100; Rp1.321.300 ;FEBRIANUR;Berjadwal;AAP-SUB;IU641; Rp875.100 
+4/6/2025 15:09:05;06/04/2025;Batik Air;Departure;160;47;100; Rp1.840.700 ;FEBRIANUR;Berjadwal;AAP-CGK;ID6257; Rp1.394.700 
+4/6/2025 15:24:42;06/04/2025;Citilink;Arrival;181;164;99;;FEBRIANUR;Berjadwal;CGK-AAP;QG422;
+4/6/2025 17:34:29;06/04/2025;Citilink;Departure;181;14;99; Rp1.799.345 ;FEBRIANUR;Berjadwal;AAP-CGK;QG423; Rp1.216.565 
+06/04/2025;06/04/2025;Batik Air;Departure;151;1;96; Rp1.840.700 ;FERIAUR;Berjadwal;AAP-CGK;id6677; Rp1.394.700 
+4/11/2025 14:45:06;10/04/2025;Super Air Jet;Departure;184;134;99; Rp1.518.100 ;FIKRI LISANI ZAM - ZAM;Tidak Berjadwal;AAP-SUB;IU641;-
+4/11/2025 17:34:53;11/04/2025;Batik Air;Arrival;154;568;96; Rp2.110.700 ;FIKRI LISANI ZAM - ZAM;Berjadwal;CGK - AAP;ID6676; Rp1.751.500 
+4/11/2025 12:53:30;11/04/2025;Super Air Jet;Arrival;178;526;98;;FIKRI LISANI ZAM-ZAM;Tidak Berjadwal;SUB - AAP;IU642;
+4/11/2025 13:59:26;11/04/2025;Wing air;Departure;72;32;97; Rp1.418.700 ;FIKRI LISANI ZAM-ZAM;Berjadwal;AAP - BEJ;IW1484; Rp1.234.400 
+4/11/2025 14:37:35;11/04/2025;Citilink;Arrival;178;1992;98;;FIKRI LISANI ZAM-ZAM;Berjadwal;CGK - AAP;QG422;
+4/11/2025 15:21:57;11/04/2025;Super Air Jet;Departure;182;25;100;-;FIKRI LISANI ZAM-ZAM;Berjadwal;AAP - SUB;IU643; Rp1.518.100 
+4/11/2025 23:48:24;10/04/2025;Super Air Jet;Departure;124;0;69; Rp1.518.100 ;FIKRI LISANI ZAM-ZAM;Tidak Berjadwal;AAP-SUB;IU2643;-
+4/10/2025 14:29:34;10/04/2025;Smart Aviation;Departure;11;0;25; Rp724.920 ;GDE RAHARDIKA;Perintis;AAP-DTD;PK-SNT; Rp724.920 
+4/10/2025 14:30:52;10/04/2025;Super Air Jet;Departure;181;104;102; Rp1.500.000 ;GDE RAHARDIKA;Berjadwal;AAP-SUB;IU-642; Rp1.238.000 
+4/10/2025 14:32:45;10/04/2025;Batik Air;Departure;121;90;99; Rp1.450.300 ;GDE RAHARDIKA;Berjadwal;AAP-CGK;ID-6257; Rp1.350.900 
+4/10/2025 17:37:26;10/04/2025;Smart Aviation;Arrival;13;0;100;;GDE RAHARDIKA;Perintis;WALW-AAP;PK-SNT;
+4/10/2025 17:39:33;10/04/2025;Smart Aviation;Departure;11;428;68; Rp525.560 ;GDE RAHARDIKA;Berjadwal;AAP-WALW;PK-SNT; Rp525.560 
+4/10/2025 13:09:05;10/04/2025;Wing air;Departure;69;2;103;Rp. 1.326.0000;GDE RAHARDIKA ;Berjadwal;AAP-BEJ;IW 1485                                           ;Rp. 1.234.400
+4/10/2025 17:28:52;10/04/2025;Wing air;Arrival;74;4;100;;GDE RAHARDIKA ;Berjadwal;BEJ-AAP;IW-1485;
+4/10/2025 17:29:45;10/04/2025;Smart Aviation;Arrival;3;0;25;;GDE RAHARDIKA ;Berjadwal;DTD-AAP;PK-SNT;
+4/10/2025 17:30:47;10/04/2025;Super Air Jet;Arrival;183;14;99;;GDE RAHARDIKA ;Berjadwal;SUB-AAP;IU-642;
+4/10/2025 17:31:41;10/04/2025;Batik Air;Arrival;155;2664;98;;GDE RAHARDIKA ;Berjadwal;CGK-AAP;ID-6256;
+4/10/2025 17:33:24;10/04/2025;Super Air Jet;Arrival;185;2563;99;;GDE RAHARDIKA ;Berjadwal;SUB-AAP;IU-658;
+4/10/2025 17:34:17;10/04/2025;Citilink;Arrival;178;1981;98;;GDE RAHARDIKA ;Berjadwal;CGK-AAP;QG-422;
+3/28/2025 8:29:27;28 March 2025;Smart Aviation;Departure;10;0;83; Rp694.330 ;Gigih Yudha Filhaq, Sandra Dwi Alliah;Perintis;AAP-RTU;PK-SNT; -
+05/04/2025,;28 March 2025;Super Air Jet;Departure;183;6;100; Rp1.584.500 ;Gigih Yudha Filhaq, Sandra Dwi Alliah;Berjadwal;AAP-YIA;IU659; -
+3/28/2025 10:17:16;28 March 2025;Smart Aviation;Arrival;9;0;75;;Gigih Yudha Filhaq, Sandra Dwi Alliah;Perintis;RTU-AAP;PK-SNT;
+3/28/2025 10:19:07;28 March 2025;Citilink;Arrival;99;2352;55;;Gigih Yudha Filhaq, Sandra Dwi Alliah;Berjadwal;SUB-AAP;QG460;
+3/28/2025 11:04:01;28 March 2025;Citilink;Departure;185;298;100; Rp1.518.515 ;Gigih Yudha Filhaq, Sandra Dwi Alliah;Berjadwal;AAP-SUB;QG461; -
+3/28/2025 11:09:27;28 March 2025;Smart Aviation;Arrival;10;0;83;;Gigih Yudha Filhaq, Sandra Dwi Alliah;Perintis;LPUCAAP;PK-SNG;
+3/28/2025 11:30:52;28 March 2025;Smart Aviation;Departure;10;0;83; Rp718.760 ;"Gigih Yudha Filhaq, Sandra Dwi Alliah					";Perintis;AAP-DTD;PK-SNT;
+4/4/2025 14:20:20;4 April 2025;Batik Air;Departure;155;170;97; Rp1.840.700 ;HADI;Berjadwal;AAP-CGK;ID6257; Rp1.394.700 
+4/4/2025 17:13:12;4 April 2025;Smart Aviation;Arrival;11;66;92; Rp718.760 ;HADI;Perintis;DTD-AAP;PK-SNT; Rp-   
+4/4/2025 17:57:06;4 April 2025;Batik Air;Departure;157;8;98; Rp1.840.700 ;HADI;Berjadwal;AAP-CGK;ID6677; Rp1.394.700 
+4/5/2025 8:30:33;5 April 2025;Super Air Jet;Arrival;179;1491;97; Rp-   ;Haries Nurcahya;Berjadwal;SUB-AAP;IU640; Rp-   
+4/5/2025 8:32:48;5 April 2025;Smart Aviation;Departure;0;0;0; Rp-   ;Haries Nurcahya;Tidak Berjadwal;AAP BPN;PKSNT; Rp-   
+4/5/2025 9:24:58;5 April 2025;Citilink;Arrival;183;1855;99; Rp-   ;Haries Nurcahya;Berjadwal;SUB AAP;QG460; Rp-   
+4/1/2025 10:47:10;1 April 2025;Citilink;Arrival;92;186;51; Rp1.518.515 ;Henny;Berjadwal;SUB;QG460;
+4/1/2025 10:50:13;1 April 2025;Super Air Jet;Departure;181;1;97; Rp1.379.180 ;Henny;Berjadwal;AAP-YIA;iu659; Rp1.379.180 
+4/1/2025 11:32:08;1 April 2025;Citilink;Departure;183;0;99; Rp1.518.515 ;Henny;Berjadwal;AAP-SUB;QG461; Rp1.518.515 
+4/1/2025 16:47:21;1 April 2025;Citilink;Arrival;96;103;52; Rp1.840.700 ;HERIYANTO;Berjadwal;CGTK-AAP;QG 422; Rp718.000 
+4/1/2025 17:39:55;1 April 2025;Citilink;Departure;179;0;99; Rp1.840.700 ;HERIYANTO;Berjadwal;AAP-CGK;QG 423; Rp718.000 
+3/29/2025 10:00:30;29 March 2025;Citilink;Arrival;95;1914;52;;Herman, Ammar Dzaki, Joko;Berjadwal;SUB-AAP;QG460;
+3/29/2025 10:03:43;29 March 2025;Batik Air;Departure;161;115;99; Rp1.840.700 ;Herman, Ammar Dzaki, Joko;Berjadwal;AAP-CGK;ID6673; Rp1.751.500 
+3/29/2025 11:37:55;29 March 2025;Citilink;Departure;189;112;100; Rp1.518.515 ;Herman, Ammar Dzaki, Joko;Berjadwal;AAP-SUB;CQ461; Rp1.518.515 
+3/29/2025 10:06:52;29 March 2025;Super Air Jet;Departure;184;1;99; Rp1.379.180 ;Herman, Ammar Dzaki, Joko P;Berjadwal;AAP-YIA;IU659; Rp1.379.180 
+3/29/2025 9:51:26;29 March 2025;Super Air Jet;Arrival;139;753;74;;Herman, Ammar, Joko;Berjadwal;SUB-AAP;IU640;
+3/29/2025 9:45:32;29 March 2025;Batik Air;Arrival;96;2575;60;;Herman, Ammart Dzaki, Joko;Berjadwal;CGK-AAP;ID6672;
+3/22/2025 9:32:53;22 March 2025;Batik Air;Departure;155;379;99; Rp2.110.700 ;Ibnu Mift. Azis;Berjadwal;AAP-CGK;ID 6673;
+3/22/2025 11:29:56;22 March 2025;Smart Aviation;Arrival;12;0;100;;Ibnu Mift. Azis;PERINTIS;WAQL-AAP;PK-SNV;
+3/22/2025 11:45:01;22 March 2025;Smart Aviation;Departure;7;0;60;;Ibnu Mift. Azis;Perintis;AAP-WALW;PK-SNV;
+3/22/2025 8:28:12;22 March 2025;Batik Air;Arrival;60;2970;38; Rp2.110.700 ;Ibnu Miftakhul Azis;Berjadwal;(CGK-AAP);ID 6672;
+4/2/2025 10:37:22;2 April 2025;Super Air Jet;Arrival;175;236;95; Rp1.321.300 ;ILIAS;Berjadwal;SUB-AAP;IU-640; Rp875.100 
+4/2/2025 10:43:24;2 April 2025;Smart Aviation;Arrival;10;0;75; Rp704.330 ;ILIAS;Perintis;RTU-AAP;PK-SNT; Rp704.330 
+3/22/2025 15:36:13;22 March 2025;Super Air Jet;Departure;182;0;100;;IMAM HERU;Berjadwal;AAP-SUB;IU-643;
+4/4/2025 16:37:41;4 April 2025;Citilink;Departure;179;157;39; Rp1.799.345 ;ISWOYO;Berjadwal;AAP-CGK;QG423; Rp1.216.565 
+4/4/2025 16:59:06;4 April 2025;Batik Air;Departure;182;135;98; Rp1.518.515 ;ISWOYO;Berjadwal;AAP-SUB;QG461;-
+4/4/2025 17:03:11;4 April 2025;Super Air Jet;Departure;182;49;100; Rp1.397.180 ;ISWOYO;Berjadwal;AAP-YIA;IU643; Rp1.046.180 
+3/31/2025 11:36:14;31 March 2025;Smart Aviation;Arrival;9;0;67;;IWAN KURNIAWAN;Perintis;LPU-AAP;PK-SNT;
+4/3/2025 13:53:26;3 April 2025;Super Air Jet;Arrival;183;200;100; Rp1.321.130 ;Jesi Sampe Padang, Vidya Alviani, & Okta;Berjadwal;SUB-AAP;IU642;
+4/3/2025 14:32:46;3 April 2025;Smart Aviation;Departure;4;0;33; Rp718.760 ;Jesi Sampe Padang, Vidya Alviani, & Okta;Perintis;AAP-DTD;PK-SNT;
+4/3/2025 14:44:56;3 April 2025;Super Air Jet;Departure;182;33;98; Rp1.321.130 ;Jesi Sampe Padang, Vidya Alviani, & Okta;Berjadwal;AAP-SUB;IU643;
+4/3/2025 14:51:53;3 April 2025;Maf;Arrival;5;0;0;;Jesi Sampe Padang, Vidya Alviani, & Okta;Tidak Berjadwal;AAP;PK-MEB;
+4/3/2025 16:37:32;3 April 2025;Smart Aviation;Arrival;9;0;75; Rp718.760 ;Jesi Sampe Padang, Vidya Alviani, & Okta;Perintis;DTD-AAP;PK-SNT;
+4/3/2025 16:41:06;3 April 2025;Citilink;Arrival;157;507;87; Rp1.799.345 ;Jesi Sampe Padang, Vidya Alviani, & Okta;Berjadwal;CGK-AAP;QG422;
+4/3/2025 16:48:05;3 April 2025;Smart Aviation;Departure;9;0;75; Rp718.760 ;Jesi Sampe Padang, Vidya Alviani, & Okta;Perintis;AAP-MHU;PK-SNT;
+4/3/2025 17:29:37;3 April 2025;Batik Air;Arrival;134;135;85; Rp1.840.700 ;Jesi Sampe Padang, Vidya Alviani, & Okta;Berjadwal;CGK-AAP;ID6676;
+4/3/2025 17:32:02;3 April 2025;Citilink;Departure;176;618;97; Rp1.799.345 ;Jesi Sampe Padang, Vidya Alviani, & Okta;Berjadwal;AAP-CGK;QG423;
+4/3/2025 17:35:08;3 April 2025;Smart Aviation;Arrival;9;0;75; Rp718.760 ;Jesi Sampe Padang, Vidya Alviani, & Okta;Perintis;MHU-APP;PK-SNT;
+4/3/2025 17:53:05;3 April 2025;Batik Air;Departure;145;185;92; Rp1.840.700 ;Jesi Sampe Padang, Vidya Alviani, & Okta;Berjadwal;AAP-CGK;ID6677;
+4/5/2025 11:18:58;5 April 2025;Citilink;Departure;184;114;99; Rp1.518.515 ;Jumadi;Berjadwal;AAP  SUB;QG 461; Rp-   
+4/9/2025 13:55:53;09/04/2025;Smart Aviation;Departure;0;0;0;-;kana;Tidak Berjadwal;BPN-AAP;PK-SNT;-
+4/9/2025 13:57:18;09/04/2025;Smart Aviation;Arrival;11;0;92; Rp515.560 ;kana;Perintis;MHU-AAP;PK-SNG;-
+4/9/2025 13:58:57;09/04/2025;Smart Aviation;Departure;4;0;33; Rp515.560 ;kana;Perintis;AAP-MHU;Pk-SNG;-
+4/9/2025 14:28:29;09/04/2025;Citilink;Arrival;181;2417;101; Rp1.318.715 ;KANA;Berjadwal;CGK-AAP;QG422;-
+4/9/2025 14:30:38;09/04/2025;Batik Air;Arrival;152;1131;97; Rp1.261.600 ;KANA;Berjadwal;CGK-AAP;ID6256;-
+4/9/2025 14:56:02;09/04/2025;Smart Aviation;Departure;9;0;75; Rp710.360 ;KANA;Perintis;AAP-RTU;PKSNT;-
+4/9/2025 14:57:28;09/04/2025;Wing air;Arrival;72;1;100; Rp1.418.700 ;KANA;Berjadwal;BEJ-AAP;IW1485;-
+4/9/2025 15:18:57;09/04/2025;Batik Air;Departure;126;80;81; Rp2.110.700 ;KANA;Berjadwal;AAP-CGK;ID6257; Rp1.261.600 
+4/9/2025 16:20:17;09/04/2025;Citilink;Departure;155;456;86; Rp1.318.715 ;KANA;Berjadwal;AAP-CGK;QG423;-
+4/9/2025 16:23:37;09/04/2025;Smart Aviation;Arrival;12;0;100; Rp710.360 ;KANA;Perintis;RTU-AAP;PKSNT;-
+4/9/2025 17:07:49;09/04/2025;Super Air Jet;Arrival;175;946;97; Rp1.518.100 ;kana;Berjadwal;SUB-AAP;IU2642;-
+4/9/2025 17:19:17;09/04/2025;Smart Aviation;Arrival;6;0;50; Rp747.320 ;kana;Perintis;LPU-AAP;PKSNG;-
+4/9/2025 17:41:18;09/04/2025;Super Air Jet;Departure;185;367;103; Rp1.451.915 ;KANA;Berjadwal;AAP-SUB;IU641;-
+4/9/2025 18:01:19;09/04/2025;Super Air Jet;Departure;177;0;98; Rp1.518.100 ;KANA;Berjadwal;AAP-SUB;IU643;-
+4/9/2025 18:08:04;09/04/2025;Batik Air;Departure;86;0;55; Rp2.110.700 ;KANA;Berjadwal;AAP-CGK;ID6677;-
+4/9/2025 18:10:06;09/04/2025;Super Air Jet;Departure;180;0;100; Rp1.518.100 ;KANA;Berjadwal;AAP-SUB;IU2643;-
+4/9/2025 14:26:48;09/04/2025;Citilink;Departure;182;646;101; Rp1.451.915 ;KANA ;Berjadwal;AAP-SUB;QG461;-
+4/4/2025 8:02:05;4 April 2025;Smart Aviation;Departure;7;0;80; Rp704.330 ;KARLIN;Perintis;AAP-RTU;PK-SNT;-
+4/4/2025 8:23:33;4 April 2025;Super Air Jet;Arrival;176;852;95; Rp1.067.100 ;KARLIN;Berjadwal;SUB-AAP;IU640;-
+4/4/2025 10:06:16;4 April 2025;Wing air;Departure;71;9;99; Rp1.067.100 ;KARLIN;Berjadwal;AAP-BEJ;IW 1484;-
+4/4/2025 10:07:43;4 April 2025;Smart Aviation;Arrival;12;-;100; Rp704.330 ;KARLIN;Perintis;RTU-AAP;PK-SNT;-
+4/4/2025 10:09:19;4 April 2025;Citilink;Arrival;184;260;100; Rp1.518.515 ;KARLIN;Berjadwal;SUB-AAP;QG460;-
+3/27/2025 9:33:08;27 March 2025;Super Air Jet;Departure;187;4;99; Rp1.584.500 ;KEMAL;Berjadwal;AAP-YIA;IU659; Rp1.584.500 
+3/27/2025 8:37:05;27 March 2025;Super Air Jet;Arrival;143;456;78; Rp1.518.600 ;KEMAL;Berjadwal;SUB - AAP;IU640; Rp1.518.600 
+3/27/2025 12:13:34;27 March 2025;Batik Air;Arrival;118;2539;72; Rp2.110.100 ;KEMAL;Berjadwal;CGK-AAP;ID6256; Rp1.733.300 
+3/27/2025 12:17:38;27 March 2025;Wing air;Arrival;73;5;100; Rp1.418.700 ;KEMAL;Berjadwal;BEJ-AAP;IW1485; Rp1.234.400 
+3/21/2025 13:14:19;21 March 2025;Citilink;Departure;179;245;100;;Khanina;Berjadwal;AAP-CGK;QG423;
+3/21/2025 13:19:03;21 March 2025;Wing air;Arrival;69;9;93;;Khanina;Berjadwal;BEJ-AAP;IW1485;
+3/21/2025 13:23:24;21 March 2025;Batik Air;Arrival;122;3028;78;;Khanina;Berjadwal;CGK-AAP;ID6256;
+3/21/2025 14:16:52;21 March 2025;Super Air Jet;Arrival;122;3916;67;;Khanina;Berjadwal;YIA-AAP;IU658;
+4/10/2025 16:17:02;10/04/2025;Citilink;Departure;124;428;68; Rp1.447.550 ;KHARISMA;Berjadwal;AAP - CGK;QG422; Rp1.368.600 
+4/10/2025 18:31:57;10/04/2025;Batik Air;Departure;128;0;80; Rp1.840.700 ;KHARISMA;Berjadwal;AAP-CGK;ID6677; Rp1.751.500 
+4/10/2025 18:34:11;10/04/2025;Smart Aviation;Arrival;10;62;75;;KHARISMA;Perintis;WALW-AAP;PK-SNT;
+4/1/2025 10:45:42;1 April 2025;Smart Aviation;Departure;2;0;17; Rp718.760 ;Kuling;Perintis;AAP-DTD;PK-SNT;
+4/1/2025 10:51:39;1 April 2025;Citilink;Arrival;92;186;51; Rp1.518.515 ;Kuling;Berjadwal;SUB-AAP;QG461; Rp1.518.515 
+3/31/2025 16:49:45;31 March 2025;Smart Aviation;Arrival;12;0;100; Rp521.160 ;LEON;Perintis;MHU-AAP;PK SNT; Rp-   
+3/21/2025 11:27:09;21 March 2025;Smart Aviation;Arrival;12;0;100; Rp700.360 ;M. Sapriansyah, Mutia Rachmi dan Karmining;Berjadwal;(RTU-AAP);PKSNT; Rp700.360 
+3/21/2025 9:38:25;21 March 2025;Batik Air;Departure;152;1060;96; Rp2.110.700 ;M.Sapriansyah, Mutia Rachmi dan Karmining;Berjadwal;(AAP-CKG);ID 6673; Rp1.518.600 
+3/21/2025 9:44:59;21 March 2025;Smart Aviation;Departure;5;0;42; Rp710.360 ;M.Sapriansyah, Mutia Rachmi dan Karmining;Berjadwal;(AAP-RTU);PK-SNT; Rp700.360 
+3/21/2025 9:48:51;21 March 2025;Super Air Jet;Departure;188;3;93; Rp1.584.500 ;M.Sapriansyah, Mutia Rachmi dan karmining;Berjadwal;(AAP-YIA);IU659; Rp1.584.500 
+3/21/2025 9:50:22;21 March 2025;Citilink;Arrival;101;2597;56; Rp1.518.600 ;M.Sapriansyah, Mutia Rachmi dan karmining;Berjadwal;(SUB-AAP);QG460; Rp1.518.600 
+3/21/2025 11:24:27;21 March 2025;Citilink;Departure;186;391;100; Rp1.518.600 ;M.Sapriansyah, Mutia Rachmi dan Karmining;Berjadwal;(AAP-SUB);QG461; Rp1.518.600 
+3/21/2025 11:28:42;21 March 2025;Smart Aviation;Departure;5;0;42; Rp724.920 ;M.Sapriansyah, Mutia Rachmi dan Karmining;Berjadwal;(AAP-DTD);PKSNT; Rp714.920 
+3/21/2025 9:37:03;21 March 2025;Batik Air;Arrival;42;3018;27; Rp2.110.700 ;M.Sapriansyah, Mutia Rachmi, Karmining;Berjadwal;(CGK-AAP);ID 6672; Rp1.518.600 
+3/21/2025 9:47:08;21 March 2025;Super Air Jet;Arrival;179;1705;99; Rp1.518.600 ;M.Sapriansyah, Mutia Rachmi, karmining;Berjadwal;(SUB-AAP);IU640; Rp1.518.600 
+3/25/2025 9:53:06;25 March 2025;Smart Aviation;Departure;11;0;92; Rp747.920 ;Mahrus, Jaenal, Danti;Perintis;AAP-DTD;PK-SNT;
+3/25/2025 10:08:41;25 March 2025;Batik Air;Arrival;39;3212;25; Rp1.840.700 ;Mahrus, Jaenal, Danti;Berjadwal;CGK-AAP;ID6672;
+3/25/2025 10:11:20;25 March 2025;Batik Air;Departure;157;592;101; Rp1.840.700 ;Mahrus, Jaenal, Danti;Berjadwal;AAP-CGK;ID6673;
+3/25/2025 10:17:32;25 March 2025;Super Air Jet;Arrival;169;1445;94; Rp1.379.180 ;Mahrus, Jaenal, Danti;Berjadwal;SUB-AAP;IU640;
+3/25/2025 10:24:15;25 March 2025;Super Air Jet;Departure;186;21;103; Rp1.379.180 ;Mahrus, Jaenal, Danti;Berjadwal;AAP-YIA;IU659;
+3/25/2025 10:32:25;25 March 2025;Citilink;Arrival;109;1526;61;;Mahrus, Jaenal, Danti;Berjadwal;SUB-AAP;QG460;
+3/25/2025 11:44:11;25 March 2025;Citilink;Departure;186;492;103; Rp1.518.515 ;Mahrus, Jaenal, Danti;Berjadwal;AAP-SUB;QG461;
+3/25/2025 11:48:58;25 March 2025;Batik Air;Arrival;81;2708;52; Rp1.840.700 ;Mahrus, Jaenal, Danti;Berjadwal;CGK-AAP;ID6256;
+4/5/2025 14:40:08;5 April 2025;Wing air;Arrival;74;3;-; Rp-   ;Masdiansyah;Berjadwal;BEJ-AAP;IW1485;-
+4/5/2025 14:30:50;5 April 2025;Batik Air;Departure;154;339;-; Rp1.840.700 ;Masdiyansah;Berjadwal;AAP-CGK;ID6257; Rp1.393.180 
+4/11/2025 9:06:21;11/04/2025;Super Air Jet;Arrival;182;392;98;;MELLYARTI RAHMAN;Berjadwal;SUB-AAP;IU 640;
+4/11/2025 9:55:46;11/04/2025;Super Air Jet;Departure;177;4;96; Rp1.584.600 ;MELLYARTI RAHMAN;Berjadwal;AAP-YIA;IU 659; Rp1.584.600 
+4/11/2025 11:13:20;11/04/2025;Citilink;Departure;147;414;81; Rp1.518.515 ;MELLYARTI RAHMAN;Berjadwal;AAP-SUB;QG 461; Rp912.455 
+3/26/2025 8:36:58;26 March 2025;Super Air Jet;Arrival;109;903;61;-;MISNO;Berjadwal;SUB - AAP;IU640;-
+3/26/2025 11:27:27;26 March 2025;Smart Aviation;Arrival;12;0;100;;MISNO;Perintis;LPU-AAP;PK-SNV;
+3/26/2025 12:00:12;26 March 2025;Smart Aviation;Departure;5;0;33; Rp740.960 ;MISNO;Perintis;AAP-LPU;PK-SNV;
+3/23/2025 12:32:19;23 March 2025;Wing air;Arrival;66;7;92;;MUHAMMAD GHANI ISTIJAR;Perintis;KALIMARAU-AAP;IW1485;
+3/23/2025 12:40:54;23 March 2025;Batik Air;Arrival;130;3078;83;;MUHAMMAD GHANI ISTIJAR;Berjadwal;JAKARTA-AAP;ID6256;
+3/23/2025 12:44:23;23 March 2025;Super Air Jet;Arrival;181;974;101;;MUHAMMAD GHANI ISTIJAR;Berjadwal;SUB-AAP;IU642;
+3/23/2025 16:44:33;23 March 2025;Citilink;Departure;185;179;103; Rp1.799.345 ;MUHAMMAD GHANI ISTIJAR;Berjadwal;AAP-CGK;QG423; Rp1.216.515 
+4/2/2025 12:18:41;2 April 2025;;Departure;-;-;-;;Muhammad Naim;Tidak Berjadwal;-;-;
+3/31/2025 9:28:29;31 March 2025;Smart Aviation;Departure;10;0;83; Rp747.320 ;MUSA HERRY;Perintis;AAP-LPU;PK-SNT;
+3/31/2025 14:45:47;31 March 2025;Citilink;Arrival;96;1109;53; Rp1.799.345 ;PARMEN LEON;Berjadwal;CGK-AAP;PK GQS; Rp-   
+3/31/2025 16:21:54;31 March 2025;Smart Aviation;Departure;3;0;25; Rp521.160 ;PARMEN LEON;Perintis;AAP-MHU;PK SNT ; Rp-   
+4/5/2025 9:50:05;5 April 2025;Super Air Jet;Departure;182;4;99; Rp1.397.180 ;Rahmat Tjipto;tidak Berjadwal;AAP YIA;IU659; Rp1.046.180 
+4/5/2025 11:21:25;5 April 2025;Batik Air;Arrival;128;1266;81; Rp1.840.700 ;Rahmat Tjipto;Berjadwal;CGK AAP;ID 6256; Rp1.394.700 
+3/22/2025 9:53:54;22 March 2025;Super Air Jet;Departure;182;2;100; Rp1.584.500 ;RERE;Berjadwal;(AAP-YIA);IU659;-
+3/22/2025 10:30:00;22 March 2025;Smart Aviation;Departure;1;0;0; Rp-   ;RERE;Tidak Berjadwal;AAP - BPN;PK-SNT; Rp-   
+3/22/2025 9:47:47;22 March 2025;Citilink;Arrival;145;2581;80;;RERE EFFENDY G;Berjadwal;SUB-AAP;QG460;
+4/6/2025 11:58:26;06/04/2025;Citilink;Departure;184;156;99; Rp1.518.515 ;RIDUAN;Berjadwal;AAP-SUB;QG41;-
+3/25/2025 14:03:38;25 March 2025;Super Air Jet;Arrival;166;335;92;;Rindra, Danayu;Berjadwal;SUB-AAP;IU642;-
+3/25/2025 14:06:56;25 March 2025;Batik Air;Departure;159;0;99; Rp1.840.700 ;Rindra, Danayu;Berjadwal;AAP-CGK;ID6257;
+3/25/2025 14:11:49;25 March 2025;Wing air;Arrival;75;4;100;;Rindra, Danayu;Berjadwal;BEJ-AAP;IW1485;
+3/25/2025 14:14:17;25 March 2025;Wing air;Departure;76;46;100; Rp1.067.100 ;Rindra, Danayu;Berjadwal;AAP-BEJ;IW1484;
+3/25/2025 15:03:09;25 March 2025;Citilink;Arrival;134;2652;74;;Rindra, Danayu;Berjadwal;CGK-AAP;QG422;
+3/25/2025 15:09:36;25 March 2025;Super Air Jet;Departure;182;1495;101; Rp1.321.130 ;Rindra, Danayu;Berjadwal;AAP-SUB;IU643;
+3/25/2025 15:20:28;25 March 2025;Smart Aviation;Arrival;11;0;91;;Rindra, Danayu;Perintis;DTD-AAP;PKSNT;
+3/25/2025 15:25:38;25 March 2025;Smart Aviation;Departure;11;0;91; Rp740.000 ;Rindra, Danayu;Perintis;AAP-LPU;PKSNT; Rp740.000 
+3/25/2025 14:10:10;25 March 2025;Super Air Jet;Arrival;142;2799;78;;Rindra, Danayu;Berjadwal;YIA-AAP;IU658;
+3/25/2025 15:52:58;25 March 2025;Citilink;Departure;179;329;99; Rp1.799.345 ;Rindra, Danayu;Berjadwal;AAP-CGK;QG423; Rp1.216.565 
+3/25/2025 13:39:29;25 March 2025;Super Air Jet;Departure;183;241;101; Rp1.321.130 ;Rindra, Danayu;Berjadwal;AAP-SUB;IU641;
+3/25/2025 16:47:15;25 March 2025;Smart Aviation;Arrival;11;0;91;;Rindra, Danayu;Perintis;LPU-AAP;PK-SNT;
+3/25/2025 17:03:34;25 March 2025;Batik Air;Arrival;92;963;58;;Rindra, Danayu;Berjadwal;CGK-AAP;IU6676;
+3/25/2025 17:56:46;25 March 2025;Batik Air;Departure;156;963;100; Rp1.840.700 ;Rindra, Danayu;Berjadwal;AAP-CGK;IU6677;
+4/6/2025 14:58:31;06/04/2025;Wing air;Departure;77;3;100; Rp1.067.100 ;RIPALDI;Berjadwal;AAP-BEJ;IW1484;
+4/6/2025 15:01:19;06/04/2025;Super Air Jet;Arrival;185;15;99;;RIPALDI;Berjadwal;SUB-AAP;IU642;
+4/6/2025 15:07:18;06/04/2025;Batik Air;Arrival;157;140;99;;RIPALDI;Berjadwal;CGK-AAP;ID6256;
+4/6/2025 15:12:17;06/04/2025;Super Air Jet;Arrival;184;254;99;;RIPALDI;Berjadwal;YIA-AAP;IU658;
+4/6/2025 17:32:40;06/04/2025;Super Air Jet;Departure;183;0;100; Rp132.130 ;RIPALDI;Berjadwal;AAP-SUB;IU643; Rp875.100 
+4/6/2025 17:35:52;06/04/2025;Batik Air;Arrival;156;16;97;;RIPALDI;Berjadwal;CGK-AAP;ID6676;
+4/1/2025 14:18:05;1 April 2025;Batik Air;Departure;159;35;102; Rp1.840.700 ;RISMA AMANDA E;Berjadwal;AAP-CGK;ID 6257; Rp718.760 
+4/1/2025 14:20:55;1 April 2025;Batik Air;Arrival;159;2603;72; Rp1.840.700 ;RISMA AMANDA E;Berjadwal;CGK-AAP;ID 6256; Rp718.760 
+3/23/2025 8:41:53;23 March 2025;Super Air Jet;Arrival;160;2124;89; Rp1.518.600 ;RIZKY;Berjadwal;SUB-AAP;IU640; Rp792.000 
+3/23/2025 9:38:42;23 March 2025;Citilink;Arrival;113;2516;63; Rp-   ;RIZKY;Berjadwal;SUB-AAP;QG460; Rp1.518.600 
+4/7/2025 13:22:46;07/04/2025;Super Air Jet;Departure;180;1;98; Rp1.379.180 ;RIZKY;Berjadwal;AAP-YIA;IU 659;
+3/24/2025 13:58:26;24 March 2025;Wing air;Departure;74;10;100; Rp1.418.700 ;RORA / INDRA;Berjadwal;AAP-BEJ;IW1484; Rp1.234.400 
+3/24/2025 14:00:29;24 March 2025;Super Air Jet;Departure;183;69;100; Rp1.518.600 ;RORA / INDRA;Berjadwal;AAP-SUB;IU641; Rp1.518.600 
+3/24/2025 14:03:07;24 March 2025;Batik Air;Departure;162;44;100; Rp2.110.700 ;RORA / INDRA;Berjadwal;AAP-CGK;ID6257; Rp1.733.300 
+3/24/2025 14:11:26;24 March 2025;Super Air Jet;Arrival;170;2829;94;;RORA / INDRA;Berjadwal;YIA-AAP;IU658;
+3/24/2025 14:13:36;24 March 2025;Smart Aviation;Arrival;12;0;100;;RORA / INDRA;Perintis;DTD-AAP;PK-SNT;
+3/24/2025 16:09:33;24 March 2025;Smart Aviation;Departure;12;0;92; Rp525.560 ;RORA / INDRA;Perintis;AAP-WALW;PK-SNT; Rp525.560 
+3/24/2025 16:11:32;24 March 2025;Smart Aviation;Arrival;12;0;12; Rp515.560 ;RORA / INDRA;Perintis;WALW - AAP;PK-SNT; Rp515.560 
+3/24/2025 16:12:49;24 March 2025;Citilink;Arrival;140;3083;76;;RORA / INDRA;Berjadwal;CGK - AAP;QG422;
+3/24/2025 16:14:05;24 March 2025;Citilink;Departure;179;287;99; Rp1.799.345 ;RORA / INDRA;Berjadwal;AAP - CGK;QG423; Rp1.216.515 
+3/24/2025 18:21:39;24 March 2025;Batik Air;Arrival;100;2866;63;;RORA / INDRA;Berjadwal;CGK - AAP;ID6676;
+3/24/2025 18:52:41;24 March 2025;Batik Air;Departure;156;0;99; Rp2.110.700 ;RORA / INDRA;Berjadwal;AAP-CGK;ID6677; Rp1.733.300 
+3/24/2025 14:45:29;24 March 2025;Super Air Jet;Departure;183;0;101; Rp1.518.600 ;RORA / INDRA;Berjadwal;AAP-SUB;IU643; Rp1.518.600 
+3/22/2025 9:43:51;22 March 2025;Super Air Jet;Arrival;181;1883;100;;Rudi;Berjadwal;SUB-AAP;IU640;
+3/26/2025 10:41:08;26 March 2025;Citilink;Arrival;95;1415;52;;RUSTAM HANAFI;Berjadwal;SUB-AAP;QG460;
+3/26/2025 10:43:24;26 March 2025;Batik Air;Departure;157;731;100; Rp1.840.700 ;RUSTAM HANAFI;Berjadwal;CGK-AAP;ID6673;
+3/26/2025 10:45:32;26 March 2025;Super Air Jet;Departure;187;12;100; Rp1.379.180 ;RUSTAM HANAFI;Berjadwal;AAP-SBY;IU659;
+3/23/2025 10:21:08;23 March 2025;Super Air Jet;Departure;191;10;98; Rp1.608.354 ;SASONGKO;Berjadwal;AAP-YIA;191; Rp1.584.500 
+3/23/2025 11:10:20;23 March 2025;Citilink;Departure;84;348;47; Rp2.544.885 ;SASONGKO;Berjadwal;AAP-SUB;QG460; Rp1.518.600 
+4/7/2025 12:39:02;07/04/2025;Smart Aviation;Departure;0;0;0;-;SIGIT;Tidak Berjadwal;BPN-AAP;-;-
+4/8/2025 9:58:15;08/04/2025;Citilink;Arrival;185;2733;100;-;siti kholifa;Berjadwal;SUB-AAP;QG460;-
+4/8/2025 8:27:49;08/04/2025;Smart Aviation;Departure;10;0;83; Rp718.760 ;Siti Kholifah;Perintis;AAP-DTD;PK-SNT; Rp-   
+4/8/2025 11:36:59;08/04/2025;Smart Aviation;Arrival;12;0;100;;siti kholifah;Perintis;DTD-AAP;PK SNT;
+4/11/2025 8:32:25;11/04/2025;Smart Aviation;Departure;12;0;100; Rp704.330 ;Sri Lanjari;Perintis;AAP-RTU;PK-SNT; Rp704.330 
+4/11/2025 9:07:26;11/04/2025;Citilink;Arrival;181;2356;100;;SRI LANJARI;Berjadwal;SUB-AAP;QG 460;
+4/11/2025 10:29:12;11/04/2025;Smart Aviation;Arrival;11;0;91;;SRI LANJARI;Perintis;RTU-AAP;PK-SNT;
+4/11/2025 12:01:41;11/04/2025;Smart Aviation;Arrival;13;0;100; Rp740.960 ;SRI LANJARI;Perintis;LPU-AAP;PK-SNV; Rp740.960 
+4/9/2025 11:40:49;09/04/2025;Batik Air;Arrival;152;2938;97; Rp2.110.700 ;Supian Nor;Berjadwal;CGK-AAP;ID6672; Rp1.751.500 
+4/5/2025 14:32:54;5 April 2025;Super Air Jet;Departure;182;105;-; Rp1.321.200 ;Sur Safi'i;Berjadwal;AAP-SUB;IU641; Rp875.000 
+4/5/2025 17:33:04;5 April 2025;Batik Air;Departure;158;1537;0; Rp1.799.345 ;SUR SAFI'I;Berjadwal;AAP-CGK;ID6677; Rp1.216.565 
+4/8/2025 15:39:56;08/04/2025;Super Air Jet;Departure;176;0;98; Rp1.321.200 ;Triono ,Palung;Berjadwal;AAP-SUB;IU643; Rp-   
+4/8/2025 13:42:33;08/04/2025;Super Air Jet;Arrival;186;2931;100; Rp-   ;Triono, Palung;Berjadwal;YIA-AAP;IU658; Rp-   
+4/8/2025 13:45:44;08/04/2025;Super Air Jet;Arrival;181;83;100; Rp-   ;Triono, Palung;Tidak Berjadwal;SUB-AAP;IU642; Rp-   
+4/8/2025 13:50:21;08/04/2025;Smart Aviation;Departure;9;0;75; Rp747.320 ;Triono, Palung;Perintis;AAP-LPU;PK-SNT; Rp-   
+4/8/2025 14:54:12;08/04/2025;Wing air;Departure;74;18;100; Rp1.418.700 ;Triono, Palung;Berjadwal;AAP-BEJ;IW1484; Rp1.234.400 
+4/8/2025 15:01:20;08/04/2025;Wing air;Arrival;73;11;100; Rp-   ;Triono, Palung;Berjadwal;BEJ-AAP;IW1485; Rp-   
+4/8/2025 15:23:52;08/04/2025;Super Air Jet;Departure;182;54;99; Rp1.321.200 ;Triono, Palung;Tidak Berjadwal;AAP-SUB;IU641; Rp-   
+4/8/2025 16:26:03;08/04/2025;Citilink;Arrival;180;1787;99; Rp-   ;Triono, Palung;Berjadwal;CGK-AAP;QG422; Rp-   
+4/8/2025 17:01:49;08/04/2025;Citilink;Departure;184;181;99; Rp1.799.345 ;Triono, Palung;Berjadwal;AAP-CGK;QG423; Rp-   
+4/8/2025 17:08:17;08/04/2025;Super Air Jet;Arrival;181;0;99; Rp-   ;Triono, Palung;Tidak Berjadwal;SUB-AAP;IU2642; Rp-   
+4/8/2025 17:37:58;08/04/2025;Smart Aviation;Arrival;11;0;83; Rp-   ;Triono, Palung;Tidak Berjadwal;LPU-AAP;PK-SNT; Rp-   
+4/8/2025 18:46:31;08/04/2025;Batik Air;Arrival;154;583;99; Rp-   ;Triono, Palung;Berjadwal;CGK-AAP;ID6676; Rp-   
+4/8/2025 18:48:01;08/04/2025;Batik Air;Departure;154;69;97; Rp-   ;Triono, Palung;Berjadwal;AAP-CGK;ID6677; Rp-   
+3/24/2025 8:12:13;24 March 2025;Smart Aviation;Departure;11;0;83; Rp747.320 ;UJANG;Perintis;AAP-LPU;PKSNT; Rp747.320 
+3/24/2025 9:28:23;24 March 2025;Citilink;Arrival;128;1931;70; Rp1.518.515 ;UJANG;Berjadwal;CGK-AAP;QG460; Rp792.000 
+3/24/2025 9:59:24;24 March 2025;Smart Aviation;Arrival;12;0;100; Rp714.920 ;UJANG;Perintis;DTD-AAP;PK-SNT; Rp714.920 
+3/24/2025 11:03:53;24 March 2025;Citilink;Departure;185;150;99; Rp1.518.515 ;UJANG;Berjadwal;AAP-SUB;QG461; Rp792.000 
+4/1/2025 15:45:19;1 April 2025;Super Air Jet;Arrival;67;2818;37; Rp1.840.700 ;VERNALDY;Berjadwal;SUB-AAP;IU 658; Rp718.000 
+4/1/2025 15:48:12;1 April 2025;Super Air Jet;Departure;187;-;99; Rp1.840.700 ;VERNALDY;Berjadwal;AAP-SUB;IU 643; Rp718.000 
+3/30/2025 14:35:36;30 March 2025;Batik Air;Arrival;74;1320;96; Rp1.840.700 ;WAHYU;Berjadwal;CGK-AAP;ID6256; Rp-   
+3/30/2025 14:45:43;30 March 2025;Super Air Jet;Arrival;59;36;31; Rp1.321.130 ;WAHYU;Berjadwal;SUB-AAP;IU658; Rp-   
+3/30/2025 14:51:23;30 March 2025;Super Air Jet;Departure;182;42;99; Rp1.321.130 ;WAHYU;Berjadwal;AAP-SUB;IU641; Rp-   
+3/30/2025 15:55:13;30 March 2025;Citilink;Departure;185;1608;100; Rp1.799.345 ;WAHYU;Berjadwal;AAP-CGK;QG423; Rp-   
+4/1/2025 10:48:47;1 April 2025;Super Air Jet;Arrival;170;35;92; Rp1.321.130 ;Winda;Berjadwal;SUB-AAP;IU640; Rp1.321.300 
+3/27/2025 8:33:22;27 March 2025;Batik Air;Arrival;70;2965;44; Rp2.110.700 ;YENI;Berjadwal;CGK - AAP;ID - 6672; Rp1.733.300 
+3/27/2025 9:15:45;27 March 2025;Batik Air;Departure;156;644;98; Rp2.110.700 ;YENY;Berjadwal;AAP-CGK;ID6673; Rp1.733.300 
+3/27/2025 11:08:42;27 March 2025;Citilink;Departure;185;207;100; Rp1.518.515 ;yeny;Berjadwal;AAP-SUB;QG461; Rp1.518.515 
+3/27/2025 12:17:17;27 March 2025;Super Air Jet;Arrival;162;417;88; Rp1.518.600 ;YENY;Berjadwal;SUB - AAP;IU642; Rp1.518.600 
+3/26/2025 14:25:49;26 March 2025;Batik Air;Arrival;103;2983;64%; Rp1.840.700 ;Yogik;Berjadwal;CGK-AAP;ID-6256;-
+3/26/2025 14:38:22;26 March 2025;Smart Aviation;Arrival;0;0;0; Rp-   ;YOGIK;Berjadwal;BPN-AAP;C208B;-
+3/26/2025 15:25:22;26 March 2025;Smart Aviation;Departure;9;0;67; Rp747.320 ;YOGIK;Berjadwal;AAP-RTU;PK-SNT;-
+3/26/2025 16:02:10;26 March 2025;Smart Aviation;Departure;0;0;0; Rp-   ;YOGIK;Berjadwal;AAP-BPN;PK-SNT; Rp-   
+3/26/2025 16:24:53;26 March 2025;Batik Air;Arrival;92;2114;58; Rp1.840.700 ;YOGIK;Berjadwal;CGK-AAP;ID6676;-
+3/26/2025 17:26:28;26 March 2025;Smart Aviation;Arrival;11;0;83; Rp700.360 ;YOGIK;Berjadwal;RTU-AAP;PK-SNT;-
+3/26/2025 17:34:04;26 March 2025;Batik Air;Departure;157;0;99; Rp1.840.700 ;YOGIK;Berjadwal;AAP-CGK;ID6257;-
+3/26/2025 18:00:48;26 March 2025;Batik Air;Departure;157;163;100; Rp1.840.700 ;YOGIK;Berjadwal;AAP-CGK;ID6677;-
+4/10/2025 11:33:49;10/04/2025;Smart Aviation;Departure;9;59;0; Rp710.360 ;Yudhy Prasetiyo, Gunawan, Zakiah;Perintis;AAP-RTU;PK-SNT;-
+4/10/2025 11:38:44;10/04/2025;Batik Air;Departure;128;654;82; Rp1.450.300 ;Yudhy Prasetiyo, Gunawan, Zakiah;Berjadwal;AAP-CGK;ID6672; Rp1.360.000 
+4/10/2025 11:45:20;10/04/2025;Super Air Jet;Departure;164;4;91; Rp1.400.000 ;Yudhy Prasetiyo, Gunawan, Zakiah;Berjadwal;AAP- YIA;IU640; Rp1.360.000 
+4/10/2025 11:49:58;10/04/2025;Citilink;Departure;175;232;97; Rp1.600.000 ;Yudhy Prasetiyo, Gunawan, Zakiah;Berjadwal;AAP-SUB;QG460; Rp1.355.000 
+4/10/2025 11:56:00;10/04/2025;Batik Air;Arrival;153;2994;98; Rp1.450.300 ;Yudhy Prasetiyo, Gunawan, Zakiah;Berjadwal;CGK-AAP;ID6672; Rp1.350.900 
+4/10/2025 12:02:41;10/04/2025;Super Air Jet;Arrival;183;1782;102; Rp1.400.000 ;Yudhy Prasetiyo, Gunawan, Zakiah;Berjadwal;SUB-AAP;IU640; Rp1.360.000 
+4/10/2025 12:07:05;10/04/2025;Citilink;Arrival;180;2330;100; Rp1.600.000 ;Yudhy Prasetiyo, Gunawan, Zakiah;Berjadwal;SUB-AAP;QG460; Rp1.355.000 
+3/26/2025 8:31:07;26 March 2025;Batik Air;Arrival;61;2944;38;-;Yusuanike;Berjadwal;CGK - AAP;ID6672;-
+3/26/2025 12:03:42;26 March 2025;Wing air;Arrival;68;1;93;;YUSUANIKE;Berjadwal;BEJ-AAP;WON1485;
+3/26/2025 11:23:21;26 March 2025;Citilink;Departure;183;182;100; Rp1.518.515 ;YUSUANIKE NURSANDI;Berjadwal;AAP-SUB;QG461;-
+3/27/2025 8:28:49;27 March 2025;Smart Aviation;Departure;10;0;75; Rp710.360 ;ZALFA;Perintis;AAP-RTU;PK-SNT; Rp710.360 
+3/27/2025 9:12:07;27 March 2025;Citilink;Arrival;70;3022;38; Rp1.518.515 ;ZALFA;Berjadwal;SUB-AAP;QG460; Rp1.518.515 
+3/27/2025 10:39:01;27 March 2025;Smart Aviation;Arrival;7;0;58; Rp700.360 ;ZALFA;Perintis;RTU - AAP;PKSNT; Rp700.360 
+3/27/2025 12:16:41;27 March 2025;Smart Aviation;Departure;4;0;33; Rp724.920 ;ZALFA;Perintis;AAP - DTD;PK-SNT; Rp724.920 
+3/22/2025 9:47:00;22 March 2025;Smart Aviation;Arrival;12;0;0;;;Perintis;LPU-AAP;PK-SNV;
+3/22/2025 9:47:00;22 March 2025;Citilink;Departure;184;423;178;;;Berjadwal;AAP-SUB;;

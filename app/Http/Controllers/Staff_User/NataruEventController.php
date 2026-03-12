@@ -36,18 +36,22 @@ class NataruEventController extends Controller
             'name' => 'required|string|max:255',
             'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
+            'peak_date' => 'nullable|date|after_or_equal:start_date|before_or_equal:end_date',
             'description' => 'nullable|string',
             'compare_event_id' => 'nullable|exists:nataru_events,id', // Validasi baru
         ], [
             'name.required' => 'Nama event wajib diisi.',
             'start_date.required' => 'Tanggal mulai wajib diisi.',
             'end_date.after_or_equal' => 'Tanggal selesai tidak boleh sebelum tanggal mulai.',
+            'peak_date.after_or_equal' => 'Hari H tidak boleh sebelum tanggal mulai.',
+            'peak_date.before_or_equal' => 'Hari H tidak boleh sesudah tanggal selesai.',
         ]);
 
         NataruEvent::create([
             'name' => $validated['name'],
             'start_date' => $validated['start_date'],
             'end_date' => $validated['end_date'],
+            'peak_date' => $validated['peak_date'] ?? null,
             'description' => $validated['description'],
             'compare_event_id' => $validated['compare_event_id'], // Simpan pembanding
             'is_active' => true, 
@@ -117,12 +121,21 @@ class NataruEventController extends Controller
             'name' => 'required|string|max:255',
             'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
+            'peak_date' => 'nullable|date|after_or_equal:start_date|before_or_equal:end_date',
             'description' => 'nullable|string',
             'is_active' => 'boolean',
             'compare_event_id' => 'nullable|exists:nataru_events,id|not_in:'.$nataruEvent->id, 
         ]);
 
-        $nataruEvent->update($validated);
+        $nataruEvent->update([
+            'name' => $validated['name'],
+            'start_date' => $validated['start_date'],
+            'end_date' => $validated['end_date'],
+            'peak_date' => $validated['peak_date'] ?? null,
+            'description' => $validated['description'],
+            'is_active' => $validated['is_active'] ?? $nataruEvent->is_active,
+            'compare_event_id' => $validated['compare_event_id'],
+        ]);
 
         return redirect()->route('staff.nataru-events.index')->with('success', 'Event berhasil diperbarui.');
     }
@@ -312,11 +325,16 @@ class NataruEventController extends Controller
         ];
 
         // --- 2. SETUP DATA HARIAN (TABLE & CHARTS) ---
-        // Logika alignment H-x (Copy dari logic getTvChartData)
+        // Logika alignment H-x dengan Peak Date dinamis
         $start1 = Carbon::parse($nataruEvent->start_date)->startOfDay();
         $end1   = Carbon::parse($nataruEvent->end_date)->startOfDay();
-        $offset1 = ceil($start1->diffInDays($end1) / 2); 
-        $refDate1 = $start1->copy()->addDays($offset1);
+        
+        if ($nataruEvent->peak_date) {
+            $refDate1 = Carbon::parse($nataruEvent->peak_date)->startOfDay();
+        } else {
+            $offset1 = ceil($start1->diffInDays($end1) / 2); 
+            $refDate1 = $start1->copy()->addDays($offset1);
+        }
 
         // Tentukan range H- yang akan ditampilkan
         $startIndex = $start1->diffInDays($refDate1) * -1;
@@ -356,8 +374,12 @@ class NataruEventController extends Controller
             
             $start2 = Carbon::parse($nataruEvent->compareEvent->start_date)->startOfDay();
             $end2   = Carbon::parse($nataruEvent->compareEvent->end_date)->startOfDay();
-            $offset2 = ceil($start2->diffInDays($end2) / 2);
-            $refDate2 = $start2->copy()->addDays($offset2);
+            
+            if ($nataruEvent->compareEvent->peak_date) {
+                $refDate2 = Carbon::parse($nataruEvent->compareEvent->peak_date)->startOfDay();
+            } else {
+                $refDate2 = $start2->copy()->addDays(ceil($start2->diffInDays($end2) / 2));
+            }
         }
 
         for ($i = $startIndex; $i <= $endIndex; $i++) {

@@ -156,32 +156,31 @@ class PublicNataruController extends Controller
         if ($nataruEvent->compare_event_id) {
             $event2 = $nataruEvent->compareEvent;
         
-        // --- UBAH BAGIAN INI (Hapus logika titik tengah lama) ---
-        
-        // OLD (Hapus/Komentari):
-        // $start1 = Carbon::parse($nataruEvent->start_date)->startOfDay();
-        // $end1   = Carbon::parse($nataruEvent->end_date)->startOfDay();
-        // $refDate1 = $start1->copy()->addDays(ceil($start1->diffInDays($end1) / 2)); 
+        // --- MENGGUNAKAN PEAK DATE DINAMIS ---
+        if ($nataruEvent->peak_date) {
+            $refDate1 = Carbon::parse($nataruEvent->peak_date)->startOfDay();
+        } else {
+            // Fallback ke titik tengah event jika tidak di-set
+            $start1 = Carbon::parse($nataruEvent->start_date)->startOfDay();
+            $end1   = Carbon::parse($nataruEvent->end_date)->startOfDay();
+            $refDate1 = $start1->copy()->addDays(ceil($start1->diffInDays($end1) / 2)); 
+        }
 
-        // NEW (Set H-0 ke 25 Desember 2025):
-        $refDate1 = Carbon::create(2025, 12, 25)->startOfDay(); 
-
-        // -------------------------------------------------------
-
-        // Untuk Event Pembanding (Event 2), kita asumsikan H-0 nya adalah
-        // tanggal 25 Desember pada tahun event tersebut berjalan.
-        // Kita ambil tahunnya dari start_date event pembanding.
-        $yearEvent2 = Carbon::parse($event2->start_date)->year;
-        $refDate2 = Carbon::create($yearEvent2, 12, 25)->startOfDay();
+        $refDate2 = null;
+        if ($event2) {
+            if ($event2->peak_date) {
+                $refDate2 = Carbon::parse($event2->peak_date)->startOfDay();
+            } else {
+                // Fallback ke titik tengah event pembanding
+                $start2 = Carbon::parse($event2->start_date)->startOfDay();
+                $end2   = Carbon::parse($event2->end_date)->startOfDay();
+                $refDate2 = $start2->copy()->addDays(ceil($start2->diffInDays($end2) / 2)); 
+            }
+        }
 
         // Cari H-berapa hari ini?
-        // ... (Kode selanjutnya sama, tidak perlu diubah) ...
-        $diffDays = $today->diffInDays($refDate1);
-        if ($today->lessThan($refDate1)) {
-            $hIndex = $diffDays * -1;
-        } else {
-            $hIndex = $diffDays;
-        }
+        $diffDays = $today->diffInDays($refDate1, false) * -1; // -1 karena jika today sebelum ref, kita ingin H- (negatif)
+        $hIndex = $diffDays;
 
             // Tentukan Tanggal Pembanding yang "H-indeks"-nya sama
             $compDate = $refDate2->copy()->addDays($hIndex);
@@ -257,32 +256,26 @@ class PublicNataruController extends Controller
         $start1 = Carbon::parse($event1->start_date)->startOfDay();
         $end1   = Carbon::parse($event1->end_date)->startOfDay();
         
-        $refDate1 = Carbon::create(2025, 12, 25)->startOfDay();
-        
+        if ($event1->peak_date) {
+            $refDate1 = Carbon::parse($event1->peak_date)->startOfDay();
+        } else {
+            $refDate1 = $start1->copy()->addDays(ceil($start1->diffInDays($end1) / 2)); 
+        }
 
-        // 4. Hitung H-0 (Ref Date) Dinamis untuk Event 2 (Agar perbandingan Apple-to-Apple)
-        // Kita lakukan hal yang sama untuk event pembanding agar titik tengahnya ketemu titik tengah event utama.
-        $start2 = Carbon::parse($event2->start_date)->startOfDay();
-        $end2   = Carbon::parse($event2->end_date)->startOfDay();
-        $diff2  = $start2->diffInDays($end2);
-        $offset2 = ceil($diff2 / 2);
-        
-        $refDate2 = Carbon::create($start2->year, 12, 25)->startOfDay();
-
+        // 4. Hitung H-0 (Ref Date) Dinamis untuk Event 2
+        if ($event2->peak_date) {
+            $refDate2 = Carbon::parse($event2->peak_date)->startOfDay();
+        } else {
+            $start2 = Carbon::parse($event2->start_date)->startOfDay();
+            $end2   = Carbon::parse($event2->end_date)->startOfDay();
+            $refDate2 = $start2->copy()->addDays(ceil($start2->diffInDays($end2) / 2)); 
+        }
 
         // 5. Tentukan Range Loop (Start Index s/d End Index)
-        // Kita hitung berdasarkan Event 1
-        // Gunakan false pada diffInDays untuk mendapatkan nilai positif/negatif
-        // Logic default carbon: date->diffInDays(now, false). Jika date di masa lalu = negatif.
-        // Kita ingin: RefDate - Date.
-        // Jika Date < Ref, hasil harus negatif (H-).
-        
-        // Rumus manual agar aman:
-        // Index = Date - RefDate
         $startIndex = $start1->diffInDays($refDate1) * -1; // Karena start pasti sebelum ref, kita kalikan -1
-        $endIndex   = $end1->diffInDays($refDate1); // Ini akan positif jika end setelah ref. (Note: diffInDays return absolute, kita perlu cek manual)
+        $endIndex   = $end1->diffInDays($refDate1); 
         
-        // Pastikan end index positif (karena end date > ref date)
+        // Pastikan end index positif jika end date > ref date
         if ($end1->lessThan($refDate1)) {
             $endIndex = $endIndex * -1;
         }

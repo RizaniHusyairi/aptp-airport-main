@@ -626,25 +626,21 @@
                         <span class="badge bg-success bg-opacity-10 text-success p-2 px-3" style="font-size: 0.75rem;">
                             <i class="bi bi-calendar-check me-1"></i>
                             @php
-                                // 1. Tentukan Tanggal Referensi (Hari H) secara Manual
-                                // Format YYYY-MM-DD
-                                $refDate = \Carbon\Carbon::create(2025, 12, 25)->startOfDay();
+                                // 1. Tentukan Tanggal Referensi (Hari H) 
+                                if ($nataruEvent->peak_date) {
+                                    $refDate = \Carbon\Carbon::parse($nataruEvent->peak_date)->startOfDay();
+                                } else {
+                                    $start = \Carbon\Carbon::parse($nataruEvent->start_date)->startOfDay();
+                                    $end   = \Carbon\Carbon::parse($nataruEvent->end_date)->startOfDay();
+                                    $offset = ceil($start->diffInDays($end) / 2);
+                                    $refDate = $start->copy()->addDays($offset);
+                                }
 
                                 // 2. Hitung Selisih Hari Ini dengan H-0
                                 $today = \Carbon\Carbon::now()->startOfDay();
 
                                 // Logika Perhitungan Selisih:
-                                // diffInDays(target, false):
-                                // - Jika $today < $refDate (Sebelum Natal), hasilnya negatif (contoh: -7).
-                                // - Jika $today > $refDate (Setelah Natal), hasilnya positif (contoh: +3).
-                                // Note: Parameter 'false' di fungsi diffInDays penting agar hasil +/- muncul otomatis.
-                                
-                                $diff = $today->diffInDays($refDate, false);
-                                
-                                // Namun, logika Carbon terbalik: (Target - Source).
-                                // Jika Target (25 Des) > Source (18 Des), hasilnya +7.
-                                // Kita ingin H-7. Maka hasilnya perlu dikali -1.
-                                $diff = $diff * -1;
+                                $diff = $today->diffInDays($refDate, false) * -1;
 
                                 // 3. Tentukan Label
                                 $label = "";
@@ -1003,77 +999,7 @@
                         },
                         yaxis: { labels: { style: { colors: '#6c757d', fontSize: '10px' } } },
 
-                        annotations: {
-                            position: 'back',
-                            xaxis: [
-                                // 1. PERIODE ARUS MUDIK (H-7 s.d H-1)
-                                {
-                                    x: globalChartData.categories.indexOf("H-7")-50, 
-                                    x2: globalChartData.categories.indexOf("H-1") + 425,
-                                    fillColor: '#00E396', // Warna Hijau Muda
-                                    opacity: .1, // Transparansi (biar grafik tetap kelihatan)
-                                    label: {
-                                        borderColor: '#00E396',
-                                        style: {
-                                            fontSize: '10px',
-                                            color: '#fff',
-                                            background: '#00E396',
-                                        },
-                                         // Geser label ke atas
-                                        
-                                        text: 'ARUS MUDIK',
-                                        position: 'top', // Posisi di Atas
-                                        orientation: 'horizontal', // Teks Mendatar
-                                        offsetY: 0, // Tempel di paling atas
-                                        offsetX: 265 // Geser sedikit ke kanan agar tidak nempel garis start
-                                    }
-                                },
-
-                                // 2. PERIODE NATAL & TAHUN BARU (H s.d H+6)
-                                {
-                                    x: globalChartData.categories.indexOf("H")+470, 
-                                    x2: globalChartData.categories.indexOf("H+6") + 905,
-                                    fillColor: '#FEB019', // Warna Kuning/Emas
-                                    opacity: .1,
-                                    label: {
-                                        borderColor: '#FEB019',
-                                        style: {
-                                            fontSize: '10px',
-                                            color: '#fff',
-                                            background: '#FEB019',
-                                        },
-                                        offsetY: -10,
-                                        text: 'NATAL & TAHUN BARU',
-                                        position: 'top', // Posisi di Atas
-                                        orientation: 'horizontal', // Teks Mendatar
-                                        offsetY: 0, // Tempel di paling atas
-                                        offsetX: 227 // Geser sedikit ke kanan agar tidak nempel garis start
-                                    }
-                                },
-
-                                // 3. PERIODE ARUS BALIK (H+7 s.d Selesai)
-                                // Catatan: x2 dikosongkan atau diisi H terakhir agar sampai ujung
-                                {
-                                    x: globalChartData.categories.indexOf("H+7")+950, 
-                                    x2: globalChartData.categories.indexOf("H+11") + 2185,
-                                    fillColor: '#FF4560', // Warna Merah
-                                    opacity: 0.1,
-                                    label: {
-                                        borderColor: '#FF4560',
-                                        style: {
-                                            fontSize: '10px',
-                                            color: '#fff',
-                                            background: '#FF4560',
-                                        },
-                                        text: 'ARUS BALIK', // (Ganti jadi ARUS MUDIK jika memang itu yang diinginkan)
-                                        position: 'top', // Posisi di Atas
-                                        orientation: 'horizontal', // Teks Mendatar
-                                        offsetY: 0, // Tempel di paling atas
-                                        offsetX: 150 // Geser sedikit ke kanan agar tidak nempel garis start
-                                    }
-                                }
-                            ]
-                        },
+                        
                         grid: {
                             borderColor: '#eef2f7',
                             strokeDashArray: 5,

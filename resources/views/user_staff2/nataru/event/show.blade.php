@@ -251,7 +251,7 @@
                     <tbody>
                         @foreach($nataruEvent->flights as $flight)
                         <tr>
-                            <td>{{ $flight->flight_date->format('d/m/Y') }}</td>
+                            <td data-sort="{{ $flight->flight_date->format('Y-m-d') }}">{{ $flight->flight_date->format('d/m/Y') }}</td>
                             <td>{{ \Carbon\Carbon::parse($flight->flight_time)->format('H:i') }}</td>
                             <td>
                                 <strong>{{ $flight->airline }}</strong><br>

@@ -46,7 +46,18 @@
                         <label class="form-label">Tanggal Selesai</label>
                         <input type="date" name="end_date" class="form-control" value="{{ $nataruEvent->end_date->format('Y-m-d') }}" required>
                     </div>
-                    <div class="col-12 mb-3">
+
+                    {{-- KONFIGURASI HARI H (PUNCAK ARUS) --}}
+                    <div class="col-12 mt-2 border-top pt-3">
+                        <h6 class="text-muted"><i class="bi bi-calendar-event"></i> Konfigurasi Hari Puncak & Range Grafik TV</h6>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Tanggal Hari H (Puncak)</label>
+                        <input type="date" name="peak_date" class="form-control" value="{{ $nataruEvent->peak_date ? $nataruEvent->peak_date->format('Y-m-d') : '' }}">
+                        <small class="text-muted text-xs">Sistem akan menyesuaikan grafik dari <b>Tanggal Mulai</b> hingga <b>Tanggal Selesai</b> dengan titik nol pada Hari H.</small>
+                    </div>
+
+                    <div class="col-12 mb-3 mt-2 border-top pt-3">
                         <label class="form-label">Deskripsi</label>
                         <textarea name="description" class="form-control" rows="3">{{ $nataruEvent->description }}</textarea>
                     </div>

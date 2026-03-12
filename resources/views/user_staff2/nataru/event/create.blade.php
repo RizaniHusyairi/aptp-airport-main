@@ -51,7 +51,18 @@
                         <label class="form-label">Tanggal Selesai <span class="text-danger">*</span></label>
                         <input type="date" name="end_date" class="form-control" required>
                     </div>
-                    <div class="col-12 mb-3">
+
+                    {{-- KONFIGURASI HARI H (PUNCAK ARUS) --}}
+                    <div class="col-12 mt-2 border-top pt-3">
+                        <h6 class="text-muted"><i class="bi bi-calendar-event"></i> Konfigurasi Hari Puncak & Range Grafik TV</h6>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Tanggal Hari H (Puncak) <span class="text-danger">*</span></label>
+                        <input type="date" name="peak_date" class="form-control" required>
+                        <small class="text-muted text-xs">Sistem akan menyesuaikan grafik dari <b>Tanggal Mulai</b> hingga <b>Tanggal Selesai</b> dengan titik nol pada Hari H.</small>
+                    </div>
+
+                    <div class="col-12 mb-3 mt-2 border-top pt-3">
                         <label class="form-label">Deskripsi (Opsional)</label>
                         <textarea name="description" class="form-control" rows="3"></textarea>
                     </div>
