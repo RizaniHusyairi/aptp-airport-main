@@ -115,9 +115,11 @@
                                                         <span class="badge {{ $badgeClass }}">{{ ucfirst($status) }}</span>
                                                         </td>
                                                         <td>
-                                                        @foreach ($tenant->users as $user)
-                                                            <span class="badge bg-secondary">{{ $user->name }}</span>
-                                                        @endforeach
+                                                        @if ($tenant->user)
+                                                            <span class="badge bg-secondary">{{ $tenant->user->name }}</span>
+                                                        @else
+                                                            <span>-</span>
+                                                        @endif
                                                         </td>
                                                         <td>
                                                         <div class="row g-1">
