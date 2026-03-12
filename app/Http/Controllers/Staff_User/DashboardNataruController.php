@@ -19,13 +19,10 @@ class DashboardNataruController extends Controller
         return view('user_staff2.nataru.dashboard.index', compact('events'));
     }
 
-    /**
-     * API untuk mengambil data perbandingan 2 event.
-     */
     public function getComparisonData(Request $request)
     {
-        $eventId1 = $request->event_id_1; // Event Utama (misal 2024)
-        $eventId2 = $request->event_id_2; // Event Pembanding (misal 2023)
+        $eventId1 = $request->event_id_1; // Event Utama
+        $eventId2 = $request->event_id_2; // Event Pembanding
 
         if (!$eventId1 || !$eventId2) {
             return response()->json(['error' => 'Pilih dua event untuk dibandingkan'], 400);
@@ -34,13 +31,31 @@ class DashboardNataruController extends Controller
         $event1 = NataruEvent::find($eventId1);
         $event2 = NataruEvent::find($eventId2);
 
-        // Helper function untuk mengambil data H-x s/d H+x
-        $data1 = $this->getEventDailyStats($event1);
-        $data2 = $this->getEventDailyStats($event2);
+        // Reference Dates
+        $refDate1 = $this->determineReferenceDate($event1);
+        $refDate2 = $this->determineReferenceDate($event2);
+        
+        // Start Dates to determine range
+        $start1 = Carbon::parse($event1->start_date)->startOfDay();
+        $end1   = Carbon::parse($event1->end_date)->startOfDay();
+        
+        $startIndex = $start1->diffInDays($refDate1) * -1;
+        $endIndex   = $end1->diffInDays($refDate1);
+        if ($end1->lessThan($refDate1)) {
+            $endIndex = $endIndex * -1;
+        }
 
-        // Kita gabungkan datanya berdasarkan index "H-x"
-        // List standar H-10 sampai H+10 (atau dinamis sesuai range event)
-        $labels = $this->generateHLabels(); 
+        // Generate Labels
+        $labels = [];
+        for ($i = $startIndex; $i <= $endIndex; $i++) {
+            if ($i == 0) $labels[] = "H";
+            elseif ($i < 0) $labels[] = "H" . $i;
+            else $labels[] = "H+" . $i;
+        }
+
+        // Fetch Data
+        $data1 = $this->getEventDailyStats($event1, $refDate1);
+        $data2 = $this->getEventDailyStats($event2, $refDate2);
 
         return response()->json([
             'event1_name' => $event1->name,
@@ -54,11 +69,10 @@ class DashboardNataruController extends Controller
     /**
      * Mengambil statistik harian event dan mengelompokkannya ke H-index
      */
-    private function getEventDailyStats($event)
+    private function getEventDailyStats($event, $referenceDate)
     {
         if (!$event) return [];
 
-        // Ambil data penerbangan, group by tanggal
         $stats = NataruFlight::where('nataru_event_id', $event->id)
             ->select(
                 'flight_date',
@@ -68,25 +82,16 @@ class DashboardNataruController extends Controller
             )
             ->groupBy('flight_date')
             ->get();
-
-
         
         $formattedData = [];
-        $targetDate = Carbon::parse($event->start_date); // Hari pertama posko
-
-       
-        $referenceDate = $this->determineReferenceDate($event); 
 
         foreach ($stats as $stat) {
-            $flightDate = Carbon::parse($stat->flight_date);
-            $diff = $flightDate->diffInDays($referenceDate, false); // false agar dapat nilai negatif
+            $flightDate = Carbon::parse($stat->flight_date)->startOfDay();
+            $diff = $flightDate->diffInDays($referenceDate, false) * -1;
             
-            // Diff negatif = Sebelum hari H (H-x)
-            // Diff positif = Setelah hari H (H+x)
-            // Diff 0 = Hari H
-            
-            // Format label: H-1, H+1, H
-            $label = $this->formatHLabel(-$diff); // diffInDays return positif jika date < ref, jadi di-negatifkan logic-nya sesuaikan
+            if ($diff == 0) $label = "H";
+            elseif ($diff < 0) $label = "H" . $diff; 
+            else $label = "H+" . $diff; 
             
             $formattedData[$label] = [
                 'pax' => $stat->total_pax,
@@ -100,40 +105,15 @@ class DashboardNataruController extends Controller
 
     private function determineReferenceDate($event)
     {
-        // Logika sederhana deteksi Nataru
-        // Jika start_date di bulan Desember, asumsikan ini Nataru -> Ref = 25 Des tahun start_date
-        if ($event->start_date->month == 12) {
-            return Carbon::create($event->start_date->year, 12, 25);
+        if (!$event) return Carbon::now()->startOfDay();
+
+        if ($event->peak_date) {
+            return Carbon::parse($event->peak_date)->startOfDay();
         }
-        
-        // Jika Lebaran (Idul Fitri berubah tiap tahun), idealnya ada input 'main_date' di tabel Event.
-        // Untuk sekarang, fallback ke start_date + 7 hari (asumsi posko mulai H-7)
-        return $event->start_date->copy()->addDays(7);
-    }
 
-    private function formatHLabel($diff)
-    {
-        // Note: diffInDays(ref, false):
-        // if date < ref (sebelum): result positif (misal 10) -> H-10
-        // if date > ref (sesudah): result negatif (misal -5) -> H+5
-        
-        // Koreksi logika diffInDays Carbon:
-        // $date->diffInDays($ref, false) -> jika date=15, ref=25 -> hasil = 10 (positif)
-        // Jadi logikanya:
-        
-        if ($diff > 0) return "H-{$diff}";
-        if ($diff < 0) return "H+" . abs($diff);
-        return "H";
-    }
-
-    private function generateHLabels()
-    {
-        // Generate array label standar H-10 s/d H+10
-        $labels = [];
-        for ($i = 10; $i >= 1; $i--) $labels[] = "H-{$i}";
-        $labels[] = "H";
-        for ($i = 1; $i <= 10; $i++) $labels[] = "H+{$i}";
-        return $labels;
+        $start = Carbon::parse($event->start_date)->startOfDay();
+        $end   = Carbon::parse($event->end_date)->startOfDay();
+        return $start->copy()->addDays(ceil($start->diffInDays($end) / 2));
     }
 
     private function mapDataToLabels($data, $labels)
