@@ -61,8 +61,10 @@ class User extends Authenticatable implements HasMedia
             // Anda bisa tambahkan relasi hasMany lainnya di sini
 
             // Lepaskan semua data dari relasi many-to-many
-            $user->rentals()->detach();
-            $user->tenants()->detach();
+            $user->rentals()->delete();
+            $user->tenants()->delete();
+
+            
             $user->licenses()->delete();
             $user->roles()->detach();
         });
