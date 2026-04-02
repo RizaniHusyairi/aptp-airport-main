@@ -295,6 +295,9 @@ class NataruEventController extends Controller
     }
     public function exportPdf($id)
     {
+        ini_set('memory_limit', '512M');
+        ini_set('max_execution_time', '300');
+        
         $nataruEvent = NataruEvent::with(['flights', 'compareEvent.flights'])->findOrFail($id);
         
         // --- 1. SETUP DATA UTAMA & PERBANDINGAN ---

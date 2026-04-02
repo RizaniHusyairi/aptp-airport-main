@@ -159,15 +159,30 @@
                     <div class="modal-body">
                         <div class="form-group mb-3">
                             <label for="current_password" class="form-label">Kata Sandi Saat Ini</label>
-                            <input type="password" id="current_password" name="current_password" class="form-control" required>
+                            <div class="input-group">
+                                <input type="password" id="current_password" name="current_password" class="form-control" required>
+                                <button type="button" class="btn btn-outline-secondary toggle-password" data-target="current_password" aria-label="Tampilkan kata sandi">
+                                    <i data-feather="eye"></i>
+                                </button>
+                            </div>
                         </div>
                         <div class="form-group mb-3">
                             <label for="new_password" class="form-label">Kata Sandi Baru</label>
-                            <input type="password" id="new_password" name="new_password" class="form-control" minlength="8" required>
+                            <div class="input-group">
+                                <input type="password" id="new_password" name="new_password" class="form-control" minlength="8" required>
+                                <button type="button" class="btn btn-outline-secondary toggle-password" data-target="new_password" aria-label="Tampilkan kata sandi">
+                                    <i data-feather="eye"></i>
+                                </button>
+                            </div>
                         </div>
                         <div class="form-group mb-3">
                             <label for="new_password_confirmation" class="form-label">Konfirmasi Kata Sandi</label>
-                            <input type="password" id="new_password_confirmation" name="new_password_confirmation" class="form-control" minlength="8" required>
+                            <div class="input-group">
+                                <input type="password" id="new_password_confirmation" name="new_password_confirmation" class="form-control" minlength="8" required>
+                                <button type="button" class="btn btn-outline-secondary toggle-password" data-target="new_password_confirmation" aria-label="Tampilkan kata sandi">
+                                    <i data-feather="eye"></i>
+                                </button>
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -195,5 +210,33 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="{{ asset('../assetsv2/extensions/feather-icons/feather.min.js') }}"></script>
     <script src="{{ asset('assetsv2/compiled/js/profile.js') }}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.toggle-password').forEach(function (button) {
+                button.addEventListener('click', function () {
+                    const input = document.getElementById(button.dataset.target);
+
+                    if (!input) {
+                        return;
+                    }
+
+                    const isPassword = input.type === 'password';
+                    input.type = isPassword ? 'text' : 'password';
+                    button.setAttribute('aria-label', isPassword ? 'Sembunyikan kata sandi' : 'Tampilkan kata sandi');
+                    button.innerHTML = isPassword
+                        ? '<i data-feather="eye-off"></i>'
+                        : '<i data-feather="eye"></i>';
+
+                    if (window.feather) {
+                        feather.replace();
+                    }
+                });
+            });
+
+            if (window.feather) {
+                feather.replace();
+            }
+        });
+    </script>
 
 @endsection

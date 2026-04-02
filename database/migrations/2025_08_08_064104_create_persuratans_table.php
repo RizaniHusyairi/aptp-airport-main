@@ -28,10 +28,8 @@ return new class extends Migration
 
             // daftar kolaborator (array user_id)
             // gunakan JSON agar mudah difilter & di-cast di Eloquent
-            $table->json('collaborators')->default(json_encode([]));
-
-            // daftar lampiran (array path di storage)
-            $table->json('attachments')->default(json_encode([]));
+            $table->json('collaborators')->nullable();
+            $table->json('attachments')->nullable();
 
             // status global surat untuk kebutuhan listing/dashboard cepat
             // (gunakan enum atau string; di sini pakai enum agar konsisten)
