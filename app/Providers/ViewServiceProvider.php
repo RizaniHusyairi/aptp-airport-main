@@ -36,10 +36,20 @@ class ViewServiceProvider extends ServiceProvider
                 if($service->slug == "informasi-publik") {
                     continue; // Lewati layanan tanpa slug
                 }
-                $serviceMenuItems[] = [
-                    'name' => $service->name,
-                    'route' => route('layanan.show', $service->slug) // Menggunakan route dinamis yang baru
-                ];
+
+                // Jika submission_url berupa URL eksternal lengkap, arahkan menu langsung ke sana
+                if (\Illuminate\Support\Str::startsWith($service->submission_url, ['http://', 'https://'])) {
+                    $serviceMenuItems[] = [
+                        'name' => $service->name,
+                        'route' => $service->submission_url, // Tautan eksternal langsung
+                        'external' => true,
+                    ];
+                } else {
+                    $serviceMenuItems[] = [
+                        'name' => $service->name,
+                        'route' => route('layanan.show', $service->slug) // Menggunakan route dinamis yang baru
+                    ];
+                }
             }
 
             $menuItems = [

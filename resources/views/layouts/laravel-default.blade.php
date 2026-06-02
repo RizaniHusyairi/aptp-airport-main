@@ -53,7 +53,8 @@
                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink{{ $loop->index }}">
                                         @foreach ($item['dropdown'] as $dropdownItem)
                                             <li><a class="dropdown-item"
-                                                    href="{{ $dropdownItem['route'] }}">{{ $dropdownItem['name'] }}</a>
+                                                    href="{{ $dropdownItem['route'] }}"
+                                                    @if (isset($dropdownItem['external'])) target="_blank" rel="noopener" @endif>{{ $dropdownItem['name'] }}</a>
                                             </li>
                                         @endforeach
                                     </ul>
@@ -160,6 +161,7 @@
                                         data-bs-parent="#accordionFlushExample">
                                         @foreach ($menu['dropdown'] as $dropdown)
                                             <a href="{{ $dropdown['route'] }}"
+                                                @if (isset($dropdown['external'])) target="_blank" rel="noopener" @endif
                                                 class="accordion-body d-flex text-decoration-none text-white pilates">{{ $dropdown['name'] }}</a>
                                         @endforeach
                                     </div>
