@@ -26,6 +26,8 @@
 
     <div class="error-container">
         <div class="error-content">
+            <img src="{{ asset('frontend/assets/logo.png') }}" alt="Logo APT" class="error-logo">
+
             <div class="maintenance-emblem" aria-hidden="true">
                 <span class="gear gear-large"><i class="bi bi-gear-wide-connected"></i></span>
                 <span class="gear gear-small"><i class="bi bi-gear-fill"></i></span>

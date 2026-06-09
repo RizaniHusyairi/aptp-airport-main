@@ -112,6 +112,25 @@ body.error-503-page {
     to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 
+/* ---------- Logo APT ---------- */
+.error-logo {
+    display: block;
+    width: 130px;
+    height: auto;
+    margin: 0 auto 18px;
+    animation: logo-in .9s cubic-bezier(.22, 1, .36, 1) both, float 4.5s ease-in-out 1s infinite;
+}
+
+@keyframes logo-in {
+    from { opacity: 0; transform: translateY(-14px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-8px); }
+}
+
 /* ---------- Emblem pemeliharaan (gerigi berputar) ---------- */
 .maintenance-emblem {
     position: relative;
@@ -204,6 +223,7 @@ body.error-503-page {
 
 /* ---------- Hormati preferensi kurangi gerak ---------- */
 @media (prefers-reduced-motion: reduce) {
+    .error-logo,
     .stars,
     .cloud,
     .holding-pattern,
