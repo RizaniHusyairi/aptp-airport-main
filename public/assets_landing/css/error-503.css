@@ -1,0 +1,217 @@
+/* public/assets_landing/css/error-503.css
+   Tampilan animatif untuk halaman 503 (Service Unavailable / Pemeliharaan).
+   Dibangun di atas errors.css (tema, kartu, dan tombol dipakai ulang). */
+
+/* ---------- Latar langit malam bandara ---------- */
+body.error-503-page {
+    background: radial-gradient(ellipse at top, #14467a 0%, #0d2c4a 55%, #081b30 100%);
+    overflow: hidden;
+    position: relative;
+}
+
+.sky-scene {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+/* Bintang berkedip */
+.stars {
+    position: absolute;
+    inset: 0;
+    background-image:
+        radial-gradient(2px 2px at 20% 30%, rgba(255, 255, 255, .9), transparent),
+        radial-gradient(2px 2px at 70% 20%, rgba(255, 255, 255, .7), transparent),
+        radial-gradient(1.5px 1.5px at 40% 70%, rgba(255, 255, 255, .8), transparent),
+        radial-gradient(1.5px 1.5px at 85% 60%, rgba(255, 255, 255, .6), transparent),
+        radial-gradient(2px 2px at 15% 80%, rgba(255, 255, 255, .75), transparent),
+        radial-gradient(1px 1px at 55% 45%, rgba(255, 255, 255, .6), transparent),
+        radial-gradient(1.5px 1.5px at 90% 35%, rgba(255, 255, 255, .7), transparent),
+        radial-gradient(1px 1px at 33% 18%, rgba(255, 255, 255, .55), transparent);
+    animation: twinkle 4s ease-in-out infinite alternate;
+}
+
+@keyframes twinkle {
+    from { opacity: .35; }
+    to   { opacity: 1; }
+}
+
+/* Awan yang bergerak perlahan */
+.cloud {
+    position: absolute;
+    background: rgba(255, 255, 255, .08);
+    border-radius: 100px;
+    filter: blur(2px);
+}
+
+.cloud::before,
+.cloud::after {
+    content: "";
+    position: absolute;
+    background: inherit;
+    border-radius: 50%;
+}
+
+.cloud::before { width: 60%; height: 160%; top: -55%; left: 12%; }
+.cloud::after  { width: 45%; height: 150%; top: -45%; right: 14%; }
+
+.cloud-1 { width: 160px; height: 46px; top: 22%; left: -220px; animation: drift 38s linear infinite; }
+.cloud-2 { width: 220px; height: 60px; top: 58%; left: -280px; animation: drift 52s linear infinite; animation-delay: -12s; }
+.cloud-3 { width: 120px; height: 36px; top: 80%; left: -180px; animation: drift 30s linear infinite; animation-delay: -22s; }
+
+@keyframes drift {
+    from { transform: translateX(0); }
+    to   { transform: translateX(calc(100vw + 320px)); }
+}
+
+/* Pesawat dalam holding pattern (mengorbit) */
+.holding-pattern {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 540px;
+    height: 540px;
+    margin: -270px 0 0 -270px;
+    border: 1px dashed rgba(240, 165, 0, .18);
+    border-radius: 50%;
+    animation: orbit 16s linear infinite;
+}
+
+.holding-pattern .plane {
+    position: absolute;
+    top: -16px;
+    left: 50%;
+    margin-left: -16px;
+    font-size: 2rem;
+    color: var(--secondary-color);
+    transform: rotate(90deg); /* searah garis singgung orbit */
+    filter: drop-shadow(0 4px 10px rgba(0, 0, 0, .45));
+}
+
+@keyframes orbit {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+}
+
+/* ---------- Kartu di atas latar ---------- */
+.error-503-page .error-container {
+    position: relative;
+    z-index: 2;
+}
+
+.error-503-page .error-content {
+    background: rgba(255, 255, 255, .97);
+    box-shadow: 0 24px 70px rgba(0, 0, 0, .45);
+    animation: card-in .8s cubic-bezier(.22, 1, .36, 1) both;
+}
+
+@keyframes card-in {
+    from { opacity: 0; transform: translateY(30px) scale(.96); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* ---------- Emblem pemeliharaan (gerigi berputar) ---------- */
+.maintenance-emblem {
+    position: relative;
+    width: 130px;
+    height: 96px;
+    margin: 0 auto 6px;
+}
+
+.maintenance-emblem .gear {
+    position: absolute;
+    line-height: 1;
+}
+
+.maintenance-emblem .gear-large {
+    font-size: 4.6rem;
+    top: 0;
+    left: 16px;
+    color: var(--primary-color);
+    opacity: .85;
+    animation: spin 6s linear infinite;
+}
+
+.maintenance-emblem .gear-small {
+    font-size: 3rem;
+    top: 36px;
+    left: 64px;
+    color: var(--secondary-color);
+    animation: spin-rev 4s linear infinite;
+}
+
+@keyframes spin     { to { transform: rotate(360deg); } }
+@keyframes spin-rev { to { transform: rotate(-360deg); } }
+
+/* ---------- Kode 503 dengan kilau ---------- */
+.error-503-page .error-code {
+    background: linear-gradient(135deg, var(--secondary-color), #ffd166);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: glow 2.4s ease-in-out infinite;
+}
+
+@keyframes glow {
+    0%, 100% { filter: drop-shadow(0 0 0 rgba(240, 165, 0, 0)); }
+    50%      { filter: drop-shadow(0 0 18px rgba(240, 165, 0, .55)); }
+}
+
+/* ---------- Bar progres pemeliharaan ---------- */
+.maintenance-bar {
+    height: 8px;
+    width: 100%;
+    background: #e9eef3;
+    border-radius: 50px;
+    overflow: hidden;
+    margin: 6px 0 26px;
+}
+
+.maintenance-bar span {
+    display: block;
+    height: 100%;
+    width: 40%;
+    border-radius: 50px;
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+    animation: indeterminate 1.9s ease-in-out infinite;
+}
+
+@keyframes indeterminate {
+    0%   { transform: translateX(-130%); width: 40%; }
+    50%  { width: 65%; }
+    100% { transform: translateX(280%); width: 40%; }
+}
+
+/* ---------- Catatan auto-refresh ---------- */
+.refresh-note {
+    margin-top: 22px;
+    font-size: .85rem;
+    color: var(--text-muted-light);
+}
+
+.refresh-note #countdown {
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+/* ---------- Responsif ---------- */
+@media (max-width: 576px) {
+    .holding-pattern { width: 360px; height: 360px; margin: -180px 0 0 -180px; }
+    .holding-pattern .plane { font-size: 1.6rem; }
+}
+
+/* ---------- Hormati preferensi kurangi gerak ---------- */
+@media (prefers-reduced-motion: reduce) {
+    .stars,
+    .cloud,
+    .holding-pattern,
+    .maintenance-emblem .gear-large,
+    .maintenance-emblem .gear-small,
+    .error-503-page .error-content,
+    .error-503-page .error-code,
+    .maintenance-bar span {
+        animation: none !important;
+    }
+}
