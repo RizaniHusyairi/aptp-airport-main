@@ -29,6 +29,7 @@ class ViewServiceProvider extends ServiceProvider
             $serviceMenuItems = [
                 ['name' => 'PAS', 'route' => 'https://pas.aptpairport.id/website/layanan/pas_orang.html', 'external' => true],
                 ['name' => 'TIM', 'route' => 'https://pas.aptpairport.id/website/layanan/tim.html', 'external' => true],
+                ['name' => 'Keuangan dan Penagihan', 'route' => 'https://sikeren.aptpairport.id', 'external' => true],
             ];
 
             // 4. Loop hasil query dan ubah menjadi format array menu, lalu gabungkan
