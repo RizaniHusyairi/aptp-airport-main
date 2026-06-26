@@ -1,6 +1,6 @@
 @extends('layouts_landing.landing_app')
 
-@section('title', 'Selamat Datang di Bandara APT Pranoto')
+@section('title', 'Bandara APT Pranoto Samarinda (AAP) — Jadwal Penerbangan')
 @section('header-class', 'home')
 
 @push('page-styles')
@@ -68,6 +68,8 @@
     <div class="hero-background-overlay"></div>
 
     <div class="container hero-container d-flex flex-column justify-content-center align-items-center">
+        {{-- H1 utama halaman (SEO + aksesibilitas); judul hero di bawah bersifat dekoratif/teranimasi --}}
+        <h1 class="visually-hidden">Bandara APT Pranoto Samarinda (AAP), gerbang udara resmi Kalimantan Timur</h1>
         {{-- STRUKTUR JUDUL BARU --}}
         <div class="hero-title-reveal-v2">
             <div class="title-line-v2 line-1">
@@ -379,16 +381,16 @@
         <div class="partners-carousel">
             <div class="partners-track">
                 {{-- Logo akan digandakan oleh JavaScript untuk efek tak terbatas --}}
-                <a href="https://www.airnavindonesia.co.id/" target="_blank" class="partner-logo"><img src="{{ asset('assets_landing/img/mitra/logo-airnav.png') }}" alt="Logo AirNav"></a>
-                <a href="https://www.batikair.com/id/" target="_blank" class="partner-logo"><img src="{{ asset('assets_landing/img/mitra/logo-batik.png') }}" alt="Logo Batik Air"></a>
-                <a href="https://www.bmkg.go.id/" target="_blank" class="partner-logo"><img src="{{ asset('assets_landing/img/mitra/logo-BMKG.png') }}" alt="Logo BMKG"></a>
-                <a href="https://www.garuda-indonesia.com/id/id/" target="_blank" class="partner-logo"><img src="{{ asset('assets_landing/img/mitra/logo-garuda.png') }}" alt="Logo Garuda Indonesia"></a>
-                <a href="https://kaltimprov.go.id/" target="_blank" class="partner-logo"><img src="{{ asset('assets_landing/img/mitra/Logo-Pemprov.png') }}" alt="Logo Pemprov Kaltim"></a>
-                <a href="https://pertamina.com/" target="_blank" class="partner-logo"><img src="{{ asset('assets_landing/img/mitra/logo-pertamina.png') }}" alt="Logo Pertamina"></a>
-                <a href="https://www.superairjet.com/id/" target="_blank" class="partner-logo"><img src="{{ asset('assets_landing/img/mitra/logo-SAJ.png') }}" alt="Logo Super Air Jet"></a>
-                <a href="https://kkp.go.id/" target="_blank" class="partner-logo"><img src="{{ asset('assets_landing/img/mitra/logo_kkp.svg') }}" alt="Logo KKP"></a>
-                <a href="https://www.citilink.co.id/" target="_blank" class="partner-logo"><img src="{{ asset('assets_landing/img/mitra/logo-citilink.png') }}" alt="Logo Citilink"></a>
-                <a href="https://smartaviation.co.id/home" target="_blank" class="partner-logo"><img src="{{ asset('assets_landing/img/mitra/logo-smart.jpg') }}" alt="Logo Smart Aviation"></a>
+                <a href="https://www.airnavindonesia.co.id/" target="_blank" class="partner-logo"><img loading="lazy" decoding="async" src="{{ asset('assets_landing/img/mitra/logo-airnav.png') }}" alt="Logo AirNav"></a>
+                <a href="https://www.batikair.com/id/" target="_blank" class="partner-logo"><img loading="lazy" decoding="async" src="{{ asset('assets_landing/img/mitra/logo-batik.png') }}" alt="Logo Batik Air"></a>
+                <a href="https://www.bmkg.go.id/" target="_blank" class="partner-logo"><img loading="lazy" decoding="async" src="{{ asset('assets_landing/img/mitra/logo-BMKG.png') }}" alt="Logo BMKG"></a>
+                <a href="https://www.garuda-indonesia.com/id/id/" target="_blank" class="partner-logo"><img loading="lazy" decoding="async" src="{{ asset('assets_landing/img/mitra/logo-garuda.png') }}" alt="Logo Garuda Indonesia"></a>
+                <a href="https://kaltimprov.go.id/" target="_blank" class="partner-logo"><img loading="lazy" decoding="async" src="{{ asset('assets_landing/img/mitra/Logo-Pemprov.png') }}" alt="Logo Pemprov Kaltim"></a>
+                <a href="https://pertamina.com/" target="_blank" class="partner-logo"><img loading="lazy" decoding="async" src="{{ asset('assets_landing/img/mitra/logo-pertamina.png') }}" alt="Logo Pertamina"></a>
+                <a href="https://www.superairjet.com/id/" target="_blank" class="partner-logo"><img loading="lazy" decoding="async" src="{{ asset('assets_landing/img/mitra/logo-SAJ.png') }}" alt="Logo Super Air Jet"></a>
+                <a href="https://kkp.go.id/" target="_blank" class="partner-logo"><img loading="lazy" decoding="async" src="{{ asset('assets_landing/img/mitra/logo_kkp.svg') }}" alt="Logo KKP"></a>
+                <a href="https://www.citilink.co.id/" target="_blank" class="partner-logo"><img loading="lazy" decoding="async" src="{{ asset('assets_landing/img/mitra/logo-citilink.png') }}" alt="Logo Citilink"></a>
+                <a href="https://smartaviation.co.id/home" target="_blank" class="partner-logo"><img loading="lazy" decoding="async" src="{{ asset('assets_landing/img/mitra/logo-smart.jpg') }}" alt="Logo Smart Aviation"></a>
             </div>
         </div>
     </div>

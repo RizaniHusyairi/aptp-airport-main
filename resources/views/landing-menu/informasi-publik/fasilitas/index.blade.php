@@ -1,6 +1,7 @@
 @extends('layouts_landing.landing_app')
 
-@section('title', 'Fasilitas Bandara - Bandara APT Pranoto')
+@section('title', 'Fasilitas Bandara APT Pranoto Samarinda (AAP)')
+@section('description', 'Daftar lengkap fasilitas Bandara APT Pranoto Samarinda (AAP): ruang tunggu, check-in, mushola, kuliner, parkir, dan layanan penumpang lainnya di gerbang udara Kalimantan Timur.')
 
 @push('page-styles')
     <link href="{{ asset('assets_landing/css/fasilitas.css') }}" rel="stylesheet">

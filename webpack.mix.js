@@ -158,12 +158,14 @@ mix.copyDirectory(folder.src + "fonts", out);
 var out = folder.dist_assets + "images";
 mix.copyDirectory(folder.src + "images", out);
 
-mix.sass('resources/scss/bootstrap.scss', folder.dist_assets + "css").minify(folder.dist_assets + "css/bootstrap.css");
-mix.sass('resources/scss/icons.scss', folder.dist_assets + "css").options({ processCssUrls: false }).minify(folder.dist_assets + "css/icons.css");
-mix.sass('resources/scss/app.scss', folder.dist_assets + "css").options({ processCssUrls: false }).minify(folder.dist_assets + "css/app.css");
+// Output langsung ke nama *.min.css agar tidak terjadi race ENOENT pada .minify()
+// (file dibaca sebelum sass selesai menulis). Mode `mix --production` tetap me-minify otomatis.
+mix.sass('resources/scss/bootstrap.scss', folder.dist_assets + "css/bootstrap.min.css");
+mix.sass('resources/scss/icons.scss', folder.dist_assets + "css/icons.min.css").options({ processCssUrls: false });
+mix.sass('resources/scss/app.scss', folder.dist_assets + "css/app.min.css").options({ processCssUrls: false });
 
-mix.sass('resources/scss/bootstrap-dark.scss', folder.dist_assets + "css").minify(folder.dist_assets + "css/bootstrap-dark.css");
-mix.sass('resources/scss/app-dark.scss', folder.dist_assets + "css").options({ processCssUrls: false }).minify(folder.dist_assets + "css/app-dark.css");
+mix.sass('resources/scss/bootstrap-dark.scss', folder.dist_assets + "css/bootstrap-dark.min.css");
+mix.sass('resources/scss/app-dark.scss', folder.dist_assets + "css/app-dark.min.css").options({ processCssUrls: false });
 
 mix.webpackConfig({
     plugins: [

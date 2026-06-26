@@ -305,9 +305,12 @@ __webpack_require__.r(__webpack_exports__);
 /*!***************************************!*\
   !*** ./resources/scss/bootstrap.scss ***!
   \***************************************/
-/***/ (function() {
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
-throw new Error("Module build failed (from ./node_modules/mini-css-extract-plugin/dist/loader.js):\nModuleBuildError: Module build failed (from ./node_modules/sass-loader/dist/cjs.js):\nSassError: Duplicate key.\n    ╷\n165 │     \"pink\":       $pink,\r\n    │     ━━━━━━ first key\n... │\n168 │     \"pink\":       $pink,\r\n    │     ^^^^^^ second key\n    ╵\n  resources\\scss\\_variables.scss 168:5  @import\n  C:\\laragon\\www\\aptp-airport-main\\resources\\scss\\bootstrap.scss 14:9                            root stylesheet\n    at processResult (C:\\laragon\\www\\aptp-airport-main\\node_modules\\webpack\\lib\\NormalModule.js:748:19)\n    at C:\\laragon\\www\\aptp-airport-main\\node_modules\\webpack\\lib\\NormalModule.js:850:5\n    at C:\\laragon\\www\\aptp-airport-main\\node_modules\\loader-runner\\lib\\LoaderRunner.js:399:11\n    at C:\\laragon\\www\\aptp-airport-main\\node_modules\\loader-runner\\lib\\LoaderRunner.js:251:18\n    at context.callback (C:\\laragon\\www\\aptp-airport-main\\node_modules\\loader-runner\\lib\\LoaderRunner.js:124:13)\n    at C:\\laragon\\www\\aptp-airport-main\\node_modules\\sass-loader\\dist\\index.js:73:7\n    at Function.call$2 (C:\\laragon\\www\\aptp-airport-main\\node_modules\\sass\\sass.dart.js:127323:16)\n    at render_closure1.call$2 (C:\\laragon\\www\\aptp-airport-main\\node_modules\\sass\\sass.dart.js:108455:12)\n    at _RootZone.runBinary$3$3 (C:\\laragon\\www\\aptp-airport-main\\node_modules\\sass\\sass.dart.js:39833:18)\n    at _FutureListener.handleError$1 (C:\\laragon\\www\\aptp-airport-main\\node_modules\\sass\\sass.dart.js:38321:21)");
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+// extracted by mini-css-extract-plugin
+
 
 /***/ }),
 
@@ -328,9 +331,12 @@ __webpack_require__.r(__webpack_exports__);
 /*!*********************************!*\
   !*** ./resources/scss/app.scss ***!
   \*********************************/
-/***/ (function() {
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
-throw new Error("Module build failed (from ./node_modules/mini-css-extract-plugin/dist/loader.js):\nModuleBuildError: Module build failed (from ./node_modules/sass-loader/dist/cjs.js):\nSassError: Duplicate key.\n    ╷\n165 │     \"pink\":       $pink,\r\n    │     ━━━━━━ first key\n... │\n168 │     \"pink\":       $pink,\r\n    │     ^^^^^^ second key\n    ╵\n  resources\\scss\\_variables.scss 168:5  @import\n  C:\\laragon\\www\\aptp-airport-main\\resources\\scss\\app.scss 16:9                            root stylesheet\n    at processResult (C:\\laragon\\www\\aptp-airport-main\\node_modules\\webpack\\lib\\NormalModule.js:748:19)\n    at C:\\laragon\\www\\aptp-airport-main\\node_modules\\webpack\\lib\\NormalModule.js:850:5\n    at C:\\laragon\\www\\aptp-airport-main\\node_modules\\loader-runner\\lib\\LoaderRunner.js:399:11\n    at C:\\laragon\\www\\aptp-airport-main\\node_modules\\loader-runner\\lib\\LoaderRunner.js:251:18\n    at context.callback (C:\\laragon\\www\\aptp-airport-main\\node_modules\\loader-runner\\lib\\LoaderRunner.js:124:13)\n    at C:\\laragon\\www\\aptp-airport-main\\node_modules\\sass-loader\\dist\\index.js:73:7\n    at Function.call$2 (C:\\laragon\\www\\aptp-airport-main\\node_modules\\sass\\sass.dart.js:127323:16)\n    at render_closure1.call$2 (C:\\laragon\\www\\aptp-airport-main\\node_modules\\sass\\sass.dart.js:108455:12)\n    at _RootZone.runBinary$3$3 (C:\\laragon\\www\\aptp-airport-main\\node_modules\\sass\\sass.dart.js:39833:18)\n    at _FutureListener.handleError$1 (C:\\laragon\\www\\aptp-airport-main\\node_modules\\sass\\sass.dart.js:38321:21)");
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+// extracted by mini-css-extract-plugin
+
 
 /***/ }),
 
@@ -449,10 +455,12 @@ __webpack_require__.r(__webpack_exports__);
 /******/ 		// [resolve, reject, Promise] = chunk loading, 0 = chunk loaded
 /******/ 		var installedChunks = {
 /******/ 			"/js/app": 0,
-/******/ 			"assets/css/app-dark": 0,
+/******/ 			"assets/css/app-dark.min": 0,
+/******/ 			"assets/css/app.min": 0,
 /******/ 			"css/app": 0,
-/******/ 			"assets/css/bootstrap-dark": 0,
-/******/ 			"assets/css/icons": 0
+/******/ 			"assets/css/bootstrap-dark.min": 0,
+/******/ 			"assets/css/icons.min": 0,
+/******/ 			"assets/css/bootstrap.min": 0
 /******/ 		};
 /******/ 		
 /******/ 		// no chunk on demand loading
@@ -504,13 +512,13 @@ __webpack_require__.r(__webpack_exports__);
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
-/******/ 	__webpack_require__.O(undefined, ["assets/css/app-dark","css/app","assets/css/bootstrap-dark","assets/css/icons"], function() { return __webpack_require__("./resources/js/app.js"); })
-/******/ 	__webpack_require__.O(undefined, ["assets/css/app-dark","css/app","assets/css/bootstrap-dark","assets/css/icons"], function() { return __webpack_require__("./resources/scss/bootstrap.scss"); })
-/******/ 	__webpack_require__.O(undefined, ["assets/css/app-dark","css/app","assets/css/bootstrap-dark","assets/css/icons"], function() { return __webpack_require__("./resources/scss/icons.scss"); })
-/******/ 	__webpack_require__.O(undefined, ["assets/css/app-dark","css/app","assets/css/bootstrap-dark","assets/css/icons"], function() { return __webpack_require__("./resources/scss/app.scss"); })
-/******/ 	__webpack_require__.O(undefined, ["assets/css/app-dark","css/app","assets/css/bootstrap-dark","assets/css/icons"], function() { return __webpack_require__("./resources/scss/bootstrap-dark.scss"); })
-/******/ 	__webpack_require__.O(undefined, ["assets/css/app-dark","css/app","assets/css/bootstrap-dark","assets/css/icons"], function() { return __webpack_require__("./resources/scss/app-dark.scss"); })
-/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["assets/css/app-dark","css/app","assets/css/bootstrap-dark","assets/css/icons"], function() { return __webpack_require__("./resources/css/app.css"); })
+/******/ 	__webpack_require__.O(undefined, ["assets/css/app-dark.min","assets/css/app.min","css/app","assets/css/bootstrap-dark.min","assets/css/icons.min","assets/css/bootstrap.min"], function() { return __webpack_require__("./resources/js/app.js"); })
+/******/ 	__webpack_require__.O(undefined, ["assets/css/app-dark.min","assets/css/app.min","css/app","assets/css/bootstrap-dark.min","assets/css/icons.min","assets/css/bootstrap.min"], function() { return __webpack_require__("./resources/scss/bootstrap.scss"); })
+/******/ 	__webpack_require__.O(undefined, ["assets/css/app-dark.min","assets/css/app.min","css/app","assets/css/bootstrap-dark.min","assets/css/icons.min","assets/css/bootstrap.min"], function() { return __webpack_require__("./resources/scss/icons.scss"); })
+/******/ 	__webpack_require__.O(undefined, ["assets/css/app-dark.min","assets/css/app.min","css/app","assets/css/bootstrap-dark.min","assets/css/icons.min","assets/css/bootstrap.min"], function() { return __webpack_require__("./resources/scss/app.scss"); })
+/******/ 	__webpack_require__.O(undefined, ["assets/css/app-dark.min","assets/css/app.min","css/app","assets/css/bootstrap-dark.min","assets/css/icons.min","assets/css/bootstrap.min"], function() { return __webpack_require__("./resources/scss/bootstrap-dark.scss"); })
+/******/ 	__webpack_require__.O(undefined, ["assets/css/app-dark.min","assets/css/app.min","css/app","assets/css/bootstrap-dark.min","assets/css/icons.min","assets/css/bootstrap.min"], function() { return __webpack_require__("./resources/scss/app-dark.scss"); })
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["assets/css/app-dark.min","assets/css/app.min","css/app","assets/css/bootstrap-dark.min","assets/css/icons.min","assets/css/bootstrap.min"], function() { return __webpack_require__("./resources/css/app.css"); })
 /******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
 /******/ 	
 /******/ })()

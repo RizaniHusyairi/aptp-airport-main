@@ -3,15 +3,76 @@
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>@yield('title', 'Bandara APT Pranoto')</title>
-  <meta name="description" content="@yield('description', '')">
-  <meta name="keywords" content="@yield('keywords', '')">
+  @php
+    $seoDefaultDescription = 'Situs resmi Bandara APT Pranoto Samarinda (AAP). Cek jadwal keberangkatan dan kedatangan real-time, fasilitas, layanan, dan informasi penerbangan resmi Kalimantan Timur.';
+    $seoImage = asset('assets_landing/img/hero-img.png');
+  @endphp
+  <title>@yield('title', 'Bandara APT Pranoto Samarinda (AAP) — Informasi Resmi')</title>
+
+  {{-- ===== SEO Meta (default situs; tiap halaman bisa override via @section) ===== --}}
+  <meta name="description" content="@yield('description', $seoDefaultDescription)">
+  <meta name="keywords" content="@yield('keywords', 'Bandara APT Pranoto, Bandara Samarinda, jadwal penerbangan APT Pranoto, rute penerbangan Samarinda, fasilitas Bandara APT Pranoto, transportasi bandara Samarinda, AAP, WALS')">
+  <meta name="robots" content="@yield('robots', 'index, follow')">
+  <meta name="author" content="Bandara APT Pranoto Samarinda">
+  <meta name="theme-color" content="#0d6efd">
+  <link rel="canonical" href="{{ url()->current() }}">
   <meta name="csrf-token" content="{{ csrf_token() }}">
+
+  {{-- ===== Open Graph (Facebook / WhatsApp) ===== --}}
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Bandara APT Pranoto Samarinda">
+  <meta property="og:locale" content="id_ID">
+  <meta property="og:url" content="{{ url()->current() }}">
+  <meta property="og:title" content="{{ View::yieldContent('title', 'Bandara APT Pranoto Samarinda (AAP)') }}">
+  <meta property="og:description" content="{{ View::yieldContent('description', $seoDefaultDescription) }}">
+  <meta property="og:image" content="@yield('og-image', $seoImage)">
+
+  {{-- ===== Twitter Card ===== --}}
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@aptp_airport">
+  <meta name="twitter:title" content="{{ View::yieldContent('title', 'Bandara APT Pranoto Samarinda (AAP)') }}">
+  <meta name="twitter:description" content="{{ View::yieldContent('description', $seoDefaultDescription) }}">
+  <meta name="twitter:image" content="@yield('og-image', $seoImage)">
+
+  {{-- ===== Structured Data: Airport (verifikasi ulang telepon/alamat resmi bila perlu) ===== --}}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Airport",
+    "name": "Bandara APT Pranoto Samarinda",
+    "alternateName": "Aji Pangeran Tumenggung Pranoto International Airport",
+    "iataCode": "AAP",
+    "icaoCode": "WALS",
+    "url": "{{ url('/') }}",
+    "logo": "{{ asset('assets_landing/img/logo/Logo_Kementerian_Perhubungan_Indonesia_(Kemenhub).png') }}",
+    "image": "{{ $seoImage }}",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Jl. Poros Samarinda - Bontang, Kel. Sungai Siring",
+      "addressLocality": "Samarinda",
+      "addressRegion": "Kalimantan Timur",
+      "postalCode": "75119",
+      "addressCountry": "ID"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": -0.37450,
+      "longitude": 117.25010
+    },
+    "sameAs": [
+      "https://www.instagram.com/aptpranotoairport",
+      "https://www.youtube.com/@aptpranotoairport",
+      "https://www.tiktok.com/@aptpranotoairport",
+      "https://x.com/aptp_airport"
+    ]
+  }
+  </script>
+  @stack('schema')
 
 
   <!-- Favicons -->
-  <link href="{{ asset('assets_landing/img/logo/Logo_Kementerian_Perhubungan_Indonesia_(Kemenhub).png') }}" rel="icon">
-  <link href="{{ asset('assets_landing/img/logo/Logo_Kementerian_Perhubungan_Indonesia_(Kemenhub).png') }}" rel="apple-touch-icon">
+  <link href="{{ asset('assets_landing/img/favicon.png') }}" rel="icon" type="image/png">
+  <link href="{{ asset('assets_landing/img/apple-touch-icon.png') }}" rel="apple-touch-icon">
 
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com" rel="preconnect">

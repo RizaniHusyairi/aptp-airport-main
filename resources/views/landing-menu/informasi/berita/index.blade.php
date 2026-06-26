@@ -1,6 +1,7 @@
 @extends('layouts_landing.landing_app')
 
-@section('title', 'Berita - Bandara APT Pranoto')
+@section('title', 'Berita Bandara APT Pranoto Samarinda (AAP)')
+@section('description', 'Berita dan informasi terbaru seputar Bandara APT Pranoto Samarinda (AAP): operasional, penerbangan, layanan, dan kegiatan resmi bandara di Kalimantan Timur.')
 
 @section('content')
   <section id="about" class="about section pt-6 light-background">

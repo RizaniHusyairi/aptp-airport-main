@@ -1,6 +1,7 @@
 @extends('layouts_landing.landing_app')
 
-@section('title', 'Keberangkatan Pesawat - Bandara APT Pranoto')
+@section('title', 'Jadwal Keberangkatan — Bandara APT Pranoto Samarinda (AAP)')
+@section('description', 'Jadwal keberangkatan penerbangan real-time dari Bandara APT Pranoto Samarinda (AAP). Lihat maskapai, kota tujuan, dan jam keberangkatan terkini.')
 
 @section('content')
 <section id="jadwal-keberangkatan" class="section pt-6">

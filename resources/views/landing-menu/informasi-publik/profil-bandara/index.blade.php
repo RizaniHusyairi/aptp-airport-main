@@ -1,6 +1,7 @@
 @extends('layouts_landing.landing_app')
 
-@section('title', 'Profil Bandara - Bandara APT Pranoto')
+@section('title', 'Profil Bandara APT Pranoto Samarinda (AAP)')
+@section('description', 'Profil resmi Bandara APT Pranoto Samarinda (AAP): sejarah, letak geografis, visi dan misi UPBU Kelas I APT Pranoto di bawah Kementerian Perhubungan.')
 
 @section('content')
 <!-- About Section -->

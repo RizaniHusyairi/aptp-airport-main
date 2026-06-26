@@ -58,8 +58,10 @@ return [
             'prefix_indexes' => true,
             'strict' => true,
             'engine' => null,
+            // PHP 8.4+ memindahkan konstanta PDO MySQL ke kelas Pdo\Mysql; PDO::MYSQL_* deprecated sejak 8.5.
+            // Pakai konstanta baru bila tersedia, jatuh ke konstanta lama untuk PHP < 8.4.
             'options' => extension_loaded('pdo_mysql') ? array_filter([
-                PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
+                (defined('Pdo\Mysql::ATTR_SSL_CA') ? \Pdo\Mysql::ATTR_SSL_CA : \PDO::MYSQL_ATTR_SSL_CA) => env('MYSQL_ATTR_SSL_CA'),
             ]) : [],
         ],
 

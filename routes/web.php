@@ -473,6 +473,8 @@ Route::group(["prefix" => 'dashboard'], function () {
 
 
 Route::get('/', [LandingPageController::class, 'home'])->name('home');
+Route::get('/sitemap.xml', [\App\Http\Controllers\SitemapController::class, 'index'])->name('sitemap');
+Route::view('/kebijakan-privasi', 'landing-menu.kebijakan-privasi.index')->name('kebijakan-privasi');
 Route::get('/lalu-lintas-angkutan', [LandingPageController::class, 'lalulintas'])->name('lalulintas');
 Route::get('/api/air-freight-traffic', [LandingPageController::class, 'getAirFreightTraffic'])->name('api.air-freight-traffic');
 Route::get('/api/monthly-traffic-stats', [LandingPageController::class, 'getMonthlyTrafficStats']);

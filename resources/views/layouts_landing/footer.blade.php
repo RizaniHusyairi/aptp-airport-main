@@ -51,5 +51,6 @@
 
   <div class="container copyright text-center mt-4">
     <p>© <span>Copyright</span><span> Kantor Unit Penyelenggara Bandara Udara Kelas I <strong class="px-1 sitename">A.P.T Pranoto Samarinda</strong></span></p>
+    <p class="mt-2 mb-0"><a href="{{ route('kebijakan-privasi') }}" class="text-reset">Kebijakan Privasi</a></p>
   </div>
 </footer>
