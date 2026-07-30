@@ -77,6 +77,10 @@ class ViewServiceProvider extends ServiceProvider
                             'route' => route('sopPpid'),
                         ],
                         [
+                            'name' => 'Standar Pelayanan',
+                            'route' => route('standarPelayanan'),
+                        ],
+                        [
                             'name' => 'Pengajuan Informasi Publik',
                             'route' => route('layanan.show', 'informasi-publik'),
                         ],
@@ -94,6 +98,7 @@ class ViewServiceProvider extends ServiceProvider
                     ['name' => 'Informasi', 'dropdown' => [
                         ['name' => 'Berita', 'route' => route('berita')],
                         ['name' => 'Kinerja Keuangan', 'route' => route('laporanKeuangan')],
+                        ['name' => 'FAQ', 'route' => route('faq')],
                     ]],
 
 
@@ -106,6 +111,25 @@ class ViewServiceProvider extends ServiceProvider
                     ['name' => 'Layanan', 'dropdown' => $serviceMenuItems]
                 ]
             ];
+
+            // Menu Tautan Terkait, dibangun dari helper externalLinks() yang ter-cache.
+            // Submenu sengaja dibuat rata (tanpa sarang per kelompok) karena renderer
+            // header hanya meneruskan target="_blank" pada tingkat kedua.
+            $tautanMenuItems = [];
+            foreach (externalLinks() as $links) {
+                foreach ($links as $link) {
+                    $tautanMenuItems[] = [
+                        'name' => $link['name'],
+                        'route' => $link['url'],
+                        'external' => true,
+                    ];
+                }
+            }
+
+            if (!empty($tautanMenuItems)) {
+                $tautanMenuItems[] = ['name' => 'Semua Tautan Terkait', 'route' => route('tautanTerkait')];
+                $menuItems['header'][] = ['name' => 'Tautan Terkait', 'dropdown' => $tautanMenuItems];
+            }
 
             $view->with(compact( 'menuItems'));
         });

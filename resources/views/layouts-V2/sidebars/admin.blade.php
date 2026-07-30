@@ -58,6 +58,12 @@
                     <span>Teks Profil</span>
                 </a>
             </li>
+            <li class="sidebar-item {{ Route::is('admin.skm-settings.*') ? 'active' : '' }}">
+                <a href="{{ route('admin.skm-settings.index') }}" class='sidebar-link'>
+                    <i class="bi bi-clipboard2-check-fill"></i>
+                    <span>Pengaturan SKM</span>
+                </a>
+            </li>
             <li class="sidebar-item {{ Route::is('slider.staffIndex') ? 'active' : '' }}">
                 <a href="{{ route('slider.staffIndex') }}" class='sidebar-link'>
                     <i class="bi bi-image"></i>
@@ -99,6 +105,24 @@
                 <a href="{{ route('staff.ppid-regulations.index') }}" class='sidebar-link'>
                     <i class="bi bi-file-earmark-ruled-fill"></i>
                     <span>Regulasi PPID</span>
+                </a>
+            </li>
+            <li class="sidebar-item {{ Route::is('staff.service-standards.*') ? 'active' : '' }}">
+                <a href="{{ route('staff.service-standards.index') }}" class='sidebar-link'>
+                    <i class="bi bi-patch-check-fill"></i>
+                    <span>Standar Pelayanan</span>
+                </a>
+            </li>
+            <li class="sidebar-item {{ Route::is('staff.external-links.*') ? 'active' : '' }}">
+                <a href="{{ route('staff.external-links.index') }}" class='sidebar-link'>
+                    <i class="bi bi-link-45deg"></i>
+                    <span>Tautan Terkait</span>
+                </a>
+            </li>
+            <li class="sidebar-item {{ Route::is('staff.faqs.*') ? 'active' : '' }}">
+                <a href="{{ route('staff.faqs.index') }}" class='sidebar-link'>
+                    <i class="bi bi-patch-question-fill"></i>
+                    <span>FAQ</span>
                 </a>
             </li>
         </ul>

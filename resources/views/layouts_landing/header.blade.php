@@ -25,7 +25,10 @@
                                             <ul>
                                                 @foreach($subItem['dropdown'] as $subSubItem)
                                                     <li>
-                                                        <a href="{{ $subSubItem['route'] }}">{{ $subSubItem['name'] }}</a>
+                                                        <a href="{{ $subSubItem['route'] }}"
+                                                           @if(isset($subSubItem['external'])) target="_blank" rel="noopener" @endif>
+                                                            {{ $subSubItem['name'] }}
+                                                        </a>
                                                     </li>
                                                 @endforeach
                                             </ul>
@@ -33,7 +36,7 @@
                                     @else
                                         <li >
                                             <a href="{{ $subItem['route'] }}"
-                                               @if(isset($subItem['external'])) target="_blank" @endif>
+                                               @if(isset($subItem['external'])) target="_blank" rel="noopener" @endif>
                                                 {{ $subItem['name'] }}
                                             </a>
                                         </li>

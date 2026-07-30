@@ -1,0 +1,74 @@
+/* =================================================== */
+/* SKM CTA — Survei Kepuasan Masyarakat                */
+/* Dipakai di beranda dan halaman Standar Pelayanan.   */
+/* =================================================== */
+
+/*
+ * Token warna dideklarasikan ulang di sini sebagai fallback karena halaman
+ * Standar Pelayanan tidak memuat beranda-modern.css tempat token ini berasal.
+ */
+.skm-cta-card {
+    --skm-primary: #0d2c4a;
+    --skm-accent: #f0a500;
+
+    background: linear-gradient(45deg, var(--skm-primary), #1a4a7a);
+    color: #fff;
+    border-radius: 16px;
+    padding: 40px;
+    box-shadow: 0 15px 40px rgba(13, 44, 74, 0.2);
+}
+
+.skm-cta-title {
+    font-weight: 700;
+    font-size: 28px;
+    line-height: 1.25;
+    color: #fff;
+    margin-bottom: 12px;
+}
+
+.skm-cta-text {
+    font-size: 17px;
+    opacity: 0.9;
+}
+
+.skm-cta-btn {
+    display: inline-block;
+    border: 2px solid var(--skm-accent, #f0a500);
+    color: var(--skm-accent, #f0a500);
+    padding: 12px 30px;
+    border-radius: 50px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.skm-cta-btn:hover,
+.skm-cta-btn:focus {
+    background: var(--skm-accent, #f0a500);
+    color: var(--skm-primary, #0d2c4a);
+}
+
+/* Jarak saat kartu dipakai di dalam halaman konten (bukan sebagai band penuh) */
+.skm-cta-inline {
+    margin-bottom: 40px;
+}
+
+@media (max-width: 767.98px) {
+    .skm-cta-card {
+        padding: 28px 20px;
+        text-align: center;
+    }
+
+    .skm-cta-title {
+        font-size: 22px;
+    }
+
+    .skm-cta-text {
+        font-size: 15px;
+    }
+
+    .skm-cta-btn {
+        width: 100%;
+        text-align: center;
+    }
+}

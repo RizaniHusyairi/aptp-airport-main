@@ -109,6 +109,63 @@ if (!function_exists("formatDateWithTimezone")) {
     }
 }
 
+if (!function_exists("skmSetting")) {
+    /**
+     * Pengaturan tautan Survei Kepuasan Masyarakat (SKM).
+     * Di-cache karena dipakai di footer yang dirender pada setiap halaman publik.
+     * Cache dibersihkan saat admin menyimpan lewat Admin\SkmSettingController.
+     */
+    function skmSetting()
+    {
+        return Illuminate\Support\Facades\Cache::rememberForever('skm_setting', function () {
+            $settings = App\Models\Setting::whereIn('key', ['skm_url', 'skm_label', 'skm_is_active'])
+                ->pluck('value', 'key');
+
+            return [
+                'url' => $settings['skm_url'] ?? null,
+                'label' => $settings['skm_label'] ?? 'Isi Survei Kepuasan Masyarakat',
+                // URL kosong ikut dianggap tidak aktif agar tidak pernah muncul href=""
+                'active' => ($settings['skm_is_active'] ?? '0') === '1' && !empty($settings['skm_url']),
+            ];
+        });
+    }
+}
+
+if (!function_exists("externalLinks")) {
+    /**
+     * Tautan terkait aktif, dikelompokkan per kolom `group`.
+     * Di-cache karena dipakai di footer dan menu navbar yang dirender pada
+     * setiap halaman. Cache dibersihkan oleh Admin\ExternalLinkController
+     * pada store(), update(), dan destroy().
+     *
+     * Sengaja mengembalikan array biasa (bukan model Eloquent) agar tidak ada
+     * masalah serialisasi cache dan blade-nya tetap sederhana.
+     */
+    function externalLinks()
+    {
+        return Illuminate\Support\Facades\Cache::rememberForever('external_links', function () {
+            return App\Models\ExternalLink::active()
+                ->orderBy('sort_order')
+                ->orderBy('name')
+                ->get()
+                ->map(function ($link) {
+                    return [
+                        'name' => $link->name,
+                        'url' => $link->url,
+                        'description' => $link->description,
+                        'icon' => $link->icon ?: 'bi-box-arrow-up-right',
+                        'logo' => $link->logo_url,
+                        'group' => $link->group,
+                    ];
+                })
+                // Urutan kelompok mengikuti kemunculan pertama pada hasil yang
+                // sudah diurutkan berdasarkan sort_order.
+                ->groupBy('group')
+                ->toArray();
+        });
+    }
+}
+
 if (!function_exists("orderClass")) {
     function orderClass($status)
     {

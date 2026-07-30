@@ -5,6 +5,9 @@
 
 @push('page-styles')
     <link href="{{ asset('assets_landing/css/beranda-modern.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets_landing/css/skm.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets_landing/css/tautan-terkait.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets_landing/css/faq.css') }}" rel="stylesheet">
 @endpush
 
 @push('page-scripts')
@@ -21,6 +24,9 @@
     
     {{-- File JS kustom untuk halaman ini --}}
     <script src="{{ asset('assets_landing/js/beranda-modern.js') }}"></script>
+
+    {{-- Animasi masuk untuk akordeon FAQ unggulan --}}
+    <script src="{{ asset('assets_landing/js/faq.js') }}"></script>
 
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
@@ -398,6 +404,50 @@
 
 
 <!-- ============================================ -->
+<!--             TAUTAN TERKAIT SECTION           -->
+<!-- ============================================ -->
+@if(!empty(externalLinks()))
+<section id="tautan-terkait" class="section-modern">
+    <div class="container" data-aos="fade-up">
+        <div class="section-title-modern">
+            <h2>Tautan Terkait</h2>
+            <p>Akses cepat ke portal resmi pelayanan publik dan aplikasi kedinasan.</p>
+        </div>
+        @include('landing-menu.partials.tautan-terkait-groups')
+    </div>
+</section>
+@endif
+
+
+<!-- ============================================ -->
+<!--                 FAQ SECTION                  -->
+<!-- ============================================ -->
+@if($featuredFaqs->isNotEmpty())
+<section id="faq-home" class="section-modern light-background">
+    <div class="container" data-aos="fade-up">
+        <div class="section-title-modern">
+            <h2>Pertanyaan yang Sering Diajukan</h2>
+            <p>Jawaban cepat untuk hal-hal yang paling sering ditanyakan pengunjung.</p>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-lg-9">
+                @include('landing-menu.partials.faq-accordion', [
+                    'faqs' => $featuredFaqs,
+                    'accordionId' => 'faq-home-accordion',
+                ])
+
+                <div class="text-center mt-5">
+                    <a href="{{ route('faq') }}" class="btn-modern-outline-dark">Lihat Semua FAQ</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+@endif
+
+
+<!-- ============================================ -->
 <!--                 NEWS SECTION                 -->
 <!-- ============================================ -->
 <section id="news-modern" class="section-modern news-modern dark-background">
@@ -430,6 +480,28 @@
         </div>
     </div>
 </section>
+
+
+<!-- ============================================ -->
+<!--          SKM CTA (SURVEI KEPUASAN)           -->
+<!-- ============================================ -->
+@if(skmSetting()['active'])
+<section id="skm-cta" class="section-modern">
+    <div class="container" data-aos="fade-up">
+        <div class="skm-cta-card row align-items-center g-4">
+            <div class="col-lg-8">
+                <h2 class="skm-cta-title">Bagaimana Pengalaman Anda di Bandara Kami?</h2>
+                <p class="skm-cta-text mb-0">Sampaikan penilaian Anda melalui Survei Kepuasan Masyarakat. Masukan Anda menjadi dasar perbaikan layanan kami.</p>
+            </div>
+            <div class="col-lg-4 text-lg-end">
+                <a href="{{ skmSetting()['url'] }}" target="_blank" rel="noopener" class="skm-cta-btn">
+                    {{ skmSetting()['label'] }} <i class="bi bi-box-arrow-up-right ms-1"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+@endif
 
 
 <!-- ============================================ -->

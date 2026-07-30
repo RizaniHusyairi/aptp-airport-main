@@ -2,7 +2,7 @@
   <div class="container">
     <div class="row gy-3">
       
-      <div class="col-lg-4 col-md-6 d-flex">
+      <div class="col-lg-3 col-md-6 d-flex">
         <i class="bi bi-geo-alt icon"></i>
         <div class="address">
           <h4>Alamat</h4>
@@ -10,8 +10,8 @@
           <p>Kel. Sungai Siring, Samarinda – Kalimantan Timur 75119</p>
         </div>
       </div>
-      
-      <div class="col-lg-4 col-md-6 d-flex">
+
+      <div class="col-lg-3 col-md-6 d-flex">
         <i class="bi bi-telephone icon"></i>
         <div>
           <h4>Info Kontak</h4>
@@ -22,7 +22,36 @@
         </div>
       </div>
       
-      <div class="col-lg-4 col-md-6">
+      <div class="col-lg-3 col-md-6">
+        <h4>Layanan Publik</h4>
+        <ul class="list-unstyled">
+          @if(skmSetting()['active'])
+            <li class="mb-2">
+              <a href="{{ skmSetting()['url'] }}" target="_blank" rel="noopener" class="text-reset">
+                <i class="bi bi-clipboard2-check me-1"></i> {{ skmSetting()['label'] }}
+              </a>
+            </li>
+          @endif
+          {{-- Kebijakan Privasi sengaja tidak diulang di sini, sudah ada di blok copyright --}}
+          <li class="mb-2"><a href="{{ route('standarPelayanan') }}" class="text-reset">Standar Pelayanan</a></li>
+          <li class="mb-2"><a href="{{ route('faq') }}" class="text-reset">FAQ</a></li>
+
+          {{--
+            Tautan terkait dirender rata dari helper ter-cache.
+            Bila daftar tumbuh melewati ~8 butir, ganti blok ini dengan satu
+            tautan ke route('tautanTerkait') saja agar footer tidak sesak.
+          --}}
+          @foreach(externalLinks() as $ttLinks)
+            @foreach($ttLinks as $ttLink)
+              <li class="mb-2">
+                <a href="{{ $ttLink['url'] }}" target="_blank" rel="noopener" class="text-reset">{{ $ttLink['name'] }}</a>
+              </li>
+            @endforeach
+          @endforeach
+        </ul>
+      </div>
+
+      <div class="col-lg-3 col-md-6">
         <div class="d-flex flex-column">
           <div class="mb-4">
             <h4>Ikuti Kami</h4>
@@ -44,8 +73,7 @@
 
         </div>
       </div>
-      
-      </div>
+
     </div>
   </div>
 

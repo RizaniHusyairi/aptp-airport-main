@@ -58,11 +58,26 @@
             <div class="mx-auto text-center mt-4">
                 <a href="{{ url($service->submission_url) }}" class="btn btn-outline-secondary">Ajukan Sekarang</a>
             </div>
+
+            @if(!empty($serviceFaqs) && $serviceFaqs->isNotEmpty())
+                <div class="mt-5" data-aos="fade-up">
+                    <h3 class="h5 text-center mb-4">Pertanyaan Seputar Layanan Ini</h3>
+                    @include('landing-menu.partials.faq-accordion', [
+                        'faqs' => $serviceFaqs,
+                        'accordionId' => 'faq-layanan-accordion',
+                    ])
+                </div>
+            @endif
         </div>
     </div>
 </section>
 @endsection
 
+@push('page-scripts')
+  <script src="{{ asset('assets_landing/js/faq.js') }}"></script>
+@endpush
+
 @push('page-styles')
+  <link href="{{ asset('assets_landing/css/faq.css') }}" rel="stylesheet">
   <link href="{{ asset('assets_landing/css/layanan-acc.css') }}" rel="stylesheet">
 @endpush

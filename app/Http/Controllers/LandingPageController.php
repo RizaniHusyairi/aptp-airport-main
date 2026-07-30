@@ -18,7 +18,9 @@ use App\Jobs\LogVisitorJob;
 use Illuminate\Http\Request;
 use App\Models\AirTrafficLog;
 use App\Models\BudgetExpense;
+use App\Models\Faq;
 use App\Models\PpidRegulation;
+use App\Models\ServiceStandard;
 use App\Models\PeriodicDocument;
 use App\Models\AirFreightTraffic;
 use App\Models\PublicInformation;
@@ -172,18 +174,27 @@ class LandingPageController extends Controller
             'description' => 'Sistem Informasi Bandara APT Pranoto, menyediakan data lalu lintas, cuaca, dan berita.',
             'keywords' => 'bandara, APT Pranoto, Samarinda, cuaca, lalu lintas',
         ];
-        return view('landing-menu.beranda.index', 
+
+        // FAQ unggulan untuk section ringkas di beranda
+        $featuredFaqs = Faq::active()
+            ->where('is_featured', true)
+            ->orderBy('sort_order')
+            ->take(6)
+            ->get();
+
+        return view('landing-menu.beranda.index',
         compact(
             'sliders',
             'infoSlides',
-            'flightStats', 
+            'flightStats',
             'totalAngkutanUdara',
             'headlines',
             'destinations',
             'weather',
             'meta',
             'facilityImages',
-            'heroSettings'
+            'heroSettings',
+            'featuredFaqs'
         ));
     }
 
@@ -457,8 +468,14 @@ class LandingPageController extends Controller
     public function showServicePage($slug)
     {
         $service = Service::where('slug', $slug)->where('is_active', true)->firstOrFail();
-        // dd($service->requairements);
-        return view('landing-menu.layanan.index', compact('service'));
+
+        // FAQ yang dikaitkan ke layanan ini
+        $serviceFaqs = Faq::active()
+            ->where('service_id', $service->id)
+            ->orderBy('sort_order')
+            ->get();
+
+        return view('landing-menu.layanan.index', compact('service', 'serviceFaqs'));
     }
 
 
@@ -1023,6 +1040,35 @@ class LandingPageController extends Controller
                                 ->groupBy('category');
         
         return view('landing-menu.informasi-publik.regulasi-ppid.index', compact('regulationCategories'));
+    }
+
+    public function standarPelayanan()
+    {
+        $documentGroups = ServiceStandard::where('is_active', true)
+                                ->orderBy('type')
+                                ->orderBy('published_date', 'desc')
+                                ->get()
+                                ->groupBy('type');
+
+        return view('landing-menu.informasi-publik.standar-pelayanan.index', compact('documentGroups'));
+    }
+
+    public function tautanTerkait()
+    {
+        // Data diambil langsung di blade lewat helper externalLinks() yang ter-cache.
+        return view('landing-menu.tautan-terkait.index');
+    }
+
+    public function faq()
+    {
+        $faqs = Faq::active()
+            ->orderBy('category')
+            ->orderBy('sort_order')
+            ->get();
+
+        $categories = $faqs->pluck('category')->unique()->values();
+
+        return view('landing-menu.faq.index', compact('faqs', 'categories'));
     }
 
 

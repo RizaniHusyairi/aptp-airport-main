@@ -21,6 +21,9 @@ class SitemapController extends Controller
             ['/informasi/berita',                'daily',   '0.8'],
             ['/informasi-publik',                'monthly', '0.7'],
             ['/informasi-publik/profil-bandara', 'monthly', '0.7'],
+            ['/informasi-publik/standar-pelayanan', 'monthly', '0.7'],
+            ['/tautan-terkait',                    'monthly', '0.6'],
+            ['/faq',                               'monthly', '0.8'],
             ['/lalu-lintas-angkutan',            'monthly', '0.6'],
             ['/kebijakan-privasi',               'yearly',  '0.3'],
         ];

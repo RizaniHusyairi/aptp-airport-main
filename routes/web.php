@@ -16,6 +16,10 @@ use App\Http\Controllers\Admin\{
     InfoSlideController,
     PeriodicDocumentController,
     PpidRegulationController,
+    ServiceStandardController,
+    SkmSettingController,
+    ExternalLinkController,
+    FaqController,
     ProfileBandaraSettingController // <<< NEW CONTROLLER
 };
 use App\Http\Controllers\Staff_User\{
@@ -431,6 +435,12 @@ Route::group(["prefix" => 'dashboard'], function () {
 
             Route::resource('staff/ppid-regulations', PpidRegulationController::class)->names('staff.ppid-regulations');
 
+            Route::resource('staff/service-standards', ServiceStandardController::class)->except('show')->names('staff.service-standards');
+
+            Route::resource('staff/external-links', ExternalLinkController::class)->except('show')->names('staff.external-links');
+
+            Route::resource('staff/faqs', FaqController::class)->except('show')->names('staff.faqs');
+
             // routes/web.php (dalam grup admin/staff)
             // === ROUTE UNTUK PENGATURAN HERO ===
             Route::prefix('hero-settings')->name('admin.hero-settings.')->group(function () {
@@ -444,6 +454,12 @@ Route::group(["prefix" => 'dashboard'], function () {
             Route::prefix('profile-bandara-settings')->name('admin.profile-bandara-settings.')->group(function () {
                 Route::get('/', [ProfileBandaraSettingController::class, 'index'])->name('index');
                 Route::post('/update', [ProfileBandaraSettingController::class, 'update'])->name('update');
+            });
+
+            // === ROUTE PENGATURAN TAUTAN SURVEI KEPUASAN MASYARAKAT ===
+            Route::prefix('skm-settings')->name('admin.skm-settings.')->group(function () {
+                Route::get('/', [SkmSettingController::class, 'index'])->name('index');
+                Route::post('/update', [SkmSettingController::class, 'update'])->name('update');
             });
 
         });
@@ -545,6 +561,7 @@ Route::get('/informasi-publik/struktur-organisasi', [LandingPageController::clas
 Route::get('/informasi-publik/profil-ppid-blu', [LandingPageController::class, 'profilPPID'])->name('profilPPID');
 Route::get('/informasi-publik/pejabat-bandara', [LandingPageController::class, 'pejabatBandara'])->name('pejabatBandara');
 Route::get('/informasi-publik/sop-ppid', [LandingPageController::class, 'sopPpid'])->name('sopPpid');
+Route::get('/informasi-publik/standar-pelayanan', [LandingPageController::class, 'standarPelayanan'])->name('standarPelayanan');
 
 Route::get('/informasi-publik/laporan-layanan', [LandingPageController::class, 'laporanLayanan'])->name('laporanLayanan');
 Route::get('/informasi-publik/informasi-berkala', [LandingPageController::class, 'informasiBerkala'])->name('informasiBerkala');
@@ -556,6 +573,10 @@ Route::get('/informasi-publik/informasi-setiap-saat', [LandingPageController::cl
 Route::get('/informasi-publik/regulasi-ppid', [LandingPageController::class, 'regulasiPpid'])->name('regulasi.ppid');
 // routes/web.php
 Route::get('/informasi-publik/laporan-layanan-informasi', [LandingPageController::class, 'laporanLayananInformasi'])->name('laporan.layanan.informasi');
+
+// routes/web.php
+Route::get('/tautan-terkait', [LandingPageController::class, 'tautanTerkait'])->name('tautanTerkait');
+Route::get('/faq', [LandingPageController::class, 'faq'])->name('faq');
 
 // routes/web.php
 Route::get('/fasilitas', [LandingPageController::class, 'fasilitas'])->name('fasilitas');

@@ -1,0 +1,128 @@
+/* =================================================== */
+/* TAUTAN TERKAIT — kartu portal eksternal             */
+/* Dipakai di beranda dan halaman /tautan-terkait.     */
+/* =================================================== */
+
+/*
+ * Token warna dideklarasikan ulang sebagai fallback karena halaman
+ * /tautan-terkait tidak memuat beranda-modern.css tempat token ini berasal.
+ */
+.tt-group {
+    --tt-primary: #0d2c4a;
+    --tt-accent: #f0a500;
+}
+
+.tt-group + .tt-group {
+    margin-top: 48px;
+}
+
+.tt-group-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--tt-primary, #0d2c4a);
+    padding-left: 14px;
+    border-left: 4px solid var(--tt-accent, #f0a500);
+    margin-bottom: 24px;
+}
+
+.tt-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 28px;
+    background: #fff;
+    border: 1px solid rgba(13, 44, 74, 0.08);
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    text-decoration: none;
+    transition: all 0.35s ease;
+}
+
+.tt-card:hover {
+    transform: translateY(-10px);
+    border-color: var(--tt-primary, #0d2c4a);
+    box-shadow: 0 20px 45px rgba(13, 44, 74, 0.18);
+}
+
+.tt-card-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    margin-bottom: 20px;
+    border-radius: 14px;
+    background: rgba(13, 44, 74, 0.08);
+    color: var(--tt-primary, #0d2c4a);
+    font-size: 30px;
+    transition: all 0.35s ease;
+}
+
+.tt-card:hover .tt-card-icon {
+    background: var(--tt-primary, #0d2c4a);
+    color: #fff;
+}
+
+.tt-card-logo {
+    display: flex;
+    align-items: center;
+    height: 64px;
+    margin-bottom: 20px;
+}
+
+.tt-card-logo img {
+    max-height: 48px;
+    max-width: 100%;
+    width: auto;
+}
+
+.tt-card-title {
+    font-size: 19px;
+    font-weight: 700;
+    color: var(--tt-primary, #0d2c4a);
+    margin-bottom: 8px;
+}
+
+.tt-card-desc {
+    font-size: 15px;
+    line-height: 1.6;
+    color: #6c757d;
+    /* Dorong tautan "Kunjungi" ke dasar kartu agar sejajar antar kartu */
+    flex-grow: 1;
+    margin-bottom: 16px;
+}
+
+.tt-card-link {
+    font-weight: 600;
+    color: var(--tt-accent, #f0a500);
+}
+
+.tt-card-link i {
+    transition: transform 0.35s ease;
+}
+
+.tt-card:hover .tt-card-link i {
+    transform: translateX(6px);
+}
+
+@media (max-width: 767.98px) {
+    .tt-card {
+        padding: 22px;
+    }
+
+    .tt-card-icon {
+        width: 52px;
+        height: 52px;
+        font-size: 24px;
+        margin-bottom: 16px;
+    }
+
+    .tt-card-logo {
+        height: 52px;
+        margin-bottom: 16px;
+    }
+
+    .tt-group-title {
+        font-size: 18px;
+    }
+}
