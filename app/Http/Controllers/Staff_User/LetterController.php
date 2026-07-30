@@ -26,7 +26,7 @@ class LetterController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'type' => 'required|in:edaran,utusan',
+            'type' => 'required|in:edaran,keputusan',
             'number' => 'required|string|unique:letters,number',
             'title' => 'required|string|max:255',
             'issue_date' => 'required|date',
@@ -56,7 +56,7 @@ class LetterController extends Controller
     public function update(Request $request, Letter $letter)
     {
         $request->validate([
-            'type' => 'required|in:edaran,utusan',
+            'type' => 'required|in:edaran,keputusan',
             'number' => 'required|string|unique:letters,number,' . $letter->id,
             'title' => 'required|string|max:255',
             'issue_date' => 'required|date',
@@ -101,7 +101,7 @@ class LetterController extends Controller
 
     public function suratUtusan()
     {
-        $letters = Letter::where('type', 'utusan')->latest()->get();
+        $letters = Letter::where('type', 'keputusan')->latest()->get();
         return view('navigation.regulasi.surat-utusan.index', compact('letters'));
     }
 }

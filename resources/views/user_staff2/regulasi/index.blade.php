@@ -55,7 +55,7 @@
                                                     <tr data-id="{{ $letter->id }}">
                                                         <td>{{ $letter->number }}</td>
                                                         <td>{{ $letter->title }}</td>
-                                                        <td>{{ $letter->type == 'edaran' ? 'Surat Edaran' : 'Surat Utusan' }}</td>
+                                                        <td>{{ $letter->type == 'edaran' ? 'Surat Edaran' : 'Surat Keputusan' }}</td>
                                                         <td>{{ \Carbon\Carbon::parse($letter->issue_date)->translatedFormat('d M Y') }}</td>
                                                         <td><a href="{{ asset('uploads/uploads/letters/' . basename($letter->file_path)) }}" target="_blank" class="badge bg-primary">Lihat</a></td>
                                                         <td class="d-flex">

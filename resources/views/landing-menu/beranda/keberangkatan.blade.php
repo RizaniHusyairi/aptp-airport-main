@@ -1,67 +1,24 @@
 @extends('layouts_landing.landing_app')
 
 @section('title', 'Jadwal Keberangkatan — Bandara APT Pranoto Samarinda (AAP)')
-@section('description', 'Jadwal keberangkatan penerbangan real-time dari Bandara APT Pranoto Samarinda (AAP). Lihat maskapai, kota tujuan, dan jam keberangkatan terkini.')
-
-@section('content')
-<section id="jadwal-keberangkatan" class="section pt-6">
-    <div class="container section-title pb-2" data-aos="fade-up">
-        <h2>Jadwal<br></h2>
-        <p><span>Keberangkatan Pesawat</span> <span class="description-title">Bandara A.P.T. Pranoto Samarinda</span></p>
-    </div>
-    <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <!-- Indikator Loading -->
-                <div id="loadingIndicator" class="text-center" style="display: none;">
-                    <div class="spinner-border text-primary" role="status">
-                        <span class="visually-hidden">Memuat...</span>
-                    </div>
-                    <p>Memuat data keberangkatan...</p>
-                </div>
-                <!-- Placeholder untuk Pesan Error -->
-                <div id="errorMessage" class="alert alert-danger" style="display: none;"></div>
-                <div class="table-responsive">
-                    <table id="departureTable" class="table table-striped table-bordered" style="width:100%">
-                        <thead>
-                            <tr>
-                                <th>Kode Penerbangan</th>
-                                <th>Maskapai</th>
-                                <th>Tujuan Bandara (Kota)</th>
-                                <th>Waktu Keberangkatan</th>
-                                <th>Gate</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- Data akan diisi oleh JavaScript -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Toast Container untuk Pesan Error -->
-    <div class="toast-container position-fixed top-0 end-0 p-3">
-        <div id="toastNotification" class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-delay="5000">
-            <div class="toast-header bg-danger text-white">
-                <strong class="me-auto">Error</strong>
-                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-            </div>
-            <div class="toast-body"></div>
-        </div>
-    </div>
-</section>
-@endsection
+@section('description', 'Jadwal keberangkatan penerbangan real-time dari Bandara APT Pranoto Samarinda (AAP). Lihat maskapai, kota tujuan, gate, dan jam keberangkatan terkini.')
 
 @push('page-styles')
-<link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
-<link href="{{ asset('assets_landing/css/keberangkatan.css') }}" rel="stylesheet">
+<link href="{{ asset('assets_landing/css/flight-board.css') }}" rel="stylesheet">
 @endpush
 
+@section('content')
+    @include('landing-menu.beranda.partials.flight-board', [
+        'mode' => 'departure',
+        'endpoint' => route('api.departures'),
+        'eyebrow' => 'Papan Keberangkatan',
+        'titleLead' => 'Jadwal',
+        'titleWord' => 'Keberangkatan',
+        'subtitle' => 'Informasi keberangkatan penerbangan dari Bandar Udara A.P.T. Pranoto Samarinda, diperbarui otomatis mengikuti data operasional bandara.',
+    ])
+@endsection
+
 @push('page-scripts')
-<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
-<script src="{{ asset('assets_landing/js/keberangkatan.js') }}"></script>
+<script src="{{ asset('assets_landing/js/flight-particles.js') }}"></script>
+<script src="{{ asset('assets_landing/js/flight-board.js') }}"></script>
 @endpush

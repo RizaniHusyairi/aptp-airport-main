@@ -15,10 +15,14 @@
 
 /* ---------- HERO: langit senja + kanvas partikel ---------- */
 
+/*
+ * Padding atas harus melebihi tinggi #header yang position:fixed (±76px:
+ * padding 20px atas-bawah + logo 36px), agar judul tidak tertutup header.
+ */
 .fb-hero {
     position: relative;
     overflow: hidden;
-    padding: 96px 0 120px;
+    padding: 148px 0 120px;
     background:
         radial-gradient(1200px 520px at 78% -10%, rgba(240, 165, 0, 0.22), transparent 62%),
         linear-gradient(170deg, var(--fb-navy-deep) 0%, var(--fb-navy) 46%, var(--fb-navy-mid) 100%);
@@ -184,10 +188,14 @@
     color: #7a8794;
 }
 
-/* Baris header kolom, hanya tampil di layar lebar */
+/*
+ * Kolom: keberangkatan 6 (kode, maskapai, tujuan, gate, waktu, status),
+ * kedatangan 5 (tanpa gate). Header dan baris data WAJIB memakai definisi
+ * grid yang sama agar tetap sejajar.
+ */
 .fb-cols {
     display: grid;
-    grid-template-columns: 1.1fr 1.5fr 1fr 0.7fr 1fr;
+    grid-template-columns: 1.05fr 1.35fr 1.3fr 0.6fr 0.95fr 1.05fr;
     gap: 16px;
     padding: 0 18px 10px;
     font-size: 11px;
@@ -198,7 +206,7 @@
 }
 
 .fb-board[data-mode="arrival"] .fb-cols {
-    grid-template-columns: 1.1fr 1.5fr 1.1fr 1fr;
+    grid-template-columns: 1.05fr 1.45fr 1.4fr 0.95fr 1.05fr;
 }
 
 /* ---------- Kartu penerbangan ---------- */
@@ -210,7 +218,7 @@
 
 .fb-row {
     display: grid;
-    grid-template-columns: 1.1fr 1.5fr 1fr 0.7fr 1fr;
+    grid-template-columns: 1.05fr 1.35fr 1.3fr 0.6fr 0.95fr 1.05fr;
     gap: 16px;
     align-items: center;
     padding: 18px;
@@ -226,7 +234,7 @@
 }
 
 .fb-board[data-mode="arrival"] .fb-row {
-    grid-template-columns: 1.1fr 1.5fr 1.1fr 1fr;
+    grid-template-columns: 1.05fr 1.45fr 1.4fr 0.95fr 1.05fr;
 }
 
 .fb-row:hover {
@@ -259,15 +267,51 @@
     font-size: 15px;
 }
 
+/* Garis tepi kartu memakai warna merek maskapai bila dikirim API */
+.fb-row {
+    border-left-color: var(--brand, var(--fb-accent));
+}
+
 .fb-airline {
+    display: flex;
+    align-items: center;
+    gap: 9px;
     font-weight: 600;
     color: #33414f;
+}
+
+/* Kode maskapai (mis. SAQ) memakai warna merek dari API.
+   Logo maskapai sengaja tidak dipakai: URL-nya berada di host API lewat HTTP,
+   sehingga akan diblokir sebagai mixed content saat situs berjalan di HTTPS. */
+.fb-airline-badge {
+    flex-shrink: 0;
+    padding: 4px 9px;
+    border-radius: 7px;
+    background: var(--brand, var(--fb-navy));
+    color: #fff;
+    font-family: "Courier New", ui-monospace, monospace;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
 }
 
 .fb-city {
     font-weight: 700;
     color: var(--fb-navy);
     line-height: 1.3;
+}
+
+/* Kode IATA bandara tujuan/asal */
+.fb-iata {
+    display: inline-block;
+    margin-right: 8px;
+    padding: 2px 8px;
+    border: 1px dashed rgba(13, 44, 74, 0.28);
+    border-radius: 6px;
+    font-family: "Courier New", ui-monospace, monospace;
+    font-size: 12.5px;
+    color: var(--fb-navy);
+    vertical-align: 1px;
 }
 
 .fb-airport {
@@ -399,7 +443,7 @@
 }
 
 @media (max-width: 575.98px) {
-    .fb-hero { padding: 72px 0 104px; }
+    .fb-hero { padding: 124px 0 104px; }
 
     .fb-board {
         padding: 16px;

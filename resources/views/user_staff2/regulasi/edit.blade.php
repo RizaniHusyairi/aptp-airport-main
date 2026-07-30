@@ -39,7 +39,7 @@
                         <select name="type" id="type" class="form-select @error('type') is-invalid @enderror">
                             <option value="">Pilih Jenis</option>
                             <option value="edaran" {{ old('type',$letter->type) == 'edaran' ? 'selected' : '' }}>Surat Edaran</option>
-                            <option value="utusan" {{ old('type', $letter->type) == 'utusan' ? 'selected' : '' }}>Surat Utusan</option>
+                            <option value="keputusan" {{ old('type', $letter->type) == 'keputusan' ? 'selected' : '' }}>Surat Keputusan</option>
                         </select>
                         @error('type')
                             <div class="invalid-feedback">{{ $message }}</div>
@@ -75,7 +75,8 @@
                     
                     <div class="col-12 mb-3">
                         <label for="file" class="form-label">File Surat (Kosongkan jika tidak diganti)</label>
-                        <input type="file" class="form-control" id="file" name="file" multiple accept=".pdf">
+                        {{-- Satu berkas saja: controller hanya memproses satu file per surat --}}
+                        <input type="file" class="form-control @error('file') is-invalid @enderror" id="file" name="file" accept="application/pdf">
                         
                         @error('file')
                         <div class="invalid-feedback">

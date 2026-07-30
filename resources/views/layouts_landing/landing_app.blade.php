@@ -70,9 +70,16 @@
   @stack('schema')
 
 
-  <!-- Favicons -->
-  <link href="{{ asset('assets_landing/img/favicon.png') }}" rel="icon" type="image/png">
-  <link href="{{ asset('assets_landing/img/apple-touch-icon.png') }}" rel="apple-touch-icon">
+  {{--
+    Favicon — logo APT Pranoto.
+    logo-mini-apt.svg dipakai sebagai ikon utama. PNG di bawahnya adalah
+    cadangan untuk peramban yang tidak mendukung favicon SVG, dan
+    apple-touch-icon WAJIB berformat PNG karena iOS tidak mendukung SVG.
+    Kedua PNG dibuat dari logo yang sama, sudah dipangkas agar terbaca.
+  --}}
+  <link href="{{ asset('assets_landing/img/logo/logo-mini-apt.svg') }}" rel="icon" type="image/svg+xml">
+  <link href="{{ asset('assets_landing/img/favicon-apt.png') }}" rel="icon" type="image/png" sizes="64x64">
+  <link href="{{ asset('assets_landing/img/apple-touch-icon-apt.png') }}" rel="apple-touch-icon" sizes="180x180">
 
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com" rel="preconnect">

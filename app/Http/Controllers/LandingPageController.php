@@ -582,7 +582,7 @@ class LandingPageController extends Controller
     public function getLettersUtusan(Request $request)
     {
 
-        $letters = Letter::where('type', 'utusan')->get();
+        $letters = Letter::where('type', 'keputusan')->get();
         return response()->json($letters);
     }
     

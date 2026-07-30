@@ -1,0 +1,572 @@
+/* =================================================== */
+/* PROFIL BANDARA — tampilan modern bernuansa udara    */
+/* Semua aturan di-scope di bawah .pf-* .              */
+/* =================================================== */
+
+.pf {
+    --pf-navy: #0d2c4a;
+    --pf-navy-deep: #061a2e;
+    --pf-navy-mid: #12395e;
+    --pf-accent: #f0a500;
+    --pf-text: #e9eef5;
+    --pf-muted: rgba(233, 238, 245, 0.68);
+}
+
+/* ---------- HERO ---------- */
+
+/*
+ * Padding atas melebihi tinggi #header yang position:fixed (±76px)
+ * agar judul tidak tertutup header.
+ */
+.pf-hero {
+    position: relative;
+    overflow: hidden;
+    padding: 148px 0 110px;
+    background:
+        radial-gradient(1100px 480px at 82% -12%, rgba(240, 165, 0, 0.2), transparent 60%),
+        linear-gradient(168deg, var(--pf-navy-deep) 0%, var(--pf-navy) 48%, var(--pf-navy-mid) 100%);
+    color: var(--pf-text);
+}
+
+/*
+ * Kelas .fb-canvas dipakai ulang dengan sengaja: flight-particles.js
+ * menginisialisasi setiap elemen dengan kelas itu, sehingga skrip partikel
+ * yang sudah ada bisa langsung dipakai tanpa duplikasi kode.
+ */
+.pf-hero .fb-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    pointer-events: none;
+}
+
+.pf-hero::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 110px;
+    background: linear-gradient(to top, rgba(6, 26, 46, 0.92), transparent);
+    pointer-events: none;
+}
+
+.pf-hero-inner {
+    position: relative;
+    z-index: 2;
+}
+
+.pf-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 16px;
+    margin-bottom: 18px;
+    border: 1px solid rgba(240, 165, 0, 0.4);
+    border-radius: 50px;
+    background: rgba(240, 165, 0, 0.1);
+    color: var(--pf-accent);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.pf-title {
+    font-size: clamp(1.9rem, 4.6vw, 3rem);
+    font-weight: 800;
+    line-height: 1.14;
+    color: #fff;
+    margin-bottom: 14px;
+}
+
+.pf-title span { color: var(--pf-accent); }
+
+.pf-lead {
+    max-width: 660px;
+    font-size: 17px;
+    color: var(--pf-muted);
+    margin-bottom: 0;
+}
+
+/* Kartu fakta singkat */
+.pf-facts {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+    margin-top: 34px;
+}
+
+.pf-fact {
+    padding: 18px 20px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(6px);
+    transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.pf-fact:hover {
+    transform: translateY(-4px);
+    border-color: rgba(240, 165, 0, 0.5);
+}
+
+.pf-fact i {
+    display: block;
+    font-size: 20px;
+    color: var(--pf-accent);
+    margin-bottom: 10px;
+}
+
+.pf-fact-label {
+    display: block;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--pf-muted);
+    margin-bottom: 4px;
+}
+
+.pf-fact-value {
+    font-size: 17px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.25;
+}
+
+.pf-fact-value--mono {
+    font-family: "Courier New", ui-monospace, monospace;
+    font-size: 24px;
+    letter-spacing: 0.05em;
+}
+
+/* ---------- BADAN HALAMAN ---------- */
+
+.pf-body {
+    position: relative;
+    z-index: 3;
+    margin-top: -56px;
+    padding-bottom: 90px;
+}
+
+/* Navigasi dalam halaman yang menempel saat digulir */
+.pf-nav {
+    position: sticky;
+    top: 100px;
+    padding: 18px;
+    border-radius: 16px;
+    background: #fff;
+    box-shadow: 0 14px 40px rgba(13, 44, 74, 0.12);
+}
+
+.pf-nav-title {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #93a1b0;
+    margin-bottom: 12px;
+}
+
+.pf-nav .nav-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    border-left: 3px solid transparent;
+    color: #44586d;
+    font-size: 14.5px;
+    font-weight: 600;
+    transition: all 0.25s ease;
+}
+
+.pf-nav .nav-link i {
+    font-size: 15px;
+    color: #9aa5b1;
+    transition: color 0.25s ease;
+}
+
+.pf-nav .nav-link:hover {
+    background: rgba(13, 44, 74, 0.05);
+    color: var(--pf-navy);
+}
+
+/* Bootstrap ScrollSpy menambahkan .active pada tautan bagian yang terlihat */
+.pf-nav .nav-link.active {
+    background: rgba(13, 44, 74, 0.07);
+    border-left-color: var(--pf-accent);
+    color: var(--pf-navy);
+}
+
+.pf-nav .nav-link.active i { color: var(--pf-accent); }
+
+/* ---------- Kartu bagian ---------- */
+
+.pf-card {
+    position: relative;
+    padding: 30px 32px;
+    margin-bottom: 26px;
+    border: 1px solid rgba(13, 44, 74, 0.07);
+    border-radius: 18px;
+    background: #fff;
+    box-shadow: 0 10px 32px rgba(0, 0, 0, 0.06);
+    transition: box-shadow 0.35s ease, transform 0.35s ease;
+    /* Beri jarak agar judul tidak tersembunyi di balik header saat di-anchor */
+    scroll-margin-top: 110px;
+}
+
+.pf-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 20px 46px rgba(13, 44, 74, 0.11);
+}
+
+.pf-card-head {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding-bottom: 18px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid rgba(13, 44, 74, 0.08);
+}
+
+.pf-card-icon {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, var(--pf-navy), var(--pf-navy-mid));
+    color: var(--pf-accent);
+    font-size: 22px;
+}
+
+.pf-card-title {
+    font-size: 21px;
+    font-weight: 700;
+    color: var(--pf-navy);
+    margin: 0;
+}
+
+.pf-card-sub {
+    display: block;
+    font-size: 13px;
+    font-weight: 400;
+    color: #7a8794;
+    margin-top: 2px;
+}
+
+.pf-subhead {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin: 22px 0 10px;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--pf-navy);
+}
+
+.pf-subhead::before {
+    content: "";
+    width: 4px;
+    height: 17px;
+    border-radius: 3px;
+    background: var(--pf-accent);
+}
+
+.pf-subhead:first-child { margin-top: 0; }
+
+/* ---------- Penataan isi dari TinyMCE ---------- */
+
+/*
+ * .pf-prose menata HTML yang datang dari editor admin maupun teks bawaan,
+ * sehingga tampilannya rapi tanpa perlu mengubah isinya.
+ */
+.pf-prose {
+    color: #4c5b6a;
+    font-size: 15.8px;
+    line-height: 1.85;
+}
+
+.pf-prose > :last-child { margin-bottom: 0; }
+
+.pf-prose p { margin-bottom: 15px; }
+
+.pf-prose strong { color: var(--pf-navy); }
+
+.pf-prose a {
+    color: var(--pf-navy);
+    font-weight: 600;
+    text-decoration: underline;
+}
+
+/* Daftar dengan penanda kustom bernuansa penerbangan */
+.pf-prose ul {
+    list-style: none;
+    padding-left: 0;
+    margin-bottom: 15px;
+}
+
+.pf-prose ul > li {
+    position: relative;
+    padding-left: 30px;
+    margin-bottom: 11px;
+}
+
+.pf-prose ul > li::before {
+    content: "\F5AE"; /* bi-send-fill (ikon pesawat kertas) */
+    position: absolute;
+    left: 0;
+    top: 2px;
+    font-family: "bootstrap-icons";
+    font-size: 12px;
+    color: var(--pf-accent);
+}
+
+.pf-prose ol {
+    padding-left: 22px;
+    margin-bottom: 15px;
+}
+
+.pf-prose ol > li { margin-bottom: 11px; }
+
+/* Teks bawaan halaman memakai komponen list-group Bootstrap; dinetralkan
+   agar seragam dengan penataan .pf-prose di atas. */
+.pf-prose .list-group,
+.pf-prose .list-group-flush {
+    list-style: none;
+    padding-left: 0;
+}
+
+.pf-prose .list-group-item {
+    position: relative;
+    padding: 0 0 0 30px;
+    margin-bottom: 11px;
+    border: 0;
+    background: transparent;
+    color: #4c5b6a !important;
+}
+
+.pf-prose .list-group-item::before {
+    content: "\F5AE";
+    position: absolute;
+    left: 0;
+    top: 2px;
+    font-family: "bootstrap-icons";
+    font-size: 12px;
+    color: var(--pf-accent);
+}
+
+/* Paragraf pertama pada kartu sejarah diberi huruf awal besar */
+.pf-card--story .pf-prose > p:first-of-type::first-letter {
+    float: left;
+    margin: 6px 12px 0 0;
+    font-size: 54px;
+    line-height: 0.82;
+    font-weight: 800;
+    color: var(--pf-navy);
+}
+
+/* ---------- Visi & Misi ---------- */
+
+.pf-vision {
+    padding: 30px 32px;
+    border-radius: 16px;
+    background: linear-gradient(45deg, var(--pf-navy), var(--pf-navy-mid));
+    color: #fff;
+    box-shadow: 0 15px 40px rgba(13, 44, 74, 0.2);
+}
+
+.pf-vision-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--pf-accent);
+    margin-bottom: 12px;
+}
+
+.pf-vision .pf-prose {
+    color: rgba(255, 255, 255, 0.92);
+    font-size: 17.5px;
+    line-height: 1.75;
+}
+
+.pf-vision .pf-prose strong { color: #fff; }
+
+.pf-vision .pf-prose p {
+    /* Visi ditampilkan seperti kutipan */
+    font-style: italic;
+}
+
+/* Misi sebagai daftar bernomor beranimasi */
+@keyframes pfIn {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.pf-mission .pf-prose ul > li,
+.pf-mission .pf-prose .list-group-item {
+    padding: 14px 16px 14px 56px;
+    margin-bottom: 10px;
+    border: 1px solid rgba(13, 44, 74, 0.08);
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
+    counter-increment: pf-mission;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    animation: pfIn 0.45s ease both;
+}
+
+.pf-mission .pf-prose ul,
+.pf-mission .pf-prose .list-group {
+    counter-reset: pf-mission;
+}
+
+/* Nomor menggantikan ikon pesawat kertas pada daftar misi */
+.pf-mission .pf-prose ul > li::before,
+.pf-mission .pf-prose .list-group-item::before {
+    content: counter(pf-mission, decimal-leading-zero);
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    background: rgba(13, 44, 74, 0.08);
+    font-family: "Courier New", ui-monospace, monospace;
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--pf-navy);
+}
+
+.pf-mission .pf-prose ul > li:hover,
+.pf-mission .pf-prose .list-group-item:hover {
+    transform: translateX(5px);
+    box-shadow: 0 10px 24px rgba(13, 44, 74, 0.1);
+}
+
+/* ---------- Tautan lanjutan ---------- */
+
+.pf-next {
+    margin-top: 34px;
+}
+
+.pf-next-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    height: 100%;
+    padding: 20px;
+    border: 1px solid rgba(13, 44, 74, 0.08);
+    border-radius: 14px;
+    background: #fff;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
+    text-decoration: none;
+    transition: all 0.32s ease;
+}
+
+.pf-next-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--pf-navy);
+    box-shadow: 0 16px 36px rgba(13, 44, 74, 0.13);
+}
+
+.pf-next-card i {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: rgba(13, 44, 74, 0.08);
+    color: var(--pf-navy);
+    font-size: 19px;
+    transition: all 0.32s ease;
+}
+
+.pf-next-card:hover i {
+    background: var(--pf-navy);
+    color: #fff;
+}
+
+.pf-next-text {
+    font-weight: 700;
+    color: var(--pf-navy);
+    line-height: 1.3;
+}
+
+.pf-next-text small {
+    display: block;
+    font-weight: 400;
+    color: #7a8794;
+}
+
+/* ---------- Responsif ---------- */
+
+@media (max-width: 991.98px) {
+    .pf-facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+    /* Navigasi dalam halaman digeser ke atas dan tidak lagi menempel */
+    .pf-nav {
+        position: static;
+        margin-bottom: 24px;
+    }
+
+    .pf-nav .nav {
+        flex-direction: row !important;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        gap: 8px;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .pf-nav .nav-link {
+        flex: 0 0 auto;
+        border-left: 0;
+        border-bottom: 3px solid transparent;
+    }
+
+    .pf-nav .nav-link.active {
+        border-left: 0;
+        border-bottom-color: var(--pf-accent);
+    }
+}
+
+@media (max-width: 575.98px) {
+    .pf-hero { padding: 124px 0 96px; }
+
+    .pf-facts { grid-template-columns: 1fr; }
+
+    .pf-card,
+    .pf-vision {
+        padding: 22px 20px;
+        border-radius: 14px;
+    }
+
+    .pf-card--story .pf-prose > p:first-of-type::first-letter {
+        font-size: 42px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .pf-card,
+    .pf-fact,
+    .pf-next-card,
+    .pf-mission .pf-prose ul > li,
+    .pf-mission .pf-prose .list-group-item {
+        animation: none !important;
+        transition: none !important;
+    }
+}

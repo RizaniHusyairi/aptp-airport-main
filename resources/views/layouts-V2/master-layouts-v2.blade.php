@@ -5,7 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title') - Dashboard</title>
-    <link rel="shortcut icon" href="{{ asset('assetsv2/compiled/svg/favicon.svg') }}" type="image/x-icon">
+    {{-- Favicon — logo APT Pranoto (PNG sebagai cadangan untuk peramban tanpa dukungan SVG) --}}
+    <link rel="icon" href="{{ asset('assets_landing/img/logo/logo-mini-apt.svg') }}" type="image/svg+xml">
+    <link rel="icon" href="{{ asset('assets_landing/img/favicon-apt.png') }}" type="image/png" sizes="64x64">
+    <link rel="apple-touch-icon" href="{{ asset('assets_landing/img/apple-touch-icon-apt.png') }}" sizes="180x180">
     
     <!-- Core CSS -->
     <link rel="stylesheet" href="{{ asset('assetsv2/compiled/css/app.css') }}">
