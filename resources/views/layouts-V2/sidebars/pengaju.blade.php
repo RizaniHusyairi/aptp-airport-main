@@ -24,16 +24,32 @@
     <div class="sidebar-menu">
         <ul class="menu">
             <li class="sidebar-title">Menu</li>
-            @foreach ($userRoutes as $menu => $data)
-                <li class="sidebar-item {{ Route::is($data['route']) ? 'active' : '' }}">
-                <a href="{{ route($data['route']) }}" class='sidebar-link' data-bs-toggle="tooltip" data-bs-placement="right" title="{{ $data['label'] }}">
-                        <i class="{{ $data['icon'] }}"></i>
-                        <span>{{ $data['label'] }}</span>
-                    </a>
-                </li>
-                
+            <li class="sidebar-item {{ Route::is('root') ? 'active' : '' }}">
+                <a href="{{ route('root') }}" class='sidebar-link' data-bs-toggle="tooltip" data-bs-placement="right" title="Beranda Dashboard">
+                    <i class="bi bi-grid-fill"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li class="sidebar-item {{ Route::is('profile') ? 'active' : '' }}">
+                <a href="{{ route('profile') }}" class='sidebar-link' data-bs-toggle="tooltip" data-bs-placement="right" title="Profil Saya">
+                    <i class="bi bi-person-circle"></i>
+                    <span>Profil Saya</span>
+                </a>
+            </li>
+
+            {{-- Menu pengajuan, dikelompokkan per jenis layanan --}}
+            @foreach ($userRoutes as $groupName => $items)
+                <li class="sidebar-title">{{ $groupName }}</li>
+
+                @foreach ($items as $data)
+                    <li class="sidebar-item {{ Route::is($data['route']) ? 'active' : '' }}">
+                        <a href="{{ route($data['route']) }}" class='sidebar-link' data-bs-toggle="tooltip" data-bs-placement="right" title="Ajukan {{ $data['label'] }}">
+                            <i class="{{ $data['icon'] }}"></i>
+                            <span>{{ $data['label'] }}</span>
+                        </a>
+                    </li>
+                @endforeach
             @endforeach
-            
         </ul>
     </div>
 </div>

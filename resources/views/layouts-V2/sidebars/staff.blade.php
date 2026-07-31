@@ -38,40 +38,48 @@
                     <span>Surat</span>
                 </a>
             </li>
-            @foreach ($permissionRoutes as $permissionName => $data)
+            {{--
+                Menu dikelompokkan per bidang kerja. Judul kelompok hanya
+                dirender bila ada minimal satu menu yang boleh diakses,
+                sehingga tidak muncul judul tanpa isi.
+            --}}
+            @foreach ($permissionRoutes as $groupName => $items)
+                @php
+                    $visibleItems = collect($items)->filter(function ($data, $permissionName) use ($user) {
+                        return $user->hasPermission($permissionName);
+                    });
+                @endphp
 
-            @if ($user->hasPermission($permissionName))
-            @if($permissionName == 'Manajemen Posko Nataru')
-            <li class="sidebar-item has-sub {{ Route::is('staff.nataru.*') ? 'active' : '' }}">
-                <a href="#" class='sidebar-link'>
-                    <i class="bi bi-airplane-engines"></i>
-                    <span>Posko</span>
-                </a>
-                <ul class="submenu {{ Route::is('staff.nataru.*') ? 'active' : '' }}">
-                    <li class="submenu-item {{ Route::is('staff.nataru.dashboard') ? 'active' : '' }}">
-                        <a href="{{ route('staff.nataru.dashboard') }}">Dashboard & Grafik</a>
-                    </li>
-                    <li class="submenu-item {{ Route::is('staff.nataru-events.index') ? 'active' : '' }}">
-                        <a href="{{ route('staff.nataru-events.index') }}">Manajemen Posko</a>
-                    </li>
+                @if ($visibleItems->isNotEmpty())
+                    <li class="sidebar-title">{{ $groupName }}</li>
 
-                </ul>
-            </li>
-            @else
-
-                <li class="sidebar-item {{ Route::is($data['route']) ? 'active' : '' }}">
-                <a href="{{ route($data['route']) }}" class='sidebar-link' data-bs-toggle="tooltip" data-bs-placement="right" title="{{ $data['label'] }}">
-                        <i class="{{ $data['icon'] }}"></i>
-                        <span>{{ $data['label'] }}</span>
-                    </a>
-                </li>
-
+                    @foreach ($visibleItems as $permissionName => $data)
+                        @if ($permissionName === 'Manajemen Posko Nataru')
+                            <li class="sidebar-item has-sub {{ Route::is('staff.nataru.*') ? 'active' : '' }}">
+                                <a href="#" class='sidebar-link'>
+                                    <i class="{{ $data['icon'] }}"></i>
+                                    <span>{{ $data['label'] }}</span>
+                                </a>
+                                <ul class="submenu {{ Route::is('staff.nataru.*') ? 'active' : '' }}">
+                                    <li class="submenu-item {{ Route::is('staff.nataru.dashboard') ? 'active' : '' }}">
+                                        <a href="{{ route('staff.nataru.dashboard') }}">Dashboard &amp; Grafik</a>
+                                    </li>
+                                    <li class="submenu-item {{ Route::is('staff.nataru-events.index') ? 'active' : '' }}">
+                                        <a href="{{ route('staff.nataru-events.index') }}">Manajemen Posko</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        @else
+                            <li class="sidebar-item {{ Route::is($data['route']) ? 'active' : '' }}">
+                                <a href="{{ route($data['route']) }}" class='sidebar-link' data-bs-toggle="tooltip" data-bs-placement="right" title="{{ $data['label'] }}">
+                                    <i class="{{ $data['icon'] }}"></i>
+                                    <span>{{ $data['label'] }}</span>
+                                </a>
+                            </li>
+                        @endif
+                    @endforeach
                 @endif
-
-            @endif
             @endforeach
-
-
         </ul>
     </div>
 </div>

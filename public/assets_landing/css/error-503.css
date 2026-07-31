@@ -5,8 +5,22 @@
 /* ---------- Latar langit malam bandara ---------- */
 body.error-503-page {
     background: radial-gradient(ellipse at top, #14467a 0%, #0d2c4a 55%, #081b30 100%);
-    overflow: hidden;
+    /*
+     * Hanya sumbu mendatar yang dikunci. Sebelumnya `overflow: hidden` membuat
+     * kartu terpotong dan tidak bisa digulir pada layar yang lebih pendek dari
+     * isi kartu (±765px) — termasuk laptop 1366x768 dan ponsel mode lanskap.
+     */
+    overflow-x: hidden;
+    overflow-y: auto;
+    /* Mulai dari atas agar bagian atas kartu tidak terpotong saat isi melebihi layar */
+    align-items: flex-start;
+    padding: 32px 0;
     position: relative;
+}
+
+/* Tetap di tengah secara vertikal selama masih muat di layar */
+.error-503-page .error-container {
+    margin: auto;
 }
 
 .sky-scene {

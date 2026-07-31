@@ -135,51 +135,78 @@ class ViewServiceProvider extends ServiceProvider
         });
 
         View::composer('layouts-V2.sidebars.pengaju', function ($view) {
+            // Menu pengaju, dikelompokkan agar mudah dipindai.
+            // Label sengaja tanpa awalan "Ajukan" karena judul kelompoknya sudah
+            // menjelaskan konteks, sehingga teks tidak terpotong di sidebar sempit.
             $userRoutes = [
-                'Ajukan Tenant' => ['route' => 'tenant.index', 'icon' => 'bi bi-shop', 'label' => 'Ajukan Tenant'],
-                'Ajukan Sewa' => ['route' => 'sewa.index', 'icon' => 'bi bi-cart', 'label' => 'Ajukan Sewa'],
-                'Ajukan Perijinan Usaha' => ['route' => 'perijinan.index', 'icon' => 'bi bi-file-earmark-text', 'label' => 'Ajukan Perijinan Usaha'],
-                'Ajukan Pengiklanan' => ['route' => 'pengiklanan.index', 'icon' => 'bi bi-megaphone', 'label' => 'Ajukan Pengiklanan'],
-                'Ajukan Field Trip' => ['route' => 'fieldtrip.index', 'icon' => 'bi bi-bus-front', 'label' => 'Ajukan Field Trip'],
-                'Ajukan Lelang' => ['route' => 'lelang.index', 'icon' => 'bi bi-hammer', 'label' => 'Ajukan Beauty Contest'],
-                'Ajukan Slot Charter' => ['route' => 'slot.index', 'icon' => 'bi bi-clock', 'label' => 'Ajukan Slot Charter'],
-                'Ajukan Extend Advance' => ['route' => 'extend-advance.index', 'icon' => 'bi bi-clock-history', 'label' => 'Ajukan Extend Advance'],
-                'Ajukan Perijinan Kerja' => ['route' => 'kerja.userindex', 'icon' => 'bi bi-person-workspace', 'label' => 'Ajukan Perizinan Kerja'],
-                'Ajukan Informasi Publik' => ['route' => 'informasiPublik.index', 'icon' => 'bi bi-info-circle', 'label' => 'Ajukan Informasi Publik'],
-                'Ajukan Sertifikat OJT' => ['route' => 'user.ojt.index', 'icon' => 'bi bi-award', 'label' => 'Ajukan Sertifikat OJT'],
-            ];  
+                'Perizinan & Usaha' => [
+                    ['route' => 'tenant.index', 'icon' => 'bi bi-shop', 'label' => 'Tenant'],
+                    ['route' => 'sewa.index', 'icon' => 'bi bi-building', 'label' => 'Sewa Lahan'],
+                    ['route' => 'perijinan.index', 'icon' => 'bi bi-file-earmark-check', 'label' => 'Perizinan Usaha'],
+                    ['route' => 'pengiklanan.index', 'icon' => 'bi bi-megaphone', 'label' => 'Pengiklanan'],
+                    ['route' => 'lelang.index', 'icon' => 'bi bi-hammer', 'label' => 'Beauty Contest'],
+                    ['route' => 'kerja.userindex', 'icon' => 'bi bi-person-workspace', 'label' => 'Perizinan Kerja'],
+                ],
+                'Operasi Penerbangan' => [
+                    ['route' => 'slot.index', 'icon' => 'bi bi-clock', 'label' => 'Slot Charter'],
+                    ['route' => 'extend-advance.index', 'icon' => 'bi bi-clock-history', 'label' => 'Extend Advance'],
+                ],
+                'Kunjungan & Informasi' => [
+                    ['route' => 'fieldtrip.index', 'icon' => 'bi bi-bus-front', 'label' => 'Field Trip'],
+                    ['route' => 'user.ojt.index', 'icon' => 'bi bi-mortarboard', 'label' => 'Sertifikat OJT'],
+                    ['route' => 'informasiPublik.index', 'icon' => 'bi bi-info-circle', 'label' => 'Informasi Publik'],
+                ],
+            ];
+
             $view->with('userRoutes', $userRoutes);
         });
 
         View::composer('layouts-V2.sidebars.staff', function($view){
+            /*
+             * Menu staf, dikelompokkan per bidang kerja.
+             *
+             * PENTING: kunci pada tiap kelompok adalah NAMA PERMISSION yang
+             * dicocokkan oleh User::hasPermission(). Jangan diubah — mengganti
+             * kunci akan membuat menu hilang bagi staf yang berhak.
+             * Judul kelompok hanya disembunyikan bila seluruh isinya tidak
+             * dapat diakses pengguna.
+             */
             $permissionRoutes = [
-                'Manajemen Berita' => ['route' => 'berita.staffIndex', 'icon' => 'bi bi-newspaper', 'label' => 'Berita'],
-                'Manajemen Tenant' => ['route' => 'tenant.staffIndex', 'icon' => 'bi bi-shop', 'label' => 'Tenant'],
-                'Manajemen Sewa' => ['route' => 'staffSewa.index', 'icon' => 'bi bi-building', 'label' => 'Penyewaan'],
-                'Manajemen Perijinan Usaha' => ['route' => 'perijinan.staffIndex', 'icon' => 'bi bi-file-earmark-check', 'label' => 'Perijinan Usaha'],
-                'Manajemen Pengiklanan' => ['route' => 'pengiklanan.staffIndex', 'icon' => 'bi bi-megaphone', 'label' => 'Pengiklanan'],
-                'Manajemen Field Trip' => ['route' => 'fieldtrip.staffIndex', 'icon' => 'bi bi-geo-alt', 'label' => 'Field Trip'],
-                'Manajemen Lelang' => ['route' => 'lelang.staffIndex', 'icon' => 'bi bi-hammer', 'label' => 'Beauty Contest'],
-                'Manajemen Slot Charter' => ['route' => 'slot.staffIndex', 'icon' => 'bi bi-clock', 'label' => 'Slot Charter'],
-                'Manajemen Extend Advance' => ['route' => 'extend-advance.staffIndex', 'icon' => 'bi bi-clock-history', 'label' => 'Extend Advance'],
-                'Manajemen Perijinan Kerja' => ['route' => 'kerja.index', 'icon' => 'bi bi-person-workspace', 'label' => 'Perizinan Kerja'],
-                'Manajemen Kinerja Keuangan' => ['route' => 'keuangan.staffIndex', 'icon' => 'bi bi-graph-up', 'label' => 'Kinerja Keuangan'],
-                'Manajemen Ajuan Informasi Publik' => ['route' => 'informasiPublik.staffIndex', 'icon' => 'bi bi-info-circle', 'label' => 'Informasi Publik'],
-                'Manajemen Lalu Lintas Angkutan Udara' => ['route' => 'staff.air-traffic.index', 'icon' => 'bi bi-graph-up-arrow', 'label' => 'Data LLAU'],
-                // 'Manajemen Lalu Lintas Angkutan Udara' => ['route' => 'laluLintas.staffIndex', 'icon' => 'bi bi-airplane', 'label' => 'Lalu Lintas Angkutan Udara'],
-                'Manajemen Pengaduan' => ['route' => 'pengaduan.staffIndex', 'icon' => 'bi bi-exclamation-triangle', 'label' => 'Pengaduan'],
-                'Manajemen Regulasi' => ['route' => 'letters.staff.index', 'icon' => 'bi bi-book', 'label' => 'Regulasi'],
-                'Manajemen Program Kerja' => ['route' => 'staff.work-programs.index', 'icon' => 'bi bi-clipboard-check', 'label' => 'Program Kerja'],
- 'Manajemen Inventaris' => ['route' => 'staff.inventories.index', 'icon' => 'bi bi-box-seam', 'label' => 'Inventaris'],
-                'Manajemen Suku Cadang' => ['route' => 'staff.spare-parts.index', 'icon' => 'bi bi-gear-wide-connected', 'label' => 'Suku Cadang'],
-                'Permintaan Suku Cadang' => ['route' => 'staff.spare-part-requests.index', 'icon' => 'bi bi-send-check', 'label' => 'Permintaan Suku Cadang'],
-                'Manajemen Absensi Rapat' => ['route' => 'staff.meetings.index', 'icon' => 'bi bi-calendar-event', 'label' => 'Absensi Rapat'],
-                'Manajemen Posko Nataru' => ['route' => 'staff.nataru.index', 'icon' => 'bi bi-airplane-engines', 'label' => 'Posko Nataru'],
-                'Manajemen Sertifikat OJT' => ['route' => 'staff.ojt.index', 'icon' => 'bi bi-mortarboard', 'label' => 'Data OJT'],
-
+                'Pengajuan & Perizinan' => [
+                    'Manajemen Tenant' => ['route' => 'tenant.staffIndex', 'icon' => 'bi bi-shop', 'label' => 'Tenant'],
+                    'Manajemen Sewa' => ['route' => 'staffSewa.index', 'icon' => 'bi bi-building', 'label' => 'Penyewaan'],
+                    'Manajemen Perijinan Usaha' => ['route' => 'perijinan.staffIndex', 'icon' => 'bi bi-file-earmark-check', 'label' => 'Perizinan Usaha'],
+                    'Manajemen Pengiklanan' => ['route' => 'pengiklanan.staffIndex', 'icon' => 'bi bi-megaphone', 'label' => 'Pengiklanan'],
+                    'Manajemen Lelang' => ['route' => 'lelang.staffIndex', 'icon' => 'bi bi-hammer', 'label' => 'Beauty Contest'],
+                    'Manajemen Perijinan Kerja' => ['route' => 'kerja.index', 'icon' => 'bi bi-person-workspace', 'label' => 'Perizinan Kerja'],
+                ],
+                'Operasi Penerbangan' => [
+                    'Manajemen Slot Charter' => ['route' => 'slot.staffIndex', 'icon' => 'bi bi-clock', 'label' => 'Slot Charter'],
+                    'Manajemen Extend Advance' => ['route' => 'extend-advance.staffIndex', 'icon' => 'bi bi-clock-history', 'label' => 'Extend Advance'],
+                    'Manajemen Lalu Lintas Angkutan Udara' => ['route' => 'staff.air-traffic.index', 'icon' => 'bi bi-graph-up-arrow', 'label' => 'Lalu Lintas Angkutan Udara'],
+                    'Manajemen Posko Nataru' => ['route' => 'staff.nataru.index', 'icon' => 'bi bi-airplane-engines', 'label' => 'Posko Nataru'],
+                ],
+                'Layanan Publik' => [
+                    'Manajemen Berita' => ['route' => 'berita.staffIndex', 'icon' => 'bi bi-newspaper', 'label' => 'Berita'],
+                    'Manajemen Ajuan Informasi Publik' => ['route' => 'informasiPublik.staffIndex', 'icon' => 'bi bi-info-circle', 'label' => 'Informasi Publik'],
+                    'Manajemen Pengaduan' => ['route' => 'pengaduan.staffIndex', 'icon' => 'bi bi-exclamation-triangle', 'label' => 'Pengaduan'],
+                    'Manajemen Regulasi' => ['route' => 'letters.staff.index', 'icon' => 'bi bi-book', 'label' => 'Regulasi'],
+                ],
+                'Aset & Inventaris' => [
+                    'Manajemen Inventaris' => ['route' => 'staff.inventories.index', 'icon' => 'bi bi-box-seam', 'label' => 'Inventaris'],
+                    'Manajemen Suku Cadang' => ['route' => 'staff.spare-parts.index', 'icon' => 'bi bi-gear-wide-connected', 'label' => 'Suku Cadang'],
+                    'Permintaan Suku Cadang' => ['route' => 'staff.spare-part-requests.index', 'icon' => 'bi bi-send-check', 'label' => 'Permintaan Suku Cadang'],
+                ],
+                'Kepegawaian & Kinerja' => [
+                    'Manajemen Program Kerja' => ['route' => 'staff.work-programs.index', 'icon' => 'bi bi-clipboard-check', 'label' => 'Program Kerja'],
+                    'Manajemen Kinerja Keuangan' => ['route' => 'keuangan.staffIndex', 'icon' => 'bi bi-graph-up', 'label' => 'Kinerja Keuangan'],
+                    'Manajemen Absensi Rapat' => ['route' => 'staff.meetings.index', 'icon' => 'bi bi-calendar-event', 'label' => 'Absensi Rapat'],
+                    'Manajemen Sertifikat OJT' => ['route' => 'staff.ojt.index', 'icon' => 'bi bi-mortarboard', 'label' => 'Sertifikat OJT'],
+                    'Manajemen Field Trip' => ['route' => 'fieldtrip.staffIndex', 'icon' => 'bi bi-geo-alt', 'label' => 'Field Trip'],
+                ],
             ];
 
-            $view->with('permissionRoutes',$permissionRoutes);
+            $view->with('permissionRoutes', $permissionRoutes);
         });
     }
 }

@@ -1,0 +1,318 @@
+/* ==================================================================== */
+/* SIDEBAR & TOOLTIP — tema penerbangan APT Pranoto                     */
+/*                                                                      */
+/* Dimuat SETELAH app.css / app-dark.css / custom.css, jadi cukup       */
+/* menimpa seperlunya tanpa menyentuh berkas tema bawaan.               */
+/* Palet disamakan dengan situs publik (navy + emas) agar dashboard     */
+/* dan halaman publik terasa satu identitas.                            */
+/* ==================================================================== */
+
+:root {
+    --sb-navy: #0d2c4a;
+    --sb-navy-soft: rgba(13, 44, 74, 0.07);
+    --sb-accent: #f0a500;
+    --sb-ease: cubic-bezier(0.34, 0.9, 0.36, 1);
+}
+
+html[data-bs-theme="dark"] {
+    --sb-navy: #cfe0f5;
+    --sb-navy-soft: rgba(255, 255, 255, 0.07);
+    --sb-accent: #ffc046;
+}
+
+/* ---------- Kerangka sidebar ---------- */
+
+.sidebar-wrapper .sidebar-menu .menu {
+    padding-bottom: 2rem;
+}
+
+/* ---------- Judul kelompok ---------- */
+
+/*
+ * Judul kelompok diberi garis putus-putus di sisi kanan, meniru marka
+ * tengah landas pacu. Halus, tapi langsung terasa bernuansa bandara.
+ */
+.sidebar-wrapper .sidebar-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 1.75rem 0 0.6rem;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: color-mix(in srgb, var(--sb-navy), transparent 45%);
+    white-space: nowrap;
+}
+
+.sidebar-wrapper .sidebar-title::after {
+    content: "";
+    flex: 1;
+    height: 2px;
+    border-radius: 2px;
+    background-image: repeating-linear-gradient(
+        to right,
+        color-mix(in srgb, var(--sb-navy), transparent 78%) 0 10px,
+        transparent 10px 18px
+    );
+}
+
+/* ---------- Butir menu ---------- */
+
+/* Animasi masuk bertingkat saat halaman dimuat */
+@keyframes sbFlyIn {
+    from { opacity: 0; transform: translateX(-14px); }
+    to   { opacity: 1; transform: translateX(0); }
+}
+
+.sidebar-wrapper .sidebar-menu .sidebar-item {
+    animation: sbFlyIn 0.42s var(--sb-ease) both;
+}
+
+/* Delay bertingkat; 24 butir sudah mencakup sidebar terpanjang (staf) */
+.sidebar-wrapper .sidebar-menu .sidebar-item:nth-child(1)  { animation-delay: 0.02s; }
+.sidebar-wrapper .sidebar-menu .sidebar-item:nth-child(2)  { animation-delay: 0.04s; }
+.sidebar-wrapper .sidebar-menu .sidebar-item:nth-child(3)  { animation-delay: 0.06s; }
+.sidebar-wrapper .sidebar-menu .sidebar-item:nth-child(4)  { animation-delay: 0.08s; }
+.sidebar-wrapper .sidebar-menu .sidebar-item:nth-child(5)  { animation-delay: 0.10s; }
+.sidebar-wrapper .sidebar-menu .sidebar-item:nth-child(6)  { animation-delay: 0.12s; }
+.sidebar-wrapper .sidebar-menu .sidebar-item:nth-child(7)  { animation-delay: 0.14s; }
+.sidebar-wrapper .sidebar-menu .sidebar-item:nth-child(8)  { animation-delay: 0.16s; }
+.sidebar-wrapper .sidebar-menu .sidebar-item:nth-child(9)  { animation-delay: 0.18s; }
+.sidebar-wrapper .sidebar-menu .sidebar-item:nth-child(10) { animation-delay: 0.20s; }
+.sidebar-wrapper .sidebar-menu .sidebar-item:nth-child(11) { animation-delay: 0.22s; }
+.sidebar-wrapper .sidebar-menu .sidebar-item:nth-child(12) { animation-delay: 0.24s; }
+.sidebar-wrapper .sidebar-menu .sidebar-item:nth-child(n + 13) { animation-delay: 0.26s; }
+
+.sidebar-wrapper .sidebar-menu .sidebar-item .sidebar-link {
+    position: relative;
+    display: flex;
+    align-items: center;
+    border-radius: 10px;
+    overflow: hidden;
+    transition:
+        background-color 0.28s var(--sb-ease),
+        transform 0.28s var(--sb-ease),
+        color 0.28s var(--sb-ease);
+}
+
+/* Bilah aksen di tepi kiri, tumbuh dari tengah saat aktif/disorot */
+.sidebar-wrapper .sidebar-menu .sidebar-item .sidebar-link::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 3px;
+    height: 0;
+    border-radius: 0 3px 3px 0;
+    background: var(--sb-accent);
+    transform: translateY(-50%);
+    transition: height 0.32s var(--sb-ease);
+}
+
+.sidebar-wrapper .sidebar-menu .sidebar-item .sidebar-link:hover {
+    background-color: var(--sb-navy-soft);
+    transform: translateX(4px);
+}
+
+.sidebar-wrapper .sidebar-menu .sidebar-item .sidebar-link:hover::before {
+    height: 45%;
+}
+
+/* Ikon: sedikit membesar dan "lepas landas" saat disorot */
+.sidebar-wrapper .sidebar-menu .sidebar-item .sidebar-link i {
+    transition: transform 0.32s var(--sb-ease), color 0.28s var(--sb-ease);
+}
+
+.sidebar-wrapper .sidebar-menu .sidebar-item .sidebar-link:hover i {
+    color: var(--sb-accent);
+    transform: translateY(-2px) scale(1.12);
+}
+
+/* ---------- Butir aktif ---------- */
+
+.sidebar-wrapper .sidebar-menu .sidebar-item.active > .sidebar-link {
+    background-image: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--sb-navy), transparent 88%),
+        transparent 78%
+    );
+    font-weight: 600;
+}
+
+.sidebar-wrapper .sidebar-menu .sidebar-item.active > .sidebar-link::before {
+    height: 62%;
+}
+
+.sidebar-wrapper .sidebar-menu .sidebar-item.active > .sidebar-link i {
+    color: var(--sb-accent);
+}
+
+/*
+ * Sapuan cahaya sekali jalan pada butir aktif — seperti lampu landas pacu
+ * yang menyala saat menu terpilih.
+ */
+@keyframes sbRunwaySweep {
+    from { transform: translateX(-100%); }
+    to   { transform: translateX(220%); }
+}
+
+.sidebar-wrapper .sidebar-menu .sidebar-item.active > .sidebar-link::after {
+    content: "";
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 45%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        color-mix(in srgb, var(--sb-accent), transparent 84%),
+        transparent
+    );
+    animation: sbRunwaySweep 1.5s var(--sb-ease) 0.35s 1;
+    pointer-events: none;
+}
+
+/* ---------- Submenu ---------- */
+
+.sidebar-wrapper .sidebar-menu .submenu .submenu-item > a {
+    border-radius: 8px;
+    transition: background-color 0.26s var(--sb-ease), padding-left 0.26s var(--sb-ease);
+}
+
+.sidebar-wrapper .sidebar-menu .submenu .submenu-item > a:hover {
+    background-color: var(--sb-navy-soft);
+    padding-left: 1.35rem;
+}
+
+.sidebar-wrapper .sidebar-menu .submenu .submenu-item.active > a {
+    color: var(--sb-accent);
+    font-weight: 600;
+}
+
+/* Tanda panah menu bersarang ikut berputar halus */
+.sidebar-wrapper .sidebar-menu .sidebar-item.has-sub > .sidebar-link::after {
+    transition: transform 0.3s var(--sb-ease);
+}
+
+/* ---------- Mode icon-only ---------- */
+
+/* Saat menyempit, geseran mendatar dimatikan agar ikon tetap lurus di tengah */
+.sidebar-wrapper.icon-only .sidebar-menu .sidebar-item .sidebar-link:hover {
+    transform: none;
+    background-color: var(--sb-navy-soft);
+}
+
+.sidebar-wrapper.icon-only .sidebar-menu .sidebar-item .sidebar-link::before {
+    left: 2px;
+}
+
+/* Sapuan cahaya tidak dipakai di mode sempit agar tidak ramai */
+.sidebar-wrapper.icon-only .sidebar-menu .sidebar-item.active > .sidebar-link::after {
+    display: none;
+}
+
+/* ---------- Logo ---------- */
+
+.sidebar-wrapper .sidebar-header .logo img {
+    transition: transform 0.35s var(--sb-ease);
+}
+
+.sidebar-wrapper .sidebar-header .logo a:hover img {
+    transform: scale(1.05);
+}
+
+/* ==================================================================== */
+/* TOOLTIP BERTEMA PENERBANGAN                                          */
+/*                                                                      */
+/* Kelas .tooltip-fly dipasang lewat opsi customClass pada inisialisasi */
+/* Bootstrap Tooltip di custom-sidebar.js. Tooltip hanya muncul saat    */
+/* sidebar dalam mode icon-only di layar >= 768px.                      */
+/* Bootstrap 5.3 memakai CSS variable, sehingga panah ikut bertema.     */
+/* ==================================================================== */
+
+.tooltip-fly {
+    --bs-tooltip-bg: #0d2c4a;
+    --bs-tooltip-color: #ffffff;
+    --bs-tooltip-opacity: 1;
+    --bs-tooltip-border-radius: 10px;
+    --bs-tooltip-font-size: 0.78rem;
+    --bs-tooltip-padding-x: 0.9rem;
+    --bs-tooltip-padding-y: 0.55rem;
+    --bs-tooltip-max-width: 240px;
+}
+
+html[data-bs-theme="dark"] .tooltip-fly {
+    --bs-tooltip-bg: #12395e;
+}
+
+.tooltip-fly .tooltip-inner {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding-left: 0.75rem;
+    background-image: linear-gradient(135deg, #0d2c4a, #1a4a7a);
+    border-left: 3px solid var(--sb-accent, #f0a500);
+    box-shadow: 0 10px 26px rgba(13, 44, 74, 0.32);
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    text-align: left;
+    white-space: nowrap;
+}
+
+/* Ikon pesawat di depan teks — kode U+F7CC diverifikasi dari bootstrap-icons */
+.tooltip-fly .tooltip-inner::before {
+    content: "\F7CC";
+    font-family: "bootstrap-icons";
+    font-size: 0.85rem;
+    font-weight: 400;
+    line-height: 1;
+    color: var(--sb-accent, #f0a500);
+    /* Ikon ikut "lepas landas" sesaat setelah tooltip muncul */
+    animation: sbTakeoff 0.55s var(--sb-ease) 0.1s both;
+}
+
+@keyframes sbTakeoff {
+    0%   { opacity: 0; transform: translate(-6px, 4px) rotate(-12deg); }
+    60%  { opacity: 1; transform: translate(1px, -2px) rotate(3deg); }
+    100% { opacity: 1; transform: translate(0, 0) rotate(0deg); }
+}
+
+/*
+ * Tooltip meluncur masuk dari kiri, bukan sekadar memudar.
+ * Bootstrap sudah mengatur opacity lewat kelas .fade/.show, jadi di sini
+ * cukup menganimasikan isinya agar tidak bentrok dengan Popper.
+ */
+@keyframes sbTooltipIn {
+    from { opacity: 0; transform: translateX(-10px) scale(0.94); }
+    to   { opacity: 1; transform: translateX(0) scale(1); }
+}
+
+.tooltip-fly.show .tooltip-inner {
+    animation: sbTooltipIn 0.32s var(--sb-ease) both;
+}
+
+.tooltip-fly .tooltip-arrow {
+    /* Panah mengambil warna dari --bs-tooltip-bg secara otomatis */
+    transition: opacity 0.2s ease;
+}
+
+/* ---------- Hormati preferensi pengurangan animasi ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+    .sidebar-wrapper .sidebar-menu .sidebar-item,
+    .sidebar-wrapper .sidebar-menu .sidebar-item.active > .sidebar-link::after,
+    .tooltip-fly .tooltip-inner,
+    .tooltip-fly .tooltip-inner::before {
+        animation: none !important;
+    }
+
+    .sidebar-wrapper .sidebar-menu .sidebar-item .sidebar-link,
+    .sidebar-wrapper .sidebar-menu .sidebar-item .sidebar-link i,
+    .sidebar-wrapper .sidebar-menu .sidebar-item .sidebar-link::before {
+        transition: none !important;
+    }
+
+    .sidebar-wrapper .sidebar-menu .sidebar-item .sidebar-link:hover {
+        transform: none;
+    }
+}

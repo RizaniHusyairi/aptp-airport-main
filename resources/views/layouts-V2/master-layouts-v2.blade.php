@@ -16,6 +16,8 @@
     <link rel="stylesheet" href="{{ asset('assetsv2/compiled/css/iconly.css') }}">
     <link rel="stylesheet" href="{{ asset('assetsv2/compiled/css/main.css') }}">
     <link rel="stylesheet" href="{{ asset('assetsv2/compiled/css/custom.css') }}">
+    {{-- Tampilan sidebar & tooltip bertema penerbangan; dimuat terakhir agar menimpa tema --}}
+    <link rel="stylesheet" href="{{ asset('assetsv2/compiled/css/sidebar-modern.css') }}">
     <link rel="stylesheet" href="{{ asset('assets_landing/vendor/glightbox/css/glightbox.min.css') }}">
 
     <!-- Page-specific CSS -->

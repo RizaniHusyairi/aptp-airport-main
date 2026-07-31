@@ -55,7 +55,10 @@ $(document).ready(function() {
                 return new bootstrap.Tooltip(tooltipTriggerEl, {
                     trigger: 'hover',
                     placement: 'right',
-                    container: 'body'
+                    container: 'body',
+                    // Kelas tema penerbangan, ditata di sidebar-modern.css
+                    customClass: 'tooltip-fly',
+                    offset: [0, 10]
                 });
             });
         }

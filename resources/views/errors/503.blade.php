@@ -52,23 +52,43 @@
             </div>
 
             <p class="refresh-note">
-                Halaman akan dimuat ulang otomatis dalam <span id="countdown">30</span> detik.
+                Halaman akan dimuat ulang otomatis dalam <span id="countdown">60</span> detik.
             </p>
         </div>
     </div>
 
     <script>
         (function () {
-            var remaining = 30;
+            var DURASI = 60;
+            var remaining = DURASI;
             var el = document.getElementById('countdown');
-            var timer = setInterval(function () {
+
+            setInterval(function () {
+                // Jangan menghitung mundur saat tab tidak terlihat: selama
+                // pemeliharaan panjang, tab yang dibiarkan terbuka akan terus
+                // memuat ulang dan membebani server tanpa ada yang melihatnya.
+                if (document.hidden) {
+                    return;
+                }
+
                 remaining -= 1;
-                if (el) el.textContent = remaining > 0 ? remaining : 0;
+                if (el) {
+                    el.textContent = remaining > 0 ? remaining : 0;
+                }
                 if (remaining <= 0) {
-                    clearInterval(timer);
                     location.reload();
                 }
             }, 1000);
+
+            // Saat pengguna kembali ke tab, mulai hitungan dari awal
+            document.addEventListener('visibilitychange', function () {
+                if (!document.hidden) {
+                    remaining = DURASI;
+                    if (el) {
+                        el.textContent = remaining;
+                    }
+                }
+            });
         })();
     </script>
 </body>
