@@ -80,5 +80,8 @@
   <div class="container copyright text-center mt-4">
     <p>© <span>Copyright</span><span> Kantor Unit Penyelenggara Bandara Udara Kelas I <strong class="px-1 sitename">A.P.T Pranoto Samarinda</strong></span></p>
     <p class="mt-2 mb-0"><a href="{{ route('kebijakan-privasi') }}" class="text-reset">Kebijakan Privasi</a></p>
+    {{-- Versi produk dari config/app.php (sumbernya APP_VERSION di .env).
+         Bukan versi template Skote pada package.json. --}}
+    <p class="mt-1 mb-0 small text-muted">Versi {{ config('app.version') }}</p>
   </div>
 </footer>

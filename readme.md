@@ -7,6 +7,23 @@
 - Database (MySQL)
 - Ekstensi PHP: BCMath, Ctype, cURL, DOM, Fileinfo, JSON, Mbstring, OpenSSL, PCRE, PDO, Tokenizer, XML
 
+
+## Versi
+
+Versi produk situs ini ada di `.env` (`APP_VERSION`), terbaca lewat
+`config('app.version')`, dan tampil di footer halaman publik. Riwayatnya di
+[CHANGELOG.md](CHANGELOG.md).
+
+Situs ini generasi pertama (seri **1.x**). Penggantinya, **AIAIS**, memakai
+seri **2.x**.
+
+### Dua angka yang BUKAN versi produk
+
+- `package.json` -> `"version": "3.3.1"` adalah versi **template admin Skote**
+  dari vendor. Jangan dinaikkan, dibaca, atau dikutip sebagai versi situs.
+- Folder `resources/views/layouts-V2/` adalah nama **keluarga layout Blade
+  internal** (perombakan tampilan dari `layouts/`), bukan penanda versi produk.
+
 ## Panduan Instalasi
 
 1.  **Clone Repositori**

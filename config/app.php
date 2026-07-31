@@ -18,6 +18,29 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Application Version
+    |--------------------------------------------------------------------------
+    |
+    | Versi produk situs aptpairport.id.
+    |
+    | JANGAN tertukar dengan dua angka lain di repositori ini:
+    |   - package.json "version": "3.3.1" adalah versi template admin Skote
+    |     dari vendor, BUKAN versi produk. Jangan dinaikkan atau dikutip.
+    |   - Folder resources/views/layouts-V2/ adalah nama keluarga layout Blade
+    |     internal, tidak ada hubungannya dengan versi produk.
+    |
+    | Situs ini generasi pertama (seri 1.x). Penggantinya, AIAIS, memakai seri
+    | 2.x. Lihat CHANGELOG.md.
+    |
+    | Catatan: `php artisan config:cache` membekukan nilai ini — bersihkan
+    | cache config setelah mengubahnya.
+    |
+    */
+
+    'version' => env('APP_VERSION', '1.0.0'),
+
+    /*
+    |--------------------------------------------------------------------------
     | Application Environment
     |--------------------------------------------------------------------------
     |
