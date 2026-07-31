@@ -15,8 +15,7 @@ class SitemapController extends Controller
         // [path, changefreq, priority]
         $staticUrls = [
             ['/',                                'daily',   '1.0'],
-            ['/keberangkatan',                   'hourly',  '0.9'],
-            ['/kedatangan',                      'hourly',  '0.9'],
+            ['/jadwal-penerbangan',              'hourly',  '0.9'],
             ['/fasilitas',                       'monthly', '0.8'],
             ['/informasi/berita',                'daily',   '0.8'],
             ['/informasi-publik',                'monthly', '0.7'],

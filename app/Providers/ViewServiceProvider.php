@@ -96,6 +96,7 @@ class ViewServiceProvider extends ServiceProvider
                         ]],
                     ]],
                     ['name' => 'Informasi', 'dropdown' => [
+                        ['name' => 'Jadwal Penerbangan', 'route' => route('jadwalPenerbangan')],
                         ['name' => 'Berita', 'route' => route('berita')],
                         ['name' => 'Kinerja Keuangan', 'route' => route('laporanKeuangan')],
                         ['name' => 'FAQ', 'route' => route('faq')],

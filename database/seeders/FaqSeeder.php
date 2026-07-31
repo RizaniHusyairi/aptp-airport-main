@@ -3,179 +3,187 @@
 namespace Database\Seeders;
 
 use App\Models\Faq;
-use App\Models\Service;
 use Illuminate\Database\Seeder;
 
 class FaqSeeder extends Seeder
 {
     /**
-     * Draf FAQ berdasarkan layanan yang benar-benar ada di website ini.
+     * Isi FAQ Bandar Udara A.P.T. Pranoto.
      *
-     * PENTING — pertanyaan yang jawabannya memuat angka atau ketentuan spesifik
-     * (jam operasional, tarif, ketersediaan fasilitas tertentu) di-seed dengan
-     * is_active = false dan diawali penanda [PERIKSA]. Data itu tidak diketahui
-     * secara pasti, jadi sengaja TIDAK ditayangkan ke publik sampai admin
-     * mengoreksi lalu mengaktifkannya lewat dashboard.
+     * Seluruh isinya bersumber dari dokumen resmi bandara
+     * `docs/FAQ BANDARA.docx` — tidak ada pertanyaan tambahan.
      *
-     * Idempoten: updateOrCreate berdasarkan `question`.
+     * Idempoten: updateOrCreate berdasarkan `question`, dan pertanyaan lama
+     * di luar dokumen dihapus lewat daftar removed() sehingga aman dijalankan
+     * berulang, termasuk di server yang sudah pernah di-seed versi sebelumnya.
      */
     public function run(): void
     {
-        // Slug layanan -> id, agar FAQ bisa dikaitkan. Layanan yang belum ada
-        // di database (mis. pada lingkungan lokal yang kosong) cukup dilewati.
-        $services = Service::pluck('id', 'slug');
-
         foreach ($this->faqs() as $faq) {
-            $slug = $faq['service_slug'] ?? null;
-            unset($faq['service_slug']);
-
-            $faq['service_id'] = $slug ? ($services[$slug] ?? null) : null;
-
             Faq::updateOrCreate(['question' => $faq['question']], $faq);
         }
+
+        // Bersihkan pertanyaan dari versi seeder terdahulu yang tidak ada di dokumen
+        Faq::whereIn('question', $this->removed())->delete();
+    }
+
+    /**
+     * Pertanyaan yang pernah di-seed sebelumnya namun tidak bersumber dari
+     * dokumen resmi, sehingga dihapus.
+     */
+    protected function removed(): array
+    {
+        return [
+            // Pengarah ke halaman/layanan website
+            'Di mana saya bisa melihat jadwal keberangkatan dan kedatangan?',
+            'Bagaimana jika penerbangan saya terlambat atau dibatalkan?',
+            'Fasilitas apa saja yang tersedia di Bandar Udara APT Pranoto?',
+            'Bagaimana cara mengurus PAS Bandara?',
+            'Bagaimana cara mengajukan sewa lahan atau menjadi tenant?',
+            'Bagaimana cara mengajukan permohonan slot penerbangan?',
+            'Bagaimana cara mengajukan kunjungan atau field trip ke bandara?',
+            'Bagaimana cara mengajukan izin pemasangan iklan di area bandara?',
+            'Bagaimana cara mengajukan permohonan informasi publik?',
+            'Di mana saya bisa melihat Standar Pelayanan bandara?',
+            'Di mana saya bisa mengisi Survei Kepuasan Masyarakat?',
+            // Draf yang jawabannya tidak tersedia di dokumen
+            'Berapa lama sebelum keberangkatan saya harus tiba di bandara?',
+            // Rumusan lama yang sudah digantikan versi dokumen
+            'Berapa jam operasional terminal penumpang?',
+            'Apakah tersedia fasilitas untuk penyandang disabilitas?',
+            'Berapa tarif parkir kendaraan di bandara?',
+            'Bagaimana cara menyampaikan pengaduan atau aspirasi?',
+        ];
     }
 
     protected function faqs(): array
     {
         return [
-            // ---------- Penerbangan & Keberangkatan ----------
+            // ==================================================
+            // Penerbangan & Keberangkatan
+            // ==================================================
             [
-                'question' => 'Di mana saya bisa melihat jadwal keberangkatan dan kedatangan?',
-                'answer' => '<p>Jadwal penerbangan hari ini dapat dilihat langsung di website ini melalui halaman <a href="/keberangkatan">Keberangkatan</a> dan <a href="/kedatangan">Kedatangan</a>. Ringkasan jadwal juga tampil di halaman beranda.</p><p>Jadwal bersifat dinamis dan dapat berubah sewaktu-waktu mengikuti operasional maskapai.</p>',
+                'question' => 'Apa saja rute penerbangan yang tersedia di Bandara A.P.T. Pranoto Samarinda?',
+                'answer' => '<p>Bandara A.P.T. Pranoto Samarinda melayani penerbangan menuju <strong>Jakarta, Surabaya, Yogyakarta, Banjarmasin, Berau,</strong> dan <strong>Melak</strong>.</p><p>Selain itu tersedia rute penerbangan perintis menuju <strong>Long Apung, Maratua, Datah Dawai,</strong> dan <strong>Muara Wahau</strong>, serta koneksi antarwilayah <strong>Datah Dawai–Melak</strong> dan <strong>Maratua–Berau</strong>.</p>',
                 'category' => 'Penerbangan & Keberangkatan',
+                'service_id' => null,
                 'sort_order' => 1,
                 'is_featured' => true,
                 'is_active' => true,
             ],
             [
-                'question' => 'Bagaimana jika penerbangan saya terlambat atau dibatalkan?',
-                'answer' => '<p>Keterlambatan dan pembatalan penerbangan merupakan kewenangan maskapai. Silakan menghubungi langsung petugas maskapai yang bersangkutan di terminal atau melalui kanal layanan pelanggan maskapai untuk informasi penjadwalan ulang dan kompensasi.</p><p>Bila Anda memerlukan bantuan lain selama berada di bandara, petugas kami di terminal siap membantu.</p>',
+                'question' => 'Berapa jam operasional Bandara A.P.T. Pranoto?',
+                'answer' => '<p>Jam operasional Bandara A.P.T. Pranoto mengikuti jadwal operasional yang telah ditetapkan, yaitu pukul <strong>07.00 WITA hingga 20.00 WITA</strong>.</p>',
                 'category' => 'Penerbangan & Keberangkatan',
+                'service_id' => null,
                 'sort_order' => 2,
                 'is_featured' => true,
                 'is_active' => true,
             ],
             [
-                'question' => 'Berapa lama sebelum keberangkatan saya harus tiba di bandara?',
-                'answer' => '<p>[PERIKSA] Jawaban ini masih berupa draf dan perlu disesuaikan dengan ketentuan resmi bandara sebelum ditayangkan.</p><p>Umumnya penumpang disarankan tiba lebih awal untuk proses lapor diri dan pemeriksaan keamanan. Mohon lengkapi durasi yang berlaku di Bandar Udara APT Pranoto.</p>',
+                'question' => 'Identitas apa yang dapat digunakan untuk pemeriksaan tiket pesawat di bandara?',
+                'answer' => '<p>Identitas yang dapat digunakan untuk pemeriksaan tiket adalah <strong>Kartu Tanda Penduduk (KTP), Surat Izin Mengemudi (SIM), paspor</strong>, atau identitas resmi lainnya yang masih berlaku dan sesuai dengan data pada tiket.</p><p>Untuk bayi dan anak yang belum memiliki KTP, dapat menggunakan <strong>Kartu Identitas Anak (KIA), Akta Kelahiran,</strong> dan <strong>Kartu Keluarga</strong>.</p>',
                 'category' => 'Penerbangan & Keberangkatan',
+                'service_id' => null,
                 'sort_order' => 3,
                 'is_featured' => false,
-                'is_active' => false,
+                'is_active' => true,
             ],
             [
-                'question' => 'Berapa jam operasional terminal penumpang?',
-                'answer' => '<p>[PERIKSA] Jam operasional terminal belum tercantum di website dan perlu diisi oleh pengelola sebelum pertanyaan ini ditayangkan.</p>',
+                // Tautan diambil dari hyperlink di dalam dokumen
+                'question' => 'Bagaimana cara memesan tiket pesawat untuk rute penerbangan perintis?',
+                'answer' => '<p>Pemesanan tiket penerbangan perintis dapat dilakukan dengan menghubungi kontak resmi yang tersedia pada <a href="https://www.instagram.com/p/DTQC0UUEZ6D/?img_index=1" target="_blank" rel="noopener">tautan berikut</a>.</p><p>Untuk informasi lebih lanjut mengenai jadwal dan ketersediaan kursi, silakan menghubungi kontak yang tercantum pada tautan tersebut.</p>',
                 'category' => 'Penerbangan & Keberangkatan',
-                'sort_order' => 4,
-                'is_featured' => false,
-                'is_active' => false,
-            ],
-
-            // ---------- Fasilitas Bandara ----------
-            [
-                'question' => 'Fasilitas apa saja yang tersedia di Bandar Udara APT Pranoto?',
-                'answer' => '<p>Daftar fasilitas yang tersedia — meliputi fasilitas sisi udara, sisi darat, dan fasilitas umum — dapat dilihat selengkapnya di halaman <a href="/fasilitas">Fasilitas Bandara</a>.</p>',
-                'category' => 'Fasilitas Bandara',
-                'sort_order' => 1,
-                'is_featured' => true,
-                'is_active' => true,
-            ],
-            [
-                'question' => 'Apakah tersedia fasilitas untuk penyandang disabilitas?',
-                'answer' => '<p>[PERIKSA] Daftar fasilitas ramah disabilitas (kursi roda, jalur khusus, toilet difabel, dan pendampingan petugas) perlu dipastikan oleh pengelola sebelum pertanyaan ini ditayangkan.</p>',
-                'category' => 'Fasilitas Bandara',
-                'sort_order' => 2,
-                'is_featured' => false,
-                'is_active' => false,
-            ],
-            [
-                'question' => 'Berapa tarif parkir kendaraan di bandara?',
-                'answer' => '<p>[PERIKSA] Tarif parkir belum tercantum di website dan perlu diisi oleh pengelola sebelum pertanyaan ini ditayangkan.</p>',
-                'category' => 'Fasilitas Bandara',
-                'sort_order' => 3,
-                'is_featured' => false,
-                'is_active' => false,
-            ],
-
-            // ---------- Layanan & Perizinan ----------
-            [
-                'question' => 'Bagaimana cara mengurus PAS Bandara?',
-                'answer' => '<p>Pengurusan PAS Bandara dilakukan melalui sistem PAS pada tautan yang tersedia di menu <strong>Layanan</strong>. Persyaratan dan alur pengajuan mengikuti ketentuan yang berlaku pada sistem tersebut.</p>',
-                'category' => 'Layanan & Perizinan',
-                'sort_order' => 1,
-                'is_featured' => true,
-                'is_active' => true,
-            ],
-            [
-                'question' => 'Bagaimana cara mengajukan sewa lahan atau menjadi tenant?',
-                'answer' => '<p>Pengajuan tenant dapat dilakukan secara daring melalui halaman layanan <a href="/layanan/tenant">Tenant</a>. Untuk penyewaan lahan atau ruang, silakan gunakan layanan <a href="/layanan/sewa">Sewa</a>.</p><p>Setiap halaman layanan memuat dokumen yang diperlukan dan tahapan pendaftarannya.</p>',
-                'category' => 'Layanan & Perizinan',
-                'service_slug' => 'tenant',
-                'sort_order' => 2,
-                'is_featured' => true,
-                'is_active' => true,
-            ],
-            [
-                'question' => 'Bagaimana cara mengajukan permohonan slot penerbangan?',
-                'answer' => '<p>Permohonan slot dapat diajukan melalui halaman layanan <a href="/layanan/slot-charter">Slot Charter</a>. Dokumen persyaratan dan alur pengajuannya tercantum di halaman tersebut.</p>',
-                'category' => 'Layanan & Perizinan',
-                'service_slug' => 'slot-charter',
-                'sort_order' => 3,
-                'is_featured' => false,
-                'is_active' => true,
-            ],
-            [
-                'question' => 'Bagaimana cara mengajukan kunjungan atau field trip ke bandara?',
-                'answer' => '<p>Pengajuan kunjungan edukasi dapat dilakukan melalui halaman layanan <a href="/layanan/field-trip">Field Trip</a>. Mohon ajukan permohonan jauh hari sebelum tanggal kunjungan yang direncanakan.</p>',
-                'category' => 'Layanan & Perizinan',
-                'service_slug' => 'field-trip',
+                'service_id' => null,
                 'sort_order' => 4,
                 'is_featured' => false,
                 'is_active' => true,
             ],
-            [
-                'question' => 'Bagaimana cara mengajukan izin pemasangan iklan di area bandara?',
-                'answer' => '<p>Permohonan pengiklanan diajukan melalui halaman layanan <a href="/layanan/pengiklanan">Pengiklanan</a>, yang memuat persyaratan dokumen dan tahapan prosesnya.</p>',
-                'category' => 'Layanan & Perizinan',
-                'service_slug' => 'pengiklanan',
-                'sort_order' => 5,
-                'is_featured' => false,
-                'is_active' => true,
-            ],
 
-            // ---------- Informasi Publik & Pengaduan ----------
+            // ==================================================
+            // Fasilitas Bandara
+            // ==================================================
             [
-                'question' => 'Bagaimana cara mengajukan permohonan informasi publik?',
-                'answer' => '<p>Permohonan informasi publik diajukan melalui layanan <a href="/layanan/informasi-publik">Pengajuan Informasi Publik</a> yang dikelola PPID Bandar Udara APT Pranoto.</p><p>Dasar hukum dan prosedurnya dapat dibaca pada halaman <a href="/informasi-publik/sop-ppid">SOP PPID</a> dan <a href="/informasi-publik/regulasi-ppid">Regulasi PPID</a>.</p>',
-                'category' => 'Informasi Publik & Pengaduan',
-                'service_slug' => 'informasi-publik',
+                'question' => 'Apakah bandara menyediakan fasilitas bagi penyandang disabilitas?',
+                'answer' => '<p>Ya. Bandara menyediakan fasilitas ramah disabilitas seperti <strong>jalur khusus, toilet difabel, area parkir khusus,</strong> dan layanan bantuan sesuai kebutuhan.</p><p>Penumpang dapat menghubungi petugas atau <em>Customer Service</em> setibanya di bandara maupun sebelum keberangkatan, agar petugas dapat memberikan pendampingan dan bantuan sesuai kebutuhan.</p>',
+                'category' => 'Fasilitas Bandara',
+                'service_id' => null,
                 'sort_order' => 1,
                 'is_featured' => true,
                 'is_active' => true,
             ],
             [
-                'question' => 'Di mana saya bisa melihat Standar Pelayanan bandara?',
-                'answer' => '<p>Dokumen Standar Pelayanan, Maklumat Pelayanan, dan laporan Survei Kepuasan Masyarakat tersedia di halaman <a href="/informasi-publik/standar-pelayanan">Standar Pelayanan</a>.</p>',
-                'category' => 'Informasi Publik & Pengaduan',
+                'question' => 'Bagaimana jika saya kehilangan barang di bandara?',
+                'answer' => '<p>Segera hubungi petugas <strong>Lost and Found</strong> atau Pusat Informasi bandara, atau kontak resmi bandara, dengan menyampaikan <strong>ciri-ciri barang, lokasi terakhir,</strong> dan <strong>waktu kehilangan</strong>.</p>',
+                'category' => 'Fasilitas Bandara',
+                'service_id' => null,
                 'sort_order' => 2,
                 'is_featured' => false,
                 'is_active' => true,
             ],
             [
-                'question' => 'Bagaimana cara menyampaikan pengaduan atau aspirasi?',
-                'answer' => '<p>Pengaduan dapat disampaikan melalui formulir kontak di halaman beranda website ini, atau melalui kanal resmi nasional <strong>SP4N-LAPOR!</strong> yang tautannya tersedia di halaman <a href="/tautan-terkait">Tautan Terkait</a>.</p>',
-                'category' => 'Informasi Publik & Pengaduan',
+                // Tautan diambil dari hyperlink di dalam dokumen
+                'question' => 'Berapa tarif parkir inap kendaraan di Bandara A.P.T. Pranoto?',
+                'answer' => '<p>Bandara A.P.T. Pranoto menyediakan layanan <strong>parkir inap 24 jam</strong> setiap hari dengan tarif <strong>Rp75.000 per hari</strong>, dilengkapi <em>shuttle car</em> menuju <em>Drop Zone</em> dan <em>Pick Up Zone</em>.</p><p>Kendaraan wajib diparkir di area yang telah disediakan. Informasi lengkap mengenai lokasi parkir inap dapat dilihat melalui <a href="https://www.instagram.com/reels/DIcjgt2B4nL/" target="_blank" rel="noopener">tautan berikut</a>.</p>',
+                'category' => 'Fasilitas Bandara',
+                'service_id' => null,
                 'sort_order' => 3,
-                'is_featured' => true,
+                'is_featured' => false,
                 'is_active' => true,
             ],
             [
-                'question' => 'Di mana saya bisa mengisi Survei Kepuasan Masyarakat?',
-                'answer' => '<p>Tautan Survei Kepuasan Masyarakat tersedia di halaman beranda, pada halaman <a href="/informasi-publik/standar-pelayanan">Standar Pelayanan</a>, dan di bagian footer setiap halaman. Masukan Anda menjadi dasar perbaikan layanan kami.</p>',
-                'category' => 'Informasi Publik & Pengaduan',
+                'question' => 'Berapa tarif taksi bandara?',
+                'answer' => '<p>Berikut tarif Taksi Resmi Bandara A.P.T. Pranoto Samarinda.</p>'
+                    . '<p><strong>Tarif Dalam Kota</strong></p>'
+                    . '<ul>'
+                    . '<li>Zona 1 (Depan Bandara): Rp50.000–Rp60.000</li>'
+                    . '<li>Zona 2 (Sungai Siring – Tanah Merah): Rp100.000</li>'
+                    . '<li>Zona 3 (Lempake, Juanda, Pasar Pagi, Sungai Dama): Rp185.000</li>'
+                    . '<li>Zona 4 (Antasari, Pelita, Suryanata, Loa Bakung): Rp225.000</li>'
+                    . '<li>Zona 5 (Samarinda Seberang, Palaran, Loa Buah): Rp275.000</li>'
+                    . '</ul>'
+                    . '<p><strong>Tarif Luar Kota (Shuttle)</strong></p>'
+                    . '<ul>'
+                    . '<li>Sangatta: Rp275.000</li>'
+                    . '<li>Simpang 3 Bontang: Rp250.000</li>'
+                    . '</ul>',
+                'category' => 'Fasilitas Bandara',
+                'service_id' => null,
                 'sort_order' => 4,
-                'is_featured' => false,
+                'is_featured' => true,
+                'is_active' => true,
+            ],
+
+            // ==================================================
+            // Layanan & Perizinan
+            // ==================================================
+            [
+                'question' => 'Apakah Bandara A.P.T. Pranoto Samarinda menyediakan layanan kargo?',
+                'answer' => '<p>Ya. Bandara A.P.T. Pranoto Samarinda memiliki <strong>Gedung Kargo Lini 2</strong> yang melayani kegiatan Ekspedisi Muatan Pesawat Udara (EMPU).</p><p>Layanan kargo beroperasi setiap hari pada pukul <strong>08.00–17.00 WITA</strong> dan didukung oleh beberapa perusahaan kargo untuk melayani kebutuhan pengiriman barang melalui transportasi udara, termasuk informasi terkait tarif, pengiriman, dan jenis layanan.</p>',
+                'category' => 'Layanan & Perizinan',
+                'service_id' => null,
+                'sort_order' => 1,
+                'is_featured' => true,
+                'is_active' => true,
+            ],
+
+            // ==================================================
+            // Informasi Publik & Pengaduan
+            // ==================================================
+            [
+                'question' => 'Bagaimana cara mengajukan pengaduan atau saran?',
+                'answer' => '<p>Pengaduan dan saran dapat disampaikan melalui:</p>'
+                    . '<ul>'
+                    . '<li>Media sosial resmi bandara</li>'
+                    . '<li>WhatsApp pengaduan: <a href="https://wa.me/62811551944" target="_blank" rel="noopener">+62 811-551-944</a></li>'
+                    . '<li>Website resmi bandara</li>'
+                    . '<li>Kotak saran yang tersedia di terminal</li>'
+                    . '<li><a href="https://www.lapor.go.id/" target="_blank" rel="noopener">SP4N-LAPOR!</a></li>'
+                    . '</ul>',
+                'category' => 'Informasi Publik & Pengaduan',
+                'service_id' => null,
+                'sort_order' => 1,
+                'is_featured' => true,
                 'is_active' => true,
             ],
         ];

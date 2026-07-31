@@ -384,6 +384,12 @@ left: 30px;
 .welcome-image-container {
     position: relative;
     padding: 10px;
+    /*
+     * z-index membentuk konteks penumpukan sendiri. Tanpa ini, elemen
+     * ber-z-index negatif di dalamnya (dekorasi ::before dan lapisan blob)
+     * akan tertutup latar .welcome-section dan tidak pernah terlihat.
+     */
+    z-index: 1;
 }
 
 .welcome-image-container img {
@@ -394,6 +400,189 @@ left: 30px;
     object-fit: cover;
     height: 80vh;
     object-position: top;
+    /* Foto harus berada di atas lapisan blob */
+    position: relative;
+    z-index: 2;
+}
+
+/* =================================================== */
+/* BLOB & PARTIKEL DEKORATIF DI BELAKANG FOTO           */
+/* Murni CSS, tanpa JavaScript maupun gambar tambahan.  */
+/* =================================================== */
+
+/*
+ * Pembungkus seukuran foto. Tanpa ini, lapisan blob mengikuti lebar kolom
+ * (jauh lebih besar dari foto) sehingga partikel tersebar ke mana-mana
+ * alih-alih menjadi latar fotonya.
+ */
+.welcome-photo {
+    position: relative;
+    display: inline-block;
+    max-width: 380px;
+    width: 100%;
+    /* Menjaga tinggi pembungkus mengikuti tinggi foto */
+    line-height: 0;
+    /*
+     * isolation membentuk konteks penumpukan sendiri. Dengan begitu lapisan
+     * blob boleh memakai z-index negatif dan DIJAMIN berada di belakang foto,
+     * tanpa bergantung pada urutan penulisan elemen maupun z-index saudara.
+     */
+    isolation: isolate;
+}
+
+/*
+ * Pelat penutup seukuran foto, dipasang di antara lapisan blob (z-index -1)
+ * dan foto (z-index 2).
+ *
+ * Blob diberi blur besar, sehingga warnanya meluber melewati tepi foto dan
+ * terlihat seperti menutupi wajah. Pelat buram ini memotong luberan itu tepat
+ * di batas foto, jadi blob hanya tampak pada pita di luar foto — berapa pun
+ * nilai blur yang dipakai.
+ */
+.welcome-photo::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    border-radius: 16px;
+    background-color: var(--background-light);
+    pointer-events: none;
+}
+
+/*
+ * Lapisan latar: melebar ke luar tepi foto sehingga terlihat sebagai aura
+ * di belakangnya. z-index negatif menjamin ia selalu di belakang foto,
+ * bukan sekadar bergantung urutan penulisan.
+ */
+/*
+ * Lapisan ini dipatok tepat pada kotak foto (inset 0), sehingga satuan persen
+ * pada tiap blob terbaca relatif terhadap ukuran foto — memudahkan penempatan
+ * di luar tepinya.
+ *
+ * overflow sengaja TIDAK dikunci: dulu `overflow: hidden` memotong blob di
+ * batas lapisan sehingga bentuknya jadi kotak, bukan organik.
+ */
+.welcome-blobs {
+    position: absolute;
+    inset: 0;
+    /*
+     * Negatif: selalu di belakang foto. Aman karena .welcome-photo sudah
+     * membentuk konteks penumpukan lewat isolation, sehingga lapisan ini
+     * tidak ikut tenggelam di balik latar .welcome-section.
+     */
+    z-index: -1;
+    pointer-events: none;
+}
+
+/* Bentuk organik yang perlahan berubah-ubah */
+.wb-blob {
+    position: absolute;
+    display: block;
+    filter: blur(26px);
+    opacity: 0.5;
+    will-change: border-radius, transform;
+}
+
+@keyframes wbMorph {
+    0%   { border-radius: 62% 38% 44% 56% / 54% 46% 54% 46%; transform: rotate(0deg) scale(1); }
+    33%  { border-radius: 38% 62% 60% 40% / 44% 62% 38% 56%; transform: rotate(45deg) scale(1.08); }
+    66%  { border-radius: 55% 45% 34% 66% / 63% 38% 62% 37%; transform: rotate(-30deg) scale(0.95); }
+    100% { border-radius: 62% 38% 44% 56% / 54% 46% 54% 46%; transform: rotate(0deg) scale(1); }
+}
+
+/*
+ * Penempatan memakai patokan tepi foto (right: 100% / left: 100% / top: 100%)
+ * supaya setiap blob berada SEPENUHNYA di luar kotak foto. Dengan begitu
+ * bentuk organiknya tampak utuh dan tidak terpotong oleh pelat penutup.
+ */
+.wb-blob--1 {
+    /* Kiri atas — seluruh badan blob di sebelah kiri foto */
+    right: 100%;
+    top: 2%;
+    width: 52%;
+    height: 26%;
+    margin-right: -6%;
+    background: radial-gradient(circle at 45% 45%, var(--secondary-color), rgba(240, 165, 0, 0));
+    animation: wbMorph 16s ease-in-out infinite;
+}
+
+.wb-blob--2 {
+    /* Kanan bawah — seluruh badan blob di sebelah kanan foto */
+    left: 100%;
+    bottom: 12%;
+    width: 48%;
+    height: 24%;
+    margin-left: -5%;
+    background: radial-gradient(circle at 55% 50%, var(--primary-color), rgba(13, 44, 74, 0));
+    opacity: 0.4;
+    animation: wbMorph 21s ease-in-out infinite reverse;
+    animation-delay: -5s;
+}
+
+.wb-blob--3 {
+    /* Bawah — melintang di bawah foto */
+    top: 100%;
+    left: 8%;
+    width: 46%;
+    height: 14%;
+    margin-top: -4%;
+    background: radial-gradient(circle at 50% 50%, #4da3ff, rgba(77, 163, 255, 0));
+    opacity: 0.32;
+    animation: wbMorph 13s ease-in-out infinite;
+    animation-delay: -9s;
+}
+
+/* Partikel kecil yang melayang naik */
+.wb-dot {
+    position: absolute;
+    display: block;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--secondary-color);
+    opacity: 0;
+    will-change: transform, opacity;
+    animation: wbFloat 9s ease-in-out infinite;
+}
+
+@keyframes wbFloat {
+    0%   { opacity: 0; transform: translateY(14px) scale(0.6); }
+    18%  { opacity: 0.85; }
+    75%  { opacity: 0.5; }
+    100% { opacity: 0; transform: translateY(-70px) scale(1.05); }
+}
+
+/*
+ * Foto opak, jadi partikel juga dipatok ke luar kotaknya (right/left/top 100%)
+ * agar tetap terlihat utuh dan tidak tertutup pelat penutup.
+ */
+.wb-dot--1 { right: 100%; bottom: 34%; margin-right: 5%;  animation-delay: 0s;    }
+.wb-dot--2 { right: 100%; bottom: 58%; margin-right: 14%; animation-delay: -2.4s; width: 6px; height: 6px; }
+.wb-dot--3 { left: 100%;  bottom: 46%; margin-left: 6%;   animation-delay: -4.1s; background: var(--primary-color); }
+.wb-dot--4 { left: 100%;  bottom: 70%; margin-left: 15%;  animation-delay: -6.2s; width: 7px; height: 7px; }
+.wb-dot--5 { top: 100%;   left: 26%;   margin-top: 3%;    animation-delay: -7.5s; width: 5px; height: 5px; }
+.wb-dot--6 { top: 100%;   left: 62%;   margin-top: 6%;    animation-delay: -3.3s; width: 6px; height: 6px; background: #4da3ff; }
+
+/* Blob ikut bereaksi saat foto disorot */
+.welcome-image-container:hover .wb-blob {
+    opacity: 0.68;
+    transition: opacity 0.5s ease;
+}
+
+@media (max-width: 991px) {
+    /* Di layar kecil blob dikecilkan agar tidak mendominasi foto */
+    .welcome-blobs { inset: -2%; }
+    .wb-blob { filter: blur(20px); opacity: 0.38; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .wb-blob,
+    .wb-dot {
+        animation: none !important;
+    }
+
+    /* Partikel disembunyikan karena hanya bermakna saat bergerak */
+    .wb-dot { display: none; }
 }
 
 /* Dekorasi latar belakang */
@@ -681,86 +870,335 @@ left: 30px;
 /* =================================== */
 /* GAYA BARU UNTUK PETA SVG ANIMASI    */
 /* =================================== */
-.route-map { 
-    background-color: var(--background-light); 
+/* =================================================== */
+/* PETA JARINGAN RUTE (Leaflet)                         */
+/* Menggantikan peta gambar statis + penggambaran SVG.  */
+/* =================================================== */
+
+.route-map {
+    position: relative;
+    overflow: hidden;
+    background:
+        radial-gradient(900px 420px at 50% 0%, rgba(240, 165, 0, 0.12), transparent 62%),
+        linear-gradient(168deg, var(--background-dark) 0%, var(--primary-color) 58%, #12395e 100%);
 }
+
 .map-container {
     position: relative;
     width: 100%;
     max-width: 1000px;
     margin: auto;
-    background-size: contain;
-    background-position: center;
-    background-repeat: no-repeat;
-    aspect-ratio: 2 / 1;
-    overflow: visible;
-}
-.map-city { 
-    fill: var(--primary-color); 
-    transition: all 0.3s ease;
-    cursor: pointer;
-}
-.map-city.city-main { 
-    fill: var(--secondary-color); 
-    stroke: white;
-    stroke-width: 2px;
-    animation: pulse-main-city 2s infinite;
-}
-.map-city:not(.city-main):hover, 
-.map-city-group:hover .map-city:not(.city-main) { 
-    fill: var(--secondary-color); 
-}
-.flight-path { 
-    stroke: var(--primary-color); 
-    stroke-width: 1.5; 
-    fill: none;
-    opacity: 0.7;
-    transition: all 0.3s ease;
-}
-.map-city-group:hover .flight-path {
-    stroke: var(--secondary-color);
-    stroke-width: 2.5;
-}
-#map-tooltip {
-    position: absolute;
-    background-color: var(--primary-color);
-    color: var(--text-light);
-    padding: 8px 15px;
-    border-radius: 8px;
-    font-size: 18px;
-    font-weight: 500;
-    white-space: nowrap;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-    z-index: 2000;
-    pointer-events: none; /* Diatur oleh GSAP */
-    transform-origin: center top; /* Untuk animasi scale yang natural */
-}
-#map-tooltip {
-    opacity: 0;
-    transition: opacity 0.3s ease, transform 0.3s ease;
-}
-#map-tooltip.show {
-    opacity: 1;
-    transform: translateY(-10px);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    overflow: hidden;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
 }
 
-.tooltip-title {
-    font-weight: 600;
-    margin-bottom: 5px;
+#route-map-canvas {
+    width: 100%;
+    height: 520px;
+    background: #0b1b2b;
+}
+
+/* Kontrol & atribusi Leaflet disesuaikan dengan tema gelap */
+.map-container .leaflet-control-zoom a {
+    background: rgba(13, 44, 74, 0.92);
+    border-color: rgba(255, 255, 255, 0.15);
+    color: #e9eef5;
+}
+
+.map-container .leaflet-control-zoom a:hover {
+    background: var(--secondary-color);
+    color: var(--primary-color);
+}
+
+.map-container .leaflet-control-attribution {
+    background: rgba(7, 26, 46, 0.75);
+    color: rgba(233, 238, 245, 0.6);
+    font-size: 10px;
+}
+
+.map-container .leaflet-control-attribution a {
+    color: rgba(142, 200, 255, 0.85);
+}
+
+/* ---------- Penanda bandara ---------- */
+
+/*
+ * Leaflet menempatkan sudut kiri-atas elemen tepat pada koordinat
+ * (iconAnchor 0,0). Karena itu bulatan dan label diposisikan absolut relatif
+ * terhadap titik nol tersebut.
+ *
+ * Penting: JANGAN memusatkan seluruh grup dengan translate(-50%,-50%) — lebar
+ * grup ikut label, sehingga bulatannya bergeser dari koordinat sebenarnya dan
+ * ujung garis rute tidak lagi menyentuh titik.
+ */
+.rm-pin {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 0;
+    height: 0;
+}
+
+.rm-pin-dot {
+    position: absolute;
+    /* Setengah ukuran bulatan, agar pusatnya persis di koordinat */
+    left: -5.5px;
+    top: -5.5px;
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background: var(--pin, #8ec8ff);
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.16), 0 0 12px var(--pin, #8ec8ff);
+}
+
+.rm-pin-code {
+    position: absolute;
+    /* Label berada di kanan bulatan, tidak memengaruhi posisi titik */
+    left: 12px;
+    top: -8px;
+    font-family: "Courier New", ui-monospace, monospace;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+    color: #eef3f9;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9), 0 0 8px rgba(0, 0, 0, 0.7);
+}
+
+.rm-pin--hub .rm-pin-dot {
+    left: -7.5px;
+    top: -7.5px;
+    width: 15px;
+    height: 15px;
+}
+
+.rm-pin--hub .rm-pin-code {
+    left: 14px;
+    top: -9px;
+    font-size: 14px;
     color: var(--secondary-color);
 }
-.tooltip-airlines {
+
+/* Denyut radar pada pusat jaringan */
+@keyframes rmPing {
+    0%   { transform: scale(0.5); opacity: 0.7; }
+    100% { transform: scale(3.4); opacity: 0; }
+}
+
+.rm-pin-ping {
+    position: absolute;
+    /* Sepusat dengan bulatan hub */
+    left: -7.5px;
+    top: -7.5px;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    border: 2px solid var(--secondary-color);
+    animation: rmPing 2.6s ease-out infinite;
+    pointer-events: none;
+}
+
+/* ---------- Busur rute & pesawat ---------- */
+
+/* Arus putus-putus berjalan di sepanjang busur */
+@keyframes rmDash {
+    to { stroke-dashoffset: -32; }
+}
+
+.rm-arc {
+    animation: rmDash 1.4s linear infinite;
+}
+
+/*
+ * Ikon dipusatkan pada koordinat lewat translate(-50%,-50%) yang ditulis
+ * bersama rotate() di JavaScript — keduanya harus dalam satu properti
+ * transform, sebab menuliskan rotate() saja akan menghapus translate-nya
+ * dan pesawat melenceng dari jalur.
+ */
+.rm-plane-ico {
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: block;
+    line-height: 1;
+    transform-origin: center;
+    transform: translate(-50%, -50%);
+    color: var(--pin, #fff);
+    font-size: 15px;
+    filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.8));
+}
+
+/* ---------- Popup ---------- */
+
+.rm-popup .leaflet-popup-content-wrapper {
+    background-image: linear-gradient(135deg, #0d2c4a, #1a4a7a);
+    border: 1px solid rgba(240, 165, 0, 0.55);
+    border-radius: 12px;
+    color: #eef3f9;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
+}
+
+.rm-popup .leaflet-popup-tip {
+    background: #12395e;
+}
+
+.rm-popup .leaflet-popup-content {
+    margin: 12px 16px;
+}
+
+.rm-pop-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #fff;
+}
+
+.rm-pop-sub {
+    font-size: 12px;
+    color: rgba(233, 238, 245, 0.65);
+    margin-top: 2px;
+    text-transform: capitalize;
+}
+
+.rm-pop-airlines {
     display: flex;
+    flex-wrap: wrap;
     gap: 8px;
+    margin-top: 10px;
+}
+
+.rm-pop-airlines img {
+    height: 22px;
+    width: auto;
+    background: #fff;
+    border-radius: 5px;
+    padding: 2px 4px;
+}
+
+/* ---------- Keterangan & keadaan gagal ---------- */
+
+.rm-legend {
+    position: absolute;
+    left: 14px;
+    bottom: 14px;
+    z-index: 500;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    padding: 9px 14px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 50px;
+    background: rgba(7, 26, 46, 0.78);
+    backdrop-filter: blur(6px);
+    font-size: 11.5px;
+    color: rgba(233, 238, 245, 0.85);
+}
+
+.rm-legend span {
+    display: inline-flex;
     align-items: center;
-    padding-top: 5px;
-    border-top: 1px solid rgba(255,255,255,0.2);
+    gap: 6px;
 }
-.tooltip-airlines img {
-    width: 50px;
-    height: 50px;
-    object-fit: contain;
+
+.rm-legend i {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--pin);
+    box-shadow: 0 0 8px var(--pin);
 }
+
+.rm-fallback {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    padding: 40px 20px;
+    text-align: center;
+    color: rgba(233, 238, 245, 0.7);
+}
+
+.rm-fallback i {
+    font-size: 38px;
+    margin-bottom: 12px;
+    color: rgba(255, 255, 255, 0.28);
+}
+
+/* ---------- Ringkasan jaringan ---------- */
+
+.rm-stats {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 14px;
+    margin-top: 32px;
+}
+
+.rm-stat {
+    flex: 0 1 200px;
+    padding: 18px 24px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(6px);
+    text-align: center;
+    transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.rm-stat:hover {
+    transform: translateY(-4px);
+    border-color: rgba(240, 165, 0, 0.55);
+}
+
+.rm-stat i {
+    display: block;
+    font-size: 20px;
+    color: var(--secondary-color);
+    margin-bottom: 8px;
+}
+
+.rm-stat-value {
+    display: block;
+    font-family: "Courier New", ui-monospace, monospace;
+    font-size: 28px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.1;
+}
+
+.rm-stat-label {
+    display: block;
+    margin-top: 4px;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(233, 238, 245, 0.6);
+}
+
+@media (max-width: 767.98px) {
+    #route-map-canvas { height: 400px; }
+    .rm-stat { flex: 1 1 100%; }
+    .rm-legend {
+        left: 10px;
+        right: 10px;
+        bottom: 10px;
+        justify-content: center;
+        font-size: 10.5px;
+        gap: 10px;
+    }
+    .rm-pin-code { font-size: 11px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .rm-arc,
+    .rm-pin-ping {
+        animation: none !important;
+    }
+}
+/* Gaya tooltip peta lama dihapus: elemen #map-tooltip sudah digantikan
+   popup Leaflet (.rm-popup). */
 
 @keyframes pulse-main-city {
   0% { r: 8; }

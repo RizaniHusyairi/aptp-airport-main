@@ -4,10 +4,21 @@
 @section('header-class', 'home')
 
 @push('page-styles')
-    <link href="{{ asset('assets_landing/css/beranda-modern.css') }}" rel="stylesheet">
-    <link href="{{ asset('assets_landing/css/skm.css') }}" rel="stylesheet">
-    <link href="{{ asset('assets_landing/css/tautan-terkait.css') }}" rel="stylesheet">
-    <link href="{{ asset('assets_landing/css/faq.css') }}" rel="stylesheet">
+    {{-- Leaflet untuk peta jaringan rute --}}
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+
+    {{--
+        Versi berkas ditempelkan pada URL agar peramban mengambil ulang CSS
+        setiap kali berkasnya berubah. Tanpa ini, perubahan tampilan tidak
+        terlihat sampai pengunjung melakukan hard refresh.
+    --}}
+    @foreach (['beranda-modern', 'skm', 'tautan-terkait', 'faq', 'flight-home'] as $sheet)
+        @php
+            $path = public_path("assets_landing/css/{$sheet}.css");
+        @endphp
+        <link href="{{ asset("assets_landing/css/{$sheet}.css") }}?v={{ file_exists($path) ? filemtime($path) : '1' }}" rel="stylesheet">
+    @endforeach
 @endpush
 
 @push('page-scripts')
@@ -27,6 +38,11 @@
 
     {{-- Animasi masuk untuk akordeon FAQ unggulan --}}
     <script src="{{ asset('assets_landing/js/faq.js') }}"></script>
+
+    {{-- Peta jaringan rute (Leaflet) --}}
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="{{ asset('assets_landing/js/route-map.js') }}"></script>
 
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
@@ -178,7 +194,25 @@
         <div class="row gy-4 align-items-center">
             <div class="col-lg-5 text-center" data-aos="fade-right">
                 <div class="welcome-image-container">
-                    <img src="{{ asset('assets_landing/img/pejabat/Kadek.png') }}" class="img-fluid" alt="Foto Kepala Bandara I Kadek Yuli Sastrawan">
+                    {{--
+                        Pembungkus seukuran foto, agar lapisan blob menempel pada
+                        kotak fotonya — bukan pada lebar kolom yang jauh lebih besar.
+                    --}}
+                    <div class="welcome-photo">
+                        {{-- Latar blob & partikel, seluruhnya di belakang foto (murni CSS) --}}
+                        <div class="welcome-blobs" aria-hidden="true">
+                            <span class="wb-blob wb-blob--1"></span>
+                            <span class="wb-blob wb-blob--2"></span>
+                            <span class="wb-blob wb-blob--3"></span>
+                            <span class="wb-dot wb-dot--1"></span>
+                            <span class="wb-dot wb-dot--2"></span>
+                            <span class="wb-dot wb-dot--3"></span>
+                            <span class="wb-dot wb-dot--4"></span>
+                            <span class="wb-dot wb-dot--5"></span>
+                            <span class="wb-dot wb-dot--6"></span>
+                        </div>
+                        <img src="{{ asset('assets_landing/img/pejabat/Kadek.png') }}" class="img-fluid" alt="Foto Kepala Bandara I Kadek Yuli Sastrawan">
+                    </div>
                 </div>
             </div>
             <div class="col-lg-7" data-aos="fade-left" data-aos-delay="200">
@@ -274,21 +308,48 @@
 <!-- ============================================ -->
 <!--   PETA SVG ANIMASI (MENGGANTIKAN CARDS)      -->
 <!-- ============================================ -->
-<section id="route-map" class="section-modern route-map">
+{{--
+    Peta rute bergaya layar radar bandara: latar malam, sapuan radar berputar,
+    jalur melengkung yang menyala, dan pesawat kecil yang terbang di sepanjang
+    tiap rute. Kelas dark-background dipakai ulang dari tema agar judul section
+    otomatis berwarna terang.
+--}}
+<section id="route-map" class="section-modern route-map dark-background">
     <div class="container" data-aos="fade-up">
         <div class="section-title-modern text-center">
             <h2>Terhubung ke Seluruh Nusantara</h2>
             <p>Jelajahi jaringan rute kami yang terus berkembang, menghubungkan Samarinda dengan berbagai destinasi.</p>
         </div>
-        <div class="map-container" style="background-image: url({{ asset('assets_landing/img/map-indonesia-simple.svg') }})">
-        {{-- <div class="map-container" style="background-image: url({{ asset('assets_landing/img/mapsimple.svg') }})"> --}}
-        {{-- <div class="map-container"> --}}
-            {{-- Kontainer SVG di mana peta akan digambar oleh JavaScript --}}
-            <svg id="map-svg" viewBox="0 0 1000 500" preserveAspectRatio="xMidYMid meet">
-                <!-- Titik utama bandara & rute akan ditambahkan oleh JS -->
-            </svg>
-            {{-- Tooltip untuk menampilkan info saat hover --}}
-            <div id="map-tooltip" style="z-index: 10000"></div>
+
+        {{-- Peta geografis Leaflet; seluruh isinya digambar oleh route-map.js --}}
+        <div class="map-container">
+            <div id="route-map-canvas"></div>
+
+            {{-- Keterangan jenis rute --}}
+            <div class="rm-legend">
+                <span><i style="--pin:#f0a500"></i> Pusat Jaringan</span>
+                <span><i style="--pin:#8ec8ff"></i> Rute Utama</span>
+                <span><i style="--pin:#3ddc84"></i> Rute Perintis</span>
+            </div>
+        </div>
+
+        {{-- Ringkasan jaringan rute, diisi oleh JavaScript dari data yang sama --}}
+        <div class="rm-stats" data-aos="fade-up" data-aos-delay="100">
+            <div class="rm-stat">
+                <i class="bi bi-geo-alt-fill"></i>
+                <span class="rm-stat-value" data-rm-destinations>—</span>
+                <span class="rm-stat-label">Kota Tujuan</span>
+            </div>
+            <div class="rm-stat">
+                <i class="bi bi-airplane-engines-fill"></i>
+                <span class="rm-stat-value" data-rm-airlines>—</span>
+                <span class="rm-stat-label">Maskapai</span>
+            </div>
+            <div class="rm-stat">
+                <i class="bi bi-broadcast"></i>
+                <span class="rm-stat-value">AAP</span>
+                <span class="rm-stat-label">Pusat Jaringan</span>
+            </div>
         </div>
     </div>
 </section>

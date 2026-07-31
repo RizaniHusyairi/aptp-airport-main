@@ -53,6 +53,46 @@
         return /^#[0-9a-f]{3,8}$/i.test(String(raw || '')) ? raw : '#0d2c4a';
     }
 
+    /**
+     * Informasi posisi layanan penumpang.
+     *
+     * Kedatangan  : `conveyor` berupa skalar ("1"/"2"), tersedia di semua data.
+     * Keberangkatan: `gate` berupa objek {id, nama} dan hanya ada pada sebagian
+     *                penerbangan; `konter`/`konter2`/`konter3` berupa angka
+     *                dengan 0 berarti belum ditetapkan. Keduanya ditampilkan
+     *                karena konter (lapor diri) dan gate (ruang tunggu) adalah
+     *                dua tahap yang berbeda.
+     */
+    function deskInfo(item, isArrival) {
+        if (isArrival) {
+            var conveyor = get(item, 'conveyor', null);
+            return {
+                label: 'Conveyor',
+                html: conveyor
+                    ? '<span class="fb-gate"><i class="bi bi-suitcase-lg-fill me-1"></i>' + esc(conveyor) + '</span>'
+                    : '<span class="fb-gate fb-gate--empty">—</span>'
+            };
+        }
+
+        var gate = get(item, 'gate.nama', null);
+        var counters = [item.konter, item.konter2, item.konter3]
+            .filter(function (v) { return Number(v) > 0; })
+            .join(', ');
+
+        var parts = [];
+        if (gate) {
+            parts.push('<span class="fb-gate"><i class="bi bi-door-open-fill me-1"></i>' + esc(gate) + '</span>');
+        }
+        if (counters) {
+            parts.push('<span class="fb-gate fb-gate--counter"><i class="bi bi-person-badge-fill me-1"></i>' + esc(counters) + '</span>');
+        }
+
+        return {
+            label: 'Gate / Konter',
+            html: parts.length ? parts.join(' ') : '<span class="fb-gate fb-gate--empty">—</span>'
+        };
+    }
+
     function esc(value) {
         return String(value === null || value === undefined ? '' : value)
             .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
@@ -103,20 +143,7 @@
         var status = get(item, 'remark.status', 'Tidak diketahui');
         var st = statusStyle(status);
 
-        // API hanya menyertakan `gate` pada sebagian penerbangan, dan `konter`
-        // bernilai 0 bila belum ditetapkan. Keduanya ditangani dengan aman.
-        var gate = get(item, 'gate.nama', null);
-        var counter = get(item, 'konter', 0);
-        var deskLabel = 'Gate / Konter';
-        var deskValue = '—';
-        if (gate) {
-            deskLabel = 'Gate';
-            deskValue = gate;
-        } else if (counter && Number(counter) > 0) {
-            deskLabel = 'Konter';
-            deskValue = counter;
-        }
-
+        var desk = deskInfo(item, isArrival);
         var routeLabel = isArrival ? 'Asal' : 'Tujuan';
         var timeLabel = isArrival ? 'Waktu Kedatangan' : 'Waktu Keberangkatan';
 
@@ -141,13 +168,11 @@
                 '</span>' +
             '</div>';
 
-        // Kolom gate/konter hanya ada pada keberangkatan
-        if (!isArrival) {
-            html += '<div class="fb-cell fb-cell--gate">' +
-                '<span class="fb-cell-label">' + deskLabel + '</span>' +
-                '<span class="fb-gate">' + esc(deskValue) + '</span>' +
-            '</div>';
-        }
+        // Kolom posisi layanan: Conveyor untuk kedatangan, Gate/Konter untuk keberangkatan
+        html += '<div class="fb-cell fb-cell--gate">' +
+            '<span class="fb-cell-label">' + desk.label + '</span>' +
+            '<span class="fb-desk-group">' + desk.html + '</span>' +
+        '</div>';
 
         html += '<div class="fb-cell fb-cell--time">' +
                 '<span class="fb-cell-label">' + timeLabel + '</span>' +
@@ -169,7 +194,10 @@
         var mode = board.dataset.mode === 'arrival' ? 'arrival' : 'departure';
         var list = board.querySelector('.fb-list');
         var updated = board.querySelector('.fb-updated');
-        var countEl = document.querySelector('[data-fb-count]');
+        // Halaman gabungan memuat dua papan sekaligus, jadi penghitungnya
+        // dipilih per mode agar keduanya tidak saling menimpa.
+        var countEl = document.querySelector('[data-fb-count="' + mode + '"]')
+            || document.querySelector('[data-fb-count]');
 
         if (!endpoint || !list) return;
 
@@ -261,8 +289,30 @@
         setInterval(tick, 1000);
     }
 
+    /**
+     * Buka tab sesuai parameter ?tab= pada URL.
+     * Dipakai oleh pengalih dari /keberangkatan dan /kedatangan agar pengunjung
+     * langsung mendarat pada papan yang mereka tuju.
+     */
+    function initTabFromUrl() {
+        var params = new URLSearchParams(window.location.search);
+        var tab = (params.get('tab') || '').toLowerCase();
+        if (!tab) return;
+
+        var id = null;
+        if (tab === 'kedatangan' || tab === 'arrival') id = 'tab-arrival';
+        if (tab === 'keberangkatan' || tab === 'departure') id = 'tab-departure';
+        if (!id) return;
+
+        var btn = document.getElementById(id);
+        if (btn && window.bootstrap && bootstrap.Tab) {
+            bootstrap.Tab.getOrCreateInstance(btn).show();
+        }
+    }
+
     document.addEventListener('DOMContentLoaded', function () {
         document.querySelectorAll('.fb-board').forEach(initBoard);
         initClock();
+        initTabFromUrl();
     });
 })();

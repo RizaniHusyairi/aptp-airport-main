@@ -62,7 +62,7 @@ class LandingPageController extends Controller
     public function getDepartures(Request $request)
     {
         $departures = $this->airportApi->getDeparturesList();
-        
+
         if (empty($departures)) {
             return response()->json([
                 'success' => false,
@@ -71,18 +71,16 @@ class LandingPageController extends Controller
             ], 500);
         }
 
-
         return response()->json([
             'success' => true,
-            'data' => $departures
+            'data' => $this->filterFlights($departures, $request),
         ]);
-
     }
 
     /**
      * Get arrivals list for frontend
      */
-    public function getArrivals()
+    public function getArrivals(Request $request)
     {
         $arrivals = $this->airportApi->getArrivalsList();
 
@@ -96,8 +94,67 @@ class LandingPageController extends Controller
 
         return response()->json([
             'success' => true,
-            'data' => $arrivals
+            'data' => $this->filterFlights($arrivals, $request),
         ]);
+    }
+
+    /**
+     * Saring daftar penerbangan sebelum dikirim ke frontend.
+     *
+     * API hulu mengirim data lebih dari satu hari, sehingga tanpa penyaringan
+     * halaman ikut menampilkan jadwal kemarin.
+     *
+     * Penyaringan dilakukan di server, bukan di JavaScript, karena "hari ini"
+     * harus mengikuti waktu bandara (Asia/Makassar). Bila dihitung di peramban,
+     * hasilnya akan berbeda bagi pengunjung di zona waktu lain atau yang jam
+     * perangkatnya tidak tepat.
+     *
+     * Parameter `recent=1` dipakai beranda: penerbangan yang sudah berstatus
+     * selesai (Departed/Arrived/Landed) dan jadwalnya lewat lebih dari 2 jam
+     * ikut disembunyikan agar papan ringkas hanya memuat yang masih relevan.
+     */
+    protected function filterFlights(array $flights, Request $request): array
+    {
+        $now = Carbon::now('Asia/Makassar');
+        $today = $now->toDateString();
+        $hideCompleted = $request->boolean('recent');
+
+        $filtered = array_filter($flights, function ($flight) use ($today, $now, $hideCompleted) {
+            // 1. Hanya jadwal hari ini
+            if (($flight['tanggal'] ?? null) !== $today) {
+                return false;
+            }
+
+            if (! $hideCompleted) {
+                return true;
+            }
+
+            // 2. Khusus beranda: buang yang sudah selesai lebih dari 2 jam lalu
+            $status = strtolower((string) ($flight['remark']['status'] ?? ''));
+            $isCompleted = str_contains($status, 'depart')
+                || str_contains($status, 'arriv')
+                || str_contains($status, 'land');
+
+            if (! $isCompleted) {
+                return true;
+            }
+
+            $time = $flight['jam'] ?? null;
+            if (! $time) {
+                return true;
+            }
+
+            try {
+                $schedule = Carbon::createFromFormat('Y-m-d H:i', $today . ' ' . substr($time, 0, 5), 'Asia/Makassar');
+            } catch (\Exception $e) {
+                // Format jam tak terduga: tampilkan saja daripada menyembunyikan data
+                return true;
+            }
+
+            return $schedule->greaterThan($now->copy()->subHours(2));
+        });
+
+        return array_values($filtered);
     }
     
     public function home(Request $request)
@@ -201,81 +258,141 @@ class LandingPageController extends Controller
     // app/Http/Controllers/LandingPageController.php
 
     // METHOD BARU UNTUK MENYEDIAKAN DATA RUTE DOMESTIK
+    /**
+     * Data jaringan rute Bandar Udara A.P.T. Pranoto.
+     *
+     * Disamakan dengan dokumen resmi bandara (lihat halaman Profil Bandara
+     * dan FAQ): enam rute utama dan empat rute perintis.
+     *
+     * Koordinat memakai lintang/bujur sesungguhnya karena peta pada beranda
+     * digambar di atas peta geografis, bukan lagi gambar latar statis.
+     *
+     * CATATAN: koordinat bandara perintis (Melak, Datah Dawai, Muara Wahau)
+     * masih perlu diverifikasi pengelola. Bila ada titik yang meleset,
+     * cukup sesuaikan nilai lat/lng di bawah ini.
+     */
     public function getDomesticRoutesData()
     {
+        $logo = fn (string $file) => asset('assets_landing/img/mitra/' . $file);
+
+        $batik = ['nama' => 'Batik Air', 'logo' => $logo('logo-batik.png')];
+        $citilink = ['nama' => 'Citilink', 'logo' => $logo('logo-citilink.png')];
+        $garuda = ['nama' => 'Garuda Indonesia', 'logo' => $logo('logo-garuda.png')];
+        $saj = ['nama' => 'Super Air Jet', 'logo' => $logo('logo-SAJ.png')];
+        $wings = ['nama' => 'Wings Air', 'logo' => $logo('logo-wings.png')];
+        $smart = ['nama' => 'Smart Aviation', 'logo' => $logo('logo-smart.jpg')];
+
         $routesData = [
+            // ---------- Rute utama ----------
             [
-                'kota' => 'Jakarta (CGK)',
+                'kota' => 'Jakarta',
+                'kode' => 'CGK',
                 'provinsi' => 'Banten',
-                'coords' => ['cx' => 320, 'cy' => 375], // Menggunakan format coords {cx, cy}
-                'maskapai' => [
-                    ['nama' => 'Batik Air', 'logo' => asset('assets_landing/img/mitra/logo-batik.png')],
-                    ['nama' => 'Citilink', 'logo' => asset('assets_landing/img/mitra/logo-citilink.png')],
-                    ['nama' => 'Garuda Indonesia', 'logo' => asset('assets_landing/img/mitra/logo-garuda.png')],
-                ]
+                'jenis' => 'utama',
+                'lat' => -6.1256,
+                'lng' => 106.6559,
+                'maskapai' => [$batik, $citilink, $garuda],
             ],
             [
-                'kota' => 'Surabaya (SUB)',
+                'kota' => 'Surabaya',
+                'kode' => 'SUB',
                 'provinsi' => 'Jawa Timur',
-                'coords' => ['cx' => 500, 'cy' => 412 ],
-                'maskapai' => [
-                    ['nama' => 'Super Air Jet', 'logo' => asset('assets_landing/img/mitra/logo-SAJ.png')],
-                    ['nama' => 'Citilink', 'logo' => asset('assets_landing/img/mitra/logo-citilink.png')],
-                ]
+                'jenis' => 'utama',
+                'lat' => -7.3798,
+                'lng' => 112.7869,
+                'maskapai' => [$saj, $citilink],
             ],
-             [
-                'kota' => 'Yogyakarta (YIA)',
+            [
+                'kota' => 'Yogyakarta',
+                'kode' => 'YIA',
                 'provinsi' => 'DI Yogyakarta',
-                'coords' => ['cx' => 430, 'cy' => 423],
-                'maskapai' => [
-                    ['nama' => 'Super Air Jet', 'logo' => asset('assets_landing/img/mitra/logo-SAJ.png')],
-                    ['nama' => 'Batik Air', 'logo' => asset('assets_landing/img/mitra/logo-batik.png')],
-                ]
-            ],
-             [
-                'kota' => 'Berau (BEJ)',
-                'provinsi' => 'Kalimantan Timur',
-                'coords' => ['cx' => 630, 'cy' => 130],
-                'maskapai' => [
-                    ['nama' => 'Wings Air', 'logo' => asset('assets_landing/img/mitra/logo-wings.png')],
-                ]
-            ],
-             [
-                'kota' => 'Maratua (RTU)',
-                'provinsi' => 'Kalimantan Timur',
-                'coords' => ['cx' => 678, 'cy' => 123],
-                'maskapai' => [
-                    ['nama' => 'Smart Aviation', 'logo' => asset('assets_landing/img/mitra/logo-smart.jpg')],
-                ]
+                'jenis' => 'utama',
+                'lat' => -7.9055,
+                'lng' => 110.0572,
+                'maskapai' => [$saj, $batik],
             ],
             [
-                'kota' => 'Long Apung (LPU)',
+                'kota' => 'Banjarmasin',
+                'kode' => 'BDJ',
+                'provinsi' => 'Kalimantan Selatan',
+                'jenis' => 'utama',
+                'lat' => -3.4424,
+                'lng' => 114.7625,
+                // Maskapai belum ditetapkan — silakan lengkapi lewat data ini
+                'maskapai' => [],
+            ],
+            [
+                'kota' => 'Berau',
+                'kode' => 'BEJ',
+                'provinsi' => 'Kalimantan Timur',
+                'jenis' => 'utama',
+                'lat' => 2.1555,
+                'lng' => 117.4324,
+                'maskapai' => [$wings],
+            ],
+            [
+                'kota' => 'Melak',
+                'kode' => '',
+                'provinsi' => 'Kalimantan Timur',
+                'jenis' => 'utama',
+                'lat' => -0.2130,
+                'lng' => 115.7800,
+                'maskapai' => [],
+            ],
+
+            // ---------- Rute perintis ----------
+            [
+                'kota' => 'Long Apung',
+                'kode' => 'LPU',
                 'provinsi' => 'Kalimantan Utara',
-                'coords' => ['cx' => 570, 'cy' => 148],
-                'maskapai' => [
-                    ['nama' => 'Smart Aviation', 'logo' => asset('assets_landing/img/mitra/logo-smart.jpg')],
-                ]
+                'jenis' => 'perintis',
+                'lat' => 1.7000,
+                'lng' => 114.9700,
+                'maskapai' => [$smart],
             ],
             [
-                'kota' => 'Datah Dawai (DTD)',
+                'kota' => 'Maratua',
+                'kode' => 'RTU',
                 'provinsi' => 'Kalimantan Timur',
-                'coords' => ['cx' => 557, 'cy' => 165],
-                'maskapai' => [
-                    ['nama' => 'Smart Aviation', 'logo' => asset('assets_landing/img/mitra/logo-smart.jpg')],
-                ]
+                'jenis' => 'perintis',
+                'lat' => 2.2300,
+                'lng' => 118.5200,
+                'maskapai' => [$smart],
             ],
-             [
-                'kota' => 'Muara Wahau (MHU)',
+            [
+                'kota' => 'Datah Dawai',
+                'kode' => 'DTD',
                 'provinsi' => 'Kalimantan Timur',
-                'coords' => ['cx' => 615, 'cy' => 150],
-                'maskapai' => [
-                    ['nama' => 'Smart Aviation', 'logo' => asset('assets_landing/img/mitra/logo-smart.jpg')],
-                ]
+                'jenis' => 'perintis',
+                'lat' => 0.8280,
+                'lng' => 114.5320,
+                'maskapai' => [$smart],
+            ],
+            [
+                'kota' => 'Muara Wahau',
+                'kode' => 'MHU',
+                'provinsi' => 'Kalimantan Timur',
+                'jenis' => 'perintis',
+                'lat' => 1.1000,
+                'lng' => 116.7500,
+                'maskapai' => [$smart],
             ],
         ];
 
-        return response()->json(['success' => true, 'data' => $routesData]);
+        return response()->json([
+            'success' => true,
+            // Titik pusat jaringan
+            'hub' => [
+                'kota' => 'Samarinda',
+                'kode' => 'AAP',
+                'provinsi' => 'Kalimantan Timur',
+                'lat' => -0.3745,
+                'lng' => 117.2500,
+            ],
+            'data' => $routesData,
+        ]);
     }
+
     
 
     // METHOD BARU UNTUK MENGHUBUNGI GEMINI API
@@ -679,13 +796,13 @@ class LandingPageController extends Controller
     }
 
 
-    public function keberangkatan()
+    /**
+     * Halaman gabungan jadwal keberangkatan dan kedatangan.
+     * Data diambil di sisi klien dari /api/departures dan /api/arrivals.
+     */
+    public function jadwalPenerbangan()
     {
-        return view('landing-menu.beranda.keberangkatan');
-    }
-    public function kedatangan()
-    {
-        return view('landing-menu.beranda.kedatangan');
+        return view('landing-menu.beranda.jadwal-penerbangan');
     }
 
     
@@ -972,30 +1089,56 @@ class LandingPageController extends Controller
      */
     public function imageProxy($filename)
     {
-        // Bangun URL lengkap ke API gambar yang tidak aman
-        $imageUrl = "http://103.210.122.2/storage/logo/" . $filename;
+        /*
+         * Logo maskapai berada di host API yang hanya melayani HTTP, sehingga
+         * tidak bisa dimuat langsung dari situs HTTPS (diblokir sebagai mixed
+         * content). Berkas diambil di sisi server lalu disajikan ulang.
+         *
+         * Nilai `maskapai.logo` dari API berbentuk "/storage/airlines/xxx.png".
+         * Hanya nama berkasnya yang dipakai — basename() sekaligus menutup
+         * upaya path traversal, dan direktori tujuannya dikunci.
+         */
+        $file = basename($filename);
 
-        try {
-            // Ambil gambar dari URL menggunakan Laravel HTTP Client
-            $response = Http::timeout(10)->get($imageUrl);
-
-            // Jika gagal mengambil gambar, kembalikan respons 404
-            if ($response->failed()) {
-                Log::error('Image proxy failed to fetch image: ' . $imageUrl);
-                abort(404, 'Image not found.');
-            }
-
-            // Dapatkan tipe konten (misalnya, 'image/png') dari respons API
-            $contentType = $response->header('Content-Type');
-
-            // Kembalikan konten gambar mentah dengan tipe konten yang benar
-            return response($response->body())
-                ->header('Content-Type', $contentType);
-
-        } catch (\Exception $e) {
-            Log::error('Image proxy exception: ' . $e->getMessage());
-            abort(500, 'Could not retrieve image.');
+        // Hanya nama berkas gambar yang wajar yang diteruskan (cegah SSRF)
+        if (! preg_match('/^[A-Za-z0-9._-]+\.(png|jpg|jpeg|webp|svg)$/i', $file)) {
+            abort(404);
         }
+
+        $cacheKey = 'airline_logo:' . $file;
+
+        // Logo jarang berubah; disimpan sehari agar tidak menembak API pada
+        // setiap kunjungan halaman.
+        $image = Cache::remember($cacheKey, now()->addDay(), function () use ($file) {
+            $url = 'http://103.210.122.2/storage/airlines/' . $file;
+
+            try {
+                $response = Http::timeout(10)->get($url);
+
+                if ($response->failed()) {
+                    Log::warning('Proxy logo maskapai gagal: ' . $url);
+                    return null;
+                }
+
+                return [
+                    'body' => $response->body(),
+                    'type' => $response->header('Content-Type') ?: 'image/png',
+                ];
+            } catch (\Exception $e) {
+                Log::warning('Proxy logo maskapai error: ' . $e->getMessage());
+                return null;
+            }
+        });
+
+        if (! $image) {
+            // Jangan simpan kegagalan selama sehari — beri kesempatan coba lagi
+            Cache::forget($cacheKey);
+            abort(404);
+        }
+
+        return response($image['body'])
+            ->header('Content-Type', $image['type'])
+            ->header('Cache-Control', 'public, max-age=86400');
     }
 
     /**

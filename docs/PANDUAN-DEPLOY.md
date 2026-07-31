@@ -40,7 +40,94 @@ Tahap 2 **tidak** memerlukan migration maupun seeder — hanya berkas tampilan.
 
 ---
 
-## 2. Commit & push Tahap 2 dari komputer lokal
+## 2. Prasyarat: akses server ke repo privat
+
+**Cukup dikerjakan sekali.** Lewati bagian ini bila server sudah bisa `git pull` tanpa diminta kata sandi.
+
+Repo ini privat, sehingga server tidak dapat menariknya tanpa kredensial. Cara yang dipakai adalah **Deploy Key (SSH)**, dipilih karena:
+
+- **Read-only** — server hanya bisa `pull`, tidak bisa `push`. Bila server diretas, isi repo tetap aman.
+- **Terbatas pada satu repo** — berbeda dengan token akun pribadi yang bisa mengakses seluruh repo Anda.
+- **Tidak terikat akun perorangan** — deploy tetap berjalan meski ada pergantian staf atau ganti perangkat.
+- Tanpa masa berlaku yang harus diperpanjang berkala.
+
+### 2.1 Buat kunci di server
+
+Login sebagai user yang menjalankan deploy — **bukan root**.
+
+```bash
+ssh-keygen -t ed25519 -C "deploy-aptp-server" -f ~/.ssh/id_ed25519_aptp -N ""
+chmod 700 ~/.ssh
+chmod 600 ~/.ssh/id_ed25519_aptp
+cat ~/.ssh/id_ed25519_aptp.pub
+```
+
+Salin seluruh keluaran perintah terakhir (diawali `ssh-ed25519 ...`).
+
+### 2.2 Daftarkan di GitHub
+
+Buka `github.com/RizaniHusyairi/aptp-airport-main` → **Settings** → **Deploy keys** → **Add deploy key**
+
+| Kolom | Isi |
+|---|---|
+| Title | `Server Produksi APTP` |
+| Key | tempel isi berkas `.pub` tadi |
+| Allow write access | **jangan dicentang** |
+
+### 2.3 Arahkan SSH ke kunci tersebut
+
+Buat atau sunting `~/.ssh/config`:
+
+```
+Host github.com
+  HostName github.com
+  User git
+  IdentityFile ~/.ssh/id_ed25519_aptp
+  IdentitiesOnly yes
+```
+
+```bash
+chmod 600 ~/.ssh/config
+ssh-keyscan github.com >> ~/.ssh/known_hosts    # agar tidak muncul prompt konfirmasi
+ssh -T git@github.com                           # harus menyebut nama repo ini
+```
+
+> Bila server yang sama juga menarik repo privat lain, ganti `Host github.com` menjadi alias seperti `Host github.com-aptp` (tetap dengan `HostName github.com`), lalu pakai alias itu pada URL remote di langkah berikut. Satu deploy key hanya berlaku untuk satu repo.
+
+### 2.4 Ubah remote dari HTTPS ke SSH
+
+```bash
+cd /path/ke/aptp-airport-main
+git remote set-url origin git@github.com:RizaniHusyairi/aptp-airport-main.git
+git remote -v
+git pull origin main
+```
+
+### Alternatif bila hosting tidak mendukung kunci SSH
+
+Untuk cPanel atau shared hosting, gunakan **fine-grained personal access token**:
+
+1. GitHub → **Settings** akun → **Developer settings** → **Personal access tokens** → **Fine-grained tokens**
+2. Repository access: **Only select repositories** → pilih repo ini saja
+3. Permissions: **Contents → Read-only**
+4. Tetapkan masa berlaku dan catat tanggal kedaluwarsanya
+
+```bash
+git config credential.helper store
+git pull origin main      # isi username, lalu token sebagai password
+```
+
+> **Jangan pernah menempelkan token ke dalam URL remote** (`https://TOKEN@github.com/...`). Token akan tersimpan di `.git/config` dan ikut terbawa backup maupun keluaran `git remote -v`. Dengan `credential.helper store` pun token tersimpan sebagai teks polos di `~/.git-credentials`, jadi batasi izinnya seketat mungkin dan perbarui saat kedaluwarsa.
+
+### Hal yang mudah terlewat
+
+1. **`.env` tidak ikut ter-pull** — berkas itu masuk `.gitignore`. Di server, `.env` dibuat manual sekali dan tidak akan pernah tertimpa `git pull`. Pastikan `BANDARA_API_URL` dan `BANDARA_API_TIMEOUT` terisi; tanpa keduanya, beranda dan papan jadwal penerbangan akan error.
+2. **`vendor/` juga tidak ikut** — itulah sebabnya `composer install` ada di langkah 5.
+3. **Jalankan git sebagai user yang tepat.** Bila `git pull` dijalankan sebagai root, berkas hasilnya bisa dimiliki root dan tidak terbaca web server. Gunakan user deploy biasa, lalu pastikan izin folder sesuai langkah 9.
+
+---
+
+## 3. Commit & push Tahap 2 dari komputer lokal
 
 Jalankan dari `c:\laragon\www\aptp-airport-main`:
 
@@ -63,7 +150,7 @@ git push -u origin feat/jadwal-dan-profil
 
 ---
 
-## 3. Backup database server — jangan dilewati
+## 4. Backup database server — jangan dilewati
 
 Wajib dilakukan sebelum migration apa pun.
 
@@ -75,7 +162,7 @@ Ini satu-satunya jaring pengaman bila migration bermasalah.
 
 ---
 
-## 4. Tarik kode di server
+## 5. Tarik kode di server
 
 ```bash
 cd /path/ke/aptp-airport-main
@@ -89,7 +176,7 @@ composer install --no-dev --optimize-autoloader
 
 ---
 
-## 5. Jalankan migration
+## 6. Jalankan migration
 
 ```bash
 php artisan migrate --force
@@ -101,7 +188,7 @@ php artisan migrate --force
 
 ---
 
-## 6. Jalankan seeder
+## 7. Jalankan seeder
 
 ```bash
 php artisan db:seed --class=SkmSettingSeeder --force
@@ -127,7 +214,7 @@ Seeder ini hanya berisi **3 data contoh** dengan tautan Google Drive palsu (`exa
 
 ---
 
-## 7. Bersihkan cache — paling sering terlewat
+## 8. Bersihkan cache — paling sering terlewat
 
 ```bash
 php artisan cache:clear      # WAJIB
@@ -152,7 +239,7 @@ php artisan view:cache
 
 ---
 
-## 8. Izin folder unggahan
+## 9. Izin folder unggahan
 
 ```bash
 ls -ld public/uploads
@@ -170,7 +257,7 @@ php artisan up      # keluar dari mode maintenance
 
 ---
 
-## 9. Verifikasi setelah deploy
+## 10. Verifikasi setelah deploy
 
 Buka sebagai pengunjung anonim (mode incognito).
 
@@ -210,7 +297,7 @@ Login, lalu pastikan 4 menu sidebar baru terbuka tanpa error:
 
 ---
 
-## 10. Yang harus diisi admin setelah deploy
+## 11. Yang harus diisi admin setelah deploy
 
 1. **4 pertanyaan FAQ bertanda `[PERIKSA]`** masih nonaktif karena jawabannya memerlukan data yang belum dipastikan. Buka **Dashboard → FAQ**, koreksi jawabannya, lalu nyalakan switch "Tampilkan di website":
    - Berapa lama sebelum keberangkatan harus tiba di bandara
@@ -223,7 +310,7 @@ Login, lalu pastikan 4 menu sidebar baru terbuka tanpa error:
 
 ---
 
-## 11. Rollback bila terjadi masalah
+## 12. Rollback bila terjadi masalah
 
 ```bash
 php artisan down
@@ -239,11 +326,11 @@ php artisan route:clear && php artisan view:clear
 php artisan up
 ```
 
-> **Peringatan:** `migrate:rollback` akan **menghapus** tabel `service_standards`, `external_links`, dan `faqs` beserta seluruh isinya. Karena itu backup di langkah 3 penting.
+> **Peringatan:** `migrate:rollback` akan **menghapus** tabel `service_standards`, `external_links`, dan `faqs` beserta seluruh isinya. Karena itu backup di langkah 4 penting.
 
 ---
 
-## 12. Lampiran — inventaris berkas
+## 13. Lampiran — inventaris berkas
 
 ### Berkas baru
 
@@ -305,7 +392,7 @@ public/assets_landing/js/{keberangkatan,kedatangan}.js
 
 ---
 
-## 13. Catatan yang belum terverifikasi
+## 14. Catatan yang belum terverifikasi
 
 Hal-hal berikut **belum** diuji dan sebaiknya diperiksa langsung setelah deploy:
 
@@ -316,7 +403,7 @@ Hal-hal berikut **belum** diuji dan sebaiknya diperiksa langsung setelah deploy:
 
 ---
 
-## 14. Perintah ringkas (setelah backup)
+## 15. Perintah ringkas (setelah backup)
 
 Untuk deploy rutin, seluruh langkah dapat dijalankan berurutan:
 

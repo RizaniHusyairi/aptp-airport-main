@@ -1,0 +1,360 @@
+/* =================================================== */
+/* JADWAL PENERBANGAN DI BERANDA                       */
+/* Kartu bergaya boarding pass untuk section            */
+/* #flight-info yang berlatar gelap.                    */
+/* Semua aturan di-scope di bawah .fx-* .               */
+/* =================================================== */
+
+#flight-info {
+    --fx-accent: #f0a500;
+    --fx-line: rgba(255, 255, 255, 0.12);
+    --fx-text: #eef3f9;
+    --fx-muted: rgba(238, 243, 249, 0.6);
+}
+
+/* ---------- Tab Kedatangan / Keberangkatan ---------- */
+
+#flight-info .nav-pills .nav-link {
+    border-radius: 50px;
+    padding: 10px 26px;
+    color: var(--fx-muted);
+    font-weight: 600;
+    background: transparent;
+    border: 1px solid var(--fx-line);
+    transition: all 0.3s ease;
+}
+
+#flight-info .nav-pills .nav-link:hover {
+    color: var(--fx-text);
+    border-color: rgba(240, 165, 0, 0.5);
+}
+
+#flight-info .nav-pills .nav-link.active {
+    background: var(--fx-accent);
+    border-color: var(--fx-accent);
+    color: #0d2c4a;
+}
+
+/* Ikon pesawat kedatangan menukik turun, keberangkatan menanjak */
+#flight-info .nav-link .bi-airplane-fill {
+    transform: rotate(45deg);
+    transition: transform 0.3s ease;
+}
+
+#flight-info .nav-link .bi-airplane-fill.kedatangan {
+    transform: rotate(135deg);
+}
+
+/* ---------- Baris header kolom ---------- */
+
+.fx-head {
+    display: grid;
+    grid-template-columns: 1.5fr 1.4fr 0.7fr 0.7fr 1fr;
+    gap: 16px;
+    padding: 0 20px 12px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--fx-muted);
+}
+
+/* ---------- Kartu penerbangan ---------- */
+
+@keyframes fxIn {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.fx-card {
+    display: grid;
+    grid-template-columns: 1.5fr 1.4fr 0.7fr 0.7fr 1fr;
+    gap: 16px;
+    align-items: center;
+    position: relative;
+    padding: 18px 20px;
+    margin-bottom: 12px;
+    border: 1px solid var(--fx-line);
+    border-left: 4px solid var(--brand, var(--fx-accent));
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.04);
+    backdrop-filter: blur(4px);
+    overflow: hidden;
+    transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+    animation: fxIn 0.45s ease both;
+    animation-delay: calc(var(--i, 0) * 55ms);
+}
+
+.fx-card:hover {
+    transform: translateY(-3px);
+    background: rgba(255, 255, 255, 0.07);
+    box-shadow: 0 16px 34px rgba(0, 0, 0, 0.28);
+}
+
+/*
+ * Takik bergaya sobekan boarding pass di tepi kanan kartu.
+ * Dibuat murni dengan CSS, tanpa gambar tambahan.
+ */
+.fx-card::after {
+    content: "";
+    position: absolute;
+    top: -6px;
+    bottom: -6px;
+    right: 84px;
+    width: 12px;
+    background-image: radial-gradient(circle at 50% 50%, rgba(9, 27, 46, 0.9) 5px, transparent 5px);
+    background-size: 12px 18px;
+    opacity: 0.55;
+    pointer-events: none;
+}
+
+/* ---------- Maskapai ---------- */
+
+.fx-cell--airline {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+}
+
+.fx-logo {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 46px;
+    height: 46px;
+    padding: 5px;
+    border-radius: 11px;
+    /* Latar terang agar logo berwarna tetap terbaca di section gelap */
+    background: #fff;
+    overflow: hidden;
+}
+
+.fx-logo img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+/* Bila logo gagal dimuat, tampilkan kode maskapai berwarna merek */
+.fx-logo--fallback {
+    background: var(--brand, #0d2c4a);
+}
+
+.fx-logo--fallback::after {
+    content: attr(data-code);
+    font-family: "Courier New", ui-monospace, monospace;
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 0.03em;
+}
+
+.fx-airline {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.fx-airline-name {
+    font-weight: 700;
+    color: var(--fx-text);
+    line-height: 1.25;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.fx-airline-sub {
+    font-family: "Courier New", ui-monospace, monospace;
+    font-size: 12px;
+    color: var(--fx-muted);
+}
+
+/* ---------- Rute ---------- */
+
+.fx-label {
+    display: none; /* hanya tampil pada tata letak bertumpuk di layar kecil */
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--fx-muted);
+    margin-bottom: 2px;
+}
+
+.fx-city {
+    display: block;
+    font-weight: 700;
+    color: var(--fx-text);
+    line-height: 1.3;
+}
+
+.fx-iata {
+    display: inline-block;
+    margin-right: 8px;
+    padding: 1px 7px;
+    border: 1px dashed rgba(255, 255, 255, 0.35);
+    border-radius: 6px;
+    font-family: "Courier New", ui-monospace, monospace;
+    font-size: 12px;
+    color: var(--fx-accent);
+}
+
+.fx-airport {
+    display: block;
+    font-size: 12.5px;
+    color: var(--fx-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ---------- Gate & waktu ---------- */
+
+/* Kelompok chip posisi layanan (Gate / Konter / Conveyor) */
+.fx-desk-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.fx-desk {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 10px;
+    border-radius: 9px;
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--fx-text);
+    font-family: "Courier New", ui-monospace, monospace;
+    font-weight: 700;
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+.fx-desk i {
+    font-size: 11px;
+    opacity: 0.8;
+}
+
+/* Konter lapor diri dibedakan dari gate ruang tunggu */
+.fx-desk--counter {
+    background: rgba(240, 165, 0, 0.2);
+    color: #ffc94d;
+}
+
+.fx-desk--empty {
+    background: transparent;
+    color: var(--fx-muted);
+    font-weight: 400;
+    padding-left: 0;
+}
+
+.fx-clock {
+    font-family: "Courier New", ui-monospace, monospace;
+    font-size: 24px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 0.02em;
+    line-height: 1.1;
+}
+
+/* ---------- Status ---------- */
+
+.fx-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 13px;
+    border-radius: 50px;
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.fx-pill i { font-size: 12px; }
+
+.fx-pill--ok      { background: rgba(61, 220, 132, 0.16); color: #6ff0ab; }
+.fx-pill--warn    { background: rgba(240, 165, 0, 0.18);  color: #ffc94d; }
+.fx-pill--danger  { background: rgba(220, 53, 69, 0.18);  color: #ff8b95; }
+.fx-pill--info    { background: rgba(77, 163, 255, 0.18); color: #8ec8ff; }
+.fx-pill--neutral { background: rgba(255, 255, 255, 0.12); color: var(--fx-muted); }
+
+/* ---------- Memuat, kosong, gagal ---------- */
+
+.fx-skeleton {
+    height: 82px;
+    margin-bottom: 12px;
+    border-radius: 14px;
+    background: linear-gradient(90deg,
+        rgba(255, 255, 255, 0.05) 25%,
+        rgba(255, 255, 255, 0.11) 50%,
+        rgba(255, 255, 255, 0.05) 75%);
+    background-size: 200% 100%;
+    animation: fxShimmer 1.3s linear infinite;
+}
+
+@keyframes fxShimmer {
+    from { background-position: 200% 0; }
+    to   { background-position: -200% 0; }
+}
+
+.fx-state {
+    padding: 48px 20px;
+    text-align: center;
+    color: var(--fx-muted);
+}
+
+.fx-state i {
+    display: block;
+    font-size: 40px;
+    margin-bottom: 12px;
+    color: rgba(255, 255, 255, 0.25);
+}
+
+.fx-state-title {
+    font-weight: 700;
+    color: var(--fx-text);
+    margin-bottom: 6px;
+}
+
+.fx-more {
+    text-align: center;
+    margin-top: 26px;
+}
+
+/* ---------- Responsif ---------- */
+
+@media (max-width: 991.98px) {
+    .fx-head { display: none; }
+
+    /* Kartu jadi blok bertumpuk dengan label inline */
+    .fx-card {
+        grid-template-columns: 1fr 1fr;
+        gap: 14px 18px;
+    }
+
+    .fx-label { display: block; }
+
+    .fx-cell--airline { grid-column: 1 / -1; }
+
+    /* Takik boarding pass dimatikan agar tidak memotong isi */
+    .fx-card::after { display: none; }
+}
+
+@media (max-width: 575.98px) {
+    .fx-card { grid-template-columns: 1fr; }
+
+    .fx-clock { font-size: 21px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .fx-card,
+    .fx-skeleton {
+        animation: none !important;
+    }
+
+    .fx-card { transition: none; }
+}

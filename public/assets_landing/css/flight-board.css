@@ -151,6 +151,44 @@
     z-index: 3;
 }
 
+/* ---------- Tab Keberangkatan / Kedatangan ---------- */
+
+.fb-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 18px;
+    border: 0;
+}
+
+.fb-tabs .nav-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 11px 26px;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: 50px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(6px);
+    color: #fff;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.fb-tabs .nav-link:hover {
+    border-color: var(--fb-accent);
+    background: rgba(255, 255, 255, 0.18);
+}
+
+.fb-tabs .nav-link.active {
+    background: var(--fb-accent);
+    border-color: var(--fb-accent);
+    color: var(--fb-navy);
+}
+
+/* Ikon: keberangkatan menanjak, kedatangan menukik turun */
+.fb-tabs #tab-departure i { transform: rotate(-45deg); }
+.fb-tabs #tab-arrival i   { transform: rotate(135deg); }
+
 .fb-board {
     padding: 26px;
     border-radius: 20px;
@@ -189,13 +227,14 @@
 }
 
 /*
- * Kolom: keberangkatan 6 (kode, maskapai, tujuan, gate, waktu, status),
- * kedatangan 5 (tanpa gate). Header dan baris data WAJIB memakai definisi
+ * Enam kolom untuk kedua mode: kode, maskapai, rute, posisi layanan,
+ * waktu, status. Kolom keempat berisi Gate/Konter pada keberangkatan dan
+ * Conveyor pada kedatangan. Header dan baris data WAJIB memakai definisi
  * grid yang sama agar tetap sejajar.
  */
 .fb-cols {
     display: grid;
-    grid-template-columns: 1.05fr 1.35fr 1.3fr 0.6fr 0.95fr 1.05fr;
+    grid-template-columns: 1.05fr 1.3fr 1.25fr 0.85fr 0.9fr 1fr;
     gap: 16px;
     padding: 0 18px 10px;
     font-size: 11px;
@@ -203,10 +242,6 @@
     letter-spacing: 0.09em;
     text-transform: uppercase;
     color: #93a1b0;
-}
-
-.fb-board[data-mode="arrival"] .fb-cols {
-    grid-template-columns: 1.05fr 1.45fr 1.4fr 0.95fr 1.05fr;
 }
 
 /* ---------- Kartu penerbangan ---------- */
@@ -218,7 +253,7 @@
 
 .fb-row {
     display: grid;
-    grid-template-columns: 1.05fr 1.35fr 1.3fr 0.6fr 0.95fr 1.05fr;
+    grid-template-columns: 1.05fr 1.3fr 1.25fr 0.85fr 0.9fr 1fr;
     gap: 16px;
     align-items: center;
     padding: 18px;
@@ -231,10 +266,6 @@
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     animation: fbRowIn 0.45s ease both;
     animation-delay: calc(var(--i, 0) * 55ms);
-}
-
-.fb-board[data-mode="arrival"] .fb-row {
-    grid-template-columns: 1.05fr 1.45fr 1.4fr 0.95fr 1.05fr;
 }
 
 .fb-row:hover {
@@ -321,17 +352,45 @@
     color: #7a8794;
 }
 
+/* Kelompok chip posisi layanan (Gate / Konter / Conveyor) */
+.fb-desk-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
 .fb-gate {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     min-width: 46px;
-    padding: 6px 12px;
+    padding: 6px 11px;
     border-radius: 9px;
     background: rgba(13, 44, 74, 0.08);
     color: var(--fb-navy);
     font-family: "Courier New", ui-monospace, monospace;
     font-weight: 700;
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+.fb-gate i {
+    font-size: 12px;
+    opacity: 0.75;
+}
+
+/* Konter lapor diri dibedakan warnanya dari gate ruang tunggu */
+.fb-gate--counter {
+    background: rgba(240, 165, 0, 0.16);
+    color: #8a6100;
+}
+
+.fb-gate--empty {
+    background: transparent;
+    color: #9aa5b1;
+    font-weight: 400;
+    min-width: 0;
+    padding-left: 0;
 }
 
 .fb-time {
@@ -429,8 +488,7 @@
     .fb-cols { display: none; }
 
     /* Kartu jadi blok bertumpuk dengan label inline */
-    .fb-row,
-    .fb-board[data-mode="arrival"] .fb-row {
+    .fb-row {
         grid-template-columns: 1fr 1fr;
         gap: 14px 18px;
         padding: 18px;
@@ -450,8 +508,7 @@
         border-radius: 16px;
     }
 
-    .fb-row,
-    .fb-board[data-mode="arrival"] .fb-row {
+    .fb-row {
         grid-template-columns: 1fr;
     }
 

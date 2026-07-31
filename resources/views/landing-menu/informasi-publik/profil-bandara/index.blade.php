@@ -150,16 +150,17 @@
                             @if(!empty($settings['profile_rute']))
                                 {!! $settings['profile_rute'] !!}
                             @else
-                                <p>Bandara ini melayani rute ke: <strong>Jakarta, Surabaya, Yogyakarta, Makassar, Denpasar, Berau</strong>.</p>
-                                <p>Rute perintis: <strong>Long Apung, Maratua, Datah Dawai, Muara Wahau</strong>.</p>
+                                {{-- Disesuaikan dengan dokumen resmi bandara (docs/FAQ BANDARA.docx) --}}
+                                <p>Bandara A.P.T. Pranoto Samarinda melayani penerbangan menuju <strong>Jakarta, Surabaya, Yogyakarta, Banjarmasin, Berau,</strong> dan <strong>Melak</strong>.</p>
+                                <p>Rute perintis: <strong>Long Apung, Maratua, Datah Dawai,</strong> dan <strong>Muara Wahau</strong>, serta koneksi antarwilayah <strong>Datah Dawai–Melak</strong> dan <strong>Maratua–Berau</strong>.</p>
                             @endif
                         </div>
 
-                        <a href="{{ route('keberangkatan') }}" class="pf-next-card mt-3" style="max-width: 420px;">
+                        <a href="{{ route('jadwalPenerbangan') }}" class="pf-next-card mt-3" style="max-width: 420px;">
                             <i class="bi bi-clock-fill"></i>
                             <span class="pf-next-text">
-                                Lihat Jadwal Keberangkatan
-                                <small>Data penerbangan hari ini</small>
+                                Lihat Jadwal Penerbangan
+                                <small>Keberangkatan &amp; kedatangan hari ini</small>
                             </span>
                         </a>
                     </section>

@@ -507,8 +507,16 @@ Route::get('/posko/tv/{token}', [PublicNataruController::class, 'tvDashboard'])-
 
 Route::get('/posko/tv/{token}/chart', [PublicNataruController::class, 'getTvChartData'])->name('public.nataru.chart');
 
-Route::get('/keberangkatan', [LandingPageController::class, 'keberangkatan'])->name('keberangkatan');
-Route::get('/kedatangan', [LandingPageController::class, 'kedatangan'])->name('kedatangan');
+// Halaman gabungan keberangkatan + kedatangan
+Route::get('/jadwal-penerbangan', [LandingPageController::class, 'jadwalPenerbangan'])->name('jadwalPenerbangan');
+
+/*
+ * URL lama dipertahankan sebagai pengalih permanen agar tautan yang sudah
+ * tersebar, hasil indeks mesin pencari, dan rujukan di dalam aplikasi
+ * (mis. resources/views/home.blade.php) tidak menjadi 404.
+ */
+Route::redirect('/keberangkatan', '/jadwal-penerbangan?tab=keberangkatan', 301)->name('keberangkatan');
+Route::redirect('/kedatangan', '/jadwal-penerbangan?tab=kedatangan', 301)->name('kedatangan');
 
 Route::post('/contact', [LandingPageController::class, 'submitContact'])->name('contact.submit');
 

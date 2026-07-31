@@ -152,92 +152,195 @@ document.addEventListener('DOMContentLoaded', function() {
     const arrivalsList = document.getElementById('arrivals-list');
     const departuresList = document.getElementById('departures-list');
 
-    // ### FUNGSI DIPERBARUI UNTUK MEMBACA API ANDA ###
-    const createFlightCard = (flight, type) => {
-        // Menentukan data berdasarkan tipe (Kedatangan/Keberangkatan)
+    // Jumlah penerbangan yang ditampilkan di beranda; selebihnya diarahkan
+    // ke halaman papan jadwal lengkap.
+    const FLIGHT_LIMIT = 8;
+
+    const escapeHtml = (value) => String(value === null || value === undefined ? '' : value)
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+
+    // Warna merek maskapai dari API, hanya diterima bila berupa hex yang sah
+    const brandColor = (value) => /^#[0-9a-f]{3,8}$/i.test(String(value || '')) ? value : '#0d2c4a';
+
+    /*
+     * Logo maskapai berada di host API yang hanya melayani HTTP sehingga
+     * diblokir sebagai mixed content pada situs HTTPS. Berkasnya diambil ulang
+     * lewat proxy di sisi server. Nilai dari API berupa path lengkap
+     * ("/storage/airlines/xxx.png"), jadi cukup nama berkasnya yang dikirim.
+     */
+    const logoUrlFor = (logoPath) => {
+        if (!logoPath) return '';
+        const file = String(logoPath).split('/').pop();
+        return file ? '/api/image-proxy/' + encodeURIComponent(file) : '';
+    };
+
+    const statusStyle = (raw) => {
+        const s = String(raw || '').toLowerCase();
+        if (s.includes('cancel') || s.includes('batal')) return { cls: 'fx-pill--danger', icon: 'bi-x-octagon-fill' };
+        if (s.includes('delay') || s.includes('tunda')) return { cls: 'fx-pill--warn', icon: 'bi-exclamation-triangle-fill' };
+        if (s.includes('check-in') || s.includes('check in')) return { cls: 'fx-pill--info', icon: 'bi-person-badge-fill' };
+        if (s.includes('board') || s.includes('gate')) return { cls: 'fx-pill--info', icon: 'bi-door-open-fill' };
+        if (s.includes('depart') || s.includes('land') || s.includes('arriv')) return { cls: 'fx-pill--ok', icon: 'bi-check-circle-fill' };
+        if (s.includes('schedule') || s.includes('jadwal')) return { cls: 'fx-pill--ok', icon: 'bi-clock-fill' };
+        return { cls: 'fx-pill--neutral', icon: 'bi-info-circle-fill' };
+    };
+
+    const createFlightCard = (flight, type, index) => {
         const isDeparture = type === 'Keberangkatan';
-        const destinationData = isDeparture ? flight.bandara_tujuan : flight.bandara_asal;
-        
-        // Mengambil data dari struktur JSON yang benar
-        const airline = flight.maskapai?.nama || 'N/A';
-        const logoFileName = flight.maskapai?.logo || '';
-        // Asumsi base URL untuk logo, ganti jika perlu.
-        const logoUrl = logoFileName ? `/api/image-proxy/${logoFileName}` : 'https://placehold.co/100x100/png?text=LOGO';
-        // const logoUrl = logoFileName ? `http://103.210.122.2/storage/logo/${logoFileName}` : 'https://placehold.co/100x100/png?text=LOGO';
-        const kota = destinationData?.nama || 'N/A';
-        const nomor_penerbangan = flight.pesawat?.kode_penerbangan || 'N/A';
-        const kodebandara = destinationData?.iata || 'N/A';
-        const jadwal = flight.jam || '--:--';   
-        const statusText = flight.remark?.status || 'SCHEDULED';
+        const place = isDeparture ? flight.bandara_tujuan : flight.bandara_asal;
 
-        const gate = isDeparture ? (flight.gate?.nama || '-') : '-';
+        const airline = flight.maskapai?.nama || '—';
+        const airlineCode = flight.maskapai?.kode || '';
+        const color = brandColor(flight.maskapai?.kode_warna);
+        const logo = logoUrlFor(flight.maskapai?.logo);
 
-        
-        // Menentukan kelas CSS berdasarkan status
-        let statusClass = 'status-ontime';
-        if (statusText.toLowerCase().includes('delay')) statusClass = 'status-delayed';
-        if (statusText.toLowerCase().includes('boarding') || statusText.toLowerCase().includes('check in')) statusClass = 'status-boarding';
-        if (statusText.toLowerCase().includes('landed') || statusText.toLowerCase().includes('departured') || statusText.toLowerCase().includes('arrived')) statusClass = 'status-landed';
-        
+        const city = place?.kota_provinsi || '';
+        const airport = place?.nama || '—';
+        const iata = place?.iata || '';
+        const registration = flight.pesawat?.kode_penerbangan || '—';
+        const time = flight.jam || '--:--';
+        const statusText = flight.remark?.status || 'Terjadwal';
+        const st = statusStyle(statusText);
+
+        /*
+         * Posisi layanan penumpang.
+         * Kedatangan  : `conveyor` skalar ("1"/"2"), tersedia di semua data.
+         * Keberangkatan: `gate` objek {id, nama} hanya pada sebagian penerbangan,
+         *                dan konter/konter2/konter3 berupa angka (0 = kosong).
+         *                Keduanya ditampilkan karena konter (lapor diri) dan
+         *                gate (ruang tunggu) adalah tahap yang berbeda.
+         */
+        let deskLabel;
+        let deskHtml;
+
+        if (isDeparture) {
+            deskLabel = 'Gate / Konter';
+            const counters = [flight.konter, flight.konter2, flight.konter3]
+                .filter((v) => Number(v) > 0)
+                .join(', ');
+            const chips = [];
+            if (flight.gate?.nama) {
+                chips.push(`<span class="fx-desk"><i class="bi bi-door-open-fill"></i>${escapeHtml(flight.gate.nama)}</span>`);
+            }
+            if (counters) {
+                chips.push(`<span class="fx-desk fx-desk--counter"><i class="bi bi-person-badge-fill"></i>${escapeHtml(counters)}</span>`);
+            }
+            deskHtml = chips.length ? chips.join(' ') : '<span class="fx-desk fx-desk--empty">—</span>';
+        } else {
+            deskLabel = 'Conveyor';
+            deskHtml = flight.conveyor
+                ? `<span class="fx-desk"><i class="bi bi-suitcase-lg-fill"></i>${escapeHtml(flight.conveyor)}</span>`
+                : '<span class="fx-desk fx-desk--empty">—</span>';
+        }
+
+        const logoBlock = logo
+            ? `<span class="fx-logo" data-code="${escapeHtml(airlineCode || airline.slice(0, 2))}">
+                   <img src="${logo}" alt="Logo ${escapeHtml(airline)}" loading="lazy"
+                        onerror="this.parentNode.classList.add('fx-logo--fallback'); this.remove();">
+               </span>`
+            : `<span class="fx-logo fx-logo--fallback" data-code="${escapeHtml(airlineCode || airline.slice(0, 2))}"></span>`;
+
         return `
-            <div class="flight-card">
-                <div class="flight-airline">
-                    <img src="${logoUrl}" alt="${airline}" onerror="this.src='https://placehold.co/100x100/png?text=LOGO'; this.onerror=null;">
-                    <span>${airline}</span>
+            <article class="fx-card" style="--brand: ${escapeHtml(color)}; --i: ${index}">
+                <div class="fx-cell fx-cell--airline">
+                    ${logoBlock}
+                    <span class="fx-airline">
+                        <span class="fx-airline-name">${escapeHtml(airline)}</span>
+                        <span class="fx-airline-sub">${escapeHtml(airlineCode)}${airlineCode ? ' · ' : ''}${escapeHtml(registration)}</span>
+                    </span>
                 </div>
-                <div class="flight-destination"><span>${kota} (${kodebandara})</span></div>
-                <div class="flight-number"><span>${nomor_penerbangan}</span></div>
-                <div class="flight-time"><span>${jadwal}</span></div>
-                <div class="flight-gate"><span>${gate}</span></div>
-
-                <div class="flight-status"><span class="${statusClass}">${statusText}</span></div>
-            </div>
+                <div class="fx-cell fx-cell--route">
+                    <span class="fx-label">${isDeparture ? 'Tujuan' : 'Asal'}</span>
+                    <span class="fx-city">${iata ? `<span class="fx-iata">${escapeHtml(iata)}</span>` : ''}${escapeHtml(city || airport)}</span>
+                    ${city ? `<span class="fx-airport">${escapeHtml(airport)}</span>` : ''}
+                </div>
+                <div class="fx-cell fx-cell--desk">
+                    <span class="fx-label">${deskLabel}</span>
+                    <span class="fx-desk-group">${deskHtml}</span>
+                </div>
+                <div class="fx-cell fx-cell--time">
+                    <span class="fx-label">Waktu</span>
+                    <span class="fx-clock">${escapeHtml(time)}</span>
+                </div>
+                <div class="fx-cell fx-cell--status">
+                    <span class="fx-pill ${st.cls}"><i class="bi ${st.icon}"></i>${escapeHtml(statusText)}</span>
+                </div>
+            </article>
         `;
     };
-    
+
+    const flightSkeleton = (rows) => {
+        let html = '';
+        for (let i = 0; i < rows; i++) html += '<div class="fx-skeleton"></div>';
+        return html;
+    };
+
     const populateFlightList = (element, data, type) => {
         if (!data || data.length === 0) {
-            element.innerHTML = `<p class="text-center text-muted">Tidak ada jadwal ${type} untuk ditampilkan saat ini.</p>`;
+            element.innerHTML = `
+                <div class="fx-state">
+                    <i class="bi bi-calendar-x"></i>
+                    <p class="fx-state-title">Belum ada jadwal</p>
+                    <p class="mb-0">Tidak ada jadwal ${type.toLowerCase()} yang tersedia saat ini.</p>
+                </div>`;
             return;
         }
-        
-        const headerHTML = `
-            <div class="flight-card-header d-none d-md-grid">
-                <div>Maskapai</div>
-                <div>${type === 'Kedatangan' ? 'Dari' : 'Ke'}</div>
-                <div>Nomor</div>
-                <div>Waktu</div>
-                <div>Pintu</div>
-                <div>Status</div>
-            </div>
-        `;
-        
-        element.innerHTML = headerHTML + data.map(flight => createFlightCard(flight, type)).join(''); 
 
-        if(typeof AOS !== 'undefined') {
-            AOS.refresh();
-        }
+        // Urutkan menurut jam agar papan terbaca runtut
+        const sorted = data.slice().sort((a, b) => String(a.jam || '').localeCompare(String(b.jam || '')));
+        const shown = sorted.slice(0, FLIGHT_LIMIT);
+        const isDeparture = type === 'Keberangkatan';
+
+        const header = `
+            <div class="fx-head d-none d-lg-grid">
+                <span>Maskapai</span>
+                <span>${isDeparture ? 'Tujuan' : 'Asal'}</span>
+                <span>${isDeparture ? 'Gate / Konter' : 'Conveyor'}</span>
+                <span>Waktu</span>
+                <span>Status</span>
+            </div>`;
+
+        const more = sorted.length > shown.length
+            ? `<div class="fx-more">
+                   <a href="/jadwal-penerbangan?tab=${isDeparture ? 'keberangkatan' : 'kedatangan'}" class="btn-modern-outline">
+                       Lihat Semua ${sorted.length} Penerbangan
+                   </a>
+               </div>`
+            : '';
+
+        element.innerHTML = header
+            + shown.map((flight, i) => createFlightCard(flight, type, i)).join('')
+            + more;
     };
 
-    if(arrivalsList){
-        fetch('/api/arrivals')
-            .then(response => response.json())
-            .then(data => populateFlightList(arrivalsList, data.success ? data.data : [], 'Kedatangan'))
-            .catch(error => {
-                console.error('Error fetching arrivals:', error);
-                arrivalsList.innerHTML = '<p class="text-center text-danger">Terjadi kesalahan jaringan.</p>';
-            });
-    }
+    const loadFlights = (element, endpoint, type) => {
+        if (!element) return;
 
-    if(departuresList){
-        fetch('/api/departures')
-            .then(response => response.json())
-            .then(data => populateFlightList(departuresList, data.success ? data.data : [], 'Keberangkatan'))
-            .catch(error => {
-                console.error('Error fetching departures:', error);
-                departuresList.innerHTML = '<p class="text-center text-danger">Terjadi kesalahan jaringan.</p>';
+        element.innerHTML = flightSkeleton(5);
+
+        fetch(endpoint, { headers: { Accept: 'application/json' } })
+            .then((response) => response.json())
+            .then((data) => populateFlightList(element, data.success ? data.data : [], type))
+            .catch((error) => {
+                console.error('Gagal memuat jadwal ' + type + ':', error);
+                element.innerHTML = `
+                    <div class="fx-state">
+                        <i class="bi bi-wifi-off"></i>
+                        <p class="fx-state-title">Gagal memuat data</p>
+                        <p class="mb-0">Periksa koneksi Anda lalu muat ulang halaman.</p>
+                    </div>`;
             });
-    }
+    };
+
+    /*
+     * `recent=1` meminta server menyaring penerbangan yang sudah berstatus
+     * selesai lebih dari 2 jam lalu, sehingga papan ringkas di beranda hanya
+     * memuat jadwal yang masih relevan. Halaman jadwal lengkap tidak memakai
+     * parameter ini agar seluruh jadwal hari ini tetap terlihat.
+     */
+    loadFlights(arrivalsList, '/api/arrivals?recent=1', 'Kedatangan');
+    loadFlights(departuresList, '/api/departures?recent=1', 'Keberangkatan');
 
     /**
      * 3. FETCH & DISPLAY DATA STATISTIK LALU LINTAS UDARA
@@ -333,139 +436,13 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
 
-    /**
-     * 4. LOGIKA PETA RUTE DOMESTIK DENGAN ANIMASI YANG DIPERBAIKI
+    /*
+     * 4. PETA JARINGAN RUTE
+     *
+     * Sudah dipindahkan ke assets_landing/js/route-map.js yang memakai
+     * Leaflet. Peta gambar statis beserta penggambaran SVG manual tidak
+     * dipakai lagi.
      */
-    const mapContainer = document.getElementById('route-map');
-if (mapContainer) {
-    const svg = document.getElementById("map-svg");
-    const tooltip = document.getElementById("map-tooltip");
-    const samarindaCoords = { cx: 640, cy: 200 }; 
-
-    const createCityElement = (cityData, index, isMain = false) => {
-        const group = document.createElementNS("http://www.w3.org/2000/svg", "g");
-        group.setAttribute('class', 'map-city-group');
-        if (!isMain) {
-            group.dataset.routeIndex = index;
-        }
-        
-        const hitArea = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-        hitArea.setAttribute('cx', cityData.coords.cx);
-        hitArea.setAttribute('cy', cityData.coords.cy);
-        hitArea.setAttribute('r', '15');
-        hitArea.setAttribute('fill', 'transparent');
-        hitArea.setAttribute('pointer-events', 'all');
-        hitArea.style.cursor = 'pointer';
-
-        const visibleDot = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-        visibleDot.setAttribute('cx', cityData.coords.cx);
-        visibleDot.setAttribute('cy', cityData.coords.cy);
-        visibleDot.setAttribute('r', isMain ? '8' : '5');
-        visibleDot.setAttribute('class', isMain ? 'map-city city-main' : 'map-city');
-        visibleDot.style.pointerEvents = 'none';
-        
-        group.appendChild(visibleDot);
-        group.appendChild(hitArea);
-        svg.appendChild(group);
-
-        group.dataset.cityData = JSON.stringify(cityData);
-        return group;
-    };
-    
-    const createFlightPath = (destinationCoords, index) => {
-        const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
-        const controlX = (samarindaCoords.cx + destinationCoords.cx) / 2;
-        const controlY = (samarindaCoords.cy + destinationCoords.cy) / 2 - 50; 
-        const pathData = `M ${samarindaCoords.cx} ${samarindaCoords.cy} Q ${controlX} ${controlY} ${destinationCoords.cx} ${destinationCoords.cy}`;
-        path.setAttribute('d', pathData);
-        path.setAttribute('class', 'flight-path');
-        path.dataset.routeIndex = index; 
-        svg.insertBefore(path, svg.firstChild); 
-        return path;
-    };
-
-    fetch('/api/routes/domestic')
-        .then(response => response.json())
-        .then(data => {
-            if (data.success && data.data.length > 0) {
-                createCityElement({ kota: 'Samarinda (AAP)', coords: samarindaCoords, maskapai: [] }, null, true);
-                data.data.forEach((route, index) => {
-                    createCityElement(route, index);
-                    const path = createFlightPath(route.coords, index);
-                    gsap.registerPlugin(ScrollTrigger);
-                    const length = path.getTotalLength();
-                    gsap.set(path, { strokeDasharray: length, strokeDashoffset: length });
-                    gsap.to(path, {
-                        strokeDashoffset: 0,
-                        duration: 1.5,
-                        ease: "power1.inOut",
-                        scrollTrigger: { 
-                            trigger: mapContainer,
-                            start: "top center+=100",
-                            toggleActions: "play none none none"
-                        }
-                    });
-                });
-                setTimeout(setupTooltipEvents, 100);
-            }
-        })
-        .catch(error => console.error("Error fetching domestic routes:", error));
-
-    function setupTooltipEvents() {
-        const cityGroups = svg.querySelectorAll(".map-city-group");
-        console.log("City Groups Found:", cityGroups.length);
-        if (cityGroups.length === 0) {
-            console.error("No .map-city-group elements found. Check SVG rendering.");
-            return;
-        }
-
-        cityGroups.forEach(group => {
-            const routeIndex = group.dataset.routeIndex;
-            const targetPath = routeIndex ? svg.querySelector(`.flight-path[data-route-index='${routeIndex}']`) : null;
-            const cityData = JSON.parse(group.dataset.cityData || '{}');
-
-            group.addEventListener('mouseenter', () => {
-                if (!tooltip) {
-                    console.error("Tooltip element not found!");
-                    return;
-                }
-                const airlines = cityData.maskapai || [];
-                let airlinesHTML = airlines.map(a => `<img src="${a.logo}" title="${a.nama}" alt="${a.nama}">`).join('');
-                
-                tooltip.innerHTML = `
-                    <div class="tooltip-title">${cityData.kota}</div>
-                    ${airlines.length > 0 ? `<div class="tooltip-airlines">${airlinesHTML}</div>` : ''}
-                `;
-                
-                const visibleDot = group.querySelector('.map-city');
-                const dotRect = visibleDot.getBoundingClientRect();
-                const svgRect = svg.getBoundingClientRect();
-                const x = dotRect.left - svgRect.left + (dotRect.width / 2);
-                const y = dotRect.top - svgRect.top - 20; // Offset sederhana
-
-                tooltip.classList.add('show');
-
-                tooltip.style.left = `${x-20}px`; // Posisi horizontal
-                tooltip.style.top = `${y-75}px`; // Posisi vertikal
-                tooltip.style.opacity = '1'; // Pastikan terlihat
-
-                if (targetPath) {
-                    targetPath.style.stroke = "var(--secondary-color)";
-                    targetPath.style.strokeWidth = "2.5";
-                }
-            });
-
-            group.addEventListener('mouseleave', () => {
-                tooltip.classList.remove('show');
-                tooltip.style.opacity = '0';
-                if (targetPath) {
-                    targetPath.style.stroke = "var(--primary-color)";
-                    targetPath.style.strokeWidth = "1.5";
-                }
-            });
-        });
-    }
-}
 
     
 
