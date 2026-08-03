@@ -41,7 +41,8 @@
                             <p class="doc-number">Nomor: {{ $letter->number }}</p>
                         </div>
                         <div class="doc-action">
-                            <a href="{{ Storage::url($letter->file_path) }}" target="_blank" class="btn-view-doc">
+                            {{-- file_url bernilai null bila berkasnya tidak ada di disk --}}
+                            <a href="{{ $letter->file_url }}" target="_blank" rel="noopener" class="btn-view-doc">
                                 Lihat Dokumen
                             </a>
                         </div>

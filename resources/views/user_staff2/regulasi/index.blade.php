@@ -57,7 +57,17 @@
                                                         <td>{{ $letter->title }}</td>
                                                         <td>{{ $letter->type == 'edaran' ? 'Surat Edaran' : 'Surat Keputusan' }}</td>
                                                         <td>{{ \Carbon\Carbon::parse($letter->issue_date)->translatedFormat('d M Y') }}</td>
-                                                        <td><a href="{{ asset('uploads/uploads/letters/' . basename($letter->file_path)) }}" target="_blank" class="badge bg-primary">Lihat</a></td>
+                                                        <td>
+                                                            {{-- Path tidak lagi ditebak manual; file_url null bila berkas hilang --}}
+                                                            @if ($letter->has_file)
+                                                                <a href="{{ $letter->file_url }}" target="_blank" rel="noopener" class="badge bg-primary">Lihat</a>
+                                                            @else
+                                                                <span class="badge bg-danger" data-bs-toggle="tooltip"
+                                                                      title="Berkas tidak ditemukan di server. Surat ini disembunyikan dari halaman publik. Unggah ulang lewat tombol Edit.">
+                                                                    <i class="bi bi-exclamation-triangle-fill me-1"></i> Berkas hilang
+                                                                </span>
+                                                            @endif
+                                                        </td>
                                                         <td class="d-flex">
                                                             <a href="{{ route('letters.staff.edit', $letter) }}" class="btn btn-sm btn-warning btn-tooltip text-white m-1" data-bs-toggle="tooltip" title="Edit Surat"><i class="bi bi-pencil"></i></a>
                                                             <button class="btn btn-sm btn-danger btn-hapus btn-tooltip m-1" data-id="{{ $letter->id }}" data-bs-toggle="tooltip" title="Hapus Surat"><i class="bi bi-trash"></i></button>

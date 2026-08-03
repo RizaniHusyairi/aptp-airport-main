@@ -131,8 +131,33 @@
             });
     }
 
+    /**
+     * Isi ringkasan jaringan (jumlah kota tujuan dan maskapai) dari data
+     * yang sama dengan yang digambar di peta, bukan angka yang ditulis manual.
+     */
+    function isiRingkasan(rutes) {
+        var kota = document.querySelector('[data-rm-destinations]');
+        var maskapai = document.querySelector('[data-rm-airlines]');
+
+        if (kota) {
+            kota.textContent = rutes.length;
+        }
+
+        if (maskapai) {
+            var unik = {};
+            rutes.forEach(function (r) {
+                (r.maskapai || []).forEach(function (m) {
+                    if (m && m.nama) unik[m.nama] = true;
+                });
+            });
+            maskapai.textContent = Object.keys(unik).length;
+        }
+    }
+
     function gambarPeta(wadah, hub, rutes) {
         var pusat = [hub.lat, hub.lng];
+
+        isiRingkasan(rutes);
 
         var map = L.map(wadah, {
             zoomControl: true,

@@ -7,6 +7,16 @@ use Illuminate\Database\Seeder;
 
 class LetterSeeder extends Seeder
 {
+    /**
+     * PERINGATAN — data contoh, JANGAN dijalankan di server produksi.
+     *
+     * Seeder ini hanya membuat baris database; berkas PDF yang dirujuk
+     * (se001.pdf … su005.pdf) tidak pernah benar-benar ada. Surat semacam itu
+     * kini otomatis disembunyikan dari halaman publik dan ditandai
+     * "Berkas hilang" di dashboard, tetapi tetap saja mengotori data.
+     *
+     * Untuk data sungguhan, unggah dokumen lewat Dashboard → Regulasi.
+     */
     public function run()
     {
         $letters = [

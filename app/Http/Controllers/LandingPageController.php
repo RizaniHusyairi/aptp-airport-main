@@ -688,34 +688,50 @@ class LandingPageController extends Controller
         ]);
     }
 
+    /**
+     * Ambil surat menurut jenisnya, HANYA yang berkas PDF-nya benar-benar ada.
+     *
+     * Kolom `file_path` dapat menunjuk ke berkas yang tidak pernah diunggah
+     * (mis. baris dari seeder contoh) atau yang sudah terhapus dari server.
+     * Tanpa penyaringan ini, tombol "Lihat Dokumen" di halaman publik
+     * menghasilkan 404.
+     *
+     * Penyaringan dilakukan di PHP, bukan SQL, karena keberadaan berkas hanya
+     * bisa diperiksa lewat disk.
+     */
+    protected function lettersWithFile(string $type)
+    {
+        return Letter::where('type', $type)
+            ->orderBy('issue_date', 'desc')
+            ->get()
+            ->filter(fn (Letter $letter) => $letter->has_file)
+            ->values();
+    }
+
     public function suratUtusan()
     {
-
         $type = 'keputusan';
-        $letters = Letter::where('type', $type)->orderBy('issue_date', 'desc')->get();
+        $letters = $this->lettersWithFile($type);
+
         return view('landing-menu.regulasi.index', compact('letters', 'type'));
     }
 
     public function getLettersUtusan(Request $request)
     {
-
-        $letters = Letter::where('type', 'keputusan')->get();
-        return response()->json($letters);
+        return response()->json($this->lettersWithFile('keputusan'));
     }
-    
+
     public function suratEdaran()
     {
         $type = 'edaran';
+        $letters = $this->lettersWithFile($type);
 
-        $letters = Letter::where('type', $type)->orderBy('issue_date', 'desc')->get();
         return view('landing-menu.regulasi.index', compact('letters', 'type'));
     }
 
     public function getLettersEdaran(Request $request)
     {
-
-        $letters = Letter::where('type', 'edaran')->get();
-        return response()->json($letters);
+        return response()->json($this->lettersWithFile('edaran'));
     }
 
     public function lalulintas() 
